@@ -7,7 +7,7 @@ package Sadna.Server.API;
 import Sadna.db.Message;
 import Sadna.db.Forum;
 import Sadna.Client.Moderator;
-import Sadna.Server.User;
+import Sadna.Client.User;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;

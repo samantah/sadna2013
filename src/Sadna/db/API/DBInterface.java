@@ -4,7 +4,7 @@
  */
 package Sadna.db.API;
 
-import Sadna.Server.User;
+import Sadna.Client.User;
 import Sadna.db.Forum;
 import Sadna.db.Message;
 import Sadna.db.SubForum;
