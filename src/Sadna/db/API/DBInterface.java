@@ -8,25 +8,27 @@ import Sadna.Client.User;
 import Sadna.db.Forum;
 import Sadna.db.Message;
 import Sadna.db.SubForum;
+import Sadna.db.ThreadMessage;
 
 /**
  *
  * @author fistuk
  */
 public interface DBInterface {
+
     Forum getForum(String forumName);
-    
-    SubForum getSubForum(String ForumName, String subForumName);
-    
+
+    SubForum getSubForum(String forumName, String subForumName);
+
+    ThreadMessage getThread(String forumName, String subForumName, int messageID);
+
     User getUser(String userName);
-    
-    Message getMessage(String ForumName, String subForumName, int messageID);
-    
-    void addForum(Forum forum);
-    
-    void addSubForum(SubForum subForum);
-    
-    void addUser(User user);
-    
-    void addMessage(Message message);
+
+    boolean addForum(Forum forum);
+
+    boolean addSubForum(SubForum subForum);
+
+    boolean addMessage(Message message);
+
+    boolean addUser(User user);
 }

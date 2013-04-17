@@ -4,6 +4,7 @@
  */
 package Sadna.Client.API;
 
+import Sadna.Client.User;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
@@ -13,17 +14,21 @@ import java.util.List;
  *
  * @author fistuk
  */
-public interface ClientInterface {
+public interface ClientCommunicationHandlerInterface {
 
     boolean login(String userName, String password);
 
-    void postComment(Post post);
+    boolean postComment(Post post, User user);
 
-    void publishThread(ThreadMessage newThread);
+    boolean publishThread(ThreadMessage newThread, User user);
 
     boolean register(String userName, String password, String fullName);
 
     SubForum getSubForum(String subForumName);
 
-    List<SubForum> getSubForumList();
+    List<SubForum> getSubForumsList();
+    
+    List<ThreadMessage> getThreadsList();
+    
+    ThreadMessage getThreadMessage(String threadMessage);
 }
