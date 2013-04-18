@@ -4,11 +4,11 @@
  */
 package Sadna.db.API;
 
+import Sadna.Client.Member;
 import java.util.List;
-
 import Sadna.Client.User;
 import Sadna.db.Forum;
-import Sadna.db.Message;
+import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 
@@ -38,7 +38,9 @@ public interface DBInterface {
 
     boolean addSubForum(SubForum subForum);
 
-    boolean addMessage(Message message);
+    boolean addMember(Member member);
 
-    boolean addUser(User user);
+    boolean addPost(Post post);
+
+    boolean addThread(ThreadMessage thread);
 }

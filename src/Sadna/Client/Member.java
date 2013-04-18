@@ -10,41 +10,42 @@ import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 
-
 public class Member extends User {
+
     protected String userName;
     protected String password;
     protected String email;
     protected String forum;
-    
-    public Member(String userName, String password, String email, String forum, ConnectionHandler ch){
-    	super(ch);
-    	this.userName = userName;
-    	this.password = password;
-    	this.email = email;
-    	this.forum = forum;
-    }
-    
-    public boolean postComment(Post post){
-    	return conHand.postComment(post, this);
-    }
-    public boolean publishThread(ThreadMessage newThread){
-    	return conHand.publishThread(newThread, this);
+
+    public Member(String userName, String password, String email, String forum, ConnectionHandler ch) {
+        super(ch);
+        this.userName = userName;
+        this.password = password;
+        this.email = email;
+        this.forum = forum;
     }
 
-	public String getUserName() {
-		return userName;
-	}
+    public boolean postComment(Post post) {
+        return conHand.postComment(post, this);
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public boolean publishThread(ThreadMessage newThread) {
+        return conHand.publishThread(newThread, this);
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getUserName() {
+        return userName;
+    }
 
-	public String getForum() {
-		return forum;
-	}
+    public String getPassword() {
+        return password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getForum() {
+        return forum;
+    }
 }
