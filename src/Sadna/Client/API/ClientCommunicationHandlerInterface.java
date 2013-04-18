@@ -17,13 +17,15 @@ import java.util.List;
  */
 public interface ClientCommunicationHandlerInterface {
 
-    boolean login(String forumName, String userName, String password);
+    Member login(String forumName, String userName, String password);
+    
+    User logout(String forumName, String userName, String password, String email);
 
     boolean postComment(Post post, Member member);
 
     boolean publishThread(ThreadMessage newThread, Member member);
 
-    boolean register(String forumName, String userName, String password, String email);
+    Member register(String forumName, String userName, String password, String email);
 
     SubForum getSubForum(String forum ,String subForumName);
 

@@ -4,6 +4,7 @@
  */
 package Sadna.Client;
 
+import java.io.Serializable;
 import java.util.List;
 
 import Sadna.db.SubForum;
@@ -13,14 +14,14 @@ import Sadna.db.ThreadMessage;
  *
  * @author fistuk
  */
-public abstract class User{
+public abstract class User implements Serializable{
 	protected ConnectionHandler conHand;
 	
 	public User(ConnectionHandler ch){
 		this.conHand = ch;
 	}
 	
-    protected boolean login(String forum, String userName, String password){
+    protected Member login(String forum, String userName, String password){
     	return conHand.login(forum,userName, password);
     }
     
@@ -31,7 +32,7 @@ public abstract class User{
     	return conHand.getThreadsList(forum ,subForumName);
     }
     
-    protected boolean register(String forumName, String userName, String password, String email){
+    protected Member register(String forumName, String userName, String password, String email){
     	return conHand.register(forumName, userName, password, email);
     }
 }
