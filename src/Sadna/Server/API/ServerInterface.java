@@ -4,6 +4,7 @@
  */
 package Sadna.Server.API;
 
+import Sadna.Client.ConnectionHandler;
 import Sadna.Client.Moderator;
 import Sadna.Client.User;
 import Sadna.db.Forum;
@@ -18,21 +19,21 @@ import java.util.List;
  */
 public interface ServerInterface {
 
-    boolean register(String userName, String password, String fullName);
+    boolean register(String forumName, String userName, String password, String email, ConnectionHandler ch);
 
-    boolean login(String userName, String password);
+    boolean login(String forumName, String userName, String password);
 
     boolean publishThread(ThreadMessage thread, User user);
 
-    SubForum getSubForum(String subForumName);
+    SubForum getSubForum(String forumName, String subForumName);
 
-    List<SubForum> getSubForumsList();
+    List<SubForum> getSubForumsList(String forumName);
 
-    List<ThreadMessage> getThreadsList();
+    List<ThreadMessage> getThreadsList(String forumName, String subForumName);
 
-    ThreadMessage getThreadMessage(String threadMessage);
+    ThreadMessage getThreadMessage(String forumName, String subForumName, String threadMessage);
 
-    Forum initiateForum(String adminUserName, String adminPassword);
+    Forum initiateForum(String adminUserName, String adminPassword, String forumName);
 
     boolean addSubForum(SubForum subForum, List<Moderator> subForumModerators);
 
