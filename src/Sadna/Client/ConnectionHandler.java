@@ -1,9 +1,11 @@
 package Sadna.Client;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.io.*;
 import java.net.*;
 import Sadna.Client.API.ClientCommunicationHandlerInterface;
+import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
@@ -31,8 +33,6 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		clientSocket.close();
 		return true;
 	}
-
-
 
 	@Override
 	public Member login(String forumName, String userName, String password){
@@ -100,11 +100,9 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		return returnedSF;
 	}
 
-
 	@Override
 	public List<SubForum> getSubForumsList(String forumName) {
-
-		List<SubForum> returnedList = null;
+		List<SubForum> returnedList = new ArrayList<SubForum>();
 		SubForum tmp = null;
 		msgToSend = "GETSFL\n"+"forumName: "+forumName+"\n";
 		try {stringToServer.writeBytes(msgToSend);}
@@ -127,8 +125,24 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 	@Override
 	public List<ThreadMessage> getThreadsList(String forumName,
 			String subForumName) {
-		// TODO Auto-generated method stub
-		return null;
+		List<ThreadMessage> returnedList = new ArrayList<ThreadMessage>();
+		ThreadMessage tmp = null;
+		msgToSend = "GETTML\n"+"forumName: "+forumName+"\n"+"subForumName: "+subForumName+"\n";
+		try {stringToServer.writeBytes(msgToSend);}
+		catch(IOException e){}
+		try {
+			reciviedMsg = stringFromServer.readLine();
+			if(reciviedMsg.contains("200ok")){
+				reciviedMsg = stringFromServer.readLine();
+				while(reciviedMsg!=null){
+					tmp = new ThreadMessage(forumName, subForumName, reciviedMsg);
+					returnedList.add(tmp);
+					reciviedMsg = stringFromServer.readLine();
+				}
+			}
+		}
+		catch(IOException e){}
+		return returnedList;
 	}
 
 	@Override
@@ -145,29 +159,56 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		return returnedTM;
 	}
 
-
-
-
 	@Override
 	public boolean postComment(Post post, Member member) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean isPosted = false;
+		ThreadMessage tm = post.getThread();
+		SubForum sf = tm.getSubForum();
+		Forum f = sf.getForum();
+		String posterName = member.getUserName();
+		msgToSend = "POST\n"+"forumName: "+f+"\n" +
+		"subForumName: "+sf+"\n"+"ThreadMessage: "+tm+"\n"+"posterName: "+posterName+"\n";
+		try {stringToServer.writeBytes(msgToSend);}
+		catch(IOException e){}
+		try {reciviedMsg = stringFromServer.readLine();}
+		catch (IOException e) {}
+		if(reciviedMsg.contains("200ok")){
+			isPosted = true;
+		}
+		return isPosted;
 	}
-
-
-
 
 	@Override
 	public boolean publishThread(ThreadMessage newThread, Member member) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean isPublished = false;
+		SubForum sf = newThread.getSubForum();
+		Forum f = sf.getForum();
+		String posterName = member.getUserName();
+		msgToSend = "THREAD\n"+"forumName: "+f+"\n" +
+		"subForumName: "+sf+"\n"+"posterName: "+posterName+"\n";
+		try {stringToServer.writeBytes(msgToSend);}
+		catch(IOException e){}
+		try {reciviedMsg = stringFromServer.readLine();}
+		catch (IOException e) {}
+		if(reciviedMsg.contains("200ok")){
+			isPublished = true;
+		}
+		return isPublished;
 	}
 
 	@Override
-	public User logout(String forumName, String userName, String password,
-			String email) {
-		// TODO Auto-generated method stub
-		return null;
+	public User logout(String forumName, String userName) {
+		User loggedOutMember = null;
+		msgToSend = "LOGOUT\n"+"forumName: "+forumName+"\n" +
+		"userName: "+userName+"\n";
+		try {stringToServer.writeBytes(msgToSend);}
+		catch(IOException e){}
+		try {reciviedMsg = stringFromServer.readLine();}
+		catch (IOException e) {}
+		if(reciviedMsg.contains("200ok")){
+			loggedOutMember = new User(this);
+		}
+		return loggedOutMember;
 	}
 
 }

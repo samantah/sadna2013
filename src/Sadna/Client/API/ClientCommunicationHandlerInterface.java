@@ -19,7 +19,7 @@ public interface ClientCommunicationHandlerInterface {
 
     Member login(String forumName, String userName, String password);
     
-    User logout(String forumName, String userName, String password, String email);
+    User logout(String forumName, String userName);
 
     boolean postComment(Post post, Member member);
 

@@ -14,7 +14,7 @@ import Sadna.db.ThreadMessage;
  *
  * @author fistuk
  */
-public abstract class User implements Serializable {
+public class User implements Serializable {
 
     protected ConnectionHandler conHand;
 
