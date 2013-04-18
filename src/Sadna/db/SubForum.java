@@ -30,10 +30,18 @@ public class SubForum implements Serializable {
         this.threadIDGenerator = new ThreadIDGenerator();
     }
 
+    public SubForum(String forumStr, String subForumName) {
+        this.subForumName = subForumName;
+        this.listOfThreadMessages = new ArrayList<ThreadMessage>();
+        this.listOfModerators = new ArrayList<Moderator>();
+        this.forum = new Forum(null, forumStr);
+        this.threadIDGenerator = new ThreadIDGenerator();
+    }
+
     public ThreadIDGenerator getThreadIDGenerator() {
         return threadIDGenerator;
     }
-    
+
     public Forum getForum() {
         return forum;
     }
