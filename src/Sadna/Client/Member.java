@@ -6,25 +6,45 @@ package Sadna.Client;
 
 import java.util.List;
 
+import Sadna.db.Post;
 import Sadna.db.SubForum;
+import Sadna.db.ThreadMessage;
 
 
 public class Member extends User {
     protected String userName;
     protected String password;
     protected String email;
-    protected ConnectionHandler conHand;
+    protected String forum;
     
-    protected Member(String userName, String password, String email, ConnectionHandler ch){
+    public Member(String userName, String password, String email, String forum, ConnectionHandler ch){
+    	super(ch);
     	this.userName = userName;
     	this.password = password;
     	this.email = email;
-    	this.conHand = ch;
+    	this.forum = forum;
     }
-    protected boolean login(String userName, String password){
-    	return conHand.login(userName, password);
+    
+    public boolean postComment(Post post){
+    	return conHand.postComment(post, this);
     }
-    protected  List<SubForum> viewSubForums(){
-    	return conHand.getSubForumsList();
+    public boolean publishThread(ThreadMessage newThread){
+    	return conHand.publishThread(newThread, this);
     }
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public String getForum() {
+		return forum;
+	}
 }

@@ -4,10 +4,34 @@
  */
 package Sadna.Client;
 
+import java.util.List;
+
+import Sadna.db.SubForum;
+import Sadna.db.ThreadMessage;
+
 /**
  *
  * @author fistuk
  */
 public abstract class User{
-    private 
+	protected ConnectionHandler conHand;
+	
+	public User(ConnectionHandler ch){
+		this.conHand = ch;
+	}
+	
+    protected boolean login(String forum, String userName, String password){
+    	return conHand.login(forum,userName, password);
+    }
+    
+    protected List<SubForum> viewSubForums(String forum){
+    	return conHand.getSubForumsList(forum);
+    }
+    protected List<ThreadMessage> viewThreadMessages(String forum ,String subForumName){
+    	return conHand.getThreadsList(forum ,subForumName);
+    }
+    
+    protected boolean register(String forumName, String userName, String password, String email){
+    	return conHand.register(forumName, userName, password, email);
+    }
 }
