@@ -4,6 +4,8 @@
  */
 package Sadna.db.API;
 
+import java.util.List;
+
 import Sadna.Client.User;
 import Sadna.db.Forum;
 import Sadna.db.Message;
@@ -23,6 +25,14 @@ public interface DBInterface {
     ThreadMessage getThread(String forumName, String subForumName, int messageID);
 
     User getUser(String userName);
+    
+    List<SubForum> getSubForumsList();
+    
+    List<ThreadMessage> getThreadsList(String subForumName);
+    
+    int getNumberOfSubforums(String forumName);
+    
+    int getNumberOfThreads(String forumName, String subForumName);
 
     boolean addForum(Forum forum);
 
