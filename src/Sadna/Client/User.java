@@ -9,5 +9,5 @@ package Sadna.Client;
  * @author fistuk
  */
 public abstract class User{
-    
+    private 
 }
