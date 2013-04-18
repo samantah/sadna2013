@@ -9,5 +9,10 @@ package Sadna.db;
  * @author fistuk
  */
 public class Post extends Message{
-    
+    private ThreadMessage thread;
+
+    public Post(ThreadMessage thread, String message) {
+        super(message);
+        this.thread = thread;
+    }
 }

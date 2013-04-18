@@ -9,5 +9,9 @@ package Sadna.db;
  * @author fistuk
  */
 public abstract class Message {
-    
+    protected String message;
+
+    public Message(String message) {
+        this.message = message;
+    }
 }
