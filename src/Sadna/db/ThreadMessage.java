@@ -18,13 +18,18 @@ public class ThreadMessage extends Message {
     private SubForum subForum;
     private PostIDGenerator postIDGenerator;
 
-
     public ThreadMessage(SubForum subForum, String message) {
         super(message);
         listOfPosts = new ArrayList<Post>();
         this.subForum = subForum;
         this.postIDGenerator = new PostIDGenerator();
+    }
 
+    public ThreadMessage(String forum,String subForum, String message) {
+        super(message);
+        listOfPosts = new ArrayList<Post>();
+        this.subForum = new SubForum(forum, subForum);
+        this.postIDGenerator = new PostIDGenerator();
     }
 
     public SubForum getSubForum() {
