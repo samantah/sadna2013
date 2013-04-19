@@ -31,6 +31,8 @@ public interface DBInterface {
     List<SubForum> getSubForumsList(String forumName);
 
     List<ThreadMessage> getThreadsList(String forumName, String subForumName);
+    
+    List<Forum> getForumsList();
 
     int getNumberOfSubforums(String forumName);
 
@@ -46,5 +48,5 @@ public interface DBInterface {
 
     boolean addThread(ThreadMessage thread);
     
-    List<Member> getAllMembers();
+    List<Member> getAllMembers(String forumName);
 }

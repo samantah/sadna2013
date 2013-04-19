@@ -127,9 +127,10 @@ public class DataBase implements DBInterface {
         FileInputStream inputStream;
         ObjectInputStream obj;
         Member returnMemeber = null;
+        String path = dataBaseFolder + "/" + forumName
+                + "/members/" + userName + ".obj";
         try {
-            inputStream = new FileInputStream(dataBaseFolder + "/" + forumName
-                    + "/" + userName + ".obj");
+            inputStream = new FileInputStream(path);
             obj = new ObjectInputStream(inputStream);
             returnMemeber = (Member) obj.readObject();
             obj.close();
@@ -272,9 +273,13 @@ public class DataBase implements DBInterface {
         ObjectOutputStream obj;
         FileOutputStream outputstream;
         try {
-            String path = dataBaseFolder + "/" + forumStr + "/";
+            String path = dataBaseFolder + "/" + forumStr + "/members/";
+            boolean mkdirs = new File(path).mkdirs();
             outputstream = new FileOutputStream(path + userName + ".obj");
             obj = new ObjectOutputStream(outputstream);
+            obj.writeObject(member);
+            obj.close();
+            outputstream.close();
 
         } catch (FileNotFoundException ex) { //cannot open the file
             String message = ex.getMessage();
@@ -389,6 +394,74 @@ public class DataBase implements DBInterface {
         return numberOfThreads;
     }
 
+    @Override
+    public List<Member> getAllMembers(String forumName) {
+        FileInputStream inputStream;
+        ObjectInputStream obj;
+        ArrayList<Member> retList = new ArrayList<Member>();
+        String pathToFolder = dataBaseFolder + "/" + forumName + "/members/";
+        File folder = new File(pathToFolder);
+        File listOfFiles[] = folder.listFiles();
+        for (int i = 0; i < listOfFiles.length; i++) {
+            String nameOfFile = listOfFiles[i].getName();
+            if (!nameOfFile.endsWith(".obj")) {
+                continue;
+            }
+            try {
+                inputStream = new FileInputStream(pathToFolder + nameOfFile);
+                obj = new ObjectInputStream(inputStream);
+                Member readObject = (Member) obj.readObject();
+                retList.add(readObject);
+                obj.close();
+                inputStream.close();
+
+            } catch (FileNotFoundException ex) {
+                String message = ex.getMessage();
+                System.out.println(message);
+                return null;
+            } catch (IOException | ClassNotFoundException ex) {
+                String message = ex.getMessage();
+                System.out.println(message);
+                return null;
+            }
+        }
+        return retList;
+    }
+
+    @Override
+    public List<Forum> getForumsList() {
+        FileInputStream inputStream;
+        ObjectInputStream obj;
+        ArrayList<Forum> retList = new ArrayList<Forum>();
+        String pathToFolder = dataBaseFolder + "/";
+        File folder = new File(pathToFolder);
+        File listOfFiles[] = folder.listFiles();
+        for (int i = 0; i < listOfFiles.length; i++) {
+            String nameOfFile = listOfFiles[i].getName();
+            if (!nameOfFile.endsWith(".obj")) {
+                continue;
+            }
+            try {
+                inputStream = new FileInputStream(pathToFolder + nameOfFile);
+                obj = new ObjectInputStream(inputStream);
+                Forum readObject = (Forum) obj.readObject();
+                retList.add(readObject);
+                obj.close();
+                inputStream.close();
+
+            } catch (FileNotFoundException ex) {
+                String message = ex.getMessage();
+                System.out.println(message);
+                return null;
+            } catch (IOException | ClassNotFoundException ex) {
+                String message = ex.getMessage();
+                System.out.println(message);
+                return null;
+            }
+        }
+        return retList;
+    }
+
     public static void main(String args[]) {
         DataBase db = new DataBase();
         Forum forum = new Forum(new Admin(null, null, null, null, null), "forum1");
@@ -397,8 +470,8 @@ public class DataBase implements DBInterface {
         ThreadMessage threadMessage = new ThreadMessage(subForum, "NA", "hi11");
         ThreadMessage threadMessage2 = new ThreadMessage(subForum, "NA", "hi2aaa2");
         Post post = new Post(threadMessage, "NA", "hi11post1");
-        Post post2 = new Post(threadMessage,"NA",  "hi11post2");
-        Post post3 = new Post(threadMessage2,"NA",  "hii222");
+        Post post2 = new Post(threadMessage, "NA", "hi11post2");
+        Post post3 = new Post(threadMessage2, "NA", "hii222");
         forum.addSubForum(subForum);
         subForum.addThreadMessage(threadMessage);
         subForum.addThreadMessage(threadMessage2);
@@ -427,10 +500,8 @@ public class DataBase implements DBInterface {
         }
         System.out.println(db.getNumberOfSubforums("forum1"));
         System.out.println(db.getNumberOfThreads("forum1", "subForum1"));
-    }
-
-    @Override
-    public List<Member> getAllMembers() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Member member = new Member("user1", "pass1234", "mail", "forum1", null);
+        db.addMember(member);
+        System.out.println(db.getMember("forum1", "user1").getUserName());
     }
 }
