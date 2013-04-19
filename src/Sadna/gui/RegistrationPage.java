@@ -169,6 +169,8 @@ public class RegistrationPage extends javax.swing.JFrame {
                 break;
             case SUBFORUM:
                 frame = new SubForumPage();
+            case THREAD:
+                frame = new ThreadPage();
                 
         }
         this.setVisible(false);

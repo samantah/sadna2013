@@ -4,6 +4,12 @@
  */
 package Sadna.gui;
 
+import Sadna.Client.User;
+import Sadna.db.Post;
+import Sadna.db.ThreadMessage;
+import java.util.List;
+import javax.swing.DefaultListModel;
+
 /**
  *
  * @author fistuk
@@ -15,6 +21,30 @@ public class ThreadPage extends javax.swing.JFrame {
      */
     public ThreadPage() {
         initComponents();
+        if (CurrentStatus.currUser instanceof User){
+            jTextFieldAddTitle.setVisible(false);
+            jTextFieldAddContent.setVisible(false);
+            jButtonAddPost.setVisible(false);
+        }
+        this.setResizable(false);
+        jListPosts.setCellRenderer(new MyCellRenderer(80));
+        jListPosts.setFixedCellWidth(80);
+        jLabelThreadTitle.setText(CurrentStatus.currThread.getTitle());
+        jLabelThreadContent.setText(CurrentStatus.currThread.getContent());
+        
+        String forumName = CurrentStatus.currForum.getForumName();
+        String subForumName = CurrentStatus.currSubForum.getSubForumName();
+        int id = CurrentStatus.currThread.getId();
+
+        DefaultListModel listModel = new DefaultListModel();
+        List<Post> listOfPosts;
+        ThreadMessage thread = CurrentStatus.currUser.getThread(forumName, 
+                                                subForumName, id);
+        listOfPosts = thread.getListOfPosts();
+        for (Post p : listOfPosts) {
+            listModel.addElement(p.getTitle() + " - " + p.getContent());
+        }
+        jListPosts.setModel(listModel);
     }
 
     /**
@@ -26,19 +56,18 @@ public class ThreadPage extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabelTitle = new javax.swing.JLabel();
         jButtonBack = new javax.swing.JButton();
         logInButton = new javax.swing.JButton();
         registerButton = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        jLabelThreadTitle = new javax.swing.JLabel();
+        jLabelThreadContent = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        jListPosts = new javax.swing.JList();
+        jButtonAddPost = new javax.swing.JButton();
+        jTextFieldAddTitle = new javax.swing.JTextField();
+        jTextFieldAddContent = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jLabelTitle.setFont(new java.awt.Font("Arial", 3, 24)); // NOI18N
-        jLabelTitle.setText("Welcome to...");
 
         jButtonBack.setText("back");
         jButtonBack.addActionListener(new java.awt.event.ActionListener() {
@@ -61,59 +90,70 @@ public class ThreadPage extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel1.setText("Thread title");
+        jLabelThreadTitle.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabelThreadTitle.setText("Thread title");
 
-        jLabel2.setText("Thread content");
+        jLabelThreadContent.setText("Thread content");
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
+        jListPosts.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "list of posts", " " };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(jListPosts);
+
+        jButtonAddPost.setText("add post");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(211, 211, 211)
+                        .addGap(89, 89, 89)
                         .addComponent(jButtonBack)
                         .addGap(18, 18, 18)
                         .addComponent(logInButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(registerButton))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(99, 99, 99)
-                        .addComponent(jLabelTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 553, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(122, 122, 122)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1))))
-                .addContainerGap(98, Short.MAX_VALUE))
+                    .addComponent(jLabelThreadContent, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
+                    .addComponent(jLabelThreadTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 110, Short.MAX_VALUE)
+                        .addComponent(jButtonAddPost)
+                        .addGap(116, 116, 116))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jTextFieldAddContent)
+                            .addComponent(jTextFieldAddTitle))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(65, 65, 65)
-                .addComponent(jLabelTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(92, 92, 92)
+                .addComponent(jLabelThreadTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabelThreadContent, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jTextFieldAddTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldAddContent))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(registerButton)
                     .addComponent(logInButton)
-                    .addComponent(jButtonBack))
-                .addGap(64, 64, 64))
+                    .addComponent(jButtonBack)
+                    .addComponent(jButtonAddPost))
+                .addGap(80, 80, 80))
         );
 
         pack();
@@ -140,48 +180,15 @@ public class ThreadPage extends javax.swing.JFrame {
         this.dispose();
         registrationPage.setVisible(true);
     }//GEN-LAST:event_registerButtonActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ThreadPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ThreadPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ThreadPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ThreadPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ThreadPage().setVisible(true);
-            }
-        });
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonAddPost;
     private javax.swing.JButton jButtonBack;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabelTitle;
-    private javax.swing.JList jList1;
+    private javax.swing.JLabel jLabelThreadContent;
+    private javax.swing.JLabel jLabelThreadTitle;
+    private javax.swing.JList jListPosts;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jTextFieldAddContent;
+    private javax.swing.JTextField jTextFieldAddTitle;
     private javax.swing.JButton logInButton;
     private javax.swing.JButton registerButton;
     // End of variables declaration//GEN-END:variables
