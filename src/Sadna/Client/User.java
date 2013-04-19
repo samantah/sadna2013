@@ -39,6 +39,7 @@ public class User implements Serializable {
         return conHand.register(forumName, userName, password, email);
     }
     
+
     public List<Forum> viewForums() {
         return conHand.getForumsList();
     }
