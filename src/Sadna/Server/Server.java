@@ -26,7 +26,7 @@ public class Server {
 		ServerSocket welcomeSocket = new ServerSocket(3248);
 		Socket connectionSocket = welcomeSocket.accept();
 		BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-		DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
+		PrintWriter outToClient = new PrintWriter(connectionSocket.getOutputStream(), true);
 		ObjectOutputStream objout = new ObjectOutputStream(connectionSocket.getOutputStream());
 		SubForum sub = new SubForum("forum1", "subForum1");
 		ThreadMessage t = new ThreadMessage(sub, "ani t1");
@@ -44,15 +44,19 @@ public class Server {
 			ThreadMessage t1 = new ThreadMessage(sub, ""+i+i+i+i+i+i+i);
 			tl.add(t1);
 		}
+
 		while (true) {
 
 			clientSentence = inFromClient.readLine();
 			if (clientSentence == null) {
 				continue;
 			}
+			
 			capitalizedSentence = "200ok\n";
-			//            if (clientSentence.contains("subForum")){
-			objout.writeObject(tl);
+			if (clientSentence.contains("POST")){
+				System.out.println("here");
+				outToClient.println("200ok");
+			}
 		}
 	}
 }
