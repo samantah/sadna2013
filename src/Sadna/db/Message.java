@@ -24,7 +24,6 @@ public abstract class Message implements Serializable {
         this.publisher = publisher;
     }
 
-
     public void setMessage(String message) {
         this.content = message;
     }

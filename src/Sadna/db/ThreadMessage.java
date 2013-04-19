@@ -19,8 +19,10 @@ public class ThreadMessage extends Message {
     private PostIDGenerator postIDGenerator;
 
 
-    public ThreadMessage(SubForum subForum, String title, String content) {
-        super(title, content);
+    
+    
+    public ThreadMessage(SubForum subForum, String title, String content, String publisher) {
+        super(title, content, publisher);
         listOfPosts = new ArrayList<Post>();
         this.subForum = subForum;
         this.postIDGenerator = new PostIDGenerator();
@@ -28,8 +30,8 @@ public class ThreadMessage extends Message {
     
     
 
-    public ThreadMessage(String forum, String subForum, String title, String content) {
-        super(title, content);
+    public ThreadMessage(String forum, String subForum, String title, String content, String publisher) {
+        super(title, content, publisher);
         listOfPosts = new ArrayList<Post>();
         this.subForum = new SubForum(forum, subForum);
         this.postIDGenerator = new PostIDGenerator();

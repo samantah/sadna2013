@@ -4,6 +4,8 @@
  */
 package Sadna.gui;
 
+import javax.swing.JFrame;
+
 /**
  *
  * @author fistuk
@@ -15,6 +17,7 @@ public class RegistrationPage extends javax.swing.JFrame {
      */
     public RegistrationPage() {
         initComponents();
+        this.setResizable(false);
         jLabelInvalidData.setVisible(false);
     }
 
@@ -68,6 +71,11 @@ public class RegistrationPage extends javax.swing.JFrame {
         jLabelInvalidData.setText("Invalid data - ");
 
         jButtonBack.setText("back");
+        jButtonBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBackActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -138,40 +146,36 @@ public class RegistrationPage extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButtonRegisterActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
+    private void jButtonBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBackActionPerformed
+        EnumPages whereToGo = null;
+        JFrame frame = null;
+        for (int i = 0; i < 1; i++) {
+            if (CurrentStatus.currForum == null) {
+                whereToGo = EnumPages.MAIN;
+                break;
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RegistrationPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RegistrationPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RegistrationPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(RegistrationPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            if (CurrentStatus.currSubForum == null) {
+                whereToGo = EnumPages.FORUM;
+                break;
+            }
+            whereToGo = EnumPages.SUBFORUM;
         }
-        //</editor-fold>
+        switch (whereToGo) {
+            case MAIN:
+                frame = new MainFrame();
+                break;
+            case FORUM:
+                frame = new ForumPage();
+                break;
+            case SUBFORUM:
+                frame = new SubForumPage();
+                
+        }
+        this.setVisible(false);
+        this.dispose();
+        frame.setVisible(true);
+    }//GEN-LAST:event_jButtonBackActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new RegistrationPage().setVisible(true);
-            }
-        });
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonBack;
     private javax.swing.JButton jButtonRegister;

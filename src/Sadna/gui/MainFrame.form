@@ -23,35 +23,40 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="232" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="278" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane1" alignment="0" min="-2" pref="251" max="-2" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                      <Component id="logInButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="registerButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="enterForumButton" min="-2" max="-2" attributes="0"/>
-                  </Group>
                   <Component id="headLabel" alignment="0" min="-2" pref="264" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jScrollPane1" alignment="0" min="-2" pref="251" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="logInButton" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
+                              <Component id="enterForumButton" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="jButtonInitiateForum" min="-2" pref="196" max="-2" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace pref="254" max="32767" attributes="0"/>
+              <EmptySpace pref="40" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
               <Component id="headLabel" min="-2" pref="29" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jScrollPane1" pref="391" max="32767" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="logInButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="registerButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="enterForumButton" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="logInButton" max="32767" attributes="0"/>
+                      <Component id="enterForumButton" max="32767" attributes="0"/>
+                  </Group>
+                  <Component id="jButtonInitiateForum" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -61,18 +66,10 @@
   <SubComponents>
     <Component class="javax.swing.JButton" name="logInButton">
       <Properties>
-        <Property name="text" type="java.lang.String" value="log in"/>
+        <Property name="text" type="java.lang.String" value="log in as admin"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="logInButtonActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="registerButton">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="register"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="registerButtonActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="headLabel">
@@ -94,8 +91,8 @@
           <Properties>
             <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
               <StringArray count="2">
-                <StringItem index="0" value="hkjhkjh"/>
-                <StringItem index="1" value="llllllllll"/>
+                <StringItem index="0" value="list of forums"/>
+                <StringItem index="1" value=" "/>
               </StringArray>
             </Property>
           </Properties>
@@ -109,6 +106,14 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="enterForumButtonActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButtonInitiateForum">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Arial" size="12" style="2"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="initiate new forum"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>
