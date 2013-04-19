@@ -6,6 +6,7 @@ package Sadna.Client.API;
 
 import Sadna.Client.Member;
 import Sadna.Client.User;
+import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
@@ -32,6 +33,8 @@ public interface ClientCommunicationHandlerInterface {
     List<SubForum> getSubForumsList(String forumName);
     
     List<ThreadMessage> getThreadsList(String forumName ,String subForumName);
+    
+    List<Forum> getForumsList();
     
     ThreadMessage getThreadMessage(String forumName ,String subForumName, String threadMessage);
 }
