@@ -124,11 +124,13 @@ public class ServerImpl implements ServerInterface {
 	}
 
 
-
 	@Override
 	public boolean postComment(Post comment) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean posted = false;
+		posted = _db.addPost(comment);
+		if(posted)
+			_ch.sendOK();
+		return posted;
 	}
 
 }
