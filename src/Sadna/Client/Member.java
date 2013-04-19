@@ -4,6 +4,7 @@
  */
 package Sadna.Client;
 
+import Sadna.Client.API.ClientCommunicationHandlerInterface;
 import java.util.List;
 
 import Sadna.db.Post;
@@ -17,7 +18,7 @@ public class Member extends User {
     protected String email;
     protected String forum;
 
-    public Member(String userName, String password, String email, String forum, ConnectionHandler ch) {
+    public Member(String userName, String password, String email, String forum, ClientCommunicationHandlerInterface ch) {
         super(ch);
         this.userName = userName;
         this.password = password;

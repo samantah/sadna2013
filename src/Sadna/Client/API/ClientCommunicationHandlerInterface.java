@@ -29,6 +29,8 @@ public interface ClientCommunicationHandlerInterface {
     Member register(String forumName, String userName, String password, String email);
 
     SubForum getSubForum(String forum ,String subForumName);
+    
+    Forum getForum(String forumName);
 
     List<SubForum> getSubForumsList(String forumName);
     
@@ -36,5 +38,5 @@ public interface ClientCommunicationHandlerInterface {
     
     List<Forum> getForumsList();
     
-    ThreadMessage getThreadMessage(String forumName ,String subForumName, String threadMessage);
+    ThreadMessage getThreadMessage(String forumName ,String subForumName, int messageID);
 }

@@ -22,16 +22,18 @@ public interface DBInterface {
 
     SubForum getSubForum(String forumName, String subForumName);
 
-    ThreadMessage getThread(String forumName, String subForumName, int messageID);
+    ThreadMessage getThread(String forumName, String subForumName, int threadID);
+    
+    Post getPost(String forumName, String subForumName, int ThreadID, int postID);
 
-    User getUser(String userName);
-    
-    List<SubForum> getSubForumsList();
-    
-    List<ThreadMessage> getThreadsList(String subForumName);
-    
+    User getUser(String forumName, String userName);
+
+    List<SubForum> getSubForumsList(String forumName);
+
+    List<ThreadMessage> getThreadsList(String forumName, String subForumName);
+
     int getNumberOfSubforums(String forumName);
-    
+
     int getNumberOfThreads(String forumName, String subForumName);
 
     boolean addForum(Forum forum);
