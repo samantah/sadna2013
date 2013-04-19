@@ -70,4 +70,14 @@ public class SubForum implements Serializable {
     public String getSubForumName() {
         return subForumName;
     }
+
+    public List<ThreadMessage> getListOfThreadMessages() {
+        return listOfThreadMessages;
+    }
+
+    public List<Moderator> getListOfModerators() {
+        return listOfModerators;
+    }
+    
+    
 }
