@@ -6,6 +6,7 @@ package Sadna.gui;
 
 import Sadna.Client.ConnectionHandler;
 import Sadna.Client.ConnectionHandlerMock;
+import Sadna.Client.SuperAdmin;
 import Sadna.Client.User;
 import Sadna.db.Forum;
 import java.util.List;
@@ -17,13 +18,13 @@ import javax.swing.JFrame;
  * @author fistuk
  */
 public class MainFrame extends javax.swing.JFrame {
-    
+
     /**
      * Creates new form MainFrame
      */
     public MainFrame() {
         initComponents();
-        
+        this.setResizable(false);
         ConnectionHandlerMock ch = new ConnectionHandlerMock();
         CurrentStatus.currUser = new User(ch);
         List<Forum> viewForums = CurrentStatus.currUser.viewForums();
@@ -32,6 +33,9 @@ public class MainFrame extends javax.swing.JFrame {
             listOfForums.addElement(f.getForumName());            
         }
         forumsList.setModel(listOfForums);
+        if (!(CurrentStatus.currUser instanceof SuperAdmin)) {
+            jButtonInitiateForum.setVisible(false);
+        }
         
         
     }
@@ -46,25 +50,18 @@ public class MainFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         logInButton = new javax.swing.JButton();
-        registerButton = new javax.swing.JButton();
         headLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         forumsList = new javax.swing.JList();
         enterForumButton = new javax.swing.JButton();
+        jButtonInitiateForum = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        logInButton.setText("log in");
+        logInButton.setText("log in as admin");
         logInButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 logInButtonActionPerformed(evt);
-            }
-        });
-
-        registerButton.setText("register");
-        registerButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                registerButtonActionPerformed(evt);
             }
         });
 
@@ -72,7 +69,7 @@ public class MainFrame extends javax.swing.JFrame {
         headLabel.setText("Welcome to our forum");
 
         forumsList.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "hkjhkjh", "llllllllll" };
+            String[] strings = { "list of forums", " " };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
@@ -85,53 +82,52 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        jButtonInitiateForum.setFont(new java.awt.Font("Arial", 2, 12)); // NOI18N
+        jButtonInitiateForum.setText("initiate new forum");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(232, 232, 232)
+                .addGap(278, 278, 278)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(headLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(logInButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(registerButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(enterForumButton))
-                    .addComponent(headLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(254, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(logInButton)
+                                .addGap(45, 45, 45)
+                                .addComponent(enterForumButton)))
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonInitiateForum, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addComponent(headLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(logInButton)
-                    .addComponent(registerButton)
-                    .addComponent(enterForumButton))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(logInButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(enterForumButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButtonInitiateForum, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void logInButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logInButtonActionPerformed
-        LogInPage logInPage = new LogInPage();
-        this.setVisible(false);
-        this.dispose();
-        logInPage.setVisible(true);
-    }//GEN-LAST:event_logInButtonActionPerformed
-
     private void enterForumButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enterForumButtonActionPerformed
         String selectedValue = (String) forumsList.getSelectedValue();
-        if (selectedValue==null)
+        if (selectedValue == null) {
             return;
+        }
         Forum forum = CurrentStatus.currUser.getForum(selectedValue);
         CurrentStatus.currForum = forum;
         ForumPage forumPage = new ForumPage();
@@ -139,13 +135,13 @@ public class MainFrame extends javax.swing.JFrame {
         this.dispose();
         forumPage.setVisible(true);
     }//GEN-LAST:event_enterForumButtonActionPerformed
-
-    private void registerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerButtonActionPerformed
-        RegistrationPage registrationPage = new RegistrationPage ();
+    
+    private void logInButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logInButtonActionPerformed
+        LogInAsAdminPage logInAsAdminPage = new LogInAsAdminPage();
         this.setVisible(false);
         this.dispose();
-        registrationPage.setVisible(true);
-    }//GEN-LAST:event_registerButtonActionPerformed
+        logInAsAdminPage.setVisible(true);
+    }//GEN-LAST:event_logInButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -185,8 +181,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton enterForumButton;
     private javax.swing.JList forumsList;
     private javax.swing.JLabel headLabel;
+    private javax.swing.JButton jButtonInitiateForum;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton logInButton;
-    private javax.swing.JButton registerButton;
     // End of variables declaration//GEN-END:variables
 }

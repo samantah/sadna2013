@@ -29,12 +29,12 @@ public class ConnectionHandlerMock implements ClientCommunicationHandlerInterfac
     }
 
     @Override
-    public boolean postComment(Post post, Member member) {
+    public boolean postComment(Post post) {
         return true;
     }
 
     @Override
-    public boolean publishThread(ThreadMessage newThread, Member member) {
+    public boolean publishThread(ThreadMessage newThread) {
         return true;
     }
 
@@ -58,7 +58,13 @@ public class ConnectionHandlerMock implements ClientCommunicationHandlerInterfac
 
     @Override
     public List<ThreadMessage> getThreadsList(String forumName, String subForumName) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        List<ThreadMessage> retList = new ArrayList<ThreadMessage>();
+        for (int i = 0; i < 44; i++) {
+            ThreadMessage threadMessage = new ThreadMessage("forum1",
+                    "sub1", "Title!!!" + i, "nothing", "chen");
+            retList.add(threadMessage);
+        }
+        return retList;
     }
 
     @Override
@@ -71,7 +77,13 @@ public class ConnectionHandlerMock implements ClientCommunicationHandlerInterfac
 
     @Override
     public ThreadMessage getThreadMessage(String forumName, String subForumName, int messageID) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        ThreadMessage threadMessage = new ThreadMessage(forumName, subForumName,
+                "title", "content", "chen");
+        for (int i = 0; i < 10; i++) {
+            Post p = new Post(threadMessage, "postTitle " + i, "postContent", "snir");
+            threadMessage.addPost(p);
+        }
+        return threadMessage;
     }
 
     @Override
@@ -80,5 +92,15 @@ public class ConnectionHandlerMock implements ClientCommunicationHandlerInterfac
         SubForum subForum = new SubForum(forum, "sub1");
         forum.addSubForum(subForum);
         return forum;
+    }
+
+    @Override
+    public boolean addSubForum(SubForum subForum) {
+        return true;
+    }
+
+    @Override
+    public boolean initiateForum(String forumName, String adminName, String adminPassword) {
+        return true;
     }
 }

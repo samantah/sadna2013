@@ -11,12 +11,12 @@ import javax.swing.JFrame;
  *
  * @author fistuk
  */
-public class LogInPage extends javax.swing.JFrame {
+public class LogInAsAdminPage extends javax.swing.JFrame {
 
     /**
      * Creates new form LogInPage
      */
-    public LogInPage() {
+    public LogInAsAdminPage() {
         initComponents();
         this.setResizable(false);
         jLabelInvalidData.setVisible(false);
@@ -51,7 +51,7 @@ public class LogInPage extends javax.swing.JFrame {
         jButtonLogin.setText("log in");
 
         jLabelTitle.setFont(new java.awt.Font("Arial", 3, 24)); // NOI18N
-        jLabelTitle.setText("Please log in");
+        jLabelTitle.setText("admin login");
 
         jPasswordField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -74,28 +74,29 @@ public class LogInPage extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(125, 125, 125)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelInvalidData, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(125, 125, 125)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelUserName)
-                            .addComponent(jLabelPassword)
+                            .addComponent(jLabelInvalidData, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(29, 29, 29)
-                                .addComponent(jButtonBack)))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextFieldUserName, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
-                            .addComponent(jPasswordField1)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jButtonLogin)
-                                .addGap(21, 21, 21)))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabelUserName)
+                                    .addComponent(jLabelPassword)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(29, 29, 29)
+                                        .addComponent(jButtonBack)))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jTextFieldUserName, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
+                                    .addComponent(jPasswordField1)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(jButtonLogin)
+                                        .addGap(21, 21, 21))))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(176, 176, 176)
+                        .addComponent(jLabelTitle)))
                 .addContainerGap(106, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabelTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -127,34 +128,12 @@ public class LogInPage extends javax.swing.JFrame {
     }//GEN-LAST:event_jPasswordField1ActionPerformed
 
     private void jButtonBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBackActionPerformed
-        EnumPages whereToGo = null;
-        JFrame frame = null;
-        for (int i = 0; i < 1; i++) {
-            if (CurrentStatus.currForum == null) {
-                whereToGo = EnumPages.MAIN;
-                break;
-            }
-            if (CurrentStatus.currSubForum == null) {
-                whereToGo = EnumPages.FORUM;
-                break;
-            }
-            whereToGo = EnumPages.SUBFORUM;
-        }
-        switch (whereToGo) {
-            case MAIN:
-                frame = new MainFrame();
-                break;
-            case FORUM:
-                frame = new ForumPage();
-                break;
-            case SUBFORUM:
-                frame = new SubForumPage();
-
-        }
+        MainFrame mainFrame = new MainFrame();
         this.setVisible(false);
         this.dispose();
-        frame.setVisible(true);
+        mainFrame.setVisible(true);
     }//GEN-LAST:event_jButtonBackActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonBack;
     private javax.swing.JButton jButtonLogin;

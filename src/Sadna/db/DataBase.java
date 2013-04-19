@@ -464,14 +464,14 @@ public class DataBase implements DBInterface {
 
     public static void main(String args[]) {
         DataBase db = new DataBase();
-        Forum forum = new Forum(new Admin(null, null, null, null, null), "forum1");
+        Forum forum = new Forum("forum1");
         SubForum subForum = new SubForum(forum, "subforum1");
         SubForum subForum2 = new SubForum(forum, "subforum2");
-        ThreadMessage threadMessage = new ThreadMessage(subForum, "NA", "hi11");
-        ThreadMessage threadMessage2 = new ThreadMessage(subForum, "NA", "hi2aaa2");
-        Post post = new Post(threadMessage, "NA", "hi11post1");
-        Post post2 = new Post(threadMessage, "NA", "hi11post2");
-        Post post3 = new Post(threadMessage2, "NA", "hii222");
+        ThreadMessage threadMessage = new ThreadMessage(subForum, "NA", "hi11", "publisher");
+        ThreadMessage threadMessage2 = new ThreadMessage(subForum, "NA", "hi2aaa2", "publisher");
+        Post post = new Post(threadMessage, "NA", "hi11post1", "publisher");
+        Post post2 = new Post(threadMessage, "NA", "hi11post2", "publisher");
+        Post post3 = new Post(threadMessage2, "NA", "hii222", "publisher");
         forum.addSubForum(subForum);
         subForum.addThreadMessage(threadMessage);
         subForum.addThreadMessage(threadMessage2);
