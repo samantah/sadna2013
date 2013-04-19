@@ -13,40 +13,58 @@ import Sadna.db.ThreadMessage;
 
 public class Member extends User {
 
-    protected String userName;
-    protected String password;
-    protected String email;
-    protected String forum;
+	protected String userName;
+	protected String password;
+	protected String email;
+	protected String forum;
 
-    public Member(String userName, String password, String email, String forum, ClientCommunicationHandlerInterface ch) {
-        super(ch);
-        this.userName = userName;
-        this.password = password;
-        this.email = email;
-        this.forum = forum;
-    }
+	public Member(String userName, String password, String email, String forum, ClientCommunicationHandlerInterface ch) {
+		super(ch);
+		this.userName = userName;
+		this.password = password;
+		this.email = email;
+		this.forum = forum;
+	}
 
-    public boolean postComment(Post post) {
-        return conHand.postComment(post);
-    }
+	public Member(String userName, String password, String email, ClientCommunicationHandlerInterface ch) {
+		super(ch);
+		this.userName = userName;
+		this.password = password;
+		this.email = email;
+		this.forum = null;
+	} 
 
-    public boolean publishThread(ThreadMessage newThread) {
-        return conHand.publishThread(newThread);
-    }
+	public boolean postComment(Post post) {
+		return conHand.postComment(post);
+	}
 
-    public String getUserName() {
-        return userName;
-    }
+	public boolean publishThread(ThreadMessage newThread) {
+		return conHand.publishThread(newThread);
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public String getUserName() {
+		return userName;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public String getForum() {
-        return forum;
-    }
+	public String getEmail() {
+		return email;
+	}
+
+	public String getForum() {
+		return forum;
+	}
+
+	public boolean setForum(String forumName) {
+		if(forum == null){
+			forum = forumName;
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 }
