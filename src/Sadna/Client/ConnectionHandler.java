@@ -143,8 +143,8 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		SubForum sf = tm.getSubForum();
 		Forum f = sf.getForum();
 		String posterName = member.getUserName();
-		msgToSend = "POST\n"+"forumName: "+f+"\n" +
-		"subForumName: "+sf+"\n"+"ThreadMessage: "+tm+"\n"+"posterName: "+posterName+"\n";
+		msgToSend = "POST\n"+"forumName: "+f.getForumName()+"\n" +
+		"subForumName: "+sf.getSubForumName()+"\n"+"ThreadMessage: "+tm.getId()+"\n"+"posterName: "+posterName+"\n";
 		stringToServer.println(msgToSend);
 		try {reciviedMsg = stringFromServer.readLine();}
 		catch (IOException e) {}
