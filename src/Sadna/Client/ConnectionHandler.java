@@ -117,18 +117,9 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		ThreadMessage tmp = null;
 		msgToSend = "GETTML\n"+"forumName: "+forumName+"\n"+"subForumName: "+subForumName+"\n";
 		stringToServer.println(msgToSend);
-		try {
-			reciviedMsg = stringFromServer.readLine();
-			if(reciviedMsg.contains("200ok")){
-				reciviedMsg = stringFromServer.readLine();
-				while(reciviedMsg!=null){
-					tmp = new ThreadMessage(forumName, subForumName, reciviedMsg);
-					returnedList.add(tmp);
-					reciviedMsg = stringFromServer.readLine();
-				}
-			}
-		}
-		catch(IOException e){}
+		try {returnedList = (List<ThreadMessage>)objectFromServer.readObject();}
+		catch (ClassNotFoundException e) {}
+		catch (IOException e) {}
 		return returnedList;
 	}
 

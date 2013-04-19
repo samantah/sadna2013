@@ -10,6 +10,8 @@ import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -37,6 +39,11 @@ public class Server {
 			sub = new SubForum(f, "subForumName"+i);
 			f.addSubForum(sub);
 		}
+		List<ThreadMessage> tl = new ArrayList<ThreadMessage>();
+		for(int i =0; i<3; i++){
+			ThreadMessage t1 = new ThreadMessage(sub, ""+i+i+i+i+i+i+i);
+			tl.add(t1);
+		}
 		while (true) {
 
 			clientSentence = inFromClient.readLine();
@@ -45,7 +52,7 @@ public class Server {
 			}
 			capitalizedSentence = "200ok\n";
 			//            if (clientSentence.contains("subForum")){
-			objout.writeObject(f.getListOfSubForums());
+			objout.writeObject(tl);
 		}
 	}
 }
