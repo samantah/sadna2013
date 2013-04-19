@@ -46,11 +46,6 @@ public class Server {
 			capitalizedSentence = "200ok\n";
 			//            if (clientSentence.contains("subForum")){
 			objout.writeObject(f.getListOfSubForums());
-			//            }
-			//            outToClient.writeBytes(capitalizedSentence);
-			//System.out.println("passed");
-			//            welcomeSocket.close();
-			//            System.out.println("connection terminated");
 		}
 	}
 }

@@ -7,6 +7,7 @@ package Sadna.Client;
 import java.io.Serializable;
 import java.util.List;
 
+import Sadna.db.Forum;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 
@@ -36,5 +37,9 @@ public class User implements Serializable {
 
     protected Member register(String forumName, String userName, String password, String email) {
         return conHand.register(forumName, userName, password, email);
+    }
+    
+    protected List<Forum> viewSubForums() {
+        return conHand.getForumsList();
     }
 }
