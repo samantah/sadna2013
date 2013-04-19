@@ -8,9 +8,18 @@ import Sadna.Client.API.ClientCommunicationHandlerInterface;
 
 public class Admin extends Member {
 
-    public Admin(String userName, String password, String email, String forum,
+    public Admin(String userName, String password, String email,
             ClientCommunicationHandlerInterface ch) {
-        super(userName, password, email, forum, ch);
-        // TODO Auto-generated constructor stub
+        super(userName, password, email, null, ch);
     }
+    
+	public boolean setForum(String forumName) {
+		if(forum == null){
+			forum = forumName;
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 }
