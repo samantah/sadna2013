@@ -14,10 +14,12 @@ public class Post extends Message implements Serializable {
 
     private ThreadMessage thread;
 
-    public Post(ThreadMessage thread, String message) {
-        super(message);
+    public Post(ThreadMessage thread, String title, String content) {
+        super(title, content);
         this.thread = thread;
     }
+
+    
 
     public ThreadMessage getThread() {
         return thread;

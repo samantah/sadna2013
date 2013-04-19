@@ -10,13 +10,14 @@ import Sadna.Client.User;
 import Sadna.db.Forum;
 import java.util.List;
 import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
 
 /**
  *
  * @author fistuk
  */
 public class MainFrame extends javax.swing.JFrame {
-
+    
     /**
      * Creates new form MainFrame
      */
@@ -116,11 +117,22 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void logInButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logInButtonActionPerformed
-        // TODO add your handling code here:
+        LogInPage logInPage = new LogInPage();
+        this.setVisible(false);
+        this.dispose();
+        logInPage.setVisible(true);
     }//GEN-LAST:event_logInButtonActionPerformed
 
     private void enterForumButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enterForumButtonActionPerformed
         String selectedValue = (String) forumsList.getSelectedValue();
+        if (selectedValue==null)
+            return;
+        Forum forum = CurrentStatus.currUser.getForum(selectedValue);
+        CurrentStatus.currForum = forum;
+        ForumPage forumPage = new ForumPage();
+        this.setVisible(false);
+        this.dispose();
+        forumPage.setVisible(true);
     }//GEN-LAST:event_enterForumButtonActionPerformed
 
     /**
