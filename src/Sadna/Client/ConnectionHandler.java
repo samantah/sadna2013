@@ -12,19 +12,21 @@ import Sadna.db.ThreadMessage;
 
 public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 	private Socket clientSocket;
-	private DataOutputStream stringToServer;
+	private PrintWriter stringToServer;
 	private BufferedReader stringFromServer;
 	private ObjectOutputStream objectToServer;
 	private ObjectInputStream objectFromServer;
 	private String msgToSend;
 	private String reciviedMsg;
 
-	public ConnectionHandler(String host, int port) throws UnknownHostException, IOException{
-		clientSocket = new Socket(host, port);
-		stringToServer = new DataOutputStream(clientSocket.getOutputStream());
-		stringFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-		objectToServer = new ObjectOutputStream(clientSocket.getOutputStream()); 
-		objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
+	public ConnectionHandler(String host, int port){
+		try{
+			clientSocket = new Socket(host, port);
+			stringToServer = new PrintWriter(clientSocket.getOutputStream(), true);
+			stringFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+			objectToServer = new ObjectOutputStream(clientSocket.getOutputStream()); 
+			objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
+		}catch(Exception e){}
 	}
 
 
@@ -39,8 +41,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		Member loggedInMember = null;
 		msgToSend = "LOGIN\n"+"forumName: "+forumName+"\n" +
 		"userName: "+userName+"\n"+"password: "+password+"\n";
-		try {stringToServer.writeBytes(msgToSend);}
-		catch(IOException e){}
+		stringToServer.println(msgToSend);
 		try {reciviedMsg = stringFromServer.readLine();}
 		catch (IOException e) {}
 		if(reciviedMsg.contains("200ok")){
@@ -56,8 +57,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		if(passwordValidity(password)){
 			msgToSend = "REGISTER\n"+"forumName: "+forumName+"\n"+"userName: "+userName+"\n" +
 			"password: "+password+"\n"+"email: "+email+"\n";
-			try {stringToServer.writeBytes(msgToSend);}
-			catch(IOException e){}
+			stringToServer.println(msgToSend);
 			try {reciviedMsg = stringFromServer.readLine();}
 			catch (IOException e) {}
 			if(reciviedMsg.contains("200ok")){
@@ -67,11 +67,11 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		return loggedInMember;
 	}
 
-	private boolean passwordValidity(String password) {
+	public boolean passwordValidity(String password) {
 		return (password.length()<16 && password.length()>8 && range(password));
 	}
 
-	private boolean range(String password){
+	public boolean range(String password){
 		boolean charFlag = false;
 		boolean numFlag = false;
 		char currchar;
@@ -92,8 +92,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		SubForum returnedSF = null;
 		msgToSend = "GETSF\n"+"forumName: "+forum+"\n" +
 		"subForumName: "+subForumName+"\n";
-		try {stringToServer.writeBytes(msgToSend);}
-		catch(IOException e){}
+		stringToServer.println(msgToSend);
 		try {returnedSF = (SubForum)objectFromServer.readObject();}
 		catch (IOException e) {}
 		catch (ClassNotFoundException e){}
@@ -105,20 +104,10 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		List<SubForum> returnedList = new ArrayList<SubForum>();
 		SubForum tmp = null;
 		msgToSend = "GETSFL\n"+"forumName: "+forumName+"\n";
-		try {stringToServer.writeBytes(msgToSend);}
-		catch(IOException e){}
-		try {
-			reciviedMsg = stringFromServer.readLine();
-			if(reciviedMsg.contains("200ok")){
-				reciviedMsg = stringFromServer.readLine();
-				while(reciviedMsg!=null){
-					tmp = new SubForum(forumName, reciviedMsg);
-					returnedList.add(tmp);
-					reciviedMsg = stringFromServer.readLine();
-				}
-			}
-		}
-		catch(IOException e){}
+		stringToServer.println(msgToSend);
+		try {returnedList = (List<SubForum>)objectFromServer.readObject();}
+		catch (ClassNotFoundException e) {}
+		catch (IOException e) {}
 		return returnedList;
 	}
 
@@ -128,8 +117,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		List<ThreadMessage> returnedList = new ArrayList<ThreadMessage>();
 		ThreadMessage tmp = null;
 		msgToSend = "GETTML\n"+"forumName: "+forumName+"\n"+"subForumName: "+subForumName+"\n";
-		try {stringToServer.writeBytes(msgToSend);}
-		catch(IOException e){}
+		stringToServer.println(msgToSend);
 		try {
 			reciviedMsg = stringFromServer.readLine();
 			if(reciviedMsg.contains("200ok")){
@@ -151,8 +139,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		ThreadMessage returnedTM = null;
 		msgToSend = "GETTM\n"+"forumName: "+forumName+"\n" +
 		"subForumName: "+subForumName+"\n"+"treadMessage: "+threadMessage+"\n";
-		try {stringToServer.writeBytes(msgToSend);}
-		catch(IOException e){}
+		stringToServer.println(msgToSend);
 		try {returnedTM = (ThreadMessage)objectFromServer.readObject();}
 		catch (IOException e) {}
 		catch (ClassNotFoundException e){}
@@ -168,8 +155,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		String posterName = member.getUserName();
 		msgToSend = "POST\n"+"forumName: "+f+"\n" +
 		"subForumName: "+sf+"\n"+"ThreadMessage: "+tm+"\n"+"posterName: "+posterName+"\n";
-		try {stringToServer.writeBytes(msgToSend);}
-		catch(IOException e){}
+		stringToServer.println(msgToSend);
 		try {reciviedMsg = stringFromServer.readLine();}
 		catch (IOException e) {}
 		if(reciviedMsg.contains("200ok")){
@@ -186,8 +172,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		String posterName = member.getUserName();
 		msgToSend = "THREAD\n"+"forumName: "+f+"\n" +
 		"subForumName: "+sf+"\n"+"posterName: "+posterName+"\n";
-		try {stringToServer.writeBytes(msgToSend);}
-		catch(IOException e){}
+		stringToServer.println(msgToSend);
 		try {reciviedMsg = stringFromServer.readLine();}
 		catch (IOException e) {}
 		if(reciviedMsg.contains("200ok")){
@@ -201,8 +186,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		User loggedOutMember = null;
 		msgToSend = "LOGOUT\n"+"forumName: "+forumName+"\n" +
 		"userName: "+userName+"\n";
-		try {stringToServer.writeBytes(msgToSend);}
-		catch(IOException e){}
+		stringToServer.println(msgToSend);
 		try {reciviedMsg = stringFromServer.readLine();}
 		catch (IOException e) {}
 		if(reciviedMsg.contains("200ok")){
