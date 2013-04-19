@@ -22,9 +22,9 @@ public interface ClientCommunicationHandlerInterface {
     
     User logout(String forumName, String userName);
 
-    boolean postComment(Post post, Member member);
+    boolean postComment(Post post);
 
-    boolean publishThread(ThreadMessage newThread, Member member);
+    boolean publishThread(ThreadMessage newThread);
 
     Member register(String forumName, String userName, String password, String email);
 
@@ -39,4 +39,6 @@ public interface ClientCommunicationHandlerInterface {
     List<Forum> getForumsList();
     
     ThreadMessage getThreadMessage(String forumName ,String subForumName, int messageID);
+    
+    boolean addSubForum(SubForum subForum);
 }

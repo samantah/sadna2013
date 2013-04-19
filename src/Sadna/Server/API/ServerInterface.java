@@ -23,7 +23,7 @@ public interface ServerInterface {
 
     boolean login(String forumName, String userName, String password);
 
-    boolean publishThread(ThreadMessage thread, User user);
+    boolean publishThread(ThreadMessage thread);
 
     SubForum getSubForum(String forumName, String subForumName);
 
@@ -35,7 +35,7 @@ public interface ServerInterface {
 
     Forum initiateForum(String adminUserName, String adminPassword, String forumName);
 
-    boolean addSubForum(SubForum subForum, List<Moderator> subForumModerators);
+    boolean addSubForum(SubForum subForum);
 
-    boolean postComment(ThreadMessage commentTo, Post comment);
+    boolean postComment(Post comment);
 }
