@@ -9,7 +9,16 @@ import Sadna.Server.API.ServerInterface;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
-
+/*dear sami,
+ * the server need to handle the next case:
+ * in case of new thread publish, you need to add to the ThreadList of the current subForum the current thread.
+ * the same case, with a new post, and with a  adding new subForum.
+ * if you have any question, you are more then welcome to call the IT department,
+ * regards,
+ * snir elkaras
+ *   8888888888888888888888888888888888888888888888888888888888888888888888888888888
+ *   8888888888888888888888888888888888888888888888888888888888888888888888888888888
+ */
 /**
  *
  * @author fistuk

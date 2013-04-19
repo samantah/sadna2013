@@ -20,7 +20,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 	private ObjectInputStream objectFromServer;
 	private String msgToSend;
 	private String reciviedMsg;
-
+	
 	public ConnectionHandler(String host, int port){
 		try{
 			clientSocket = new Socket(host, port);
@@ -179,7 +179,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 
 	@Override
 	public User logout(String forumName, String userName) {
-		User loggedOutMember = null;
+		/*User loggedOutMember = null;
 		msgToSend = "LOGOUT\n"+"forumName: "+forumName+"\n" +
 		"userName: "+userName+"\n";
 		stringToServer.println(msgToSend);
@@ -189,6 +189,8 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 			loggedOutMember = new User(this);
 		}
 		return loggedOutMember;
+		*///FOR FUTURE USE
+		return new User(this);
 	}
 
 	@Override
