@@ -18,9 +18,10 @@ public class ConnectionHandlerServer implements ConnectionHandlerServerInterface
 	private Socket serverSocket;
 	private PrintWriter stringToClient;
 	private ObjectOutputStream objectToClient;
-	public ConnectionHandlerServer(String host, int port){
+	
+	public ConnectionHandlerServer(Socket socket){
 		try{
-			serverSocket = new Socket(host, port);
+			serverSocket = socket;
 			stringToClient = new PrintWriter(serverSocket.getOutputStream(), true);
 			new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
 			objectToClient = new ObjectOutputStream(serverSocket.getOutputStream()); 
@@ -95,6 +96,12 @@ public class ConnectionHandlerServer implements ConnectionHandlerServerInterface
 		} catch (IOException e) {
 			e.printStackTrace();
 		}			
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 
