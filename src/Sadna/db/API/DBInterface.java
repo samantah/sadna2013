@@ -45,4 +45,6 @@ public interface DBInterface {
     boolean addPost(Post post);
 
     boolean addThread(ThreadMessage thread);
+    
+    List<Member> getAllMembers();
 }

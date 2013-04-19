@@ -29,8 +29,8 @@ public class Server {
 		PrintWriter outToClient = new PrintWriter(connectionSocket.getOutputStream(), true);
 		ObjectOutputStream objout = new ObjectOutputStream(connectionSocket.getOutputStream());
 		SubForum sub = new SubForum("forum1", "subForum1");
-		ThreadMessage t = new ThreadMessage(sub, "ani t1");
-		ThreadMessage t2 = new ThreadMessage(sub, "ani t2");
+		ThreadMessage t = new ThreadMessage(sub, "ani t1", "zubi");
+		ThreadMessage t2 = new ThreadMessage(sub, "ani t2", "zubi");
 		sub.addThreadMessage(t);
 		sub.addThreadMessage(t2);
 		Admin a = new Admin("userName", "password", "email", "forum", null);
@@ -41,10 +41,14 @@ public class Server {
 		}
 		List<ThreadMessage> tl = new ArrayList<ThreadMessage>();
 		for(int i =0; i<3; i++){
-			ThreadMessage t1 = new ThreadMessage(sub, ""+i+i+i+i+i+i+i);
+			ThreadMessage t1 = new ThreadMessage(sub, ""+i+i+i+i+i+i+i, "zubi");
 			tl.add(t1);
 		}
-
+		List<Forum> fl = new ArrayList<Forum>();
+		for(int i =0; i<10; i++){
+			Forum f1 = new Forum(a, "forumName"+i);
+			fl.add(f1);
+		}
 		while (true) {
 
 			clientSentence = inFromClient.readLine();
@@ -53,10 +57,11 @@ public class Server {
 			}
 			
 			capitalizedSentence = "200ok\n";
-			if (clientSentence.contains("POST")){
-				System.out.println("here");
-				outToClient.println("200ok");
+			System.out.println("sendind..");
+			if (clientSentence.contains("GETFL")){
+				objout.writeObject(fl);
 			}
+			System.out.println("finished");
 		}
 	}
 }

@@ -29,8 +29,6 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		}catch(Exception e){}
 	}
 
-
-
 	public boolean finishCommunication() throws IOException{
 		clientSocket.close();
 		return true;
@@ -68,7 +66,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 	}
 
 	public boolean passwordValidity(String password) {
-		return (password.length()<16 && password.length()>8 && range(password));
+		return (password.length()<=16 && password.length()>=8 && range(password));
 	}
 
 	public boolean range(String password){
@@ -115,7 +113,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 			String subForumName) {
 		List<ThreadMessage> returnedList = new ArrayList<ThreadMessage>();
 		ThreadMessage tmp = null;
-		msgToSend = "GETTML\n"+"forumName: "+forumName+"\n"+"subForumName: "+subForumName+"\n";
+		msgToSend = "GETTL\n"+"forumName: "+forumName+"\n"+"subForumName: "+subForumName+"\n";
 		stringToServer.println(msgToSend);
 		try {returnedList = (List<ThreadMessage>)objectFromServer.readObject();}
 		catch (ClassNotFoundException e) {}
@@ -125,10 +123,10 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 
 	@Override
 	public ThreadMessage getThreadMessage(String forumName,
-			String subForumName, String threadMessage) {
+			String subForumName, int msgID) {
 		ThreadMessage returnedTM = null;
 		msgToSend = "GETTM\n"+"forumName: "+forumName+"\n" +
-		"subForumName: "+subForumName+"\n"+"treadMessage: "+threadMessage+"\n";
+		"subForumName: "+subForumName+"\n"+"treadMessageID: "+msgID+"\n";
 		stringToServer.println(msgToSend);
 		try {returnedTM = (ThreadMessage)objectFromServer.readObject();}
 		catch (IOException e) {}
@@ -144,7 +142,9 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		Forum f = sf.getForum();
 		String posterName = member.getUserName();
 		msgToSend = "POST\n"+"forumName: "+f.getForumName()+"\n" +
-		"subForumName: "+sf.getSubForumName()+"\n"+"ThreadMessage: "+tm.getId()+"\n"+"posterName: "+posterName+"\n";
+		"subForumName: "+sf.getSubForumName()+"\n"+"ThreadMessage: "+tm.getId()+"\n"+
+		"posterName: "+posterName+"\n"+"postTitle: "+post.getTitle()+"\n"+
+		"postContent: "+post.getContent()+"\n";
 		stringToServer.println(msgToSend);
 		try {reciviedMsg = stringFromServer.readLine();}
 		catch (IOException e) {}
@@ -161,7 +161,8 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		Forum f = sf.getForum();
 		String posterName = member.getUserName();
 		msgToSend = "THREAD\n"+"forumName: "+f+"\n" +
-		"subForumName: "+sf+"\n"+"posterName: "+posterName+"\n";
+		"subForumName: "+sf+"\n"+"posterName: "+posterName+"\n"+"threadTitle: "+newThread.getTitle()+"\n"+
+		"threadContent: "+newThread.getContent()+"\n";
 		stringToServer.println(msgToSend);
 		try {reciviedMsg = stringFromServer.readLine();}
 		catch (IOException e) {}
@@ -185,8 +186,6 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		return loggedOutMember;
 	}
 
-
-
 	@Override
 	public List<Forum> getForumsList() {
 		List<Forum> returnedList = new ArrayList<Forum>();
@@ -196,6 +195,17 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		catch (ClassNotFoundException e) {}
 		catch (IOException e) {}
 		return returnedList;
+	}
+
+	@Override
+	public Forum getForum(String forumName) {
+		Forum returnedSF = null;
+		msgToSend = "GETF\n"+"forumName: "+forumName+"\n";
+		stringToServer.println(msgToSend);
+		try {returnedSF = (Forum)objectFromServer.readObject();}
+		catch (IOException e) {}
+		catch (ClassNotFoundException e){}
+		return returnedSF;
 	}
 
 }
