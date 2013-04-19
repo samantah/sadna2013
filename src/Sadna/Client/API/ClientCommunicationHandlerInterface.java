@@ -41,4 +41,6 @@ public interface ClientCommunicationHandlerInterface {
     ThreadMessage getThreadMessage(String forumName ,String subForumName, int messageID);
     
     boolean addSubForum(SubForum subForum);
+    
+    boolean initiateForum(Forum forum);
 }
