@@ -26,13 +26,6 @@ public class Member extends User {
 		this.forum = forum;
 	}
 
-	public Member(String userName, String password, String email, ClientCommunicationHandlerInterface ch) {
-		super(ch);
-		this.userName = userName;
-		this.password = password;
-		this.email = email;
-		this.forum = null;
-	} 
 
 	public boolean postComment(Post post) {
 		return conHand.postComment(post);
@@ -58,13 +51,4 @@ public class Member extends User {
 		return forum;
 	}
 
-	public boolean setForum(String forumName) {
-		if(forum == null){
-			forum = forumName;
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
 }
