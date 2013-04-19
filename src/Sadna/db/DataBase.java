@@ -7,7 +7,6 @@ package Sadna.db;
 import Sadna.Client.Admin;
 import Sadna.Client.Member;
 import Sadna.Client.Moderator;
-import Sadna.Client.User;
 import Sadna.db.API.DBInterface;
 import java.io.File;
 import java.io.FileInputStream;
@@ -124,15 +123,15 @@ public class DataBase implements DBInterface {
     }
 
     @Override
-    public User getUser(String forumName, String userName) {
+    public Member getMember(String forumName, String userName) {
         FileInputStream inputStream;
         ObjectInputStream obj;
-        User returnUser = null;
+        Member returnMemeber = null;
         try {
             inputStream = new FileInputStream(dataBaseFolder + "/" + forumName
                     + "/" + userName + ".obj");
             obj = new ObjectInputStream(inputStream);
-            returnUser = (User) obj.readObject();
+            returnMemeber = (Member) obj.readObject();
             obj.close();
             inputStream.close();
         } catch (FileNotFoundException ex) {
@@ -144,7 +143,7 @@ public class DataBase implements DBInterface {
             System.out.println(message);
             return null;
         }
-        return returnUser;
+        return returnMemeber;
     }
 
     @Override
@@ -395,11 +394,11 @@ public class DataBase implements DBInterface {
         Forum forum = new Forum(new Admin(null, null, null, null, null), "forum1");
         SubForum subForum = new SubForum(forum, "subforum1");
         SubForum subForum2 = new SubForum(forum, "subforum2");
-        ThreadMessage threadMessage = new ThreadMessage(subForum, "hi11", "NA");
-        ThreadMessage threadMessage2 = new ThreadMessage(subForum, "hi2aaa2", "NA");
-        Post post = new Post(threadMessage, "hi11post1", "NA");
-        Post post2 = new Post(threadMessage, "hi11post2", "NA");
-        Post post3 = new Post(threadMessage2, "hii222", "NA");
+        ThreadMessage threadMessage = new ThreadMessage(subForum, "NA", "hi11");
+        ThreadMessage threadMessage2 = new ThreadMessage(subForum, "NA", "hi2aaa2");
+        Post post = new Post(threadMessage, "NA", "hi11post1");
+        Post post2 = new Post(threadMessage,"NA",  "hi11post2");
+        Post post3 = new Post(threadMessage2,"NA",  "hii222");
         forum.addSubForum(subForum);
         subForum.addThreadMessage(threadMessage);
         subForum.addThreadMessage(threadMessage2);
@@ -415,18 +414,23 @@ public class DataBase implements DBInterface {
         db.addPost(post2);
         db.addPost(post3);
         ThreadMessage thread = db.getThread("forum1", "subForum1", 1);
-        System.out.println(thread.getMessage());
+        System.out.println(thread.getContent());
         Post post1 = db.getPost("forum1", "subForum1", 0, 1);
-        System.out.println(post1.getMessage());
+        System.out.println(post1.getContent());
         List<SubForum> subForumsList = db.getSubForumsList("forum1");
         for (SubForum sf : subForumsList) {
             System.out.println(sf.getSubForumName());
         }
         List<ThreadMessage> threadsList = db.getThreadsList("forum1", "subForum1");
         for (ThreadMessage threadMessage1 : threadsList) {
-            System.out.println(threadMessage1.getMessage());
+            System.out.println(threadMessage1.getContent());
         }
         System.out.println(db.getNumberOfSubforums("forum1"));
         System.out.println(db.getNumberOfThreads("forum1", "subForum1"));
+    }
+
+    @Override
+    public List<Member> getAllMembers() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
