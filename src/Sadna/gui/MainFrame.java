@@ -62,6 +62,11 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         registerButton.setText("register");
+        registerButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                registerButtonActionPerformed(evt);
+            }
+        });
 
         headLabel.setFont(new java.awt.Font("Arial", 3, 24)); // NOI18N
         headLabel.setText("Welcome to our forum");
@@ -134,6 +139,13 @@ public class MainFrame extends javax.swing.JFrame {
         this.dispose();
         forumPage.setVisible(true);
     }//GEN-LAST:event_enterForumButtonActionPerformed
+
+    private void registerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerButtonActionPerformed
+        RegistrationPage registrationPage = new RegistrationPage ();
+        this.setVisible(false);
+        this.dispose();
+        registrationPage.setVisible(true);
+    }//GEN-LAST:event_registerButtonActionPerformed
 
     /**
      * @param args the command line arguments

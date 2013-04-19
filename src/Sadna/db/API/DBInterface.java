@@ -26,7 +26,7 @@ public interface DBInterface {
     
     Post getPost(String forumName, String subForumName, int ThreadID, int postID);
 
-    User getUser(String forumName, String userName);
+    Member getMember(String forumName, String userName);
 
     List<SubForum> getSubForumsList(String forumName);
 
