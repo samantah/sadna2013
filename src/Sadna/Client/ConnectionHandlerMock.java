@@ -76,6 +76,9 @@ public class ConnectionHandlerMock implements ClientCommunicationHandlerInterfac
 
     @Override
     public Forum getForum(String forumName) {
-        return new Forum(null, forumName);
+        Forum forum = new Forum(null, forumName);
+        SubForum subForum = new SubForum(forum, "sub1");
+        forum.addSubForum(subForum);
+        return forum;
     }
 }

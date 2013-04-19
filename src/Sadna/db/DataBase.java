@@ -395,11 +395,11 @@ public class DataBase implements DBInterface {
         Forum forum = new Forum(new Admin(null, null, null, null, null), "forum1");
         SubForum subForum = new SubForum(forum, "subforum1");
         SubForum subForum2 = new SubForum(forum, "subforum2");
-        ThreadMessage threadMessage = new ThreadMessage(subForum, "hi11");
-        ThreadMessage threadMessage2 = new ThreadMessage(subForum, "hi2aaa2");
-        Post post = new Post(threadMessage, "hi11post1");
-        Post post2 = new Post(threadMessage, "hi11post2");
-        Post post3 = new Post(threadMessage2, "hii222");
+        ThreadMessage threadMessage = new ThreadMessage(subForum, "hi11", "NA");
+        ThreadMessage threadMessage2 = new ThreadMessage(subForum, "hi2aaa2", "NA");
+        Post post = new Post(threadMessage, "hi11post1", "NA");
+        Post post2 = new Post(threadMessage, "hi11post2", "NA");
+        Post post3 = new Post(threadMessage2, "hii222", "NA");
         forum.addSubForum(subForum);
         subForum.addThreadMessage(threadMessage);
         subForum.addThreadMessage(threadMessage2);

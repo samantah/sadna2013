@@ -4,6 +4,10 @@
  */
 package Sadna.gui;
 
+import Sadna.db.SubForum;
+import java.util.List;
+import javax.swing.DefaultListModel;
+
 /**
  *
  * @author fistuk
@@ -19,6 +23,13 @@ public class ForumPage extends javax.swing.JFrame {
             jLabel1.setText("Forum: " + CurrentStatus.currForum.getForumName());
         else
             jLabel1.setText("Forum: ");
+        DefaultListModel listModel = new DefaultListModel();
+        List<SubForum> listOfSubForums;
+        listOfSubForums = CurrentStatus.currForum.getListOfSubForums();
+        for (SubForum sf : listOfSubForums) {
+            listModel.addElement(sf.getSubForumName());            
+        }
+        subForumsList.setModel(listModel);
     }
 
     /**
@@ -32,7 +43,7 @@ public class ForumPage extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList();
+        subForumsList = new javax.swing.JList();
         logInButton = new javax.swing.JButton();
         registerButton = new javax.swing.JButton();
         enterForumButton = new javax.swing.JButton();
@@ -41,12 +52,12 @@ public class ForumPage extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Arial", 3, 24)); // NOI18N
 
-        jList2.setModel(new javax.swing.AbstractListModel() {
+        subForumsList.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane2.setViewportView(jList2);
+        jScrollPane2.setViewportView(subForumsList);
 
         logInButton.setText("log in");
         logInButton.addActionListener(new java.awt.event.ActionListener() {
@@ -73,16 +84,17 @@ public class ForumPage extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 272, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(logInButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(registerButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(enterForumButton))
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(logInButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(registerButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(enterForumButton)))
                 .addGap(239, 239, 239))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(258, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(163, 163, 163))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -147,9 +159,9 @@ public class ForumPage extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton enterForumButton;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JList jList2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton logInButton;
     private javax.swing.JButton registerButton;
+    private javax.swing.JList subForumsList;
     // End of variables declaration//GEN-END:variables
 }

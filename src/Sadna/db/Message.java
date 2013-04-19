@@ -11,20 +11,23 @@ import java.io.Serializable;
  *
  * @author fistuk
  */
-public abstract class Message implements Serializable{
-    protected int id;
-    protected String message;
+public abstract class Message implements Serializable {
 
-    public Message(String message) {
-        this.message = message;
+    protected int id;
+    protected String title;
+    protected String content;
+
+    public Message(String title, String content) {
+        this.title = title;
+        this.content = content;
     }
 
     public String getMessage() {
-        return message;
+        return content;
     }
 
     public void setMessage(String message) {
-        this.message = message;
+        this.content = message;
     }
 
     public int getId() {
@@ -34,8 +37,8 @@ public abstract class Message implements Serializable{
     public void setId(int id) {
         this.id = id;
     }
-    
-    
-    
-    
+
+    public String getHead() {
+        return title;
+    }
 }
