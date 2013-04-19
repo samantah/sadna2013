@@ -7,7 +7,7 @@ import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 
 
-public interface ConnectionHandlerServerInterface {
+public interface ConnectionHandlerServerInterface extends Runnable{
 
 	public void sendOK();
 
