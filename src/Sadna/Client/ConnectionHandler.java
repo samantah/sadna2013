@@ -102,7 +102,6 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 	@Override
 	public List<SubForum> getSubForumsList(String forumName) {
 		List<SubForum> returnedList = new ArrayList<SubForum>();
-		SubForum tmp = null;
 		msgToSend = "GETSFL\n"+"forumName: "+forumName+"\n";
 		stringToServer.println(msgToSend);
 		try {returnedList = (List<SubForum>)objectFromServer.readObject();}
@@ -193,6 +192,19 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 			loggedOutMember = new User(this);
 		}
 		return loggedOutMember;
+	}
+
+
+
+	@Override
+	public List<Forum> getForumsList() {
+		List<Forum> returnedList = new ArrayList<Forum>();
+		msgToSend = "GETFL\n";
+		stringToServer.println(msgToSend);
+		try {returnedList = (List<Forum>)objectFromServer.readObject();}
+		catch (ClassNotFoundException e) {}
+		catch (IOException e) {}
+		return returnedList;
 	}
 
 }
