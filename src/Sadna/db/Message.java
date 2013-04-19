@@ -22,9 +22,6 @@ public abstract class Message implements Serializable {
         this.content = content;
     }
 
-    public String getMessage() {
-        return content;
-    }
 
     public void setMessage(String message) {
         this.content = message;
@@ -38,7 +35,13 @@ public abstract class Message implements Serializable {
         this.id = id;
     }
 
-    public String getHead() {
+    public String getTitle() {
         return title;
     }
+
+    public String getContent() {
+        return content;
+    }
+    
+    
 }
