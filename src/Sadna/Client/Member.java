@@ -27,11 +27,11 @@ public class Member extends User {
     }
 
     public boolean postComment(Post post) {
-        return conHand.postComment(post, this);
+        return conHand.postComment(post);
     }
 
     public boolean publishThread(ThreadMessage newThread) {
-        return conHand.publishThread(newThread, this);
+        return conHand.publishThread(newThread);
     }
 
     public String getUserName() {

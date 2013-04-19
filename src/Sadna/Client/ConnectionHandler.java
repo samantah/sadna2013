@@ -135,12 +135,12 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 	}
 
 	@Override
-	public boolean postComment(Post post, Member member) {
+	public boolean postComment(Post post) {
 		boolean isPosted = false;
 		ThreadMessage tm = post.getThread();
 		SubForum sf = tm.getSubForum();
 		Forum f = sf.getForum();
-		String posterName = member.getUserName();
+		String posterName = post.getPublisher();
 		msgToSend = "POST\n"+"forumName: "+f.getForumName()+"\n" +
 		"subForumName: "+sf.getSubForumName()+"\n"+"ThreadMessage: "+tm.getId()+"\n"+
 		"posterName: "+posterName+"\n"+"postTitle: "+post.getTitle()+"\n"+
@@ -155,11 +155,11 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 	}
 
 	@Override
-	public boolean publishThread(ThreadMessage newThread, Member member) {
+	public boolean publishThread(ThreadMessage newThread) {
 		boolean isPublished = false;
 		SubForum sf = newThread.getSubForum();
 		Forum f = sf.getForum();
-		String posterName = member.getUserName();
+		String posterName = newThread.getPublisher();
 		msgToSend = "THREAD\n"+"forumName: "+f+"\n" +
 		"subForumName: "+sf+"\n"+"posterName: "+posterName+"\n"+"threadTitle: "+newThread.getTitle()+"\n"+
 		"threadContent: "+newThread.getContent()+"\n";
@@ -206,6 +206,18 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		catch (IOException e) {}
 		catch (ClassNotFoundException e){}
 		return returnedSF;
+	}
+
+	@Override
+	public boolean addSubForum(SubForum subForum) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean initiateForum(Forum forum) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
