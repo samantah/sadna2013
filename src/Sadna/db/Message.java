@@ -16,10 +16,12 @@ public abstract class Message implements Serializable {
     protected int id;
     protected String title;
     protected String content;
+    protected String publisher;
 
-    public Message(String title, String content) {
+    public Message(String title, String content, String publisher) {
         this.title = title;
         this.content = content;
+        this.publisher = publisher;
     }
 
 
@@ -41,6 +43,10 @@ public abstract class Message implements Serializable {
 
     public String getContent() {
         return content;
+    }
+    
+    public String getPublisher(){
+    	return publisher;
     }
     
     
