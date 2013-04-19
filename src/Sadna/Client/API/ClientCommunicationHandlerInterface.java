@@ -42,5 +42,5 @@ public interface ClientCommunicationHandlerInterface {
     
     boolean addSubForum(SubForum subForum);
     
-    boolean initiateForum(Forum forum);
+    boolean initiateForum(String forumName, String adminName, String adminPassword);
 }

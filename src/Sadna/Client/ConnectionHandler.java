@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.io.*;
 import java.net.*;
+
+
 import Sadna.Client.API.ClientCommunicationHandlerInterface;
 import Sadna.db.Forum;
+import Sadna.db.Message;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
@@ -14,7 +17,6 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 	private Socket clientSocket;
 	private PrintWriter stringToServer;
 	private BufferedReader stringFromServer;
-	private ObjectOutputStream objectToServer;
 	private ObjectInputStream objectFromServer;
 	private String msgToSend;
 	private String reciviedMsg;
@@ -24,7 +26,6 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 			clientSocket = new Socket(host, port);
 			stringToServer = new PrintWriter(clientSocket.getOutputStream(), true);
 			stringFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-			objectToServer = new ObjectOutputStream(clientSocket.getOutputStream()); 
 			objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
 		}catch(Exception e){}
 	}
@@ -137,19 +138,21 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 	@Override
 	public boolean postComment(Post post) {
 		boolean isPosted = false;
-		ThreadMessage tm = post.getThread();
-		SubForum sf = tm.getSubForum();
-		Forum f = sf.getForum();
-		String posterName = post.getPublisher();
-		msgToSend = "POST\n"+"forumName: "+f.getForumName()+"\n" +
-		"subForumName: "+sf.getSubForumName()+"\n"+"ThreadMessage: "+tm.getId()+"\n"+
-		"posterName: "+posterName+"\n"+"postTitle: "+post.getTitle()+"\n"+
-		"postContent: "+post.getContent()+"\n";
-		stringToServer.println(msgToSend);
-		try {reciviedMsg = stringFromServer.readLine();}
-		catch (IOException e) {}
-		if(reciviedMsg.contains("200ok")){
-			isPosted = true;
+		if(legalMsg(post)){
+			ThreadMessage tm = post.getThread();
+			SubForum sf = tm.getSubForum();
+			Forum f = sf.getForum();
+			String posterName = post.getPublisher();
+			msgToSend = "POST\n"+"forumName: "+f.getForumName()+"\n" +
+			"subForumName: "+sf.getSubForumName()+"\n"+"ThreadMessage: "+tm.getId()+"\n"+
+			"posterName: "+posterName+"\n"+"postTitle: "+post.getTitle()+"\n"+
+			"postContent: "+post.getContent()+"\n";
+			stringToServer.println(msgToSend);
+			try {reciviedMsg = stringFromServer.readLine();}
+			catch (IOException e) {}
+			if(reciviedMsg.contains("200ok")){
+				isPosted = true;
+			}
 		}
 		return isPosted;
 	}
@@ -157,17 +160,19 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 	@Override
 	public boolean publishThread(ThreadMessage newThread) {
 		boolean isPublished = false;
-		SubForum sf = newThread.getSubForum();
-		Forum f = sf.getForum();
-		String posterName = newThread.getPublisher();
-		msgToSend = "THREAD\n"+"forumName: "+f+"\n" +
-		"subForumName: "+sf+"\n"+"posterName: "+posterName+"\n"+"threadTitle: "+newThread.getTitle()+"\n"+
-		"threadContent: "+newThread.getContent()+"\n";
-		stringToServer.println(msgToSend);
-		try {reciviedMsg = stringFromServer.readLine();}
-		catch (IOException e) {}
-		if(reciviedMsg.contains("200ok")){
-			isPublished = true;
+		if(legalMsg(newThread)){
+			SubForum sf = newThread.getSubForum();
+			Forum f = sf.getForum();
+			String posterName = newThread.getPublisher();
+			msgToSend = "THREAD\n"+"forumName: "+f+"\n" +
+			"subForumName: "+sf+"\n"+"posterName: "+posterName+"\n"+"threadTitle: "+newThread.getTitle()+"\n"+
+			"threadContent: "+newThread.getContent()+"\n";
+			stringToServer.println(msgToSend);
+			try {reciviedMsg = stringFromServer.readLine();}
+			catch (IOException e) {}
+			if(reciviedMsg.contains("200ok")){
+				isPublished = true;
+			}
 		}
 		return isPublished;
 	}
@@ -214,7 +219,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 	public boolean addSubForum(SubForum subForum) {
 		boolean added = false;
 		Forum f = subForum.getForum();
-		
+
 		msgToSend = "ADDSF\n"+"forumName: "+f.getForumName()+"\n" +
 		"subForumName: "+subForum.getSubForumName()+"\n";
 		for(Moderator md: subForum.getListOfModerators()){
@@ -230,9 +235,10 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 	}
 
 	@Override
-	public boolean initiateForum(Forum forum) {
+	public boolean initiateForum(String forumName, String adminName, String AdminPassword) {
 		boolean initiated = false;
-		msgToSend = "ADDF\n"+"forumName: "+forum.getForumName()+"\n";
+		msgToSend = "ADDF\n"+"forumName: "+forumName+"\n"+
+		"adminName: "+adminName+"\n"+"adminPassword: "+AdminPassword+"\n";
 		stringToServer.println(msgToSend);
 		try {reciviedMsg = stringFromServer.readLine();}
 		catch (IOException e) {}
@@ -242,4 +248,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		return initiated;
 	}
 
+	private boolean legalMsg(Message m){
+		return m.getContent().length()<=1000;
+	}
 }
