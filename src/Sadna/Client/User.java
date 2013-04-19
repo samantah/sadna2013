@@ -23,23 +23,23 @@ public class User implements Serializable {
         this.conHand = ch;
     }
 
-    protected Member login(String forum, String userName, String password) {
+    public Member login(String forum, String userName, String password) {
         return conHand.login(forum, userName, password);
     }
-
-    protected List<SubForum> viewSubForums(String forum) {
+    
+    public List<SubForum> viewSubForums(String forum) {
         return conHand.getSubForumsList(forum);
     }
 
-    protected List<ThreadMessage> viewThreadMessages(String forum, String subForumName) {
+    public List<ThreadMessage> viewThreadMessages(String forum, String subForumName) {
         return conHand.getThreadsList(forum, subForumName);
     }
 
-    protected Member register(String forumName, String userName, String password, String email) {
+    public Member register(String forumName, String userName, String password, String email) {
         return conHand.register(forumName, userName, password, email);
     }
     
-    protected List<Forum> viewSubForums() {
+    public List<Forum> viewForums() {
         return conHand.getForumsList();
     }
 }
