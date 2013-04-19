@@ -199,6 +199,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 
 	@Override
 	public Forum getForum(String forumName) {
+
 		Forum returnedSF = null;
 		msgToSend = "GETF\n"+"forumName: "+forumName+"\n";
 		stringToServer.println(msgToSend);
@@ -208,16 +209,37 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		return returnedSF;
 	}
 
+
 	@Override
 	public boolean addSubForum(SubForum subForum) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean added = false;
+		Forum f = subForum.getForum();
+		
+		msgToSend = "ADDSF\n"+"forumName: "+f.getForumName()+"\n" +
+		"subForumName: "+subForum.getSubForumName()+"\n";
+		for(Moderator md: subForum.getListOfModerators()){
+			msgToSend+="moderator: "+md.getUserName()+"\n";
+		}
+		stringToServer.println(msgToSend);
+		try {reciviedMsg = stringFromServer.readLine();}
+		catch (IOException e) {}
+		if(reciviedMsg.contains("200ok")){
+			added = true;
+		}
+		return added;
 	}
 
 	@Override
 	public boolean initiateForum(Forum forum) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean initiated = false;
+		msgToSend = "ADDF\n"+"forumName: "+forum.getForumName()+"\n";
+		stringToServer.println(msgToSend);
+		try {reciviedMsg = stringFromServer.readLine();}
+		catch (IOException e) {}
+		if(reciviedMsg.contains("200ok")){
+			initiated = true;
+		}
+		return initiated;
 	}
 
 }
