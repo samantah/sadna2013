@@ -4,7 +4,6 @@
  */
 package Sadna.gui;
 
-import java.awt.geom.CubicCurve2D;
 import javax.swing.JFrame;
 
 /**
@@ -138,7 +137,11 @@ public class LogInPage extends javax.swing.JFrame {
                 whereToGo = EnumPages.FORUM;
                 break;
             }
-            whereToGo = EnumPages.SUBFORUM;
+            if (CurrentStatus.currThread == null) {
+                whereToGo = EnumPages.SUBFORUM;
+                break;
+            }
+            whereToGo = EnumPages.THREAD;
         }
         switch (whereToGo) {
             case MAIN:
@@ -149,6 +152,8 @@ public class LogInPage extends javax.swing.JFrame {
                 break;
             case SUBFORUM:
                 frame = new SubForumPage();
+            case THREAD:
+                frame = new ThreadPage();
 
         }
         this.setVisible(false);

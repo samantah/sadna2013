@@ -53,4 +53,10 @@ public class ThreadMessage extends Message {
     public boolean removePost(Post e) {
         return listOfPosts.remove(e);
     }
+
+    public List<Post> getListOfPosts() {
+        return listOfPosts;
+    }
+    
+    
 }

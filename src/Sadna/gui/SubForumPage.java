@@ -156,7 +156,7 @@ public class SubForumPage extends javax.swing.JFrame {
 
     private void jButtonEnterThreadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEnterThreadActionPerformed
         int selectedIndex = jListThreads.getSelectedIndex();
-        if (selectedIndex == 0) {
+        if (selectedIndex == -1) {
             return;
         }
         String forumName = CurrentStatus.currForum.getForumName();
