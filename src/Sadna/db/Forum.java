@@ -37,5 +37,11 @@ public class Forum implements Serializable{
     public String getForumName() {
         return forumName;
     }
+
+    public List<SubForum> getListOfSubForums() {
+        return listOfSubForums;
+    }
+    
+    
     
 }
