@@ -186,5 +186,37 @@ public class ServerImpl implements ServerInterface {
 		return thread;
 	}
 
+	private boolean forumExists(String forumName) {
+		List<Forum> forums = _db.getForumsList();
+		for (Forum forum : forums) {
+			if (forum.getForumName().equals(forumName))
+				return true;
+		}
+		return false;
+	}
 
+	private boolean subForumExists(String forumName, String subForumName) {
+		if(forumExists(forumName)){
+			List<SubForum> subForums = _db.getSubForumsList(forumName);
+			for (SubForum s : subForums) {
+				if (s.getSubForumName().equals(subForumName))
+					return true;
+			}
+			return false;
+		}
+		return false;
+	}
+
+	private boolean threadExists(String forumName, String subForumName,
+			int messageId) {
+		if(subForumExists(forumName, subForumName)){
+			List<SubForum> subForums = _db.getSubForumsList(forumName);
+			for (SubForum s : subForums) {
+				if (s.getSubForumName().equals(subForumName))
+					return true;
+			}
+			return false;
+		}
+		return false;
+	}
 }
