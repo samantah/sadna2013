@@ -23,7 +23,10 @@ public interface ServerInterface {
 
     boolean login(String forumName, String userName, String password);
     
-    boolean logout(String forumName, String userName);
+/* For later use..  
+ * 
+ * boolean logout(String forumName, String userName);
+ */
  
     boolean initiateForum(String adminUserName, String adminPassword, String forumName);
 
@@ -33,9 +36,13 @@ public interface ServerInterface {
     
     boolean postComment(Post comment);
 
-    SubForum getSubForum(String forumName, String subForumName);
+    List<Forum> getForumsList();
+
+    Forum getForum(String forumName);
 
     List<SubForum> getSubForumsList(String forumName);
+
+    SubForum getSubForum(String forumName, String subForumName);
 
     List<ThreadMessage> getThreadsList(String forumName, String subForumName);
 
