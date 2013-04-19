@@ -202,7 +202,6 @@ public class ServerImpl implements ServerInterface {
 				if (s.getSubForumName().equals(subForumName))
 					return true;
 			}
-			return false;
 		}
 		return false;
 	}
@@ -210,12 +209,11 @@ public class ServerImpl implements ServerInterface {
 	private boolean threadExists(String forumName, String subForumName,
 			int messageId) {
 		if(subForumExists(forumName, subForumName)){
-			List<SubForum> subForums = _db.getSubForumsList(forumName);
-			for (SubForum s : subForums) {
-				if (s.getSubForumName().equals(subForumName))
+			List<ThreadMessage> threads = _db.getThreadsList(forumName, subForumName);
+			for (ThreadMessage t : threads) {
+				if (t.getId() == messageId)
 					return true;
 			}
-			return false;
 		}
 		return false;
 	}
