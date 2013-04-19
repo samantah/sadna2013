@@ -4,10 +4,12 @@
  */
 package Sadna.Client;
 
+import Sadna.Client.API.ClientCommunicationHandlerInterface;
+
 public class Admin extends Member {
 
     public Admin(String userName, String password, String email, String forum,
-            ConnectionHandler ch) {
+            ClientCommunicationHandlerInterface ch) {
         super(userName, password, email, forum, ch);
         // TODO Auto-generated constructor stub
     }

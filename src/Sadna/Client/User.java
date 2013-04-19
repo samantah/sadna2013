@@ -4,6 +4,7 @@
  */
 package Sadna.Client;
 
+import Sadna.Client.API.ClientCommunicationHandlerInterface;
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,9 +18,9 @@ import Sadna.db.ThreadMessage;
  */
 public class User implements Serializable {
 
-    protected ConnectionHandler conHand;
+    protected ClientCommunicationHandlerInterface conHand;
 
-    public User(ConnectionHandler ch) {
+    public User(ClientCommunicationHandlerInterface ch) {
         this.conHand = ch;
     }
 
@@ -39,6 +40,17 @@ public class User implements Serializable {
         return conHand.register(forumName, userName, password, email);
     }
     
+    public Forum getForum(String forumName){
+        return conHand.getForum(forumName);
+    }
+    
+    public SubForum getSubForum(String forumName, String subForumName){
+        return conHand.getSubForum(forumName, subForumName);
+    }
+    
+    public ThreadMessage getThread(String forumName, String subForumname, int messageID){
+        return conHand.getThreadMessage(forumName, subForumname, messageID);
+    }
 
     public List<Forum> viewForums() {
         return conHand.getForumsList();

@@ -41,7 +41,4 @@ public class Forum implements Serializable{
     public List<SubForum> getListOfSubForums() {
         return listOfSubForums;
     }
-    
-    
-    
 }
