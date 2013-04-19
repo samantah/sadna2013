@@ -25,8 +25,28 @@ public class Forum implements Serializable{
         this.listOfSubForums = new ArrayList<SubForum>();
         this.admin = admin;
     }
+    
+    public Forum(String forumName) {
+        this.forumName = forumName;
+        this.listOfSubForums = new ArrayList<SubForum>();
+        this.admin = null;
+    }
 
-    public boolean addSubForum(SubForum e) {
+    public Admin getAdmin() {
+		return admin;
+	}
+
+	public boolean setAdmin(Admin admin) {
+		if (admin==null){
+			this.admin = admin;
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
+	public boolean addSubForum(SubForum e) {
         return listOfSubForums.add(e);
     }
 
