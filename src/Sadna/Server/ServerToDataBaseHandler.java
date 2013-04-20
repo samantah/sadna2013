@@ -13,11 +13,11 @@ import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 import Sadna.db.API.DBInterface;
 
-public class ServerImpl implements ServerInterface {
+public class ServerToDataBaseHandler implements ServerInterface {
 
 	private DBInterface _db;
 
-	public ServerImpl(DBInterface db){
+	public ServerToDataBaseHandler(DBInterface db){
 		_db = db;
 	}
 

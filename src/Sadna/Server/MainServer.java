@@ -10,13 +10,13 @@ import Sadna.db.DataBase;
 
 public class MainServer {
 	
-	private ServerInterface si = new ServerImpl(new DataBase());
+	private ServerInterface si = new ServerToDataBaseHandler(new DataBase());
 	private ConnectionHandlerServerInterface ch;
-	private ServerHandler server;
 	
 	private ServerSocket serverSocket;
 	private int portNumber = 3248;
 	
+
 	public MainServer() {
         try {
         	serverSocket = new ServerSocket(portNumber);
@@ -35,8 +35,8 @@ public class MainServer {
         while (true) {
             try {
                 Socket socket = serverSocket.accept();
-                ch = new ConnectionHandlerServer(socket);
-                new ServerHandler(ch, si);
+                ch = new ServerConnectionWithClientHandler(socket);
+                new ServerRequestHandler(ch, si);
             } catch (IOException e) {
          //     e.printStackTrace();
                 System.out.println("Connection stopped...");

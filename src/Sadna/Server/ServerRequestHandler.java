@@ -23,12 +23,12 @@ import Sadna.db.ThreadMessage;
  *
  * @author fistuk
  */
-public class ServerHandler implements Runnable {
+public class ServerRequestHandler implements Runnable {
 
 	private ConnectionHandlerServerInterface _ch;
 	private ServerInterface _si;
 
-	public ServerHandler(ConnectionHandlerServerInterface ch, ServerInterface si) {
+	public ServerRequestHandler(ConnectionHandlerServerInterface ch, ServerInterface si) {
 		_ch = ch;
 		_si = si;
 		Thread t = new Thread(this);
