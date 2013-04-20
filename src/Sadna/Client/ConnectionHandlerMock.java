@@ -80,7 +80,7 @@ public class ConnectionHandlerMock implements ClientCommunicationHandlerInterfac
         ThreadMessage threadMessage = new ThreadMessage(forumName, subForumName,
                 "title", "content", "chen");
         for (int i = 0; i < 10; i++) {
-            Post p = new Post(threadMessage, "postTitle " + i, "postContent ", "snir");
+            Post p = new Post(threadMessage, "postTitle " + i, "postContent postContent postContent postContent postContent postContent postContent postContent postContent postContent postContent ", "snir");
             threadMessage.addPost(p);
         }
         return threadMessage;
