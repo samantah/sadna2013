@@ -40,13 +40,16 @@ public class ServerRequestHandler implements Runnable {
 			// Read a message sent by client application
 			//
 			String request = _ch.receiveRequestFromClient();
-			if(request.equals("end")){
-				_ch.sendErrorInServer();
-				break;
-			}
-			else if(request != null){
+			if(request != null){
+				if(request.equals("end")){
+					_ch.sendErrorInServer();
+					break;
+				}
 				System.out.println("-- Message Received -- \n" + request);
 				parseAndHandleRequest(request);
+			}
+			else{
+				continue;
 			}
 		}
 		_ch.closeSocket();
@@ -99,23 +102,11 @@ public class ServerRequestHandler implements Runnable {
 		case "POST":
 			ThreadMessage tm = _si.getThreadMessage(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]));
 			Post p = new Post(tm, parsedReq[10], parsedReq[12], parsedReq[8]);
-
-			/* Not relevant to add it here since in the db it will
-			   be updated! This object tm is irrelevant..
-			tm.addPost(p);
-			 */
-
 			handlePostComment(p);
 			break;
 		case "THREAD":
 			SubForum sf = _si.getSubForum(parsedReq[2], parsedReq[4]);
 			ThreadMessage threadM = new ThreadMessage(sf, parsedReq[8], parsedReq[10], parsedReq[6]);
-
-			/* Not relevant to add it here since in the db it will
-			   be updated! This object sf is irrelevant..
-			sf.addThreadMessage(threadM);
-			 */
-
 			handlePublishThread(threadM);
 			break;
 		default:
