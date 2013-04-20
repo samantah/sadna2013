@@ -44,7 +44,7 @@ public class ServerRequestHandler implements Runnable {
 		//
 		String request = _ch.receiveRequestFromClient();
 		if(request != null){
-			System.out.println("Message Received: \n" + request);
+			System.out.println("-- Message Received -- \n" + request);
 			parseAndHandleRequest(request);
 		}
 		else{
@@ -87,7 +87,7 @@ public class ServerRequestHandler implements Runnable {
 			handleAddSubForum(subF);
 			break;
 		case "ADDF":
-			handleInitiateForum(forumName, adminName, adminPassword)
+			handleInitiateForum(parsedReq[2], parsedReq[4], parsedReq[6]);
 			break;
 		case "POST":
 			ThreadMessage tm = _si.getThreadMessage(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]));
