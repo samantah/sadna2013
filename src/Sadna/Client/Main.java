@@ -12,6 +12,7 @@ import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 public class Main {
