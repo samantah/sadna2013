@@ -20,14 +20,19 @@ public class Main {
 		ConnectionHandler c = new ConnectionHandler(host, port);
 		SuperAdmin sa = new SuperAdmin("mega-admin", "megaadmin12", "mega@gmail.com", c);
 		User guest = new User(c);
-//		Member member = guest.login("forum1", "snirelkaras1","snirfh1234");
-//		System.out.println(member.getUserName());
-//		Forum f =member.getForum("forum1");
-//		SubForum sf = member.getSubForum(f.getForumName(), "subForum1");
-//		ThreadMessage tm = new ThreadMessage(sf, "eminem", "my name is slim shady", "snirelkaras1");
-//		member.publishThread(tm);
-		Member chen = guest.login("forum1", "chenli", "qwert1234");
-		System.out.println(chen);
+		Member member = guest.login("forum1", "snirelkaras1","snirfh1234");
+		System.out.println(member.getUserName());
+		Forum f =member.getForum("forum1");
+		SubForum sf = member.getSubForum(f.getForumName(), "subForum1");
+		ThreadMessage tm = new ThreadMessage(sf, "kaveret", "Is somebody knows where can i find the lyrics of GULIATH?", "snirelkaras1");
+		if(member.publishThread(tm)){
+			System.out.println("success");
+		}
+		Post p = new Post(tm, "", "that's really importent to me!!!", member.getUserName());
+		if(member.postComment(p)){
+			System.out.println("success");;
+		}
+
 		
 		/*----LOGIN-----*/
 		//litest(c);

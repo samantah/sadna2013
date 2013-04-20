@@ -5,6 +5,7 @@
 package Sadna.Client;
 
 import Sadna.Client.API.ClientCommunicationHandlerInterface;
+import Sadna.db.SubForum;
 
 public class Admin extends Member {
 
@@ -26,5 +27,9 @@ public class Admin extends Member {
 		else{
 			return false;
 		}
+	}
+	
+	public boolean addSubForum(SubForum subForum){
+		return conHand.addSubForum(subForum);
 	}
 }
