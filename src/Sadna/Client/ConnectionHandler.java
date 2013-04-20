@@ -97,7 +97,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		"subForumName: "+subForumName+"\n";
 		msgToSend += delimiter;
 		stringToServer.println(msgToSend);
-		try {returnedSF = (SubForum)objectFromServer.readObject();}
+		try {returnedSF = (SubForum)objectFromServer.readObject();if(returnedSF==null) System.out.println("111");}
 		catch (IOException e) {}
 		catch (ClassNotFoundException e){}
 		return returnedSF;
