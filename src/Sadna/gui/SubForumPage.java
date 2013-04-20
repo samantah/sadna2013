@@ -4,6 +4,7 @@
  */
 package Sadna.gui;
 
+import Sadna.Client.User;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 import java.util.List;
@@ -21,6 +22,12 @@ public class SubForumPage extends javax.swing.JFrame {
     public SubForumPage() {
         initComponents();
         this.setResizable(false);
+        if (CurrentStatus.currUser instanceof User) {
+            jButtonSignout.setVisible(false);
+        } else {
+            logInButton.setVisible(false);
+            registerButton.setVisible(false);
+        }
         String subForumName = CurrentStatus.currSubForum.getSubForumName();
         jLabelTitle.setText("Welcome To The Sub-Forum: " + subForumName);
         DefaultListModel listModel = new DefaultListModel();
@@ -50,6 +57,7 @@ public class SubForumPage extends javax.swing.JFrame {
         logInButton = new javax.swing.JButton();
         registerButton = new javax.swing.JButton();
         jButtonBack = new javax.swing.JButton();
+        jButtonSignout = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -91,42 +99,44 @@ public class SubForumPage extends javax.swing.JFrame {
             }
         });
 
+        jButtonSignout.setText("sign out");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(113, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 553, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 474, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(84, 84, 84))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButtonBack)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 172, Short.MAX_VALUE)
+                        .addComponent(jButtonSignout)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(logInButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(registerButton)
                         .addGap(18, 18, 18)
-                        .addComponent(jButtonEnterThread)
-                        .addGap(202, 202, 202))))
+                        .addComponent(jButtonEnterThread))
+                    .addComponent(jLabelTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 553, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2))
+                .addContainerGap(187, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
+                .addGap(44, 44, 44)
                 .addComponent(jLabelTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(28, 99, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonEnterThread)
                     .addComponent(registerButton)
                     .addComponent(logInButton)
+                    .addComponent(jButtonSignout)
                     .addComponent(jButtonBack))
-                .addContainerGap(118, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -161,8 +171,8 @@ public class SubForumPage extends javax.swing.JFrame {
         }
         String forumName = CurrentStatus.currForum.getForumName();
         String subForumName = CurrentStatus.currSubForum.getSubForumName();
-        ThreadMessage thread = CurrentStatus.currUser.getThread(forumName, 
-                                                   subForumName, selectedIndex);
+        ThreadMessage thread = CurrentStatus.currUser.getThread(forumName,
+                subForumName, selectedIndex);
         CurrentStatus.currThread = thread;
         ThreadPage threadPage = new ThreadPage();
         this.setVisible(false);
@@ -172,6 +182,7 @@ public class SubForumPage extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonBack;
     private javax.swing.JButton jButtonEnterThread;
+    private javax.swing.JButton jButtonSignout;
     private javax.swing.JLabel jLabelTitle;
     private javax.swing.JList jListThreads;
     private javax.swing.JScrollPane jScrollPane2;

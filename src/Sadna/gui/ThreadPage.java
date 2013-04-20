@@ -21,7 +21,16 @@ public class ThreadPage extends javax.swing.JFrame {
      */
     public ThreadPage() {
         initComponents();
-        if (CurrentStatus.currUser instanceof User){
+        this.setResizable(false);
+
+        if (CurrentStatus.currUser instanceof User) {
+            jButtonSignout.setVisible(false);
+        } else {
+            logInButton.setVisible(false);
+            registerButton.setVisible(false);
+        }
+        
+        if (CurrentStatus.currUser instanceof User) {
             jTextFieldAddTitle.setVisible(false);
             jTextFieldAddContent.setVisible(false);
             jButtonAddPost.setVisible(false);
@@ -29,17 +38,17 @@ public class ThreadPage extends javax.swing.JFrame {
         this.setResizable(false);
         jListPosts.setCellRenderer(new MyCellRenderer(80));
         jListPosts.setFixedCellWidth(80);
-        jLabelThreadTitle.setText(CurrentStatus.currThread.getTitle());
-        jLabelThreadContent.setText(CurrentStatus.currThread.getContent());
-        
+        jLabelThreadTitle.setText("Title: " + CurrentStatus.currThread.getTitle());
+        jLabelThreadContent.setText("Content: " + CurrentStatus.currThread.getContent());
+
         String forumName = CurrentStatus.currForum.getForumName();
         String subForumName = CurrentStatus.currSubForum.getSubForumName();
         int id = CurrentStatus.currThread.getId();
 
         DefaultListModel listModel = new DefaultListModel();
         List<Post> listOfPosts;
-        ThreadMessage thread = CurrentStatus.currUser.getThread(forumName, 
-                                                subForumName, id);
+        ThreadMessage thread = CurrentStatus.currUser.getThread(forumName,
+                subForumName, id);
         listOfPosts = thread.getListOfPosts();
         for (Post p : listOfPosts) {
             listModel.addElement(p.getTitle() + " - " + p.getContent());
@@ -66,6 +75,7 @@ public class ThreadPage extends javax.swing.JFrame {
         jButtonAddPost = new javax.swing.JButton();
         jTextFieldAddTitle = new javax.swing.JTextField();
         jTextFieldAddContent = new javax.swing.JTextField();
+        jButtonSignout = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -104,39 +114,42 @@ public class ThreadPage extends javax.swing.JFrame {
 
         jButtonAddPost.setText("add post");
 
+        jButtonSignout.setText("sign out");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(89, 89, 89)
                         .addComponent(jButtonBack)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonSignout)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(logInButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(registerButton))
-                    .addComponent(jLabelThreadContent, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
-                    .addComponent(jLabelThreadTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1))
+                    .addComponent(jLabelThreadContent, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
+                    .addComponent(jLabelThreadTitle, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 110, Short.MAX_VALUE)
-                        .addComponent(jButtonAddPost)
-                        .addGap(116, 116, 116))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jTextFieldAddContent)
+                            .addComponent(jTextFieldAddContent, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
                             .addComponent(jTextFieldAddTitle))
-                        .addContainerGap())))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonAddPost)
+                        .addGap(113, 113, 113))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(92, 92, 92)
+                .addGap(33, 33, 33)
                 .addComponent(jLabelThreadTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabelThreadContent, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -144,16 +157,17 @@ public class ThreadPage extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jTextFieldAddTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(jTextFieldAddContent))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE))
+                .addGap(75, 75, 75)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonBack)
                     .addComponent(registerButton)
                     .addComponent(logInButton)
-                    .addComponent(jButtonBack)
-                    .addComponent(jButtonAddPost))
-                .addGap(80, 80, 80))
+                    .addComponent(jButtonAddPost)
+                    .addComponent(jButtonSignout))
+                .addContainerGap())
         );
 
         pack();
@@ -183,6 +197,7 @@ public class ThreadPage extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAddPost;
     private javax.swing.JButton jButtonBack;
+    private javax.swing.JButton jButtonSignout;
     private javax.swing.JLabel jLabelThreadContent;
     private javax.swing.JLabel jLabelThreadTitle;
     private javax.swing.JList jListPosts;

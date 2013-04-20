@@ -54,7 +54,7 @@ public interface DBInterface {
     
     List<Member> getAllMembers(String forumName);
     
-    boolean setSuperAdmin(String userName, String password);
+    boolean setSuperAdmin();
     
     SuperAdmin getSuperAdmin();
     
