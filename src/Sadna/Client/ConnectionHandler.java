@@ -266,4 +266,21 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 	private boolean legalMsg(Message m){
 		return m.getContent().length()<=1000;
 	}
+
+	@Override
+	public List<Post> getAllPosts(ThreadMessage tm) {
+		List<Post> allPosts = null;
+		SubForum subForum = tm.getSubForum();
+		String forumName = subForum.getSubForumName();
+		String subForumName = subForum.getSubForumName();
+		int threadID = tm.getId();
+		msgToSend = "GETAP\n"+"forumName: "+forumName+"\n"+
+		"SubForumName: "+subForumName+"\n"+"TheadID: "+threadID+"\n";
+		msgToSend += delimiter;
+		stringToServer.println(msgToSend);
+		try {allPosts = (List<Post>)objectFromServer.readObject();}
+		catch (IOException e) {}
+		catch (ClassNotFoundException e){}
+		return allPosts;
+	}
 }
