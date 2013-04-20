@@ -45,12 +45,13 @@ public class ConnectionHandlerMock implements ClientCommunicationHandlerInterfac
 
     @Override
     public SubForum getSubForum(String forum, String subForumName) {
-        return new SubForum("forum1", "subForum1");
+        SubForum subForum = new SubForum(new Forum("forum1"), "subForum1");
+        return subForum;
     }
 
     @Override
     public List<SubForum> getSubForumsList(String forumName) {
-        SubForum l = new SubForum("forum1", "subForum1");
+        SubForum l = new SubForum(new Forum("forum1"), "subForum1");
         List<SubForum> arrayList = new ArrayList<>();
         arrayList.add(l);
         return arrayList;
@@ -59,9 +60,10 @@ public class ConnectionHandlerMock implements ClientCommunicationHandlerInterfac
     @Override
     public List<ThreadMessage> getThreadsList(String forumName, String subForumName) {
         List<ThreadMessage> retList = new ArrayList<ThreadMessage>();
-        for (int i = 0; i < 44; i++) {
-            ThreadMessage threadMessage = new ThreadMessage("forum1",
-                    "sub1", "Title!!!" + i, "nothing", "chen");
+        SubForum l ;
+        for (int i = 0; i < 12; i++) {
+            l = new SubForum(new Forum("forum1"), "subForum1");
+            ThreadMessage threadMessage = new ThreadMessage(l, "Title!!!" + i, "nothing", "chen");
             retList.add(threadMessage);
         }
         return retList;
@@ -77,30 +79,35 @@ public class ConnectionHandlerMock implements ClientCommunicationHandlerInterfac
 
     @Override
     public ThreadMessage getThreadMessage(String forumName, String subForumName, int messageID) {
-        ThreadMessage threadMessage = new ThreadMessage(forumName, subForumName,
+        SubForum subForum = new SubForum(new Forum(forumName), subForumName);
+        ThreadMessage threadMessage = new ThreadMessage(subForum,
                 "title", "content", "chen");
-        for (int i = 0; i < 10; i++) {
-            Post p = new Post(threadMessage, "postTitle " + i, "postContent postContent postContent postContent postContent postContent postContent postContent postContent postContent postContent ", "snir");
-            threadMessage.addPost(p);
-        }
-        return threadMessage;
+          return threadMessage;
     }
 
     @Override
     public Forum getForum(String forumName) {
         Forum forum = new Forum(null, forumName);
         SubForum subForum = new SubForum(forum, "sub1");
-        forum.addSubForum(subForum);
         return forum;
     }
 
     @Override
-    public boolean addSubForum(SubForum subForum) {
+    public boolean addSubForum(SubForum subForum, List<Moderator> l) {
         return true;
     }
 
     @Override
     public boolean initiateForum(String forumName, String adminName, String adminPassword) {
         return true;
+    }
+
+    @Override
+    public List<Post> getAllPosts(ThreadMessage tm) {
+        ArrayList<Post> arrayList = new ArrayList<Post>();
+        for (int i = 0; i < 44; i++) {
+            arrayList.add(new Post(tm, "title " + i, "content" , "chen"));            
+        }
+        return arrayList;
     }
 }

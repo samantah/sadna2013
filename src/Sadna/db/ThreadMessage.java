@@ -28,6 +28,10 @@ public class ThreadMessage extends Message {
         this.id = subForum.getThreadIDGenerator().getID();
     }
 
+    public PostIDGenerator getPostIDGenerator() {
+        return postIDGenerator;
+    }
+    
     public SubForum getSubForum() {
         return subForum;
     }
