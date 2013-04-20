@@ -15,11 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 public class Main {
 	public static void main(String argv[]) throws Exception{
-		String host = "192.168.0.105";
+		String host = "192.168.1.101";
 		int port = 3248;
 		ConnectionHandler c = new ConnectionHandler(host, port);
 		SuperAdmin sa = new SuperAdmin("mega-admin", "megaadmin12", "mega@gmail.com", c);
-		sa.initiateForum("forum1", "snirElkaras", "snir1234");
+		//Member ans = c.register("forum1", "snirelkaras", "snirsnirs34", "snir@gmail.com");
+		boolean ans = sa.initiateForum("forum1", "snirElkaras", "snir1234");
+		//if(ans==null){System.out.println("hiiiiiiiiiiiiiiii");}
 		
 		/*----LOGIN-----*/
 		//litest(c);
@@ -49,7 +51,7 @@ public class Main {
 		//pttest(c);
 		
 		/*----GET-FORUM-LIST---*/
-		gfltest(c);
+		//gfltest(c);
 		
 		c.finishCommunication();
 
@@ -120,7 +122,7 @@ public class Main {
 	 * @param c
 	 */
 	private static void litest(ConnectionHandler c) {
-		Member m = c.login("forumName", "userName", "password");
+		Member m = c.login("forum1", "userName", "password");
 		if(m!=null){
 			System.out.println(m.userName);
 			System.out.println(m.password);
@@ -134,7 +136,7 @@ public class Main {
 	 * @param c
 	 */
 	private static void regitest(ConnectionHandler c) {
-		Member m = c.register("forumName", "userName", "snirfh1234", "email");
+		Member m = c.register("forum1", "snirElkaras", "snirfh1234", "email");
 		if(m!=null){
 			System.out.println(m.userName);
 			System.out.println(m.password);
