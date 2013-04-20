@@ -18,7 +18,9 @@ import Sadna.Client.Member;
 import Sadna.Client.Moderator;
 import Sadna.Client.SuperAdmin;
 import Sadna.db.API.DBInterface;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
 
 public class DataBase implements DBInterface {
@@ -189,7 +191,7 @@ public class DataBase implements DBInterface {
         try {
             String path = dataBaseFolder + "/" + forum + "/"; //save the path of the post
             boolean mkdirs = new File(path).mkdirs();
-            String pathToMembers = path + "/" + subForumStr + "/members/";
+            String pathToMembers = path + "/" + subForumStr + "/";
             new File(pathToMembers).mkdirs();
 
             BufferedWriter bw = new BufferedWriter(new FileWriter(pathToMembers
@@ -528,36 +530,35 @@ public class DataBase implements DBInterface {
     }
 
     @Override
-    public List<Moderator> getModerators(String forumName, String subForumName) {
-        FileInputStream inputStream;
-        ObjectInputStream obj;
-        ArrayList<Moderator> retList = new ArrayList<Moderator>();
-        String pathToFolder = dataBaseFolder + "/" + forumName + "/"
-                + subForumName + "/members/";
-        File folder = new File(pathToFolder);
-        File listOfFiles[] = folder.listFiles();
-        for (int i = 0; i < listOfFiles.length; i++) {
-            String nameOfFile = listOfFiles[i].getName();
-            if (!nameOfFile.endsWith(".obj")) {
-                continue;
-            }
-            try {
-                inputStream = new FileInputStream(pathToFolder + nameOfFile);
-                obj = new ObjectInputStream(inputStream);
-                Moderator readObject = (Moderator) obj.readObject();
-                retList.add(readObject);
-                obj.close();
-                inputStream.close();
+    public List<Member> getModerators(String forumName, String subForumName) {
+        FileInputStream inputStream = null;
+        ObjectInputStream objin = null;
+        ArrayList<Member> retList = new ArrayList<Member>();
+        String currMod;
+        String path = this.dataBaseFolder + "/" + forumName + "/"
+                + subForumName + "/moderators.txt";
+        String pathToMembers = this.dataBaseFolder + "/" + forumName
+                + "/members/";
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(path));
 
-            } catch (FileNotFoundException ex) {
-                String message = ex.getMessage();
-                System.out.println(message);
-                return null;
-            } catch (IOException | ClassNotFoundException ex) {
-                String message = ex.getMessage();
-                System.out.println(message);
-                return null;
+            while ((currMod = br.readLine()) != null) {
+                inputStream = new FileInputStream(pathToMembers + currMod + ".obj");
+                objin = new ObjectInputStream(inputStream);
+                Member readObject = (Member) objin.readObject();
+                retList.add(readObject);
             }
+            objin.close();
+            inputStream.close();
+
+        } catch (FileNotFoundException ex) {
+            String message = ex.getMessage();
+            System.out.println(message);
+            return null;
+        } catch (IOException | ClassNotFoundException ex) {
+            String message = ex.getMessage();
+            System.out.println(message);
+            return null;
         }
         return retList;
     }
@@ -640,6 +641,6 @@ public class DataBase implements DBInterface {
 
     @Override
     public boolean addModerator(Moderator moderator) {
-        return true;
+        return false;
     }
 }

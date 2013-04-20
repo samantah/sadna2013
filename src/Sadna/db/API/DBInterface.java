@@ -30,7 +30,7 @@ public interface DBInterface {
 
     Member getMember(String forumName, String userName);
     
-    List<Moderator> getModerators(String forumName, String subForumName);
+    List<Member> getModerators(String forumName, String subForumName);
 
     List<SubForum> getSubForumsList(String forumName);
 
