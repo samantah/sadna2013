@@ -7,6 +7,7 @@ package Sadna.db.API;
 import java.util.List;
 
 import Sadna.Client.Member;
+import Sadna.Client.SuperAdmin;
 import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
@@ -49,4 +50,8 @@ public interface DBInterface {
     boolean addThread(ThreadMessage thread);
     
     List<Member> getAllMembers(String forumName);
+    
+    boolean setSuperAdmin(String userName, String password);
+    
+    SuperAdmin getSuperAdmin();
 }
