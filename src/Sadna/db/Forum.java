@@ -13,56 +13,39 @@ import java.util.List;
  *
  * @author fistuk
  */
-public class Forum implements Serializable{
-    
+public class Forum implements Serializable {
+
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = -7660231455619569811L;
-	private List<SubForum> listOfSubForums;
+     *
+     */
+    private static final long serialVersionUID = -7660231455619569811L;
     private Admin admin;
     private String forumName;
 
-
-    public Forum(Admin admin,String forumName) {
+    public Forum(Admin admin, String forumName) {
         this.forumName = forumName;
-        this.listOfSubForums = new ArrayList<SubForum>();
         this.admin = admin;
     }
-    
+
     public Forum(String forumName) {
         this.forumName = forumName;
-        this.listOfSubForums = new ArrayList<SubForum>();
         this.admin = null;
     }
 
     public Admin getAdmin() {
-		return admin;
-	}
-
-	public boolean setAdmin(Admin admin) {
-		if (admin==null){
-			this.admin = admin;
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
-
-	public boolean addSubForum(SubForum e) {
-        return listOfSubForums.add(e);
+        return admin;
     }
 
-    public boolean removeSubForum(Object o) {
-        return listOfSubForums.remove(o);
+    public boolean setAdmin(Admin admin) {
+        if (admin == null) {
+            this.admin = admin;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public String getForumName() {
         return forumName;
-    }
-
-    public List<SubForum> getListOfSubForums() {
-        return listOfSubForums;
     }
 }
