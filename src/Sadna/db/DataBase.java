@@ -301,7 +301,7 @@ public class DataBase implements DBInterface {
             String path = dataBaseFolder + "/" + forum
                     + "/" + subForumStr + "/"; //save the path of the post
             boolean mkdirs = new File(path).mkdirs();
-            String pathToFolder = path + "thread" + threadMessage + "/";
+            String pathToFolder = path + "thread" + df.format(threadMessage) + "/";
             new File(pathToFolder).mkdirs();
             outputstream = new FileOutputStream(path + "thread"
                     + df.format(threadMessage) + ".obj");
