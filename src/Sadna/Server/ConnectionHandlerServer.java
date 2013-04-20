@@ -17,17 +17,20 @@ import Sadna.db.ThreadMessage;
 public class ConnectionHandlerServer implements ConnectionHandlerServerInterface {
 	private Socket serverSocket;
 	private PrintWriter stringToClient;
-	private ObjectOutputStream objectToClient;
-	
+	private ObjectOutputStream objectOutputToClient;
+	private BufferedReader stringFromClient;
+	private ObjectInputStream objectInputFromClient;
+
 	public ConnectionHandlerServer(Socket socket){
 		try{
 			serverSocket = socket;
 			stringToClient = new PrintWriter(serverSocket.getOutputStream(), true);
-			new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
-			objectToClient = new ObjectOutputStream(serverSocket.getOutputStream()); 
-			new ObjectInputStream(serverSocket.getInputStream());
+			stringFromClient = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
+			objectOutputToClient = new ObjectOutputStream(serverSocket.getOutputStream()); 
+			objectInputFromClient = new ObjectInputStream(serverSocket.getInputStream());
 		}catch(Exception e){}
 	}
+
 
 	@Override
 	public void sendOK() {
@@ -47,7 +50,7 @@ public class ConnectionHandlerServer implements ConnectionHandlerServerInterface
 	@Override
 	public void sendSubForumsList(List<SubForum> subForumsList) {
 		try {
-			objectToClient.writeObject(subForumsList);
+			objectOutputToClient.writeObject(subForumsList);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}		
@@ -56,7 +59,7 @@ public class ConnectionHandlerServer implements ConnectionHandlerServerInterface
 	@Override
 	public void sendSubForum(SubForum subForum) {
 		try {
-			objectToClient.writeObject(subForum);
+			objectOutputToClient.writeObject(subForum);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}		
@@ -65,7 +68,7 @@ public class ConnectionHandlerServer implements ConnectionHandlerServerInterface
 	@Override
 	public void sendThreadsList(List<ThreadMessage> threadsList) {
 		try {
-			objectToClient.writeObject(threadsList);
+			objectOutputToClient.writeObject(threadsList);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}			
@@ -74,7 +77,7 @@ public class ConnectionHandlerServer implements ConnectionHandlerServerInterface
 	@Override
 	public void sendThreadMeassage(ThreadMessage threadMessage) {
 		try {
-			objectToClient.writeObject(threadMessage);
+			objectOutputToClient.writeObject(threadMessage);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}			
@@ -83,7 +86,7 @@ public class ConnectionHandlerServer implements ConnectionHandlerServerInterface
 	@Override
 	public void sendForumsList(List<Forum> forumsList) {
 		try {
-			objectToClient.writeObject(forumsList);
+			objectOutputToClient.writeObject(forumsList);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}			
@@ -92,17 +95,34 @@ public class ConnectionHandlerServer implements ConnectionHandlerServerInterface
 	@Override
 	public void sendForum(Forum forum) {
 		try {
-			objectToClient.writeObject(forum);
+			objectOutputToClient.writeObject(forum);
 		} catch (IOException e) {
 			e.printStackTrace();
-		}			
+		}	
 	}
 
 	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		
+	public String receiveRequestFromClient() {
+		String request = null;
+		try {
+			request = stringFromClient.readLine();
+		} catch (IOException e) {}
+		return request;
+
+	}
+
+
+	public void closeSocket() {
+		try{
+			objectInputFromClient.close();
+			objectOutputToClient.close();
+			stringToClient.close();
+			stringFromClient.close();
+			serverSocket.close();
+			System.out.println("Closed socket..");
+		}catch (Exception e) {
+			System.out.println("Couldn't close socket..");		
+		}
 	}
 	
-
 }

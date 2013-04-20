@@ -23,14 +23,40 @@ import Sadna.db.ThreadMessage;
  *
  * @author fistuk
  */
-public class Server {
+public class ServerHandler implements Runnable {
 
 	private ConnectionHandlerServerInterface _ch;
 	private ServerInterface _si;
 
-	public Server(ConnectionHandlerServerInterface ch, ServerInterface si) {
+	public ServerHandler(ConnectionHandlerServerInterface ch, ServerInterface si) {
 		_ch = ch;
 		_si = si;
+		Thread t = new Thread(this);
+		t.start();
+	}
+
+	@Override
+	public void run() {
+
+		//
+		// Read a message sent by client application
+		//
+		String request = _ch.receiveRequestFromClient();
+		if(request != null){
+			System.out.println("Message Received: \n" + request);
+			parseAndHandleRequest(request);
+		}
+		else{
+			System.out.println("Bad request from client.");
+			_ch.sendErrorInServer();
+		}
+		_ch.closeSocket();
+
+	}
+
+	private void parseAndHandleRequest(String request) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	public boolean handleRegister(String forumName, String userName, String password, 
