@@ -4,6 +4,7 @@
  */
 package Sadna.gui;
 
+import Sadna.Client.Member;
 import javax.swing.JFrame;
 
 /**
@@ -48,6 +49,11 @@ public class LogInPage extends javax.swing.JFrame {
         jLabelPassword.setText("Password");
 
         jButtonLogin.setText("log in");
+        jButtonLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonLoginActionPerformed(evt);
+            }
+        });
 
         jLabelTitle.setFont(new java.awt.Font("Arial", 3, 24)); // NOI18N
         jLabelTitle.setText("Please log in");
@@ -59,7 +65,7 @@ public class LogInPage extends javax.swing.JFrame {
         });
 
         jLabelInvalidData.setForeground(new java.awt.Color(255, 0, 0));
-        jLabelInvalidData.setText("Invalid data - ");
+        jLabelInvalidData.setText("Invalid data - Username or Password are incorrect");
 
         jButtonBack.setText("back");
         jButtonBack.addActionListener(new java.awt.event.ActionListener() {
@@ -126,6 +132,37 @@ public class LogInPage extends javax.swing.JFrame {
     }//GEN-LAST:event_jPasswordField1ActionPerformed
 
     private void jButtonBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBackActionPerformed
+        goBack();
+    }//GEN-LAST:event_jButtonBackActionPerformed
+
+    private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLoginActionPerformed
+        String userNameStr = jTextFieldUserName.getText();
+        String passwordStr = jPasswordField1.getText();
+        String forumName = CurrentStatus.currForum.getForumName();
+        Member login = CurrentStatus.currUser.login(forumName, userNameStr, passwordStr);
+        if (login==null){
+            jLabelInvalidData.setVisible(true);
+            jTextFieldUserName.setText("");
+            jPasswordField1.setText("");
+            return;
+        }
+        CurrentStatus.currUser = login;
+        goBack();
+        
+    }//GEN-LAST:event_jButtonLoginActionPerformed
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonBack;
+    private javax.swing.JButton jButtonLogin;
+    private javax.swing.JLabel jLabelInvalidData;
+    private javax.swing.JLabel jLabelPassword;
+    private javax.swing.JLabel jLabelTitle;
+    private javax.swing.JLabel jLabelUserName;
+    private javax.swing.JPasswordField jPasswordField1;
+    private javax.swing.JTextField jTextFieldUserName;
+    // End of variables declaration//GEN-END:variables
+
+    private void goBack() {
         EnumPages whereToGo = null;
         JFrame frame = null;
         for (int i = 0; i < 1; i++) {
@@ -152,22 +189,14 @@ public class LogInPage extends javax.swing.JFrame {
                 break;
             case SUBFORUM:
                 frame = new SubForumPage();
+                break;
             case THREAD:
                 frame = new ThreadPage();
+                break;
 
         }
         this.setVisible(false);
         this.dispose();
         frame.setVisible(true);
-    }//GEN-LAST:event_jButtonBackActionPerformed
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonBack;
-    private javax.swing.JButton jButtonLogin;
-    private javax.swing.JLabel jLabelInvalidData;
-    private javax.swing.JLabel jLabelPassword;
-    private javax.swing.JLabel jLabelTitle;
-    private javax.swing.JLabel jLabelUserName;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextFieldUserName;
-    // End of variables declaration//GEN-END:variables
+    }
 }

@@ -35,7 +35,6 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabelUserName" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabelPassword" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabelFullName" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabelEmail" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
@@ -46,7 +45,6 @@
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="jTextFieldUserName" max="32767" attributes="0"/>
                           <Component id="jPasswordField1" alignment="0" pref="155" max="32767" attributes="0"/>
-                          <Component id="jTextFieldFullName" alignment="0" max="32767" attributes="0"/>
                           <Component id="jTextFieldEmail" alignment="0" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
@@ -76,22 +74,17 @@
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabelFullName" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jTextFieldFullName" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabelEmail" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jTextFieldEmail" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jButtonRegister" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jButtonBack" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jLabelInvalidData" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace pref="23" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -138,16 +131,6 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Email"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabelFullName">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Arial" size="14" style="0"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Full name"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="jTextFieldFullName">
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldEmail">
     </Component>

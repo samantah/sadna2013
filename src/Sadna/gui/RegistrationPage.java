@@ -4,6 +4,7 @@
  */
 package Sadna.gui;
 
+import Sadna.Client.Member;
 import javax.swing.JFrame;
 
 /**
@@ -36,8 +37,6 @@ public class RegistrationPage extends javax.swing.JFrame {
         jTextFieldUserName = new javax.swing.JTextField();
         jButtonRegister = new javax.swing.JButton();
         jLabelEmail = new javax.swing.JLabel();
-        jLabelFullName = new javax.swing.JLabel();
-        jTextFieldFullName = new javax.swing.JTextField();
         jTextFieldEmail = new javax.swing.JTextField();
         jPasswordField1 = new javax.swing.JPasswordField();
         jLabelInvalidData = new javax.swing.JLabel();
@@ -63,9 +62,6 @@ public class RegistrationPage extends javax.swing.JFrame {
 
         jLabelEmail.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabelEmail.setText("Email");
-
-        jLabelFullName.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabelFullName.setText("Full name");
 
         jLabelInvalidData.setForeground(new java.awt.Color(255, 0, 0));
         jLabelInvalidData.setText("Invalid data - ");
@@ -93,7 +89,6 @@ public class RegistrationPage extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelUserName)
                             .addComponent(jLabelPassword)
-                            .addComponent(jLabelFullName)
                             .addComponent(jLabelEmail)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(40, 40, 40)
@@ -102,7 +97,6 @@ public class RegistrationPage extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jTextFieldUserName)
                             .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
-                            .addComponent(jTextFieldFullName)
                             .addComponent(jTextFieldEmail)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(40, 40, 40)
@@ -124,29 +118,55 @@ public class RegistrationPage extends javax.swing.JFrame {
                     .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelFullName)
-                    .addComponent(jTextFieldFullName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelEmail)
                     .addComponent(jTextFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonRegister)
                     .addComponent(jButtonBack))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabelInvalidData)
-                .addContainerGap())
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegisterActionPerformed
-        // TODO add your handling code here:
+        String userNameStr = jTextFieldUserName.getText();
+        String passwordStr = jPasswordField1.getText();
+        String email = jTextFieldEmail.getText();
+        String forumName = CurrentStatus.currForum.getForumName();  
+        Member register = CurrentStatus.currUser.register(forumName, 
+                userNameStr, passwordStr, email);
+        if (register==null){
+            jTextFieldUserName.setText("");
+            jTextFieldEmail.setText("");
+            jPasswordField1.setText("");
+            jLabelInvalidData.setVisible(true);
+            return;
+        }
+        CurrentStatus.currUser = register;
+        goBack();
     }//GEN-LAST:event_jButtonRegisterActionPerformed
 
     private void jButtonBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBackActionPerformed
+       goBack();
+    }//GEN-LAST:event_jButtonBackActionPerformed
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonBack;
+    private javax.swing.JButton jButtonRegister;
+    private javax.swing.JLabel jLabelEmail;
+    private javax.swing.JLabel jLabelInvalidData;
+    private javax.swing.JLabel jLabelPassword;
+    private javax.swing.JLabel jLabelTitle;
+    private javax.swing.JLabel jLabelUserName;
+    private javax.swing.JPasswordField jPasswordField1;
+    private javax.swing.JTextField jTextFieldEmail;
+    private javax.swing.JTextField jTextFieldUserName;
+    // End of variables declaration//GEN-END:variables
+    private void goBack() {
         EnumPages whereToGo = null;
         JFrame frame = null;
         for (int i = 0; i < 1; i++) {
@@ -158,7 +178,11 @@ public class RegistrationPage extends javax.swing.JFrame {
                 whereToGo = EnumPages.FORUM;
                 break;
             }
-            whereToGo = EnumPages.SUBFORUM;
+            if (CurrentStatus.currThread == null) {
+                whereToGo = EnumPages.SUBFORUM;
+                break;
+            }
+            whereToGo = EnumPages.THREAD;
         }
         switch (whereToGo) {
             case MAIN:
@@ -169,27 +193,14 @@ public class RegistrationPage extends javax.swing.JFrame {
                 break;
             case SUBFORUM:
                 frame = new SubForumPage();
+                break;
             case THREAD:
                 frame = new ThreadPage();
-                
+                break;
+
         }
         this.setVisible(false);
         this.dispose();
         frame.setVisible(true);
-    }//GEN-LAST:event_jButtonBackActionPerformed
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonBack;
-    private javax.swing.JButton jButtonRegister;
-    private javax.swing.JLabel jLabelEmail;
-    private javax.swing.JLabel jLabelFullName;
-    private javax.swing.JLabel jLabelInvalidData;
-    private javax.swing.JLabel jLabelPassword;
-    private javax.swing.JLabel jLabelTitle;
-    private javax.swing.JLabel jLabelUserName;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextFieldEmail;
-    private javax.swing.JTextField jTextFieldFullName;
-    private javax.swing.JTextField jTextFieldUserName;
-    // End of variables declaration//GEN-END:variables
+    }
 }

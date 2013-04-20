@@ -4,8 +4,11 @@
  */
 package Sadna.gui;
 
+import Sadna.Client.Member;
 import Sadna.Client.User;
+import Sadna.db.Forum;
 import Sadna.db.Post;
+import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 import java.util.List;
 import javax.swing.DefaultListModel;
@@ -22,19 +25,18 @@ public class ThreadPage extends javax.swing.JFrame {
     public ThreadPage() {
         initComponents();
         this.setResizable(false);
+        this.jLabelError.setVisible(false);
 
-        if (CurrentStatus.currUser instanceof User) {
-            jButtonSignout.setVisible(false);
-        } else {
+        if (CurrentStatus.currUser instanceof Member) {
             logInButton.setVisible(false);
             registerButton.setVisible(false);
-        }
-        
-        if (CurrentStatus.currUser instanceof User) {
+        } else {
+            jButtonSignout.setVisible(false);
             jTextFieldAddTitle.setVisible(false);
             jTextFieldAddContent.setVisible(false);
             jButtonAddPost.setVisible(false);
         }
+
         this.setResizable(false);
         jListPosts.setCellRenderer(new MyCellRenderer(80));
         jListPosts.setFixedCellWidth(80);
@@ -43,12 +45,12 @@ public class ThreadPage extends javax.swing.JFrame {
 
         String forumName = CurrentStatus.currForum.getForumName();
         String subForumName = CurrentStatus.currSubForum.getSubForumName();
-        int id = CurrentStatus.currThread.getId();
+        int threadId = CurrentStatus.currThread.getId();
 
         DefaultListModel listModel = new DefaultListModel();
         List<Post> listOfPosts;
         ThreadMessage thread = CurrentStatus.currUser.getThread(forumName,
-                subForumName, id);
+                subForumName, threadId);
         listOfPosts = CurrentStatus.currUser.getAllPosts(thread);
         for (Post p : listOfPosts) {
             listModel.addElement(p.getTitle() + " - " + p.getContent());
@@ -76,6 +78,7 @@ public class ThreadPage extends javax.swing.JFrame {
         jTextFieldAddTitle = new javax.swing.JTextField();
         jTextFieldAddContent = new javax.swing.JTextField();
         jButtonSignout = new javax.swing.JButton();
+        jLabelError = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -113,8 +116,21 @@ public class ThreadPage extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jListPosts);
 
         jButtonAddPost.setText("add post");
+        jButtonAddPost.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAddPostActionPerformed(evt);
+            }
+        });
 
         jButtonSignout.setText("sign out");
+        jButtonSignout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSignoutActionPerformed(evt);
+            }
+        });
+
+        jLabelError.setForeground(new java.awt.Color(255, 0, 0));
+        jLabelError.setText("Error - didn't post");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -145,6 +161,10 @@ public class ThreadPage extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonAddPost)
                         .addGap(113, 113, 113))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabelError, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(105, 105, 105))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -160,7 +180,9 @@ public class ThreadPage extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jTextFieldAddContent))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE))
-                .addGap(75, 75, 75)
+                .addGap(18, 18, 18)
+                .addComponent(jLabelError)
+                .addGap(43, 43, 43)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonBack)
                     .addComponent(registerButton)
@@ -194,10 +216,41 @@ public class ThreadPage extends javax.swing.JFrame {
         this.dispose();
         registrationPage.setVisible(true);
     }//GEN-LAST:event_registerButtonActionPerformed
+
+    private void jButtonSignoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSignoutActionPerformed
+        Member m = (Member) CurrentStatus.currUser;
+        String forumName = CurrentStatus.currForum.getForumName();
+        String userName = m.getUserName();
+        User logout = m.logout(forumName, userName);
+        CurrentStatus.currUser = logout;
+        ThreadPage threadPage = new ThreadPage();
+        this.setVisible(false);
+        this.dispose();
+        threadPage.setVisible(true);
+    }//GEN-LAST:event_jButtonSignoutActionPerformed
+
+    private void jButtonAddPostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddPostActionPerformed
+        String title = jTextFieldAddTitle.getText();
+        String content = jTextFieldAddContent.getText();
+        Member m = (Member) CurrentStatus.currUser;
+        ThreadMessage tm = CurrentStatus.currThread;
+        Post p = new Post(tm, title, content, m.getUserName());
+        boolean postComment = m.postComment(p);
+        if (!postComment){
+            this.jLabelError.setVisible(true);
+            return;
+        }
+        ThreadPage threadPage = new ThreadPage();
+        this.setVisible(false);
+        this.dispose();
+        threadPage.setVisible(true);
+    }//GEN-LAST:event_jButtonAddPostActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAddPost;
     private javax.swing.JButton jButtonBack;
     private javax.swing.JButton jButtonSignout;
+    private javax.swing.JLabel jLabelError;
     private javax.swing.JLabel jLabelThreadContent;
     private javax.swing.JLabel jLabelThreadTitle;
     private javax.swing.JList jListPosts;

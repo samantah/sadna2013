@@ -164,6 +164,10 @@ public class DataBase implements DBInterface {
         try {
             String path = dataBaseFolder + "/"; //save the path of the post
             boolean mkdirs = new File(path).mkdirs();
+            String pathToFolder = dataBaseFolder + "/" + forumStr + "/";
+            new File(pathToFolder).mkdirs();
+            String pathToMembers = dataBaseFolder + "/" + forumStr + "/members/";
+            new File(pathToMembers).mkdirs();
             outputstream = new FileOutputStream(path + forumStr + ".obj");
             obj = new ObjectOutputStream(outputstream);
             obj.writeObject(forum);//write the object to the file
@@ -195,10 +199,10 @@ public class DataBase implements DBInterface {
 
         try {
             String path = dataBaseFolder + "/" + forum + "/"; //save the path of the post
-            boolean mkdirs = new File(path).mkdirs();
-            String pathToMembers = path + "/" + subForumStr + "/";
-            new File(pathToMembers).mkdirs();
-
+            new File(path).mkdirs();
+            String pathToFolder = path + "/" + subForumStr + "/";
+            new File(pathToFolder).mkdirs();
+            String pathToMembers = pathToFolder;
             BufferedWriter bw = new BufferedWriter(new FileWriter(pathToMembers
                     + "moderators.txt"));
             for (Moderator m : listOfModerators) {
@@ -238,7 +242,8 @@ public class DataBase implements DBInterface {
         String pathToThread = this.dataBaseFolder + "/" + forum + "/"
                 + subForum + "/";
         try {
-            outputstream = new FileOutputStream(pathToThread + "thread" + threadMessage + ".obj");
+            outputstream = new FileOutputStream(pathToThread + "thread" 
+                            + threadMessage + ".obj");
             obj = new ObjectOutputStream(outputstream);
             obj.writeObject(thread);
             outputstream.close();
@@ -295,6 +300,8 @@ public class DataBase implements DBInterface {
             String path = dataBaseFolder + "/" + forum
                     + "/" + subForumStr + "/"; //save the path of the post
             boolean mkdirs = new File(path).mkdirs();
+            String pathToFolder = path + "thread" + threadMessage + "/";
+            new File(pathToFolder).mkdirs();
             outputstream = new FileOutputStream(path + "thread"
                     + threadMessage + ".obj");
             obj = new ObjectOutputStream(outputstream);

@@ -39,7 +39,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="registerButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="enterForumButton" min="-2" max="-2" attributes="0"/>
+                      <Component id="enterSubForumButton" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="jScrollPane2" min="-2" pref="550" max="-2" attributes="0"/>
               </Group>
@@ -58,7 +58,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="logInButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="registerButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="enterForumButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="enterSubForumButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jButtonBack" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jButtonSignout" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
@@ -110,12 +110,12 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="registerButtonActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="enterForumButton">
+    <Component class="javax.swing.JButton" name="enterSubForumButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Enter Sub-Forum"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="enterForumButtonActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="enterSubForumButtonActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jButtonBack">
@@ -130,6 +130,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="sign out"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonSignoutActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
