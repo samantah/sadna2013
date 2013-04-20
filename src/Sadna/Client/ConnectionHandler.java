@@ -40,8 +40,8 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 	@Override
 	public Member login(String forumName, String userName, String password){
 		Member loggedInMember = null;
-		msgToSend = "LOGIN\n"+"forumName: "+forumName+"\n" +
-		"userName: "+userName+"\n"+"password: "+password+"\n";
+		msgToSend = "LOGIN\n"+"forumName:\n"+forumName+"\n" +
+		"userName:\n"+userName+"\n"+"password:\n"+password+"\n";
 		msgToSend += delimiter;
 		stringToServer.println(msgToSend);
 		try {receivedMsg = stringFromServer.readLine();}
@@ -57,8 +57,8 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 			String email) {
 		Member loggedInMember = null;
 		if(passwordValidity(password)){
-			msgToSend = "REGISTER\n"+"forumName: "+forumName+"\n"+"userName: "+userName+"\n" +
-			"password: "+password+"\n"+"email: "+email+"\n";
+			msgToSend = "REGISTER\n"+"forumName:\n"+forumName+"\n"+"userName:\n"+userName+"\n" +
+			"password:\n"+password+"\n"+"email:\n"+email+"\n";
 			msgToSend += delimiter;
 			stringToServer.println(msgToSend);
 			try {receivedMsg = stringFromServer.readLine();}
@@ -93,8 +93,8 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 	@Override
 	public SubForum getSubForum(String forum, String subForumName) {
 		SubForum returnedSF = null;
-		msgToSend = "GETSF\n"+"forumName: "+forum+"\n" +
-		"subForumName: "+subForumName+"\n";
+		msgToSend = "GETSF\n"+"forumName:\n"+forum+"\n" +
+		"subForumName:\n"+subForumName+"\n";
 		msgToSend += delimiter;
 		stringToServer.println(msgToSend);
 		try {returnedSF = (SubForum)objectFromServer.readObject();if(returnedSF==null) System.out.println("111");}
@@ -106,7 +106,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 	@Override
 	public List<SubForum> getSubForumsList(String forumName) {
 		List<SubForum> returnedList = new ArrayList<SubForum>();
-		msgToSend = "GETSFL\n"+"forumName: "+forumName+"\n";
+		msgToSend = "GETSFL\n"+"forumName:\n"+forumName+"\n";
 		msgToSend += delimiter;
 		stringToServer.println(msgToSend);
 		try {returnedList = (List<SubForum>)objectFromServer.readObject();}
@@ -120,7 +120,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 			String subForumName) {
 		List<ThreadMessage> returnedList = new ArrayList<ThreadMessage>();
 		ThreadMessage tmp = null;
-		msgToSend = "GETTL\n"+"forumName: "+forumName+"\n"+"subForumName: "+subForumName+"\n";
+		msgToSend = "GETTL\n"+"forumName:\n"+forumName+"\n"+"subForumName:\n"+subForumName+"\n";
 		msgToSend += delimiter;
 		stringToServer.println(msgToSend);
 		try {returnedList = (List<ThreadMessage>)objectFromServer.readObject();}
@@ -133,8 +133,8 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 	public ThreadMessage getThreadMessage(String forumName,
 			String subForumName, int msgID) {
 		ThreadMessage returnedTM = null;
-		msgToSend = "GETTM\n"+"forumName: "+forumName+"\n" +
-		"subForumName: "+subForumName+"\n"+"treadMessageID: "+msgID+"\n";
+		msgToSend = "GETTM\n"+"forumName:\n"+forumName+"\n" +
+		"subForumName:\n"+subForumName+"\n"+"treadMessageID:\n"+msgID+"\n";
 		msgToSend += delimiter;
 		stringToServer.println(msgToSend);
 		try {returnedTM = (ThreadMessage)objectFromServer.readObject();}
@@ -151,10 +151,10 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 			SubForum sf = tm.getSubForum();
 			Forum f = sf.getForum();
 			String posterName = post.getPublisher();
-			msgToSend = "POST\n"+"forumName: "+f.getForumName()+"\n" +
-			"subForumName: "+sf.getSubForumName()+"\n"+"ThreadMessage: "+tm.getId()+"\n"+
-			"posterName: "+posterName+"\n"+"postTitle: "+post.getTitle()+"\n"+
-			"postContent: "+post.getContent()+"\n";
+			msgToSend = "POST\n"+"forumName:\n"+f.getForumName()+"\n" +
+			"subForumName:\n"+sf.getSubForumName()+"\n"+"ThreadMessage:\n"+tm.getId()+"\n"+
+			"posterName:\n"+posterName+"\n"+"postTitle:\n"+post.getTitle()+"\n"+
+			"postContent:\n"+post.getContent()+"\n";
 			msgToSend += delimiter;
 			stringToServer.println(msgToSend);
 			try {receivedMsg = stringFromServer.readLine();}
@@ -173,9 +173,9 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 			SubForum sf = newThread.getSubForum();
 			Forum f = sf.getForum();
 			String posterName = newThread.getPublisher();
-			msgToSend = "THREAD\n"+"forumName: "+f.getForumName()+"\n" +
-			"subForumName: "+sf.getSubForumName()+"\n"+"posterName: "+posterName+"\n"+"threadTitle: "+newThread.getTitle()+"\n"+
-			"threadContent: "+newThread.getContent()+"\n";
+			msgToSend = "THREAD\n"+"forumName:\n"+f.getForumName()+"\n" +
+			"subForumName:\n"+sf.getSubForumName()+"\n"+"posterName:\n"+posterName+"\n"+"threadTitle:\n"+newThread.getTitle()+"\n"+
+			"threadContent:\n"+newThread.getContent()+"\n";
 			msgToSend += delimiter;
 			stringToServer.println(msgToSend);
 			try {receivedMsg = stringFromServer.readLine();}
@@ -190,8 +190,8 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 	@Override
 	public User logout(String forumName, String userName) {
 		/*User loggedOutMember = null;
-		msgToSend = "LOGOUT\n"+"forumName: "+forumName+"\n" +
-		"userName: "+userName+"\n";
+		msgToSend = "LOGOUT\n"+"forumName:\n"+forumName+"\n" +
+		"userName:\n"+userName+"\n";
 		stringToServer.println(msgToSend);
 		try {reciviedMsg = stringFromServer.readLine();}
 		catch (IOException e) {}
@@ -219,7 +219,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 	public Forum getForum(String forumName) {
 
 		Forum returnedSF = null;
-		msgToSend = "GETF\n"+"forumName: "+forumName+"\n";
+		msgToSend = "GETF\n"+"forumName:\n"+forumName+"\n";
 		msgToSend += delimiter;
 		stringToServer.println(msgToSend);
 		try {returnedSF = (Forum)objectFromServer.readObject();}
@@ -233,10 +233,10 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 	public boolean addSubForum(SubForum subForum, List<Moderator> lm) {
 		boolean added = false;
 		Forum f = subForum.getForum();
-		msgToSend = "ADDSF\n"+"forumName: "+f.getForumName()+"\n" +
-		"subForumName: "+subForum.getSubForumName()+"\n"+"size: "+lm.size()+"\n";
+		msgToSend = "ADDSF\n"+"forumName:\n"+f.getForumName()+"\n" +
+		"subForumName:\n"+subForum.getSubForumName()+"\n"+"size:\n"+lm.size()+"\n";
 		for(Moderator md: lm){
-			msgToSend+="moderator: "+md.getUserName()+"\n";
+			msgToSend+="moderator:\n"+md.getUserName()+"\n";
 		}
 		msgToSend += delimiter;
 		stringToServer.println(msgToSend);
@@ -251,8 +251,8 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 	@Override
 	public boolean initiateForum(String forumName, String adminName, String AdminPassword) {
 		boolean initiated = false;
-		msgToSend = "ADDF\n"+"forumName: "+forumName+"\n"+
-		"adminName: "+adminName+"\n"+"adminPassword: "+AdminPassword+"\n";
+		msgToSend = "ADDF\n"+"forumName:\n"+forumName+"\n"+
+		"adminName:\n"+adminName+"\n"+"adminPassword:\n"+AdminPassword+"\n";
 		msgToSend += delimiter;
 		stringToServer.println(msgToSend);
 		try {receivedMsg = stringFromServer.readLine();}
@@ -275,16 +275,13 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		String forumName = forum.getForumName();
 		String subForumName = subForum.getSubForumName();
 		int threadID = tm.getId();
-		msgToSend = "GETAP\n"+"forumName: "+forumName+"\n"+
-		"SubForumName: "+subForumName+"\n"+"TheadID: "+threadID+"\n";
+		msgToSend = "GETAP\n"+"forumName:\n"+forumName+"\n"+
+		"SubForumName:\n"+subForumName+"\n"+"TheadID:\n"+threadID+"\n";
 		msgToSend += delimiter;
 		stringToServer.println(msgToSend);
 		try {allPosts = (List<Post>)objectFromServer.readObject();}
 		catch (IOException e) {}
 		catch (ClassNotFoundException e){}
-                for (Post post : allPosts) {
-                    System.out.println(post);
-                }
 		return allPosts;
 	}
 }
