@@ -19,9 +19,15 @@ public class Main {
 		int port = 3248;
 		ConnectionHandler c = new ConnectionHandler(host, port);
 		SuperAdmin sa = new SuperAdmin("mega-admin", "megaadmin12", "mega@gmail.com", c);
-		//Member ans = c.register("forum1", "snirelkaras", "snirsnirs34", "snir@gmail.com");
-		boolean ans = sa.initiateForum("forum1", "snirElkaras", "snir1234");
-		//if(ans==null){System.out.println("hiiiiiiiiiiiiiiii");}
+		User guest = new User(c);
+//		Member member = guest.login("forum1", "snirelkaras1","snirfh1234");
+//		System.out.println(member.getUserName());
+//		Forum f =member.getForum("forum1");
+//		SubForum sf = member.getSubForum(f.getForumName(), "subForum1");
+//		ThreadMessage tm = new ThreadMessage(sf, "eminem", "my name is slim shady", "snirelkaras1");
+//		member.publishThread(tm);
+		Member chen = guest.login("forum1", "chenli", "qwert1234");
+		System.out.println(chen);
 		
 		/*----LOGIN-----*/
 		//litest(c);
@@ -136,7 +142,7 @@ public class Main {
 	 * @param c
 	 */
 	private static void regitest(ConnectionHandler c) {
-		Member m = c.register("forum1", "snirElkaras", "snirfh1234", "email");
+		Member m = c.register("forum1", "snirElkaras1", "snirfh1234", "email");
 		if(m!=null){
 			System.out.println(m.userName);
 			System.out.println(m.password);
