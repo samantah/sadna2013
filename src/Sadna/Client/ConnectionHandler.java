@@ -61,7 +61,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 			"password: "+password+"\n"+"email: "+email+"\n";
 			msgToSend += delimiter;
 			stringToServer.println(msgToSend);
-			try {receivedMsg = stringFromServer.readLine(); System.out.println("shalom"+receivedMsg);}
+			try {receivedMsg = stringFromServer.readLine();}
 			catch (IOException e) {}
 			if(receivedMsg.contains("200ok")){
 				loggedInMember = new Member(userName,password,null,forumName, this);
@@ -233,10 +233,10 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 	public boolean addSubForum(SubForum subForum) {
 		boolean added = false;
 		Forum f = subForum.getForum();
-
+		List<Moderator> lm = subForum.getListOfModerators();
 		msgToSend = "ADDSF\n"+"forumName: "+f.getForumName()+"\n" +
-		"subForumName: "+subForum.getSubForumName()+"\n";
-		for(Moderator md: subForum.getListOfModerators()){
+		"subForumName: "+subForum.getSubForumName()+"\n"+"size: "+lm.size()+"\n";
+		for(Moderator md: lm){
 			msgToSend+="moderator: "+md.getUserName()+"\n";
 		}
 		msgToSend += delimiter;
@@ -256,7 +256,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		"adminName: "+adminName+"\n"+"adminPassword: "+AdminPassword+"\n";
 		msgToSend += delimiter;
 		stringToServer.println(msgToSend);
-		try {receivedMsg = stringFromServer.readLine(); 		System.out.println("hhiii  "+receivedMsg);}
+		try {receivedMsg = stringFromServer.readLine();}
 		catch (IOException e) {}
 		if(receivedMsg.contains("200ok")){
 			initiated = true;
