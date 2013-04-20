@@ -230,10 +230,9 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 
 
 	@Override
-	public boolean addSubForum(SubForum subForum) {
+	public boolean addSubForum(SubForum subForum, List<Moderator> lm) {
 		boolean added = false;
 		Forum f = subForum.getForum();
-		List<Moderator> lm = subForum.getListOfModerators();
 		msgToSend = "ADDSF\n"+"forumName: "+f.getForumName()+"\n" +
 		"subForumName: "+subForum.getSubForumName()+"\n"+"size: "+lm.size()+"\n";
 		for(Moderator md: lm){

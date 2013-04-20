@@ -178,9 +178,6 @@ public class Main {
 		if(f!=null){
 			System.out.println(f.getForum().getForumName());
 			System.out.println(f.getSubForumName());
-			for(ThreadMessage t: f.getListOfThreadMessages()){ 
-				System.out.println(t.getTitle());
-			}
 		}
 		else
 			System.out.println("zain");

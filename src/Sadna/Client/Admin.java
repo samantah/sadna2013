@@ -4,6 +4,8 @@
  */
 package Sadna.Client;
 
+import java.util.List;
+
 import Sadna.Client.API.ClientCommunicationHandlerInterface;
 import Sadna.db.SubForum;
 
@@ -29,7 +31,7 @@ public class Admin extends Member {
 		}
 	}
 	
-	public boolean addSubForum(SubForum subForum){
-		return conHand.addSubForum(subForum);
+	public boolean addSubForum(SubForum subForum, List<Moderator> lm){
+		return conHand.addSubForum(subForum, lm);
 	}
 }

@@ -96,13 +96,13 @@ public class connectionHandlerTest {
 	public void addSubForumTest(){
 		Forum fake = new Forum("illegal"); 
 		SubForum illegal = new SubForum(fake, "firstAttemp");
-		assertFalse(ch.addSubForum(illegal));
+		assertFalse(ch.addSubForum(illegal, null));
 		SubForum legal = new SubForum(forum1, "succeesfullAttemp");
-		assertTrue(ch.addSubForum(legal));
+		assertTrue(ch.addSubForum(legal, null));
 	}
 	public void getSubForumTest(){
 		SubForum sf2 = new SubForum(forum1, "FASHION");
-		ch.addSubForum(sf2);
+		ch.addSubForum(sf2, null);
 		SubForum sf3 = ch.getSubForum("notExist", "FASHION");
 		assertNull(sf3);
 		sf3 = ch.getSubForum("forum1", "FAMILY");
