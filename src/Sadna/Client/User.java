@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import Sadna.db.Forum;
+import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 
@@ -58,5 +59,9 @@ public class User implements Serializable {
 
     public List<Forum> viewForums() {
         return conHand.getForumsList();
+    }
+    
+    public List<Post> getAllPosts(ThreadMessage tm){
+    	return conHand.getAllPosts(tm);
     }
 }

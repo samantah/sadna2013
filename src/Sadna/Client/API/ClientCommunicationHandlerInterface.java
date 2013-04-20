@@ -13,6 +13,8 @@ import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 import java.util.List;
 
+import org.omg.PortableServer.POA;
+
 /**
  *
  * @author fistuk
@@ -44,4 +46,6 @@ public interface ClientCommunicationHandlerInterface {
     boolean addSubForum(SubForum subForum, List<Moderator> lm);
     
     boolean initiateForum(String forumName, String adminName, String adminPassword);
+    
+    List<Post> getAllPosts(ThreadMessage tm);
 }
