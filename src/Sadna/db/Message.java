@@ -22,9 +22,17 @@ public abstract class Message implements Serializable {
     protected String publisher;
 
     public Message(String title, String content, String publisher) {
-        this.title = title;
+    	this.title = title;
         this.content = content;
         this.publisher = publisher;
+        
+    	if((title == null)||(title.equals(""))){
+    		this.title = "No Title";
+    	}
+    	
+      	if((content == null)||(content.equals(""))){
+    		this.title = "No Content";
+    	}
     }
 
     public void setMessage(String message) {
