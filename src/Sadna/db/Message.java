@@ -31,7 +31,7 @@ public abstract class Message implements Serializable {
     	}
     	
       	if((content == null)||(content.equals(""))){
-    		this.title = "No Content";
+    		this.content = "No Content";
     	}
     }
 
