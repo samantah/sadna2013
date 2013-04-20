@@ -27,7 +27,9 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 			stringToServer = new PrintWriter(clientSocket.getOutputStream(), true);
 			stringFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
-		}catch(Exception e){}
+		}catch(Exception e){
+			System.out.println("Got exception in ConnectionHandler constructor");
+		}
 	}
 
 	public boolean finishCommunication() throws IOException{
