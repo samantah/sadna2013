@@ -7,7 +7,7 @@ import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 
 
-public interface ConnectionHandlerServerInterface extends Runnable{
+public interface ConnectionHandlerServerInterface{
 
 	public void sendOK();
 
@@ -26,5 +26,9 @@ public interface ConnectionHandlerServerInterface extends Runnable{
 	public void sendForumsList(List<Forum> forumsList);
 
 	public void sendForum(Forum forum);
+
+	public String receiveRequestFromClient();
+	
+	public void closeSocket();
 }
 
