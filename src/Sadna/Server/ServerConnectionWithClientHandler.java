@@ -22,13 +22,15 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 	private ObjectInputStream objectInputFromClient;
 
 	public ServerConnectionWithClientHandler(Socket socket){
+		serverSocket = socket;
 		try{
-			serverSocket = socket;
 			stringToClient = new PrintWriter(serverSocket.getOutputStream(), true);
 			stringFromClient = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
 			objectOutputToClient = new ObjectOutputStream(serverSocket.getOutputStream()); 
 			objectInputFromClient = new ObjectInputStream(serverSocket.getInputStream());
-		}catch(Exception e){}
+		}catch(Exception e){
+			System.out.println(">> Got Exception in ServerConnectionWithClientHandler - constructor");
+		}
 	}
 
 
@@ -53,6 +55,7 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 			objectOutputToClient.writeObject(subForumsList);
 		} catch (IOException e) {
 			e.printStackTrace();
+			System.out.println(">> Got Exception in ServerConnectionWithClientHandler - sendSubForumsList");
 		}		
 	}
 
@@ -62,6 +65,7 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 			objectOutputToClient.writeObject(subForum);
 		} catch (IOException e) {
 			e.printStackTrace();
+			System.out.println(">> Got Exception in ServerConnectionWithClientHandler - sendSubForum");
 		}		
 	}
 
@@ -71,6 +75,7 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 			objectOutputToClient.writeObject(threadsList);
 		} catch (IOException e) {
 			e.printStackTrace();
+			System.out.println(">> Got Exception in ServerConnectionWithClientHandler - sendThreadsList");
 		}			
 	}
 
@@ -80,6 +85,7 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 			objectOutputToClient.writeObject(threadMessage);
 		} catch (IOException e) {
 			e.printStackTrace();
+			System.out.println(">> Got Exception in ServerConnectionWithClientHandler - sendThreadMeassage");
 		}			
 	}
 
@@ -89,6 +95,8 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 			objectOutputToClient.writeObject(forumsList);
 		} catch (IOException e) {
 			e.printStackTrace();
+			System.out.println(">> Got Exception in ServerConnectionWithClientHandler - sendForumsList");
+
 		}			
 	}
 
@@ -98,6 +106,8 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 			objectOutputToClient.writeObject(forum);
 		} catch (IOException e) {
 			e.printStackTrace();
+			System.out.println(">> Got Exception in ServerConnectionWithClientHandler - sendForum");
+
 		}	
 	}
 
@@ -105,8 +115,12 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 	public String receiveRequestFromClient() {
 		String request = null;
 		try {
+			System.out.println("Reading line from client in - ServerConnectionWithClientHandler");
 			request = stringFromClient.readLine();
-		} catch (IOException e) {}
+			System.out.println("Done reading line from client");
+		} catch (IOException e) {
+			System.out.println(">> Got Exception in ServerConnectionWithClientHandler - receiveRequestFromClient");
+		}
 		return request;
 
 	}
@@ -121,8 +135,8 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 			serverSocket.close();
 			System.out.println("Closed socket..");
 		}catch (Exception e) {
-			System.out.println("Couldn't close socket..");		
+			System.out.println(">> Couldn't close socket in server side..");		
 		}
 	}
-	
+
 }

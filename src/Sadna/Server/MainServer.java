@@ -22,6 +22,7 @@ public class MainServer {
         	serverSocket = new ServerSocket(portNumber);
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println(">> Got IOException in MainServer - serverSocket couldn't be initialized");
         }
     }
 	
@@ -39,7 +40,7 @@ public class MainServer {
                 new ServerRequestHandler(ch, si);
             } catch (IOException e) {
          //     e.printStackTrace();
-                System.out.println("Connection stopped...");
+                System.out.println("Connection stopped in server (because client stopped)...");
             }
         }
     }
