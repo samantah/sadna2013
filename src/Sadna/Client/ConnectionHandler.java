@@ -282,6 +282,9 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		try {allPosts = (List<Post>)objectFromServer.readObject();}
 		catch (IOException e) {}
 		catch (ClassNotFoundException e){}
+                for (Post post : allPosts) {
+                    System.out.println(post);
+                }
 		return allPosts;
 	}
 }
