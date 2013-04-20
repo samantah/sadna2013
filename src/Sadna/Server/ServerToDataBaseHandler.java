@@ -107,12 +107,12 @@ public class ServerToDataBaseHandler implements ServerInterface {
 	}
 
 	@Override
-	public boolean addSubForum(SubForum subForum) {
+	public boolean addSubForum(SubForum subForum, List<Moderator> moderators) {
 		boolean isAdded = false;
 		if(isSubForumNameUnique(subForum.getForum().getForumName(), 
 				subForum.getSubForumName())){
 			System.out.println("is unique subforum");
-			isAdded = _db.addSubForum(subForum);
+			isAdded = _db.addSubForum(subForum, moderators);
 		}
 		return isAdded;
 	}
@@ -248,4 +248,6 @@ public class ServerToDataBaseHandler implements ServerInterface {
 		}
 		return null;
 	}
+
+
 }

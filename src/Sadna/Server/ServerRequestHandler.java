@@ -93,6 +93,9 @@ public class ServerRequestHandler implements Runnable {
 			if(handleInitiateForum(parsedReq[2], parsedReq[4], parsedReq[6]))
 				System.out.println("After add forum");
 			break;
+		case "GETAP":
+			handleGetAllPosts(parsedReq[2], parsedReq[4],Integer.parseInt(parsedReq[6]));
+			break;
 		case "POST":
 			ThreadMessage tm = _si.getThreadMessage(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]));
 			Post p = new Post(tm, parsedReq[10], parsedReq[12], parsedReq[8]);
@@ -120,6 +123,8 @@ public class ServerRequestHandler implements Runnable {
 		}
 
 	}
+
+
 
 	public boolean handleRegister(String forumName, String userName, String password, 
 			String email){
@@ -203,6 +208,11 @@ public class ServerRequestHandler implements Runnable {
 		_ch.sendForumsList(_si.getForumsList());
 	}
 
+	private void handleGetAllPosts(String forumName, String subForumName, int threadId) {
+		_ch.sendAllPosts(_si.getAllPosts(forumName, subForumName, threadId));
+		
+	}
+	
 	public void handleGetForum(String forumName){
 		_ch.sendForum(_si.getForum(forumName));
 	}
