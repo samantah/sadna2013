@@ -40,4 +40,11 @@ public class ThreadMessage extends Message {
         this.subForum = subForum;
     }
 
+    @Override
+    public String toString() {
+        return this.getTitle();
+    }
+    
+    
+
 }

@@ -7,6 +7,7 @@ package Sadna.gui;
 import Sadna.Client.Member;
 import Sadna.Client.User;
 import Sadna.db.Forum;
+import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 import java.util.List;
@@ -24,11 +25,15 @@ public class SubForumPage extends javax.swing.JFrame {
     public SubForumPage() {
         initComponents();
         this.setResizable(false);
+        this.jLabelError.setVisible(false);
         if (CurrentStatus.currUser instanceof Member) {
             logInButton.setVisible(false);
             registerButton.setVisible(false);
         } else {
             jButtonSignout.setVisible(false);
+            jTextFieldAddContent.setVisible(false);
+            jTextFieldAddTitle.setVisible(false);
+            jButtonPublisThread.setVisible(false);
         }
         String subForumName = CurrentStatus.currSubForum.getSubForumName();
         jLabelTitle.setText("Welcome To The Sub-Forum: " + subForumName);
@@ -39,7 +44,7 @@ public class SubForumPage extends javax.swing.JFrame {
         listOfThreads = CurrentStatus.currUser.viewThreadMessages(f.getForumName(),
                 sf.getSubForumName());
         for (ThreadMessage tm : listOfThreads) {
-            listModel.addElement(tm.getTitle());
+            listModel.addElement(tm);
         }
         jListThreads.setModel(listModel);
 
@@ -62,6 +67,10 @@ public class SubForumPage extends javax.swing.JFrame {
         registerButton = new javax.swing.JButton();
         jButtonBack = new javax.swing.JButton();
         jButtonSignout = new javax.swing.JButton();
+        jTextFieldAddTitle = new javax.swing.JTextField();
+        jButtonPublisThread = new javax.swing.JButton();
+        jLabelError = new javax.swing.JLabel();
+        jTextFieldAddContent = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -110,6 +119,22 @@ public class SubForumPage extends javax.swing.JFrame {
             }
         });
 
+        jTextFieldAddTitle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldAddTitleActionPerformed(evt);
+            }
+        });
+
+        jButtonPublisThread.setText("publish thread");
+        jButtonPublisThread.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPublisThreadActionPerformed(evt);
+            }
+        });
+
+        jLabelError.setForeground(new java.awt.Color(255, 0, 0));
+        jLabelError.setText("Error - didn't publish");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -117,19 +142,37 @@ public class SubForumPage extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabelTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(77, 77, 77))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jButtonBack)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonSignout)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(logInButton)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(registerButton)
+                            .addGap(18, 18, 18)
+                            .addComponent(jButtonEnterThread))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 512, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(30, 30, 30)
+                                .addComponent(jTextFieldAddTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(76, 76, 76)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabelError)
+                                    .addComponent(jButtonPublisThread))))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButtonBack)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 172, Short.MAX_VALUE)
-                        .addComponent(jButtonSignout)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(logInButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(registerButton)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButtonEnterThread))
-                    .addComponent(jLabelTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 553, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2))
-                .addContainerGap(187, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jTextFieldAddContent, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -137,8 +180,19 @@ public class SubForumPage extends javax.swing.JFrame {
                 .addGap(44, 44, 44)
                 .addComponent(jLabelTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 99, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(28, 99, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jTextFieldAddTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jTextFieldAddContent, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabelError)
+                        .addGap(43, 43, 43)
+                        .addComponent(jButtonPublisThread)
+                        .addGap(3, 3, 3)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonEnterThread)
                     .addComponent(registerButton)
@@ -174,14 +228,12 @@ public class SubForumPage extends javax.swing.JFrame {
     }//GEN-LAST:event_logInButtonActionPerformed
 
     private void jButtonEnterThreadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEnterThreadActionPerformed
-        int selectedIndex = jListThreads.getSelectedIndex();
-        if (selectedIndex == -1) {
-            return;
-        }
+        ThreadMessage selectedValue = (ThreadMessage) jListThreads.getSelectedValue();
+        
         String forumName = CurrentStatus.currForum.getForumName();
         String subForumName = CurrentStatus.currSubForum.getSubForumName();
         ThreadMessage thread = CurrentStatus.currUser.getThread(forumName,
-                subForumName, selectedIndex);
+                subForumName, selectedValue.getId());
         CurrentStatus.currThread = thread;
         ThreadPage threadPage = new ThreadPage();
         this.setVisible(false);
@@ -201,13 +253,38 @@ public class SubForumPage extends javax.swing.JFrame {
         subForumPage.setVisible(true);      
     }//GEN-LAST:event_jButtonSignoutActionPerformed
 
+    private void jButtonPublisThreadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPublisThreadActionPerformed
+        String title = jTextFieldAddTitle.getText();
+        String content = jTextFieldAddContent.getText();
+        Member m = (Member) CurrentStatus.currUser;
+        SubForum sf = CurrentStatus.currSubForum;
+        ThreadMessage threadMessage = new ThreadMessage(sf, title, content, m.getUserName());
+        boolean publishThread = m.publishThread(threadMessage);
+        if (!publishThread){
+            this.jLabelError.setVisible(true);
+            return;
+        }
+        SubForumPage subForumPage = new SubForumPage();
+        this.setVisible(false);
+        this.dispose();
+        subForumPage.setVisible(true);
+    }//GEN-LAST:event_jButtonPublisThreadActionPerformed
+
+    private void jTextFieldAddTitleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldAddTitleActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldAddTitleActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonBack;
     private javax.swing.JButton jButtonEnterThread;
+    private javax.swing.JButton jButtonPublisThread;
     private javax.swing.JButton jButtonSignout;
+    private javax.swing.JLabel jLabelError;
     private javax.swing.JLabel jLabelTitle;
     private javax.swing.JList jListThreads;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextField jTextFieldAddContent;
+    private javax.swing.JTextField jTextFieldAddTitle;
     private javax.swing.JButton logInButton;
     private javax.swing.JButton registerButton;
     // End of variables declaration//GEN-END:variables

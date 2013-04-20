@@ -173,8 +173,8 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 			SubForum sf = newThread.getSubForum();
 			Forum f = sf.getForum();
 			String posterName = newThread.getPublisher();
-			msgToSend = "THREAD\n"+"forumName: "+f+"\n" +
-			"subForumName: "+sf+"\n"+"posterName: "+posterName+"\n"+"threadTitle: "+newThread.getTitle()+"\n"+
+			msgToSend = "THREAD\n"+"forumName: "+f.getForumName()+"\n" +
+			"subForumName: "+sf.getSubForumName()+"\n"+"posterName: "+posterName+"\n"+"threadTitle: "+newThread.getTitle()+"\n"+
 			"threadContent: "+newThread.getContent()+"\n";
 			msgToSend += delimiter;
 			stringToServer.println(msgToSend);

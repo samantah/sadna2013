@@ -22,11 +22,12 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.text.DecimalFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DataBase implements DBInterface {
-
+    private DecimalFormat df = new DecimalFormat("000");
     private String dataBaseFolder = "dataBase";
 
     public DataBase() {
@@ -86,7 +87,7 @@ public class DataBase implements DBInterface {
         ThreadMessage returnThreadMessage = null;
         try {
             inputStream = new FileInputStream(dataBaseFolder + "/" + forumName
-                    + "/" + subForumName + "/" + "thread" + threadID + ".obj");
+                    + "/" + subForumName + "/" + "thread" + df.format(threadID) + ".obj");
             obj = new ObjectInputStream(inputStream);
             returnThreadMessage = (ThreadMessage) obj.readObject();
             obj.close();
@@ -105,13 +106,13 @@ public class DataBase implements DBInterface {
     }
 
     @Override
-    public Post getPost(String forumName, String subForumName, int ThreadID, int postID) {
+    public Post getPost(String forumName, String subForumName, int threadID, int postID) {
         FileInputStream inputStream;
         ObjectInputStream obj;
         Post returnPost = null;
         String path = dataBaseFolder + "/" + forumName
-                + "/" + subForumName + "/" + "thread" + ThreadID
-                + "/" + "message" + postID + ".obj";
+                + "/" + subForumName + "/" + "thread" + df.format(threadID)
+                + "/" + "message" + df.format(postID) + ".obj";
         try {
             inputStream = new FileInputStream(path);
             obj = new ObjectInputStream(inputStream);
@@ -243,7 +244,7 @@ public class DataBase implements DBInterface {
                 + subForum + "/";
         try {
             outputstream = new FileOutputStream(pathToThread + "thread" 
-                            + threadMessage + ".obj");
+                            + df.format(threadMessage) + ".obj");
             obj = new ObjectOutputStream(outputstream);
             obj.writeObject(thread);
             outputstream.close();
@@ -255,9 +256,9 @@ public class DataBase implements DBInterface {
 
         try {
             String path = dataBaseFolder + "/" + forum
-                    + "/" + subForum + "/" + "thread" + threadMessage + "/"; //save the path of the post
+                    + "/" + subForum + "/" + "thread" + df.format(threadMessage) + "/"; //save the path of the post
             boolean mkdirs = new File(path).mkdirs();
-            outputstream = new FileOutputStream(path + "/message" + postid + ".obj");
+            outputstream = new FileOutputStream(path + "/message" + df.format(postid) + ".obj");
             obj = new ObjectOutputStream(outputstream);
             obj.writeObject(post);//write the object to the file
             obj.close();
@@ -303,7 +304,7 @@ public class DataBase implements DBInterface {
             String pathToFolder = path + "thread" + threadMessage + "/";
             new File(pathToFolder).mkdirs();
             outputstream = new FileOutputStream(path + "thread"
-                    + threadMessage + ".obj");
+                    + df.format(threadMessage) + ".obj");
             obj = new ObjectOutputStream(outputstream);
             obj.writeObject(thread);//write the object to the file
             obj.close();
@@ -609,7 +610,7 @@ public class DataBase implements DBInterface {
         ObjectInputStream obj;
         ArrayList<Post> retList = new ArrayList<Post>();
         String pathToFolder = dataBaseFolder + "/" + forumName + "/"
-                + subForumName + "/thread" + threadID + "/";
+                + subForumName + "/thread" + df.format(threadID) + "/";
         File folder = new File(pathToFolder);
         File listOfFiles[] = folder.listFiles();
         for (int i = 0; i < listOfFiles.length; i++) {
