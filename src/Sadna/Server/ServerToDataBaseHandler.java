@@ -3,9 +3,7 @@ package Sadna.Server;
 import java.util.List;
 
 import Sadna.Client.Admin;
-import Sadna.Client.ConnectionHandler;
 import Sadna.Client.Member;
-import Sadna.Server.API.ConnectionHandlerServerInterface;
 import Sadna.Server.API.ServerInterface;
 import Sadna.db.Forum;
 import Sadna.db.Post;
