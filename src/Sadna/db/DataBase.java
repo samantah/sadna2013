@@ -190,6 +190,9 @@ public class DataBase implements DBInterface {
         String subForumStr = subForum.getSubForumName();
         ObjectOutputStream obj;
         FileOutputStream outputstream;
+
+
+
         try {
             String path = dataBaseFolder + "/" + forum + "/"; //save the path of the post
             boolean mkdirs = new File(path).mkdirs();
@@ -271,13 +274,26 @@ public class DataBase implements DBInterface {
     public boolean addThread(ThreadMessage thread) {
         //get the names and IDs of the thread
         String forum = thread.getSubForum().getForum().getForumName();
-        String subForum = thread.getSubForum().getSubForumName();
+        String subForumStr = thread.getSubForum().getSubForumName();
         int threadMessage = thread.getId();
         ObjectOutputStream obj;
         FileOutputStream outputstream;
+        SubForum subForumToRewrite = thread.getSubForum();
+        String pathToSubForum = this.dataBaseFolder + "/" + forum + "/";
+        try {
+            outputstream = new FileOutputStream(pathToSubForum + subForumStr + ".obj");
+            obj = new ObjectOutputStream(outputstream);
+            obj.writeObject(subForumToRewrite);
+            outputstream.close();
+            obj.close();
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+            return false;
+        }
+
         try {
             String path = dataBaseFolder + "/" + forum
-                    + "/" + subForum + "/"; //save the path of the post
+                    + "/" + subForumStr + "/"; //save the path of the post
             boolean mkdirs = new File(path).mkdirs();
             outputstream = new FileOutputStream(path + "thread"
                     + threadMessage + ".obj");
