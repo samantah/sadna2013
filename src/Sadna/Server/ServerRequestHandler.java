@@ -57,7 +57,7 @@ public class ServerRequestHandler implements Runnable {
 	}
 
 	private void parseAndHandleRequest(String request) {
-		String[] parsedReq = request.split("\n| ");
+		String[] parsedReq = request.split("\n");
 		switch (parsedReq[0]) {
 		case "LOGIN":
 			handleLogin(parsedReq[2], parsedReq[4], parsedReq[6]);
