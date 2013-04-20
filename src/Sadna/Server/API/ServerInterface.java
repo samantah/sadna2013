@@ -23,8 +23,8 @@ public interface ServerInterface {
     boolean login(String forumName, String userName, String password);
  
     boolean initiateForum(String adminUserName, String adminPassword, String forumName);
-
-    boolean addSubForum(SubForum subForum);
+    
+    boolean addSubForum(SubForum subForum, List<Moderator> moderators);
 
     boolean publishThread(ThreadMessage thread);
     

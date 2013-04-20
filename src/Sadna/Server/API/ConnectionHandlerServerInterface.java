@@ -3,6 +3,7 @@ package Sadna.Server.API;
 import java.util.List;
 
 import Sadna.db.Forum;
+import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 
@@ -30,5 +31,7 @@ public interface ConnectionHandlerServerInterface{
 	public String receiveRequestFromClient();
 	
 	public void closeSocket();
+
+	public void sendAllPosts(List<Post> allPosts);
 }
 

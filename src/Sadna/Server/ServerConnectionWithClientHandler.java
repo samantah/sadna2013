@@ -11,6 +11,7 @@ import java.util.List;
 
 import Sadna.Server.API.ConnectionHandlerServerInterface;
 import Sadna.db.Forum;
+import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 
@@ -113,6 +114,17 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 		}	
 	}
 
+	@Override
+	public void sendAllPosts(List<Post> allPosts) {
+		try {
+			objectOutputToClient.writeObject(allPosts);
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println(">> Got Exception in ServerConnectionWithClientHandler - sendAllPosts");
+
+		}	
+	}
+	
 	@Override
 	public String receiveRequestFromClient() {
 		String request = "";
