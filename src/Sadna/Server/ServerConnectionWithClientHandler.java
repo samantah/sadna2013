@@ -14,14 +14,14 @@ import Sadna.db.Forum;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 
-public class ConnectionHandlerServer implements ConnectionHandlerServerInterface {
+public class ServerConnectionWithClientHandler implements ConnectionHandlerServerInterface {
 	private Socket serverSocket;
 	private PrintWriter stringToClient;
 	private ObjectOutputStream objectOutputToClient;
 	private BufferedReader stringFromClient;
 	private ObjectInputStream objectInputFromClient;
 
-	public ConnectionHandlerServer(Socket socket){
+	public ServerConnectionWithClientHandler(Socket socket){
 		try{
 			serverSocket = socket;
 			stringToClient = new PrintWriter(serverSocket.getOutputStream(), true);
