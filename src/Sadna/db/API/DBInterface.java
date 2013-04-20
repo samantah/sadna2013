@@ -46,7 +46,7 @@ public interface DBInterface {
 
     boolean addForum(Forum forum);
 
-    boolean addSubForum(SubForum subForum);
+    boolean addSubForum(SubForum subForum, List<Moderator> listOfModerators);
 
     boolean addMember(Member member);
     
