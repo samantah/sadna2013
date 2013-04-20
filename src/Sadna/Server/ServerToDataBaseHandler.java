@@ -4,6 +4,7 @@ import java.util.List;
 
 import Sadna.Client.Admin;
 import Sadna.Client.Member;
+import Sadna.Client.Moderator;
 import Sadna.Server.API.ServerInterface;
 import Sadna.db.Forum;
 import Sadna.db.Post;
@@ -23,7 +24,9 @@ public class ServerToDataBaseHandler implements ServerInterface {
 	public boolean register(String forumName, String userName, String password, String email) {
 		boolean isAdded = false;
 		if(forumExists(forumName)){
+			System.out.println("is unique forum");
 			if(isUserNameUnique(forumName, userName)){
+				System.out.println("is unique username");
 				isAdded = _db.addMember(new Member(userName, password, email, forumName, null));
 			}
 		}
@@ -46,6 +49,7 @@ public class ServerToDataBaseHandler implements ServerInterface {
 	public boolean login(String forumName, String userName, String password) {
 		boolean succeeded = false;
 		if(forumExists(forumName)){
+			System.out.println("forum exists");
 			Member loginner = _db.getMember(forumName, userName);
 			if(loginner!=null && loginner.getPassword().equals(password)){
 				succeeded = true;
@@ -73,12 +77,18 @@ public class ServerToDataBaseHandler implements ServerInterface {
 		boolean isAdded = false;
 		Admin admin = null;
 		if(isForumNameUnique(forumName)){
+			System.out.println("is unique forum");
 			Forum forumToAdd = new Forum(forumName);
 			admin = new Admin(adminUserName, adminPassword, "", null);
 			admin.setForum(forumName);
 			forumToAdd.setAdmin(admin);
-			boolean addedAdmin = _db.addMember(admin);
 			boolean addedForum = _db.addForum(forumToAdd);
+			if(addedForum)
+				System.out.println("After adding forum in database");
+			boolean addedAdmin = _db.addMember(admin);
+			if(addedAdmin)
+				System.out.println("After adding admin in database");
+
 			isAdded = (addedAdmin && addedForum);
 		}
 		return isAdded;
@@ -101,6 +111,7 @@ public class ServerToDataBaseHandler implements ServerInterface {
 		boolean isAdded = false;
 		if(isSubForumNameUnique(subForum.getForum().getForumName(), 
 				subForum.getSubForumName())){
+			System.out.println("is unique subforum");
 			isAdded = _db.addSubForum(subForum);
 		}
 		return isAdded;
@@ -141,6 +152,7 @@ public class ServerToDataBaseHandler implements ServerInterface {
 	public Forum getForum(String forumName) {
 		Forum resForum = null;
 		if(forumExists(forumName)){
+			System.out.println("forum exists");
 			resForum = _db.getForum(forumName);
 		}
 		return resForum;
@@ -150,6 +162,7 @@ public class ServerToDataBaseHandler implements ServerInterface {
 	public List<SubForum> getSubForumsList(String forumName) {
 		List<SubForum> subforums = null;
 		if(forumExists(forumName)){
+			System.out.println("forum exists");
 			subforums = _db.getSubForumsList(forumName);
 		}
 		return subforums;
@@ -159,6 +172,7 @@ public class ServerToDataBaseHandler implements ServerInterface {
 	public SubForum getSubForum(String forumName, String subForumName) {
 		SubForum subForum = null;
 		if(subForumExists(forumName,subForumName)){
+			System.out.println("subforum exists");
 			subForum = _db.getSubForum(forumName, subForumName);
 		}
 		return subForum;
@@ -169,6 +183,7 @@ public class ServerToDataBaseHandler implements ServerInterface {
 			String subForumName) {
 		List<ThreadMessage> threads = null;
 		if(subForumExists(forumName,subForumName)){
+			System.out.println("subforum exists");
 			threads = _db.getThreadsList(forumName, subForumName);
 		}
 		return threads;
@@ -179,6 +194,7 @@ public class ServerToDataBaseHandler implements ServerInterface {
 			String subForumName, int messageId) {
 		ThreadMessage thread = null;
 		if(threadExists(forumName,subForumName, messageId)){
+			System.out.println("thread exists");
 			thread = _db.getThread(forumName, subForumName, messageId);
 		}
 		return thread;
@@ -214,5 +230,22 @@ public class ServerToDataBaseHandler implements ServerInterface {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public List<Moderator> getModerators(String forumName, String subForumName) {
+		if(subForumExists(forumName, subForumName)){
+			return _db.getModerators(forumName, subForumName);
+		}
+		return null;
+	}
+
+	@Override
+	public List<Post> getAllPosts(String forumName, String subForumName,
+			int threadId) {
+		if(subForumExists(forumName, subForumName)){
+			return _db.getPostList(forumName, subForumName, threadId);
+		}
+		return null;
 	}
 }

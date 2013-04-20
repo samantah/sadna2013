@@ -27,7 +27,9 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 			stringToClient = new PrintWriter(serverSocket.getOutputStream(), true);
 			stringFromClient = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
 			objectOutputToClient = new ObjectOutputStream(serverSocket.getOutputStream()); 
-			objectInputFromClient = new ObjectInputStream(serverSocket.getInputStream());
+//			objectInputFromClient = new ObjectInputStream(serverSocket.getInputStream());
+//			System.out.println("*555555*****");
+
 		}catch(Exception e){
 			System.out.println(">> Got Exception in ServerConnectionWithClientHandler - constructor");
 		}
@@ -113,13 +115,27 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 
 	@Override
 	public String receiveRequestFromClient() {
-		String request = null;
+		String request = "";
+		String tmpline = "";
 		try {
-			System.out.println("Reading line from client in - ServerConnectionWithClientHandler");
-			request = stringFromClient.readLine();
-			System.out.println("Done reading line from client");
+			
+			//System.out.println("Reading line from client in - ServerConnectionWithClientHandler");
+			tmpline = stringFromClient.readLine();
+			if(tmpline == null)
+				return null;
+			while((tmpline!= null) && (!tmpline.equals("\0"))){
+				request += tmpline+ "\n";
+				tmpline = stringFromClient.readLine();
+
+//				if(request.equals("\0"))
+//					break;
+			}
+//			System.out.println("----- request from client : " + request);
+//			System.out.println("Done reading line from client");
 		} catch (IOException e) {
+			//e.printStackTrace();
 			System.out.println(">> Got Exception in ServerConnectionWithClientHandler - receiveRequestFromClient");
+			return "end";
 		}
 		return request;
 
@@ -128,7 +144,6 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 
 	public void closeSocket() {
 		try{
-			objectInputFromClient.close();
 			objectOutputToClient.close();
 			stringToClient.close();
 			stringFromClient.close();

@@ -4,22 +4,18 @@
  */
 package Sadna.Server;
 
+
+import java.util.ArrayList;
+import java.util.List;
+
 import Sadna.Server.API.ConnectionHandlerServerInterface;
 import Sadna.Server.API.ServerInterface;
+import Sadna.Client.Moderator;
 import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
-/*dear sami,
- * the server need to handle the next case:
- * in case of new thread publish, you need to add to the ThreadList of the current subForum the current thread.
- * the same case, with a new post, and with a  adding new subForum.
- * if you have any question, you are more then welcome to call the IT department,
- * regards,
- * snir elkaras
- *   8888888888888888888888888888888888888888888888888888888888888888888888888888888
- *   8888888888888888888888888888888888888888888888888888888888888888888888888888888
- */
+
 /**
  *
  * @author fistuk
@@ -39,17 +35,19 @@ public class ServerRequestHandler implements Runnable {
 	@Override
 	public void run() {
 
-		//
-		// Read a message sent by client application
-		//
-		String request = _ch.receiveRequestFromClient();
-		if(request != null){
-			System.out.println("-- Message Received -- \n" + request);
-			parseAndHandleRequest(request);
-		}
-		else{
-			System.out.println("Bad request from client.");
-			_ch.sendErrorInServer();
+		while(true){
+			//
+			// Read a message sent by client application
+			//
+			String request = _ch.receiveRequestFromClient();
+			if(request.equals("end")){
+				_ch.sendErrorInServer();
+				break;
+			}
+			else if(request != null){
+				System.out.println("-- Message Received -- \n" + request);
+				parseAndHandleRequest(request);
+			}
 		}
 		_ch.closeSocket();
 
@@ -83,11 +81,17 @@ public class ServerRequestHandler implements Runnable {
 			handleGetForum(parsedReq[2]);
 			break;
 		case "ADDSF":
-			SubForum subF = new SubForum(parsedReq[2], parsedReq[4]);
-			handleAddSubForum(subF);
+			List<Moderator> moderators = new ArrayList<Moderator>();
+			for(int i = 8; i < Integer.parseInt(parsedReq[6]);i = i+2){
+				moderators.add(new Moderator(parsedReq[i], "", "", parsedReq[2], null));
+			}
+			Forum foru = _si.getForum(parsedReq[2]);
+			SubForum subF = new SubForum(foru, parsedReq[4]);
+			handleAddSubForum(subF, moderators);
 			break;
 		case "ADDF":
-			handleInitiateForum(parsedReq[2], parsedReq[4], parsedReq[6]);
+			if(handleInitiateForum(parsedReq[2], parsedReq[4], parsedReq[6]))
+				System.out.println("After add forum");
 			break;
 		case "POST":
 			ThreadMessage tm = _si.getThreadMessage(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]));
@@ -146,25 +150,29 @@ public class ServerRequestHandler implements Runnable {
 		boolean isAdded = false;
 		isAdded = _si.initiateForum(adminName, adminPassword, forumName);		
 		if(isAdded){
+			System.out.println("isAdded");
 			_ch.sendOK();
+			System.out.println("Sent ok");
 		}
 		else{
+			System.out.println("notAdded");
 			_ch.sendErrorInServer();
+			System.out.println("Sent ErrorInServer");
 		}
 
 		return isAdded;
 	}
 
-	public boolean handleAddSubForum(SubForum subForum){
-		boolean isAdded = false;
-		isAdded = _si.addSubForum(subForum);
-		if(isAdded){
+	public boolean handleAddSubForum(SubForum subForum, List<Moderator> moderators){
+		boolean subForumIsAdded = false;
+		subForumIsAdded = _si.addSubForum(subForum, moderators);
+		if(subForumIsAdded){
 			_ch.sendOK();
 		}
 		else{
 			_ch.sendErrorInServer();
 		}
-		return isAdded;
+		return subForumIsAdded;
 	}
 
 	public boolean handlePublishThread(ThreadMessage newThread){

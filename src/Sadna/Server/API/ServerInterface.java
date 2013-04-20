@@ -6,6 +6,7 @@ package Sadna.Server.API;
 
 import java.util.List;
 
+import Sadna.Client.Moderator;
 import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
@@ -40,6 +41,11 @@ public interface ServerInterface {
     List<ThreadMessage> getThreadsList(String forumName, String subForumName);
 
     ThreadMessage getThreadMessage(String forumName, String subForumName, int messageId);
+    
+    List<Moderator> getModerators(String forumName, String subForumName);
+
+    List<Post> getAllPosts(String forumName, String subForumName, int threadId);
+    
 
     /* For later use..  
      * 
