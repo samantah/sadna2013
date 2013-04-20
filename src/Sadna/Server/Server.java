@@ -33,7 +33,7 @@ public class Server {
 		_si = si;
 	}
 
-	private boolean handleRegister(String forumName, String userName, String password, 
+	public boolean handleRegister(String forumName, String userName, String password, 
 			String email){
 		boolean isAdded = false;
 		isAdded = _si.register(forumName, userName, password, email);
@@ -46,7 +46,7 @@ public class Server {
 		return isAdded;
 	}
 
-	private boolean handleLogin(String forumName, String userName, String password){
+	public boolean handleLogin(String forumName, String userName, String password){
 		boolean logedIn = _si.login(forumName, userName, password);
 		if(logedIn){
 			_ch.sendOK();
@@ -57,7 +57,7 @@ public class Server {
 		return logedIn;
 	}
 
-	private boolean handleInitiateForum(String forumName, String adminName, 
+	public boolean handleInitiateForum(String forumName, String adminName, 
 			String adminPassword){
 		boolean isAdded = false;
 		isAdded = _si.initiateForum(adminName, adminPassword, forumName);		
@@ -71,7 +71,7 @@ public class Server {
 		return isAdded;
 	}
 
-	private boolean handleAddSubForum(SubForum subForum){
+	public boolean handleAddSubForum(SubForum subForum){
 		boolean isAdded = false;
 		isAdded = _si.addSubForum(subForum);
 		if(isAdded){
@@ -83,7 +83,7 @@ public class Server {
 		return isAdded;
 	}
 
-	private boolean handlePublishThread(ThreadMessage newThread){
+	public boolean handlePublishThread(ThreadMessage newThread){
 		boolean succeeded = false;
 		succeeded = _si.publishThread(newThread);
 		if(succeeded){
@@ -95,7 +95,7 @@ public class Server {
 		return succeeded;
 	}
 
-	private boolean handlePostComment(Post post){
+	public boolean handlePostComment(Post post){
 		boolean succeeded = false;
 		succeeded = _si.postComment(post);
 		if(succeeded){
@@ -107,28 +107,28 @@ public class Server {
 		return succeeded;
 	}
 
-	private void handleGetForumsList(){
+	public void handleGetForumsList(){
 		_ch.sendForumsList(_si.getForumsList());
 	}
 
-	private void handleGetForum(String forumName){
+	public void handleGetForum(String forumName){
 		_ch.sendForum(_si.getForum(forumName));
 	}
 
-	private void handleGetSubForumsList(String forumName){
+	public void handleGetSubForumsList(String forumName){
 		_ch.sendSubForumsList(_si.getSubForumsList(forumName));
 	}
 
-	private void handleGetSubForum(String forum ,String subForumName){
+	public void handleGetSubForum(String forum ,String subForumName){
 		_ch.sendSubForum(_si.getSubForum(forum, subForumName));
 	}
 
-	private void handleGetThreadsList(String forumName, 
+	public void handleGetThreadsList(String forumName, 
 			String subForumName){
 		_ch.sendThreadsList(_si.getThreadsList(forumName, subForumName));
 	}
 
-	private void handleGetThreadMessage(String forumName ,String subForumName,
+	public void handleGetThreadMessage(String forumName ,String subForumName,
 			int messageID){
 		_ch.sendThreadMeassage(_si.getThreadMessage(forumName, subForumName, messageID));
 	}

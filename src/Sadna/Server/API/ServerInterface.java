@@ -6,8 +6,6 @@ package Sadna.Server.API;
 
 import java.util.List;
 
-import Sadna.Client.ConnectionHandler;
-import Sadna.Client.User;
 import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
@@ -22,11 +20,6 @@ public interface ServerInterface {
     boolean register(String forumName, String userName, String password, String email);
 
     boolean login(String forumName, String userName, String password);
-    
-/* For later use..  
- * 
- * boolean logout(String forumName, String userName);
- */
  
     boolean initiateForum(String adminUserName, String adminPassword, String forumName);
 
@@ -48,5 +41,9 @@ public interface ServerInterface {
 
     ThreadMessage getThreadMessage(String forumName, String subForumName, int messageId);
 
+    /* For later use..  
+     * 
+     * boolean logout(String forumName, String userName);
+     */
 
 }

@@ -16,7 +16,11 @@ import java.util.List;
  */
 public class SubForum implements Serializable {
 
-    private Forum forum;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4538107590374025375L;
+	private Forum forum;
     private List<ThreadMessage> listOfThreadMessages;
     private List<Moderator> listOfModerators;
     private String subForumName;

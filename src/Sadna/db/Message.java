@@ -4,7 +4,6 @@
  */
 package Sadna.db;
 
-import Sadna.db.Generators.PostIDGenerator;
 import java.io.Serializable;
 
 /**
@@ -13,7 +12,11 @@ import java.io.Serializable;
  */
 public abstract class Message implements Serializable {
 
-    protected int id;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1241099472836278483L;
+	protected int id;
     protected String title;
     protected String content;
     protected String publisher;

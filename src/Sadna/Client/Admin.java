@@ -8,7 +8,12 @@ import Sadna.Client.API.ClientCommunicationHandlerInterface;
 
 public class Admin extends Member {
 
-    public Admin(String userName, String password, String email,
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -420707384012581575L;
+
+	public Admin(String userName, String password, String email,
             ClientCommunicationHandlerInterface ch) {
         super(userName, password, email, null, ch);
     }

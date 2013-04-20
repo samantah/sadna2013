@@ -14,7 +14,11 @@ import java.util.List;
  */
 public class ThreadMessage extends Message {
 
-    private List<Post> listOfPosts;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2804071144673510942L;
+	private List<Post> listOfPosts;
     private SubForum subForum;
     private PostIDGenerator postIDGenerator;
 

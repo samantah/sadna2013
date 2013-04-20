@@ -5,14 +5,15 @@
 package Sadna.Client;
 
 import Sadna.Client.API.ClientCommunicationHandlerInterface;
-import java.util.List;
-
 import Sadna.db.Post;
-import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 
 public class Member extends User {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 383909427775825138L;
 	protected String userName;
 	protected String password;
 	protected String email;

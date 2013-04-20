@@ -5,7 +5,6 @@
 package Sadna.Client;
 
 import Sadna.Client.API.ClientCommunicationHandlerInterface;
-import Sadna.db.Forum;
 
 /**
  *
@@ -13,7 +12,12 @@ import Sadna.db.Forum;
  */
 public class SuperAdmin extends Admin{
 
-    public SuperAdmin(String userName, String password, String email, ClientCommunicationHandlerInterface ch) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3955980432575126358L;
+
+	public SuperAdmin(String userName, String password, String email, ClientCommunicationHandlerInterface ch) {
         super(userName, password, email, ch);
     }
 
