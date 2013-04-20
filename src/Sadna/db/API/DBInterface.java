@@ -36,6 +36,8 @@ public interface DBInterface {
 
     List<ThreadMessage> getThreadsList(String forumName, String subForumName);
     
+    List<Post> getPostList(String forumName, String subForumName, int threadID);
+    
     List<Forum> getForumsList();
 
     int getNumberOfSubforums(String forumName);
