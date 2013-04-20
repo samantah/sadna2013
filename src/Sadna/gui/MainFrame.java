@@ -4,6 +4,7 @@
  */
 package Sadna.gui;
 
+import Sadna.Client.API.ClientCommunicationHandlerInterface;
 import Sadna.Client.ConnectionHandler;
 import Sadna.Client.ConnectionHandlerMock;
 import Sadna.Client.SuperAdmin;
@@ -19,25 +20,26 @@ import javax.swing.JFrame;
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    /**
-     * Creates new form MainFrame
-     */
+    String host = "192.168.1.101";
+    int port = 3248;
+    
     public MainFrame() {
         initComponents();
         this.setResizable(false);
-        ConnectionHandlerMock ch = new ConnectionHandlerMock();
+        ClientCommunicationHandlerInterface ch = new ConnectionHandler(host, port);
         CurrentStatus.currUser = new User(ch);
         List<Forum> viewForums = CurrentStatus.currUser.viewForums();
         DefaultListModel listOfForums = new DefaultListModel();
         for (Forum f : viewForums) {
-            listOfForums.addElement(f.getForumName());            
+            listOfForums.addElement(f.getForumName());
         }
         forumsList.setModel(listOfForums);
+        
         if (!(CurrentStatus.currUser instanceof SuperAdmin)) {
             jButtonInitiateForum.setVisible(false);
         }
-        
-        
+
+
     }
 
     /**
@@ -135,7 +137,7 @@ public class MainFrame extends javax.swing.JFrame {
         this.dispose();
         forumPage.setVisible(true);
     }//GEN-LAST:event_enterForumButtonActionPerformed
-    
+
     private void logInButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logInButtonActionPerformed
         LogInAsAdminPage logInAsAdminPage = new LogInAsAdminPage();
         this.setVisible(false);

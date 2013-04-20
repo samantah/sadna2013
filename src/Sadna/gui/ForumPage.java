@@ -4,7 +4,9 @@
  */
 package Sadna.gui;
 
+import Sadna.Client.Member;
 import Sadna.Client.User;
+import Sadna.db.Forum;
 import Sadna.db.SubForum;
 import java.util.List;
 import javax.swing.DefaultListModel;
@@ -20,18 +22,20 @@ public class ForumPage extends javax.swing.JFrame {
      */
     public ForumPage() {
         initComponents();
-        if (CurrentStatus.currUser instanceof User) {
-            jButtonSignout.setVisible(false);
-        } 
-        else{
+        
+        if (CurrentStatus.currUser instanceof Member) {
             logInButton.setVisible(false);
             registerButton.setVisible(false);
+        } else {
+            jButtonSignout.setVisible(false);
         }
+        
         this.setResizable(false);
         jLabel1.setText("Forum: " + CurrentStatus.currForum.getForumName());
+        Forum f = CurrentStatus.currForum;
         DefaultListModel listModel = new DefaultListModel();
         List<SubForum> listOfSubForums;
-        listOfSubForums = CurrentStatus.currUser.viewSubForums("forum1");
+        listOfSubForums = CurrentStatus.currUser.viewSubForums(f.getForumName());
         for (SubForum sf : listOfSubForums) {
             listModel.addElement(sf.getSubForumName());
         }
@@ -52,7 +56,7 @@ public class ForumPage extends javax.swing.JFrame {
         subForumsList = new javax.swing.JList();
         logInButton = new javax.swing.JButton();
         registerButton = new javax.swing.JButton();
-        enterForumButton = new javax.swing.JButton();
+        enterSubForumButton = new javax.swing.JButton();
         jButtonBack = new javax.swing.JButton();
         jButtonSignout = new javax.swing.JButton();
 
@@ -81,10 +85,10 @@ public class ForumPage extends javax.swing.JFrame {
             }
         });
 
-        enterForumButton.setText("Enter Sub-Forum");
-        enterForumButton.addActionListener(new java.awt.event.ActionListener() {
+        enterSubForumButton.setText("Enter Sub-Forum");
+        enterSubForumButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                enterForumButtonActionPerformed(evt);
+                enterSubForumButtonActionPerformed(evt);
             }
         });
 
@@ -96,6 +100,11 @@ public class ForumPage extends javax.swing.JFrame {
         });
 
         jButtonSignout.setText("sign out");
+        jButtonSignout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSignoutActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -117,7 +126,7 @@ public class ForumPage extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(registerButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(enterForumButton))
+                        .addComponent(enterSubForumButton))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -132,7 +141,7 @@ public class ForumPage extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(logInButton)
                     .addComponent(registerButton)
-                    .addComponent(enterForumButton)
+                    .addComponent(enterSubForumButton)
                     .addComponent(jButtonBack)
                     .addComponent(jButtonSignout))
                 .addContainerGap())
@@ -148,7 +157,7 @@ public class ForumPage extends javax.swing.JFrame {
         logInPage.setVisible(true);
     }//GEN-LAST:event_logInButtonActionPerformed
 
-    private void enterForumButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enterForumButtonActionPerformed
+    private void enterSubForumButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enterSubForumButtonActionPerformed
         String selectedValue = (String) subForumsList.getSelectedValue();
         if (selectedValue == null) {
             return;
@@ -160,7 +169,7 @@ public class ForumPage extends javax.swing.JFrame {
         this.setVisible(false);
         this.dispose();
         subForumPage.setVisible(true);
-    }//GEN-LAST:event_enterForumButtonActionPerformed
+    }//GEN-LAST:event_enterSubForumButtonActionPerformed
 
     private void jButtonBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBackActionPerformed
         CurrentStatus.currForum = null;
@@ -176,8 +185,21 @@ public class ForumPage extends javax.swing.JFrame {
         this.dispose();
         registrationPage.setVisible(true);
     }//GEN-LAST:event_registerButtonActionPerformed
+
+    private void jButtonSignoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSignoutActionPerformed
+        Member m = (Member) CurrentStatus.currUser;
+        String forumName = CurrentStatus.currForum.getForumName();
+        String userName = m.getUserName();
+        User logout = m.logout(forumName, userName);
+        CurrentStatus.currUser = logout;
+        ForumPage forumPage = new ForumPage();
+        this.setVisible(false);
+        this.dispose();
+        forumPage.setVisible(true);
+    }//GEN-LAST:event_jButtonSignoutActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton enterForumButton;
+    private javax.swing.JButton enterSubForumButton;
     private javax.swing.JButton jButtonBack;
     private javax.swing.JButton jButtonSignout;
     private javax.swing.JLabel jLabel1;

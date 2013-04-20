@@ -51,5 +51,9 @@ public class Member extends User {
 	public String getForum() {
 		return forum;
 	}
+        
+        public User logout(String forum, String userName){
+            return this.conHand.logout(forum, userName);
+        }
 
 }

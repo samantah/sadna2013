@@ -4,7 +4,9 @@
  */
 package Sadna.gui;
 
+import Sadna.Client.Member;
 import Sadna.Client.User;
+import Sadna.db.Forum;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 import java.util.List;
@@ -22,18 +24,20 @@ public class SubForumPage extends javax.swing.JFrame {
     public SubForumPage() {
         initComponents();
         this.setResizable(false);
-        if (CurrentStatus.currUser instanceof User) {
-            jButtonSignout.setVisible(false);
-        } else {
+        if (CurrentStatus.currUser instanceof Member) {
             logInButton.setVisible(false);
             registerButton.setVisible(false);
+        } else {
+            jButtonSignout.setVisible(false);
         }
         String subForumName = CurrentStatus.currSubForum.getSubForumName();
         jLabelTitle.setText("Welcome To The Sub-Forum: " + subForumName);
         DefaultListModel listModel = new DefaultListModel();
-
+        Forum f = CurrentStatus.currForum;
+        SubForum sf = CurrentStatus.currSubForum;
         List<ThreadMessage> listOfThreads;
-        listOfThreads = CurrentStatus.currUser.viewThreadMessages("forum1", "subForum1");
+        listOfThreads = CurrentStatus.currUser.viewThreadMessages(f.getForumName(),
+                sf.getSubForumName());
         for (ThreadMessage tm : listOfThreads) {
             listModel.addElement(tm.getTitle());
         }
@@ -100,6 +104,11 @@ public class SubForumPage extends javax.swing.JFrame {
         });
 
         jButtonSignout.setText("sign out");
+        jButtonSignout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSignoutActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -179,6 +188,19 @@ public class SubForumPage extends javax.swing.JFrame {
         this.dispose();
         threadPage.setVisible(true);
     }//GEN-LAST:event_jButtonEnterThreadActionPerformed
+
+    private void jButtonSignoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSignoutActionPerformed
+        Member m = (Member) CurrentStatus.currUser;
+        String forumName = CurrentStatus.currForum.getForumName();
+        String userName = m.getUserName();
+        User logout = m.logout(forumName, userName);
+        CurrentStatus.currUser = logout;
+        SubForumPage subForumPage = new SubForumPage();
+        this.setVisible(false);
+        this.dispose();
+        subForumPage.setVisible(true);      
+    }//GEN-LAST:event_jButtonSignoutActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonBack;
     private javax.swing.JButton jButtonEnterThread;

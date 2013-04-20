@@ -271,7 +271,8 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 	public List<Post> getAllPosts(ThreadMessage tm) {
 		List<Post> allPosts = null;
 		SubForum subForum = tm.getSubForum();
-		String forumName = subForum.getSubForumName();
+                Forum forum = subForum.getForum();
+		String forumName = forum.getForumName();
 		String subForumName = subForum.getSubForumName();
 		int threadID = tm.getId();
 		msgToSend = "GETAP\n"+"forumName: "+forumName+"\n"+
