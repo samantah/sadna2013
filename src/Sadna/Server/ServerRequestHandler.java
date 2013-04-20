@@ -6,6 +6,7 @@ package Sadna.Server;
 
 import Sadna.Server.API.ConnectionHandlerServerInterface;
 import Sadna.Server.API.ServerInterface;
+import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
@@ -55,8 +56,65 @@ public class ServerRequestHandler implements Runnable {
 	}
 
 	private void parseAndHandleRequest(String request) {
-		// TODO Auto-generated method stub
-		
+		String[] parsedReq = request.split("\n| ");
+		switch (parsedReq[0]) {
+		case "LOGIN":
+			handleLogin(parsedReq[2], parsedReq[4], parsedReq[6]);
+			break;
+		case "REGISTER":
+			handleRegister(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8]);
+			break;
+		case "GETSF":
+			handleGetSubForum(parsedReq[2], parsedReq[4]);
+			break;
+		case "GETSFL":
+			handleGetSubForumsList(parsedReq[2]);
+			break;
+		case "GETTL":
+			handleGetThreadsList(parsedReq[2], parsedReq[4]);
+			break;
+		case "GETTM":
+			handleGetThreadMessage(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]));
+			break;
+		case "GETFL":
+			handleGetForumsList();
+			break;
+		case "GETF":
+			handleGetForum(parsedReq[2]);
+			break;
+		case "ADDSF":
+			SubForum subF = new SubForum(parsedReq[2], parsedReq[4]);
+			handleAddSubForum(subF);
+			break;
+		case "ADDF":
+			handleInitiateForum(forumName, adminName, adminPassword)
+			break;
+		case "POST":
+			ThreadMessage tm = _si.getThreadMessage(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]));
+			Post p = new Post(tm, parsedReq[10], parsedReq[12], parsedReq[8]);
+
+			/* Not relevant to add it here since in the db it will
+			   be updated! This object tm is irrelevant..
+			tm.addPost(p);
+			 */
+
+			handlePostComment(p);
+			break;
+		case "THREAD":
+			SubForum sf = _si.getSubForum(parsedReq[2], parsedReq[4]);
+			ThreadMessage threadM = new ThreadMessage(sf, parsedReq[8], parsedReq[10], parsedReq[6]);
+
+			/* Not relevant to add it here since in the db it will
+			   be updated! This object sf is irrelevant..
+			sf.addThreadMessage(threadM);
+			 */
+
+			handlePublishThread(threadM);
+			break;
+		default:
+			break;
+		}
+
 	}
 
 	public boolean handleRegister(String forumName, String userName, String password, 
