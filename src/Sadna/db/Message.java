@@ -26,13 +26,13 @@ public abstract class Message implements Serializable {
         this.content = content;
         this.publisher = publisher;
         
-    	if((title == null)||(title.equals(""))){
+    	/*if((title == null)||(title.equals(""))){
     		this.title = "No Title";
     	}
     	
       	if((content == null)||(content.equals(""))){
     		this.content = "No Content";
-    	}
+    	}*/
     }
 
     public void setMessage(String message) {

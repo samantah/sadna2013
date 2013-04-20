@@ -28,6 +28,11 @@ public class Post extends Message implements Serializable {
         return thread;
     }
 
+    @Override
+    public String toString() {
+        return getTitle() + " - " + getContent();
+    }
+    
     public void setThread(ThreadMessage thread) {
         this.thread = thread;
     }
