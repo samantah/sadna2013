@@ -514,6 +514,76 @@ public class DataBase implements DBInterface {
         return superAdmin;
     }
     
+    @Override
+    public List<Moderator> getModerators(String forumName, String subForumName) {
+        FileInputStream inputStream;
+        ObjectInputStream obj;
+        ArrayList<Moderator> retList = new ArrayList<Moderator>();
+        String pathToFolder = dataBaseFolder + "/" + forumName + "/"
+                + subForumName + "/members/";
+        File folder = new File(pathToFolder);
+        File listOfFiles[] = folder.listFiles();
+        for (int i = 0; i < listOfFiles.length; i++) {
+            String nameOfFile = listOfFiles[i].getName();
+            if (!nameOfFile.endsWith(".obj")) {
+                continue;
+            }
+            try {
+                inputStream = new FileInputStream(pathToFolder + nameOfFile);
+                obj = new ObjectInputStream(inputStream);
+                Moderator readObject = (Moderator) obj.readObject();
+                retList.add(readObject);
+                obj.close();
+                inputStream.close();
+                
+            } catch (FileNotFoundException ex) {
+                String message = ex.getMessage();
+                System.out.println(message);
+                return null;
+            } catch (IOException | ClassNotFoundException ex) {
+                String message = ex.getMessage();
+                System.out.println(message);
+                return null;
+            }
+        }
+        return retList;
+    }
+    
+    @Override
+    public List<Post> getPostList(String forumName, String subForumName, int threadID) {
+        FileInputStream inputStream;
+        ObjectInputStream obj;
+        ArrayList<Post> retList = new ArrayList<Post>();
+        String pathToFolder = dataBaseFolder + "/" + forumName + "/"
+                + subForumName + "/thread" + threadID + "/";
+        File folder = new File(pathToFolder);
+        File listOfFiles[] = folder.listFiles();
+        for (int i = 0; i < listOfFiles.length; i++) {
+            String nameOfFile = listOfFiles[i].getName();
+            if (!nameOfFile.endsWith(".obj")) {
+                continue;
+            }
+            try {
+                inputStream = new FileInputStream(pathToFolder + nameOfFile);
+                obj = new ObjectInputStream(inputStream);
+                Post readObject = (Post) obj.readObject();
+                retList.add(readObject);
+                obj.close();
+                inputStream.close();
+                
+            } catch (FileNotFoundException ex) {
+                String message = ex.getMessage();
+                System.out.println(message);
+                return null;
+            } catch (IOException | ClassNotFoundException ex) {
+                String message = ex.getMessage();
+                System.out.println(message);
+                return null;
+            }
+        }
+        return retList;
+    }
+    
     public static void main(String args[]) {
         DataBase db = new DataBase();
         Forum forum = new Forum("forum1");
@@ -555,40 +625,5 @@ public class DataBase implements DBInterface {
         Member member = new Member("user1", "pass1234", "mail", "forum1", null);
         db.addMember(member);
         System.out.println(db.getMember("forum1", "user1").getUserName());
-    }
-    
-    @Override
-    public List<Moderator> getModerators(String forumName, String subForumName) {
-        FileInputStream inputStream;
-        ObjectInputStream obj;
-        ArrayList<Moderator> retList = new ArrayList<Moderator>();
-        String pathToFolder = dataBaseFolder + "/" + forumName + "/"
-                + subForumName + "/members/";
-        File folder = new File(pathToFolder);
-        File listOfFiles[] = folder.listFiles();
-        for (int i = 0; i < listOfFiles.length; i++) {
-            String nameOfFile = listOfFiles[i].getName();
-            if (!nameOfFile.endsWith(".obj")) {
-                continue;
-            }
-            try {
-                inputStream = new FileInputStream(pathToFolder + nameOfFile);
-                obj = new ObjectInputStream(inputStream);
-                Moderator readObject = (Moderator) obj.readObject();
-                retList.add(readObject);
-                obj.close();
-                inputStream.close();
-                
-            } catch (FileNotFoundException ex) {
-                String message = ex.getMessage();
-                System.out.println(message);
-                return null;
-            } catch (IOException | ClassNotFoundException ex) {
-                String message = ex.getMessage();
-                System.out.println(message);
-                return null;
-            }
-        }
-        return retList;
     }
 }
