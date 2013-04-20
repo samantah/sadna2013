@@ -40,7 +40,7 @@ public class MainServer {
                 new ServerRequestHandler(ch, si);
             } catch (IOException e) {
          //     e.printStackTrace();
-                System.out.println("Connection stopped in server (because client stopped)...");
+                System.out.println(">> Connection stopped in server (because client stopped)...");
             }
         }
     }
