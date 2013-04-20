@@ -13,10 +13,10 @@ import java.io.Serializable;
 public abstract class Message implements Serializable {
 
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = -1241099472836278483L;
-	protected int id;
+     *
+     */
+    private static final long serialVersionUID = -1241099472836278483L;
+    protected int id;
     protected String title;
     protected String content;
     protected String publisher;
@@ -46,10 +46,8 @@ public abstract class Message implements Serializable {
     public String getContent() {
         return content;
     }
-    
-    public String getPublisher(){
-    	return publisher;
+
+    public String getPublisher() {
+        return publisher;
     }
-    
-    
 }

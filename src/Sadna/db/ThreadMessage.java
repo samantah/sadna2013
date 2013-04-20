@@ -15,30 +15,17 @@ import java.util.List;
 public class ThreadMessage extends Message {
 
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 2804071144673510942L;
-	private List<Post> listOfPosts;
+     *
+     */
+    private static final long serialVersionUID = 2804071144673510942L;
     private SubForum subForum;
     private PostIDGenerator postIDGenerator;
 
-
-    
-    
     public ThreadMessage(SubForum subForum, String title, String content, String publisher) {
         super(title, content, publisher);
-        listOfPosts = new ArrayList<Post>();
         this.subForum = subForum;
         this.postIDGenerator = new PostIDGenerator();
-    }
-    
-    
-
-    public ThreadMessage(String forum, String subForum, String title, String content, String publisher) {
-        super(title, content, publisher);
-        listOfPosts = new ArrayList<Post>();
-        this.subForum = new SubForum(forum, subForum);
-        this.postIDGenerator = new PostIDGenerator();
+        this.id = subForum.getThreadIDGenerator().getID();
     }
 
     public SubForum getSubForum() {
@@ -49,18 +36,4 @@ public class ThreadMessage extends Message {
         this.subForum = subForum;
     }
 
-    public boolean addPost(Post e) {
-        e.setId(postIDGenerator.getID());
-        return listOfPosts.add(e);
-    }
-
-    public boolean removePost(Post e) {
-        return listOfPosts.remove(e);
-    }
-
-    public List<Post> getListOfPosts() {
-        return listOfPosts;
-    }
-    
-    
 }

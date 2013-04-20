@@ -13,10 +13,10 @@ import java.io.Serializable;
 public class Post extends Message implements Serializable {
 
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = -3796791526192451832L;
-	private ThreadMessage thread;
+     *
+     */
+    private static final long serialVersionUID = -3796791526192451832L;
+    private ThreadMessage thread;
 
     public Post(ThreadMessage thread, String title, String content, String publisher) {
         super(title, content, publisher);
