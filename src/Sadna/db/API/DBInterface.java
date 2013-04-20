@@ -49,6 +49,8 @@ public interface DBInterface {
     boolean addSubForum(SubForum subForum);
 
     boolean addMember(Member member);
+    
+    boolean addModerator(Moderator moderator);
 
     boolean addPost(Post post);
 

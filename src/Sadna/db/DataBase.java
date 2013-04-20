@@ -609,9 +609,9 @@ public class DataBase implements DBInterface {
         db.addPost(post2);
         db.addPost(post3);
         ThreadMessage thread = db.getThread("forum1", "subForum1", 1);
-        System.out.println(thread.getContent());
+        System.out.println("thread: " + thread.getContent());
         Post post1 = db.getPost("forum1", "subForum1", 0, 1);
-        System.out.println(post1.getContent());
+        System.out.println("post: " + post1);
         List<SubForum> subForumsList = db.getSubForumsList("forum1");
         for (SubForum sf : subForumsList) {
             System.out.println(sf.getSubForumName());
@@ -625,5 +625,10 @@ public class DataBase implements DBInterface {
         Member member = new Member("user1", "pass1234", "mail", "forum1", null);
         db.addMember(member);
         System.out.println(db.getMember("forum1", "user1").getUserName());
+    }
+
+    @Override
+    public boolean addModerator(Moderator moderator) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
