@@ -8,7 +8,12 @@ import Sadna.Client.API.ClientCommunicationHandlerInterface;
 
 public class Moderator extends Member {
 
-    public Moderator(String userName, String password, String email,
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 106491013262132601L;
+
+	public Moderator(String userName, String password, String email,
             String forum, ClientCommunicationHandlerInterface ch) {
         super(userName, password, email, forum, ch);
         // TODO Auto-generated constructor stub

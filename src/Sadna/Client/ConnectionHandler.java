@@ -19,7 +19,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 	private BufferedReader stringFromServer;
 	private ObjectInputStream objectFromServer;
 	private String msgToSend;
-	private String reciviedMsg;
+	private String receivedMsg;
 	
 	public ConnectionHandler(String host, int port){
 		try{
@@ -41,9 +41,9 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		msgToSend = "LOGIN\n"+"forumName: "+forumName+"\n" +
 		"userName: "+userName+"\n"+"password: "+password+"\n";
 		stringToServer.println(msgToSend);
-		try {reciviedMsg = stringFromServer.readLine();}
+		try {receivedMsg = stringFromServer.readLine();}
 		catch (IOException e) {}
-		if(reciviedMsg.contains("200ok")){
+		if(receivedMsg.contains("200ok")){
 			loggedInMember = new Member(userName,password,null,forumName, this);
 		}
 		return loggedInMember;
@@ -57,9 +57,9 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 			msgToSend = "REGISTER\n"+"forumName: "+forumName+"\n"+"userName: "+userName+"\n" +
 			"password: "+password+"\n"+"email: "+email+"\n";
 			stringToServer.println(msgToSend);
-			try {reciviedMsg = stringFromServer.readLine();}
+			try {receivedMsg = stringFromServer.readLine();}
 			catch (IOException e) {}
-			if(reciviedMsg.contains("200ok")){
+			if(receivedMsg.contains("200ok")){
 				loggedInMember = new Member(userName,password,null,forumName, this);
 			}
 		}
@@ -148,9 +148,9 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 			"posterName: "+posterName+"\n"+"postTitle: "+post.getTitle()+"\n"+
 			"postContent: "+post.getContent()+"\n";
 			stringToServer.println(msgToSend);
-			try {reciviedMsg = stringFromServer.readLine();}
+			try {receivedMsg = stringFromServer.readLine();}
 			catch (IOException e) {}
-			if(reciviedMsg.contains("200ok")){
+			if(receivedMsg.contains("200ok")){
 				isPosted = true;
 			}
 		}
@@ -168,9 +168,9 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 			"subForumName: "+sf+"\n"+"posterName: "+posterName+"\n"+"threadTitle: "+newThread.getTitle()+"\n"+
 			"threadContent: "+newThread.getContent()+"\n";
 			stringToServer.println(msgToSend);
-			try {reciviedMsg = stringFromServer.readLine();}
+			try {receivedMsg = stringFromServer.readLine();}
 			catch (IOException e) {}
-			if(reciviedMsg.contains("200ok")){
+			if(receivedMsg.contains("200ok")){
 				isPublished = true;
 			}
 		}
@@ -228,9 +228,9 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 			msgToSend+="moderator: "+md.getUserName()+"\n";
 		}
 		stringToServer.println(msgToSend);
-		try {reciviedMsg = stringFromServer.readLine();}
+		try {receivedMsg = stringFromServer.readLine();}
 		catch (IOException e) {}
-		if(reciviedMsg.contains("200ok")){
+		if(receivedMsg.contains("200ok")){
 			added = true;
 		}
 		return added;
@@ -242,9 +242,9 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		msgToSend = "ADDF\n"+"forumName: "+forumName+"\n"+
 		"adminName: "+adminName+"\n"+"adminPassword: "+AdminPassword+"\n";
 		stringToServer.println(msgToSend);
-		try {reciviedMsg = stringFromServer.readLine();}
+		try {receivedMsg = stringFromServer.readLine();}
 		catch (IOException e) {}
-		if(reciviedMsg.contains("200ok")){
+		if(receivedMsg.contains("200ok")){
 			initiated = true;
 		}
 		return initiated;

@@ -4,10 +4,6 @@
  */
 package Sadna.db;
 
-import Sadna.Client.Admin;
-import Sadna.Client.Member;
-import Sadna.Client.Moderator;
-import Sadna.db.API.DBInterface;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -17,6 +13,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import Sadna.Client.Member;
+import Sadna.Client.Moderator;
+import Sadna.db.API.DBInterface;
 
 public class DataBase implements DBInterface {
 

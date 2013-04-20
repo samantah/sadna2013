@@ -4,9 +4,9 @@
  */
 package Sadna.db.API;
 
-import Sadna.Client.Member;
 import java.util.List;
-import Sadna.Client.User;
+
+import Sadna.Client.Member;
 import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;

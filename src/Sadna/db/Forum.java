@@ -15,7 +15,11 @@ import java.util.List;
  */
 public class Forum implements Serializable{
     
-    private List<SubForum> listOfSubForums;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7660231455619569811L;
+	private List<SubForum> listOfSubForums;
     private Admin admin;
     private String forumName;
 

@@ -18,7 +18,11 @@ import Sadna.db.ThreadMessage;
  */
 public class User implements Serializable {
 
-    protected ClientCommunicationHandlerInterface conHand;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6569160581577696172L;
+	protected ClientCommunicationHandlerInterface conHand;
 
     public User(ClientCommunicationHandlerInterface ch) {
         this.conHand = ch;

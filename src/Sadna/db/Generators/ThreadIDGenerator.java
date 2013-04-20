@@ -12,7 +12,11 @@ import java.io.Serializable;
  */
 public class ThreadIDGenerator implements Serializable{
 
-    private int idNumber = 0;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7636248939396642629L;
+	private int idNumber = 0;
 
     public int getID() {
         return idNumber++;
