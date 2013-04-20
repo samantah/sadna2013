@@ -22,6 +22,8 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DataBase implements DBInterface {
 
@@ -228,6 +230,20 @@ public class DataBase implements DBInterface {
         int postid = post.getId();
         ObjectOutputStream obj;
         FileOutputStream outputstream;
+
+        ThreadMessage thread = post.getThread();
+        String pathToThread = this.dataBaseFolder + "/" + forum + "/"
+                + subForum + "/";
+        try {
+            outputstream = new FileOutputStream(pathToThread + "thread" + threadMessage + ".obj");
+            obj = new ObjectOutputStream(outputstream);
+            obj.writeObject(thread);
+            outputstream.close();
+            obj.close();
+        } catch (IOException ex) {
+            return false;
+        }
+
         try {
             String path = dataBaseFolder + "/" + forum
                     + "/" + subForum + "/" + "thread" + threadMessage + "/"; //save the path of the post
