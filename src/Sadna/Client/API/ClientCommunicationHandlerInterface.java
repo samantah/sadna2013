@@ -5,6 +5,7 @@
 package Sadna.Client.API;
 
 import Sadna.Client.Member;
+import Sadna.Client.Moderator;
 import Sadna.Client.User;
 import Sadna.db.Forum;
 import Sadna.db.Post;
@@ -40,7 +41,7 @@ public interface ClientCommunicationHandlerInterface {
     
     ThreadMessage getThreadMessage(String forumName ,String subForumName, int messageID);
     
-    boolean addSubForum(SubForum subForum);
+    boolean addSubForum(SubForum subForum, List<Moderator> lm);
     
     boolean initiateForum(String forumName, String adminName, String adminPassword);
 }
