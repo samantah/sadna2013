@@ -241,6 +241,7 @@ public class DataBase implements DBInterface {
             outputstream.close();
             obj.close();
         } catch (IOException ex) {
+            System.out.println(ex.getMessage());
             return false;
         }
 
