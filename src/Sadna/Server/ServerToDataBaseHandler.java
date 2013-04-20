@@ -79,7 +79,7 @@ public class ServerToDataBaseHandler implements ServerInterface {
 			forumToAdd.setAdmin(admin);
 			boolean addedAdmin = _db.addMember(admin);
 			boolean addedForum = _db.addForum(forumToAdd);
-			isAdded = addedAdmin && addedForum;
+			isAdded = (addedAdmin && addedForum);
 		}
 		return isAdded;
 	}	
