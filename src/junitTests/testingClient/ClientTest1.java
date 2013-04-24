@@ -1,8 +1,8 @@
-package atestingClient;
+package junitTests.testingClient;
 
 import Sadna.Client.*;
 
-public class Test1 extends ATestStartUp {
+public class ClientTest1 extends ClientTestStartUp {
 
 	//ALL fields need to be valid
 	 public static final String FORUM_NAME = "sadnaForum"; //valid forum

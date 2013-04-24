@@ -1,13 +1,13 @@
-package driverServer;
+package junitTests.driverServer;
 
 
 
 
-public class Driver {
+public class ServerDriver {
 
 
-	public static ProxyBridge getBridge() {
-		ProxyBridge bridge=new ProxyBridge (); 
+	public static ServerProxyBridge getBridge() {
+		ServerProxyBridge bridge=new ServerProxyBridge (); 
 		// add when real bridge is ready
 		//bridge.real =  new RealBridge (); 
 		bridge.setRealBridge(null); // add real bridge here

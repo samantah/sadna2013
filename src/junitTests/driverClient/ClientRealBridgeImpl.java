@@ -1,9 +1,8 @@
-package adriverClient;
+package junitTests.driverClient;
 
 import java.util.List;
 
 import Sadna.Client.ConnectionHandler;
-import Sadna.Client.ConnectionHandlerMock;
 import Sadna.Client.Member;
 import Sadna.Client.User;
 import Sadna.Client.API.ClientCommunicationHandlerInterface;
@@ -12,7 +11,7 @@ import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 
-public class RealBridge implements Bridge {
+public class ClientRealBridgeImpl implements ClientBridge {
 	ClientCommunicationHandlerInterface clientHandler = new ConnectionHandler("sadna", 3000);
 	//ClientCommunicationHandlerInterface clientHandler = new ConnectionHandlerMock();
 	

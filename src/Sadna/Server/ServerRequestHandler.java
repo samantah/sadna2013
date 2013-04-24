@@ -86,6 +86,7 @@ public class ServerRequestHandler implements Runnable {
 		case "ADDSF":
 			List<Moderator> moderators = new ArrayList<Moderator>();
 			for(int i = 8; i < Integer.parseInt(parsedReq[6]);i = i+2){
+				System.out.println("inside");
 				moderators.add(new Moderator(parsedReq[i], "", "", parsedReq[2], null));
 			}
 			Forum foru = _si.getForum(parsedReq[2]);
@@ -105,15 +106,15 @@ public class ServerRequestHandler implements Runnable {
 			handlePostComment(p);
 			break;
 		case "THREAD":
-			SubForum sf = _si.getSubForum(parsedReq[2], parsedReq[4]);
-			ThreadMessage threadM = new ThreadMessage(sf, parsedReq[8], parsedReq[10], parsedReq[6]);
-			handlePublishThread(threadM);
+			handlePublishThread(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8], parsedReq[10]);
 			break;
 		default:
 			break;
 		}
 
 	}
+
+
 
 
 
@@ -171,9 +172,14 @@ public class ServerRequestHandler implements Runnable {
 		return subForumIsAdded;
 	}
 
-	public boolean handlePublishThread(ThreadMessage newThread){
+	public boolean handlePublishThread(String forumName, String subForumName,
+			String posterName, String threadTitle, String threadContent){
 		boolean succeeded = false;
-		succeeded = _si.publishThread(newThread);
+		SubForum sf = _si.getSubForum(forumName, subForumName);
+		if(sf != null && _si.memberExistsInForum(forumName, posterName)){
+			ThreadMessage threadM = new ThreadMessage(sf, threadTitle, threadContent, posterName);
+			succeeded = _si.publishThread(threadM);
+		}
 		if(succeeded){
 			_ch.sendOK();
 		}
@@ -201,9 +207,9 @@ public class ServerRequestHandler implements Runnable {
 
 	private void handleGetAllPosts(String forumName, String subForumName, int threadId) {
 		_ch.sendAllPosts(_si.getAllPosts(forumName, subForumName, threadId));
-		
+
 	}
-	
+
 	public void handleGetForum(String forumName){
 		_ch.sendForum(_si.getForum(forumName));
 	}

@@ -44,12 +44,28 @@ public class ServerToDataBaseHandler implements ServerInterface {
 		}
 		return isUnique;
 	}
+	
+	@Override
+	public boolean memberExistsInForum(String forumName, String posterName) {
+		return userNameExist(forumName, posterName);
+	}
+	
+	private boolean userNameExist(String forumName, String userName) {
+		boolean exist = false;
+		List<Member> members = _db.getAllMembers(forumName);
+		for(Member m: members){
+			if(m.getUserName().equals(userName)){
+				exist = true;
+				break;
+			}
+		}
+		return exist;
+	}
 
 	@Override
 	public boolean login(String forumName, String userName, String password) {
 		boolean succeeded = false;
 		if(forumExists(forumName)){
-			System.out.println("forum exists");
 			Member loginner = _db.getMember(forumName, userName);
 			if(loginner!=null && loginner.getPassword().equals(password)){
 				succeeded = true;
@@ -109,10 +125,12 @@ public class ServerToDataBaseHandler implements ServerInterface {
 	@Override
 	public boolean addSubForum(SubForum subForum, List<Moderator> moderators) {
 		boolean isAdded = false;
-		if(isSubForumNameUnique(subForum.getForum().getForumName(), 
-				subForum.getSubForumName())){
-			System.out.println("is unique subforum");
-			isAdded = _db.addSubForum(subForum, moderators);
+		if(subForum.getForum() != null){
+			if(isSubForumNameUnique(subForum.getForum().getForumName(), 
+					subForum.getSubForumName())){
+				System.out.println("is unique subforum");
+				isAdded = _db.addSubForum(subForum, moderators);
+			}
 		}
 		return isAdded;
 	}
@@ -152,7 +170,6 @@ public class ServerToDataBaseHandler implements ServerInterface {
 	public Forum getForum(String forumName) {
 		Forum resForum = null;
 		if(forumExists(forumName)){
-			System.out.println("forum exists");
 			resForum = _db.getForum(forumName);
 		}
 		return resForum;
@@ -162,7 +179,6 @@ public class ServerToDataBaseHandler implements ServerInterface {
 	public List<SubForum> getSubForumsList(String forumName) {
 		List<SubForum> subforums = null;
 		if(forumExists(forumName)){
-			System.out.println("forum exists");
 			subforums = _db.getSubForumsList(forumName);
 		}
 		return subforums;
@@ -172,7 +188,6 @@ public class ServerToDataBaseHandler implements ServerInterface {
 	public SubForum getSubForum(String forumName, String subForumName) {
 		SubForum subForum = null;
 		if(subForumExists(forumName,subForumName)){
-			System.out.println("subforum exists");
 			subForum = _db.getSubForum(forumName, subForumName);
 		}
 		return subForum;
@@ -183,7 +198,6 @@ public class ServerToDataBaseHandler implements ServerInterface {
 			String subForumName) {
 		List<ThreadMessage> threads = null;
 		if(subForumExists(forumName,subForumName)){
-			System.out.println("subforum exists");
 			threads = _db.getThreadsList(forumName, subForumName);
 		}
 		return threads;
@@ -194,7 +208,6 @@ public class ServerToDataBaseHandler implements ServerInterface {
 			String subForumName, int messageId) {
 		ThreadMessage thread = null;
 		if(threadExists(forumName,subForumName, messageId)){
-			System.out.println("thread exists");
 			thread = _db.getThread(forumName, subForumName, messageId);
 		}
 		return thread;

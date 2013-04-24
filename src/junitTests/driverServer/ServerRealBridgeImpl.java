@@ -1,4 +1,4 @@
-package driverServer;
+package junitTests.driverServer;
 
 import java.net.Socket;
 import java.util.List;
@@ -15,7 +15,7 @@ import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 import Sadna.db.API.DBInterface;
 
-public class RealBridge implements Bridge {
+public class ServerRealBridgeImpl implements ServerBridge {
 
 	Socket _socket = new Socket();
 	DBInterface _dataBase = new DataBase();
