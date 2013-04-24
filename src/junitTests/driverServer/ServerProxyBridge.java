@@ -1,4 +1,4 @@
-package driverServer;
+package junitTests.driverServer;
 
 
 import java.util.List;
@@ -9,15 +9,15 @@ import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 
-public class ProxyBridge implements Bridge {
-	private Bridge real;
+public class ServerProxyBridge implements ServerBridge {
+	private ServerBridge real;
 	
 	
-	public ProxyBridge() {
+	public ServerProxyBridge() {
 		this.real=null;
 	}
 
-	public void setRealBridge(Bridge real) {
+	public void setRealBridge(ServerBridge real) {
 		this.real = real;
 	}
 

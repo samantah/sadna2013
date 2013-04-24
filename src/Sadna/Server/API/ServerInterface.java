@@ -45,6 +45,8 @@ public interface ServerInterface {
     List<Moderator> getModerators(String forumName, String subForumName);
 
     List<Post> getAllPosts(String forumName, String subForumName, int threadId);
+
+	boolean memberExistsInForum(String forumName, String posterName);
     
 
     /* For later use..  

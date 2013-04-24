@@ -1,4 +1,4 @@
-package adriverClient;
+package junitTests.driverClient;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 
-public interface Bridge {
+public interface ClientBridge {
 	
 	//
 	boolean isConnect(User user);
