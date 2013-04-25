@@ -11,9 +11,6 @@ import Sadna.db.ThreadMessage;
 
 public interface ClientBridge {
 	
-	//
-	boolean isConnect(User user);
-	//
     Member login(String forumName, String userName, String password);
     
     User logout(String forumName, String userName);
@@ -40,6 +37,7 @@ public interface ClientBridge {
     
     boolean initiateForum(String forumName, String adminName, String adminPassword);
 
+    List<Post> getAllPosts(ThreadMessage tm);
 
 	
 }

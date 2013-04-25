@@ -112,11 +112,10 @@ public class ClientProxyBridge implements ClientBridge {
 		return null;
 	}
 
-	//
-	public boolean isConnect(User user) {
+	@Override
+	public List<Post> getAllPosts(ThreadMessage tm) {
 		if(this.real!=null)
-			return this.real.isConnect(user);
-		return false;
+			return this.real.getAllPosts(tm);
+		return null;
 	}
-	//
 }

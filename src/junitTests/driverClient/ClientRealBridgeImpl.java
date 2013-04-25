@@ -1,9 +1,11 @@
 package junitTests.driverClient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import Sadna.Client.ConnectionHandler;
 import Sadna.Client.Member;
+import Sadna.Client.Moderator;
 import Sadna.Client.User;
 import Sadna.Client.API.ClientCommunicationHandlerInterface;
 import Sadna.db.Forum;
@@ -12,83 +14,77 @@ import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 
 public class ClientRealBridgeImpl implements ClientBridge {
-	ClientCommunicationHandlerInterface clientHandler = new ConnectionHandler("sadna", 3000);
-	//ClientCommunicationHandlerInterface clientHandler = new ConnectionHandlerMock();
+	private String _host;
+	private int _port;
+	private ClientCommunicationHandlerInterface _clientHandler;
+	
+	public ClientRealBridgeImpl(String host, int port) {
+		_host = host;
+		_port = port;
+		_clientHandler = new ConnectionHandler(_host, _port);
+	}
+		
 	
 	
-	
+
 	public boolean addSubForum(SubForum subForum) {
-		return clientHandler.addSubForum(subForum, null);
+		return _clientHandler.addSubForum(subForum, new ArrayList<Moderator>());
 	}
 
 	public Forum getForum(String forumName) {
-		// TODO Auto-generated method stub
-		return null;
+		return _clientHandler.getForum(forumName);
 	}
 
 	public List<Forum> getForumsList() {
-		// TODO Auto-generated method stub
-		return null;
+		return _clientHandler.getForumsList();
 	}
 
 	public SubForum getSubForum(String forum, String subForumName) {
-		// TODO Auto-generated method stub
-		return null;
+		return _clientHandler.getSubForum(forum, subForumName);
 	}
 
 	public List<SubForum> getSubForumsList(String forumName) {
-		// TODO Auto-generated method stub
-		return null;
+		return _clientHandler.getSubForumsList(forumName);
 	}
 
 	public ThreadMessage getThreadMessage(String forumName,
 			String subForumName, int messageID) {
-		// TODO Auto-generated method stub
-		return null;
+		return _clientHandler.getThreadMessage(forumName, subForumName, messageID);
 	}
 
 	public List<ThreadMessage> getThreadsList(String forumName,
 			String subForumName) {
-		// TODO Auto-generated method stub
-		return null;
+		return _clientHandler.getThreadsList(forumName, subForumName);
 	}
 
 	public boolean initiateForum(String forumName, String adminName,
 			String adminPassword) {
-		// TODO Auto-generated method stub
-		return false;
+		return _clientHandler.initiateForum(forumName, adminName, adminPassword);
 	}
 
 	public Member login(String forumName, String userName, String password) {
-		// TODO Auto-generated method stub
-		return null;
+		return _clientHandler.login(forumName, userName, password);
 	}
 
 	public User logout(String forumName, String userName) {
-		// TODO Auto-generated method stub
-		return null;
+		return _clientHandler.logout(forumName, userName);
 	}
 
 	public boolean postComment(Post post) {
-		// TODO Auto-generated method stub
-		return false;
+		return _clientHandler.postComment(post);
 	}
 
 	public boolean publishThread(ThreadMessage newThread) {
-		// TODO Auto-generated method stub
-		return false;
+		return _clientHandler.publishThread(newThread);
 	}
 
 	public Member register(String forumName, String userName, String password,
 			String email) {
-		// TODO Auto-generated method stub
-		return null;
+		return _clientHandler.register(forumName, userName, password, email);
 	}
 
-	//
-	public boolean isConnect(User user) {
-		// TODO Auto-generated method stub
-		return false;
+	@Override
+	public List<Post> getAllPosts(ThreadMessage tm) {
+		return _clientHandler.getAllPosts(tm);
 	}
-	//
 }
