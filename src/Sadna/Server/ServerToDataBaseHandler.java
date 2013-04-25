@@ -246,7 +246,7 @@ public class ServerToDataBaseHandler implements ServerInterface {
 	}
 
 	@Override
-	public List<Moderator> getModerators(String forumName, String subForumName) {
+	public List<Member> getModerators(String forumName, String subForumName) {
 		if(subForumExists(forumName, subForumName)){
 			return null; // change to the line in the bottom
 			//return _db.getModerators(forumName, subForumName);

@@ -5,12 +5,12 @@ import Sadna.Client.*;
 public class ClientTest1 extends ClientTestStartUp {
 
 	//ALL fields need to be valid
-	 public static final String FORUM_NAME = "sadnaForum"; //valid forum
+	 public static final String FORUM_NAME = "forum1"; //valid forum
 	 public static final String USER_NAME  = "sadnaUser";  //valid username
 	 public static final String USER_EMAIL  = "sadna@bgu.ac.il";
 	 public static final String USER_PASSWORD  = "abcdefg34";
 	 public static final String ADMIN_NAME  = "admin1";
-	 public static final String ADMIN_PASSWORD  = "admin1";
+	 public static final String ADMIN_PASSWORD  = "password1234";
 	 
 	 
 	 
@@ -19,7 +19,7 @@ public class ClientTest1 extends ClientTestStartUp {
 	  סיסמא של חבר חייבת להכיל לפחות תו נומרי אחד ותו אלפביתי אחד. כמו כן גודלה
       יהיה בין 8 ל 16 תוים. 
 	 */
- 
+	 
 	 
 	public void test_RegisterInvalidPass() {
 		Member _member1 =  this.bridge.register(FORUM_NAME, USER_NAME, "short", USER_EMAIL);
@@ -43,13 +43,6 @@ public class ClientTest1 extends ClientTestStartUp {
 	public void test_RegisterValidPass() {
 		Member _member1 =  this.bridge.register(FORUM_NAME, USER_NAME, "1234567k", USER_EMAIL);
 		assertNotNull(_member1);
-		Member _member2 =  this.bridge.register(FORUM_NAME, USER_NAME, "123456789123456k", USER_EMAIL);
-		assertNotNull(_member2);
-		Member _member3 =  this.bridge.register(FORUM_NAME, USER_NAME, "abcdefghijklmno4", USER_EMAIL);
-		assertNotNull(_member3);
-		Member _member4 =  this.bridge.register(FORUM_NAME, USER_NAME, "a3b4c5d6", USER_EMAIL);
-		assertNotNull(_member4);
-
 	}
 
 
@@ -78,8 +71,7 @@ public class ClientTest1 extends ClientTestStartUp {
 		Member _member1 =  this.bridge.register(FORUM_NAME, USER_NAME, USER_PASSWORD,USER_EMAIL);		
 		assertNotNull(_member1);
 		User _user = this.bridge.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
-		boolean isConnect = this.bridge.isConnect(_user);
-		assertEquals(true, isConnect);
+		assertTrue(_user instanceof Member);
 		
 	}
 	
@@ -135,8 +127,7 @@ public class ClientTest1 extends ClientTestStartUp {
 		Member _member1 =  this.bridge.register(FORUM_NAME, USER_NAME, USER_PASSWORD,USER_EMAIL);		
 		assertNotNull(_member1);
 		User _user = this.bridge.logout(FORUM_NAME, USER_NAME);
-		boolean isConnect = this.bridge.isConnect(_user);
-		assertEquals(false, isConnect); 
+		assertFalse(_user instanceof Member); 
 		
 	}
 

@@ -9,7 +9,7 @@ import Sadna.db.ThreadMessage;
 public class ServerTest1 extends junitTests.testingServer.ServerTestStartUp {
 
 	//ALL fields need to be valid
-	 public static final String FORUM_NAME = "sadnaForum"; //valid forum
+	 public static final String FORUM_NAME = "forum1"; //valid forum
 	 public static final String USER_NAME  = "sadnaUser";  //valid username
 	 public static final String USER_EMAIL  = "sadna@bgu.ac.il";
 	 public static final String USER_PASSWORD  = "abcdefg34";
