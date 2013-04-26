@@ -23,8 +23,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class DataBase implements DBInterface {
+
     private DecimalFormat df = new DecimalFormat("000");
     private String dataBaseFolder = "dataBase";
 
@@ -241,8 +241,8 @@ public class DataBase implements DBInterface {
         String pathToThread = this.dataBaseFolder + "/" + forum + "/"
                 + subForum + "/";
         try {
-            outputstream = new FileOutputStream(pathToThread + "thread" 
-                            + df.format(threadMessage) + ".obj");
+            outputstream = new FileOutputStream(pathToThread + "thread"
+                    + df.format(threadMessage) + ".obj");
             obj = new ObjectOutputStream(outputstream);
             obj.writeObject(thread);
             outputstream.close();
@@ -681,5 +681,21 @@ public class DataBase implements DBInterface {
     @Override
     public boolean addModerator(Moderator moderator) {
         return false;
+    }
+
+    public void deleteAll(String path) {
+        File f = new File(path);
+        File[] listFiles = f.listFiles();
+        System.out.println(listFiles.length);
+        if (listFiles == null) {
+            return;
+        }
+        for (int i = 0; i < listFiles.length; i++) {
+            if (listFiles[i].isDirectory()) {
+                String newPath = listFiles[i] + "/";
+                deleteAll(newPath);
+            }
+            listFiles[i].delete();
+        }
     }
 }
