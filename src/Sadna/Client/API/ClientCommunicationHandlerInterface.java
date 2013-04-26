@@ -48,4 +48,6 @@ public interface ClientCommunicationHandlerInterface {
     boolean initiateForum(String forumName, String adminName, String adminPassword);
     
     List<Post> getAllPosts(ThreadMessage tm);
+    
+    public boolean finishCommunication();
 }

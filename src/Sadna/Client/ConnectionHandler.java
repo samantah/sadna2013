@@ -12,6 +12,8 @@ import Sadna.db.Message;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
+import java.util.logging.Level;
+import java.util.logging.Logger;
  
 public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 	private Socket clientSocket;
@@ -33,10 +35,17 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		}
 	}
 
-	public boolean finishCommunication() throws IOException{
-		clientSocket.close();
-		return true;
-	}
+    @Override
+    public boolean finishCommunication() {
+        try {
+            clientSocket.close();
+            return true;
+        } catch (IOException ex) {
+            String message = ex.getMessage();
+            System.out.println(message);
+        }
+        return false;
+    }
 	@Override
 	public Member login(String forumName, String userName, String password){
 		Member loggedInMember = null;
