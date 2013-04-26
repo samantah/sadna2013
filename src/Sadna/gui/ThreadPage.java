@@ -53,7 +53,7 @@ public class ThreadPage extends javax.swing.JFrame {
                 subForumName, threadId);
         listOfPosts = CurrentStatus.currUser.getAllPosts(thread);
         for (Post p : listOfPosts) {
-            listModel.addElement(p.getTitle() + " - " + p.getContent());
+            listModel.addElement(p);
         }
         jListPosts.setModel(listModel);
     }

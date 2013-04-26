@@ -6,7 +6,6 @@ package Sadna.gui;
 
 import Sadna.Client.API.ClientCommunicationHandlerInterface;
 import Sadna.Client.ConnectionHandler;
-import Sadna.Client.ConnectionHandlerMock;
 import Sadna.Client.SuperAdmin;
 import Sadna.Client.User;
 import Sadna.db.Forum;
@@ -20,8 +19,8 @@ import javax.swing.JFrame;
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    String host = "132.73.198.198";
-    int port = 3248;
+    String host = "192.168.1.100";
+    int port = 3333;
     
     public MainFrame() {
         initComponents();

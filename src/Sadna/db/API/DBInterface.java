@@ -60,7 +60,7 @@ public interface DBInterface {
     
     boolean setSuperAdmin();
     
-    SuperAdmin getSuperAdmin();
+    //SuperAdmin getSuperAdmin();
     
 
 }
