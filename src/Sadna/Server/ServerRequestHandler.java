@@ -53,6 +53,7 @@ public class ServerRequestHandler implements Runnable {
 			}
 		}
 		_ch.closeSocket();
+                System.out.println("closed connection with a client");
 
 	}
 
