@@ -131,7 +131,7 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 		String tmpline = "";
 		try {
 			
-			//System.out.println("Reading line from client in - ServerConnectionWithClientHandler");
+//			System.out.println("Reading line from client in - ServerConnectionWithClientHandler");
 			tmpline = stringFromClient.readLine();
 			if(tmpline == null)
 				return null;
@@ -145,7 +145,7 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 //			System.out.println("----- request from client : " + request);
 //			System.out.println("Done reading line from client");
 		} catch (IOException e) {
-			//e.printStackTrace();
+			                 System.out.println(e.getMessage());
 			System.out.println(">> Got Exception in ServerConnectionWithClientHandler - receiveRequestFromClient");
 			return "end";
 		}

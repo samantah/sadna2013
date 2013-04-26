@@ -14,7 +14,7 @@ public class MainServer {
 	private ConnectionHandlerServerInterface ch;
 	
 	private ServerSocket serverSocket;
-	private int portNumber = 3248;
+	private int portNumber = 3333;
 	
 
 	public MainServer() {
@@ -36,6 +36,7 @@ public class MainServer {
         while (true) {
             try {
                 Socket socket = serverSocket.accept();
+                System.out.println("got new client");
                 ch = new ServerConnectionWithClientHandler(socket);
                 new ServerRequestHandler(ch, si);
             } catch (IOException e) {
