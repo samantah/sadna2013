@@ -21,8 +21,8 @@ import Sadna.db.ThreadMessage;
  *
  */
 public class connectionHandlerTest {
-	String host = "192.168.0.105";
-	int port = 3248;
+	String host = "192.168.0.100";
+	int port = 3333;
 	ConnectionHandler ch;
 	User guest;
 	SuperAdmin sp;
