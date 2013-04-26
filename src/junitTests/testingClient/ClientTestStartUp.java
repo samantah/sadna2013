@@ -10,6 +10,7 @@ import Sadna.db.Forum;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 import junit.framework.TestCase;
+import org.junit.*;
 import junitTests.driverClient.ClientBridge;
 import junitTests.driverClient.ClientDriver;
 
@@ -17,22 +18,13 @@ import junitTests.driverClient.ClientDriver;
 public class ClientTestStartUp extends TestCase {
 	protected ClientBridge bridge;
 
-
-	
-	public ClientTestStartUp(){
-		this.bridge = ClientDriver.getBridge();
-	}
-	
 	public void setUp() {
 		this.bridge = ClientDriver.getBridge();
 	}
-	
+
 	public void tearDown() throws IOException {
-		this.bridge = null;
+		ConnectionHandler ch = (ConnectionHandler)this.bridge;
+		ch.finishCommunication();
 	}
-	
-	
-	
-	
 	
 }
