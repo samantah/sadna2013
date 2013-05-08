@@ -73,4 +73,6 @@ public interface DBInterface {
     boolean addModerator(Moderator moderator, SubForum subForum);
     
     SuperAdmin getSuperAdmin();
+
+    public boolean addNotifications(int threadId);
 }

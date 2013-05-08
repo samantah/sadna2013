@@ -27,10 +27,12 @@ public class ServerRequestHandler implements Runnable {
 
     private ConnectionHandlerServerInterface _ch;
     private ServerInterface _si;
+    private NotificationsFactory notificationsFactory;
 
     public ServerRequestHandler(ConnectionHandlerServerInterface ch, ServerInterface si) {
         _ch = ch;
         _si = si;
+        this.notificationsFactory = new NotificationsFactory(si);
         Thread t = new Thread(this);
         t.start();
     }
@@ -245,6 +247,7 @@ public class ServerRequestHandler implements Runnable {
         } else {
             _ch.sendErrorInServer();
         }
+        notificationsFactory.sendNotifications(post);
         return succeeded;
     }
 

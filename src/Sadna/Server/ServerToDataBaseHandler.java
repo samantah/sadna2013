@@ -316,4 +316,9 @@ public class ServerToDataBaseHandler implements ServerInterface {
         return _db.getSuperAdmin();
     }
 
+    @Override
+    public boolean addNotification(int threadId) {
+        return _db.addNotifications(threadId);
+    }
+
 }
