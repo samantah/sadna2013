@@ -10,7 +10,7 @@ import java.util.List;
 
 import Sadna.Server.API.ConnectionHandlerServerInterface;
 import Sadna.Server.API.ServerInterface;
-import Sadna.Client.Moderator;
+import Sadna.Server.Users.Moderator;
 import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;

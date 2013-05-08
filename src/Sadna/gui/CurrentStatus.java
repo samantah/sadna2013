@@ -4,7 +4,7 @@
  */
 package Sadna.gui;
 
-import Sadna.Client.User;
+import Sadna.Server.Users.User;
 import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;

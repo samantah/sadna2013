@@ -2,10 +2,10 @@ package Sadna.Server;
 
 import java.util.List;
 
-import Sadna.Client.Admin;
-import Sadna.Client.Member;
-import Sadna.Client.Moderator;
 import Sadna.Server.API.ServerInterface;
+import Sadna.Server.Users.Admin;
+import Sadna.Server.Users.Member;
+import Sadna.Server.Users.Moderator;
 import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;

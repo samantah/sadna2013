@@ -4,7 +4,7 @@
  */
 package Sadna.db;
 
-import Sadna.Client.Moderator;
+import Sadna.Server.Users.Moderator;
 import Sadna.db.Generators.ThreadIDGenerator;
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -4,7 +4,8 @@
  */
 package Sadna.gui;
 
-import Sadna.Client.Member;
+import Sadna.Server.Users.Member;
+
 import javax.swing.JFrame;
 
 /**
