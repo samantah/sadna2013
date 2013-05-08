@@ -6,17 +6,18 @@ package Sadna.Server;
 
 import Sadna.Client.Admin;
 import Sadna.Client.Member;
-import java.util.ArrayList;
-import java.util.List;
-
+import Sadna.Client.Moderator;
 import Sadna.Server.API.ConnectionHandlerServerInterface;
 import Sadna.Server.API.ServerInterface;
-import Sadna.Server.Users.Moderator;
 import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+
+
 
 /**
  *

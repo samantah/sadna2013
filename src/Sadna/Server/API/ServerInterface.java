@@ -4,14 +4,13 @@
  */
 package Sadna.Server.API;
 
-import java.util.List;
-
-import Sadna.Server.Users.Member;
-import Sadna.Server.Users.Moderator;
+import Sadna.Client.Member;
+import Sadna.Client.Moderator;
 import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
+import java.util.List;
 
 /**
  *

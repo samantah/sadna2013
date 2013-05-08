@@ -1,26 +1,13 @@
 package Sadna.Client;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
 
 
-import Sadna.Server.Users.Admin;
-import Sadna.Server.Users.Member;
-import Sadna.Server.Users.User;
+
 import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
-
-import com.sun.org.apache.bcel.internal.generic.NEWARRAY;
-
-import Sadna.Client.*;
 public class Main {
 
     public static void main(String argv[]) throws Exception {

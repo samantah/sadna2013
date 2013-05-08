@@ -11,7 +11,6 @@ import Sadna.Client.User;
 import Sadna.db.Forum;
 import java.util.List;
 import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
 
 /**
  *
@@ -21,7 +20,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     String host = "192.168.0.107";
     int port = 3333;
-    
+
     public MainFrame() {
         initComponents();
         this.setResizable(false);
@@ -33,7 +32,7 @@ public class MainFrame extends javax.swing.JFrame {
             listOfForums.addElement(f.getForumName());
         }
         forumsList.setModel(listOfForums);
-        
+
         if (!(CurrentStatus.currUser instanceof SuperAdmin)) {
             jButtonInitiateForum.setVisible(false);
         }
