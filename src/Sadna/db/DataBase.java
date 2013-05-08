@@ -4,9 +4,9 @@
  */
 package Sadna.db;
 
-import Sadna.Server.Users.Member;
-import Sadna.Server.Users.Moderator;
-import Sadna.Server.Users.SuperAdmin;
+import Sadna.Client.Member;
+import Sadna.Client.Moderator;
+import Sadna.Client.SuperAdmin;
 import Sadna.db.API.DBInterface;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -23,8 +23,7 @@ import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 public class DataBase implements DBInterface {
 
