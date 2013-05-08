@@ -3,6 +3,7 @@ package Sadna.Server;
 import Sadna.Client.Admin;
 import Sadna.Client.Member;
 import Sadna.Client.Moderator;
+import Sadna.Client.SuperAdmin;
 import Sadna.Server.API.ServerInterface;
 import Sadna.db.API.DBInterface;
 import Sadna.db.Forum;
@@ -303,6 +304,16 @@ public class ServerToDataBaseHandler implements ServerInterface {
     @Override
     public boolean addModerator(Moderator moderator, SubForum subForum) {
         return _db.addModerator(moderator, subForum);
+    }
+
+    @Override
+    public boolean setSuperAdmin() {
+        return _db.setSuperAdmin();
+    }
+
+    @Override
+    public SuperAdmin getSuperAdmin() {
+        return _db.getSuperAdmin();
     }
 
 }

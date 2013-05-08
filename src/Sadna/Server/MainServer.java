@@ -9,30 +9,29 @@ import Sadna.Server.API.ServerInterface;
 import Sadna.db.DataBase;
 
 public class MainServer {
-	
-	private ServerInterface si = new ServerToDataBaseHandler(new DataBase());
-	private ConnectionHandlerServerInterface ch;
-	
-	private ServerSocket serverSocket;
-	private int portNumber = 3333;
-	
 
-	public MainServer() {
+    private ServerInterface si = new ServerToDataBaseHandler(new DataBase());
+    private ConnectionHandlerServerInterface ch;
+    private ServerSocket serverSocket;
+    private int portNumber = 3333;
+
+    public MainServer() {
         try {
-        	serverSocket = new ServerSocket(portNumber);
+            serverSocket = new ServerSocket(portNumber);
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println(">> Got IOException in MainServer - serverSocket couldn't be initialized");
         }
     }
-	
-	public void handleConnection() {
+
+    public void handleConnection() {
         System.out.println("Waiting for client request...");
 
         //
         // The server do a loop here to accept all connection initiated by the
         // client application.
         //
+        si.setSuperAdmin();
         while (true) {
             try {
                 Socket socket = serverSocket.accept();
@@ -40,15 +39,14 @@ public class MainServer {
                 ch = new ServerConnectionWithClientHandler(socket);
                 new ServerRequestHandler(ch, si);
             } catch (IOException e) {
-         //     e.printStackTrace();
+                //     e.printStackTrace();
                 System.out.println(">> Connection stopped in server (because client stopped)...");
             }
         }
     }
 
     public static void main(String[] args) {
-    	MainServer main = new MainServer();
+        MainServer main = new MainServer();
         main.handleConnection();
     }
- 
 }
