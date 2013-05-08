@@ -6,6 +6,7 @@ package Sadna.db.API;
 
 import Sadna.Client.Member;
 import Sadna.Client.Moderator;
+import Sadna.Client.SuperAdmin;
 import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
@@ -70,5 +71,6 @@ public interface DBInterface {
     boolean setSuperAdmin();
     
     boolean addModerator(Moderator moderator, SubForum subForum);
-    //SuperAdmin getSuperAdmin();
+    
+    SuperAdmin getSuperAdmin();
 }
