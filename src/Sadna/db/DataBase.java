@@ -527,7 +527,7 @@ public class DataBase implements DBInterface {
         ObjectOutputStream obj;
         FileOutputStream outputstream;
         try {
-            String path = dataBaseFolder;
+            String path = dataBaseFolder + "/";
             outputstream = new FileOutputStream(path + userName + ".obj");
             obj = new ObjectOutputStream(outputstream);
             obj.writeObject(sa);
@@ -800,5 +800,10 @@ public class DataBase implements DBInterface {
         System.out.println(db.getMember("forum1", "user1").getUserName());
 //        db.deletePost(post2);
 
+    }
+
+    @Override
+    public boolean addNotifications(int threadId) {
+        return false;
     }
 }

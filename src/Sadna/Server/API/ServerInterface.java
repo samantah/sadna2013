@@ -61,6 +61,8 @@ public interface ServerInterface {
     
     Member getMember(String forumName, String userName);
     
+    boolean addNotification(int threadId);
+    
     boolean addModerator(Moderator moderator, SubForum subForum);
     
     boolean setSuperAdmin();
