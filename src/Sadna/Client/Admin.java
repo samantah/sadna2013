@@ -10,7 +10,7 @@ import java.util.List;
 
 
 
-public class Admin extends Member {
+public class Admin extends Moderator {
 
     /**
 	 * 

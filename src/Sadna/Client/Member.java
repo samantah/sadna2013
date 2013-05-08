@@ -20,7 +20,7 @@ public class Member extends User {
     protected String password;
     protected String email;
     protected String forum;
-    protected Vector<ForumNotification> notifications;
+    protected Vector<ForumNotificationsþ> notifications;
 
     public Member(String userName, String password, String email, String forum, ClientCommunicationHandlerInterface ch) {
         super(ch);
@@ -28,10 +28,10 @@ public class Member extends User {
         this.password = password;
         this.email = email;
         this.forum = forum;
-        this.notifications = new Vector<>();
+        this.notifications = new Vector<ForumNotificationsþ>();
     }
 
-    public Vector<ForumNotification> getNotifications() {
+    public Vector<ForumNotificationsþ> getNotifications() {
         return notifications;
     }
     

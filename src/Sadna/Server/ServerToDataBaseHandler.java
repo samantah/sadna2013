@@ -1,6 +1,7 @@
 package Sadna.Server;
 
 import Sadna.Client.Admin;
+import Sadna.Client.ForumNotificationsþ;
 import Sadna.Client.Member;
 import Sadna.Client.Moderator;
 import Sadna.Client.SuperAdmin;
@@ -11,6 +12,7 @@ import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 import java.util.List;
+import java.util.Vector;
 
 public class ServerToDataBaseHandler implements ServerInterface {
 
@@ -304,6 +306,16 @@ public class ServerToDataBaseHandler implements ServerInterface {
     public boolean addModerator(Moderator moderator, SubForum subForum) {
         return _db.addModerator(moderator, subForum);
     }
+
+
+	@Override
+	public Vector<ForumNotificationsþ> getNotifications(String forumName,
+			String userName) {
+		Member m = _db.getMember(forumName, userName);
+		Vector<ForumNotificationsþ> notifications =  m.getNotifications();
+		m.clearNotifications();
+		return m.getNotifications();
+	}
 
     @Override
     public boolean setSuperAdmin() {
