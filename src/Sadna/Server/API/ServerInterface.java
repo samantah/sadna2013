@@ -22,14 +22,22 @@ public interface ServerInterface {
     boolean register(String forumName, String userName, String password, String email);
 
     boolean login(String forumName, String userName, String password);
- 
+
     boolean initiateForum(String adminUserName, String adminPassword, String forumName);
+
+    boolean deleteForum(String forumName);
     
     boolean addSubForum(SubForum subForum, List<Moderator> moderators);
 
+    boolean deleteSubForum(SubForum subForum);
+
     boolean publishThread(ThreadMessage thread);
-    
+
+    boolean deleteThread(ThreadMessage thread);
+
     boolean postComment(Post comment);
+
+    boolean deleteComment(Post comment);
 
     List<Forum> getForumsList();
 
@@ -42,17 +50,21 @@ public interface ServerInterface {
     List<ThreadMessage> getThreadsList(String forumName, String subForumName);
 
     ThreadMessage getThreadMessage(String forumName, String subForumName, int messageId);
-    
+
     List<Member> getModerators(String forumName, String subForumName);
 
     List<Post> getAllPosts(String forumName, String subForumName, int threadId);
-
-	boolean memberExistsInForum(String forumName, String posterName);
     
+    Post getPost(String forumName, String subForumName, int threadId, int postId);
 
+    boolean memberExistsInForum(String forumName, String posterName);
+    
+    Member getMember(String forumName, String userName);
+    
+    boolean addModerator(Moderator moderator, SubForum subForum);
+    
     /* For later use..  
      * 
      * boolean logout(String forumName, String userName);
      */
-
 }

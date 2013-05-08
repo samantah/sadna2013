@@ -33,5 +33,7 @@ public interface ConnectionHandlerServerInterface{
 	public void closeSocket();
 
 	public void sendAllPosts(List<Post> allPosts);
+
+        public void sendErrorNoAuthorized();
 }
 

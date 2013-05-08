@@ -38,7 +38,7 @@ public class Forum implements Serializable {
     }
 
     public boolean setAdmin(Admin admin) {
-        if (admin == null) {
+        if (admin != null) {
             this.admin = admin;
             return true;
         } else {
