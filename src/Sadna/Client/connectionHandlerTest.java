@@ -3,8 +3,7 @@
  */
 package Sadna.Client;
 
-
-import javax.imageio.spi.RegisterableService;
+ 
 
 import static org.junit.Assert.*;
 
@@ -12,6 +11,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import Sadna.Server.Users.Member;
+import Sadna.Server.Users.SuperAdmin;
+import Sadna.Server.Users.User;
 import Sadna.db.Forum;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;

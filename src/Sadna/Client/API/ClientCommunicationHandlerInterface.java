@@ -49,5 +49,19 @@ public interface ClientCommunicationHandlerInterface {
     
     List<Post> getAllPosts(ThreadMessage tm);
     
+    boolean deleteForum(String forumName, String userName, String password);
+    
+    boolean deleteSubForum(String forumName ,String subForumName, String userName, String password);
+    
+    boolean deleteThreadMessage(ThreadMessage tm, String userName, String password);
+    
+    boolean deletePost(Post p, String userName, String password);
+    
+    boolean addModerator(String forumName, String subForumName, String newModerator, String userName, String password);
+    
+    boolean editThread(ThreadMessage tm, String newText, String userName, String password);
+    
+    boolean editPost(Post p, String newText ,String userName, String password);
+    
     public boolean finishCommunication();
 }

@@ -7,6 +7,9 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 
+import Sadna.Server.Users.Admin;
+import Sadna.Server.Users.Member;
+import Sadna.Server.Users.User;
 import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
@@ -14,14 +17,14 @@ import Sadna.db.ThreadMessage;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-
+import Sadna.Client.*;
 public class Main {
 
     public static void main(String argv[]) throws Exception {
-        String host = "192.168.1.100";
+        String host = "192.168.0.107";
         int port = 3333;
         ConnectionHandler c = new ConnectionHandler(host, port);
-        List<Forum> forumsList = c.getForumsList();
+        //List<Forum> forumsList = c.getForumsList();
 //		SuperAdmin sa = new SuperAdmin("mega-admin", "megaadmin12", "mega@gmail.com", c);
 //		User guest = new User(c);
 //		//Member erez = guest.register("forum1", "erezLefel1", "erez12345", "email");
@@ -96,6 +99,17 @@ public class Main {
 //		/*----GET-FORUM-LIST---*/
 //		//gfltest(c);
 //		
+        //Sadna.Client.Member u = c.login("forum1", "qwertyui", "1234qwer","dfsdf");
+        
+        Forum forum = new Forum("forum1");
+        SubForum subForum = new SubForum(forum, "subForum1");
+        ThreadMessage thread = new ThreadMessage(subForum, "", "", "publisher");
+        thread.setId(0);
+        boolean al_hazain = c.deleteThreadMessage(thread, "hhhhhhhhhh" , "1234qwer");
+        System.out.println(al_hazain);
+        
+        
+        
         c.finishCommunication();
 
     }
@@ -155,7 +169,7 @@ public class Main {
      * @param c
      */
     private static void litest(ConnectionHandler c) {
-        Member m = c.login("forum1", "userName", "password");
+        Sadna.Client.Member m = c.login("forum1", "userName", "password");
         if (m != null) {
             System.out.println(m.userName);
             System.out.println(m.password);
@@ -169,7 +183,7 @@ public class Main {
      * @param c
      */
     private static void regitest(ConnectionHandler c) {
-        Member m = c.register("forum1", "snirElkaras1", "snirfh1234", "email");
+        Sadna.Client.Member m = c.register("forum1", "snirElkaras1", "snirfh1234", "email");
         if (m != null) {
             System.out.println(m.userName);
             System.out.println(m.password);
@@ -184,7 +198,7 @@ public class Main {
      * @param c
      */
     private static void lotest(ConnectionHandler c) {
-        User u = c.logout("forumName", "userName");
+        Sadna.Client.User u = c.logout("forumName", "userName");
         if (u != null) {
             System.out.println("yesh");
         } else {

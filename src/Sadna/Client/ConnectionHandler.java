@@ -14,7 +14,7 @@ import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
- 
+
 public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 	private Socket clientSocket;
 	private PrintWriter stringToServer;
@@ -23,7 +23,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 	private String msgToSend;
 	private String receivedMsg;
 	private String delimiter = "\0";
-	
+
 	public ConnectionHandler(String host, int port){
 		try{
 			clientSocket = new Socket(host, port);
@@ -35,17 +35,17 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		}
 	}
 
-    @Override
-    public boolean finishCommunication() {
-        try {
-            clientSocket.close();
-            return true;
-        } catch (IOException ex) {
-            String message = ex.getMessage();
-            System.out.println(message);
-        }
-        return false;
-    }
+	@Override
+	public boolean finishCommunication() {
+		try {
+			clientSocket.close();
+			return true;
+		} catch (IOException ex) {
+			String message = ex.getMessage();
+			System.out.println(message);
+		}
+		return false;
+	}
 	@Override
 	public Member login(String forumName, String userName, String password){
 		Member loggedInMember = null;
@@ -79,11 +79,11 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		return loggedInMember;
 	}
 
-	public boolean passwordValidity(String password) {
+	private boolean passwordValidity(String password) {
 		return (password.length()<=16 && password.length()>=8 && range(password));
 	}
 
-	public boolean range(String password){
+	private boolean range(String password){
 		boolean charFlag = false;
 		boolean numFlag = false;
 		char currchar;
@@ -198,18 +198,16 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 
 	@Override
 	public User logout(String forumName, String userName) {
-		/*User loggedOutMember = null;
+		User loggedOutMember = null;
 		msgToSend = "LOGOUT\n"+"forumName:\n"+forumName+"\n" +
 		"userName:\n"+userName+"\n";
 		stringToServer.println(msgToSend);
-		try {reciviedMsg = stringFromServer.readLine();}
+		try {receivedMsg = stringFromServer.readLine();}
 		catch (IOException e) {}
-		if(reciviedMsg.contains("200ok")){
+		if(receivedMsg.contains("200ok")){
 			loggedOutMember = new User(this);
 		}
 		return loggedOutMember;
-		*///FOR FUTURE USE
-		return new User(this);
 	}
 
 	@Override
@@ -280,7 +278,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 	public List<Post> getAllPosts(ThreadMessage tm) {
 		List<Post> allPosts = null;
 		SubForum subForum = tm.getSubForum();
-                Forum forum = subForum.getForum();
+		Forum forum = subForum.getForum();
 		String forumName = forum.getForumName();
 		String subForumName = subForum.getSubForumName();
 		int threadID = tm.getId();
@@ -293,4 +291,128 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		catch (ClassNotFoundException e){}
 		return allPosts;
 	}
+
+	@Override
+	public boolean deleteForum(String forumName, String userName, String password) {
+		boolean deleted = false;
+		msgToSend = "DELF\n"+"forumName:\n"+forumName+"\n"+"userName:\n"
+		+userName+"\n"+"password:\n"+password+"\n";
+		msgToSend+=delimiter;
+		stringToServer.println(msgToSend);
+		if(receivedMsg.contains("200ok")){
+			deleted = true;
+		}
+		return deleted;
+	}
+
+	@Override
+	public boolean deleteSubForum(String forumName, String subForumName, String userName, String password) {
+
+		boolean deleted = false;
+		msgToSend = "DELSF\n"+"forumName:\n"+forumName+"\n"+"subForumName:\n"+subForumName+"\n"+"userName:\n"
+		+userName+"\n"+"password:\n"+password+"\n";
+		msgToSend+=delimiter;
+		stringToServer.println(msgToSend);
+		if(receivedMsg.contains("200ok")){
+			deleted = true;
+		}
+		return deleted;
+	}
+
+	@Override
+	public boolean deleteThreadMessage(ThreadMessage tm, String userName, String password) {
+		boolean deleted = false;
+		SubForum subForum = tm.getSubForum();
+		String subForumName = subForum.getSubForumName();
+		Forum forum = subForum.getForum();
+		String forumName = forum.getForumName();
+		int tmId = tm.getId();
+		msgToSend = "DELTHRD\n"+"forumName:\n"+forumName+"\n"+"subForumName:\n"+subForumName+"\n"+
+		"threadId:\n"+tmId+"\n"+"userName:\n"+userName+"\n"+"password:\n"+password+"\n";
+		msgToSend+=delimiter;
+		stringToServer.println(msgToSend);
+		if(receivedMsg.contains("200ok")){
+			deleted = true;
+		}
+		return deleted;
+	}
+
+	@Override
+	public boolean deletePost(Post p, String userName, String password) {
+		boolean deleted = false;
+		int pId = p.getId();
+		ThreadMessage tm = p.getThread();
+		SubForum subForum = tm.getSubForum();
+		String subForumName = subForum.getSubForumName();
+		Forum forum = subForum.getForum();
+		String forumName = forum.getForumName();
+		int tmId = tm.getId();
+		msgToSend = "DELPST\n"+"forumName:\n"+forumName+"\n"+"subForumName:\n"+subForumName+"\n"+
+		"threadId:\n"+tmId+"\n"+"postId:\n"+pId+"\n"+"userName:\n"+userName+"\n"+"password:\n"+password+"\n";
+		msgToSend+=delimiter;
+		stringToServer.println(msgToSend);
+		if(receivedMsg.contains("200ok")){
+			deleted = true;
+		}
+		return deleted;
+	}
+
+
+	@Override
+	public boolean editThread(ThreadMessage tm, String newTest,
+			String userName, String password) {
+		boolean edited = false;
+		SubForum subForum = tm.getSubForum();
+		String subForumName = subForum.getSubForumName();
+		Forum forum = subForum.getForum();
+		String forumName = forum.getForumName();
+		int tmId = tm.getId();
+		msgToSend = "EDTTHRD\n"+"forumName:\n"+forumName+"\n"+"subForumName:\n"+subForumName+"\n"+
+		"threadId:\n"+tmId+"\n"+"newText:\n"+newTest+"\n"+"userName:\n"+userName+
+		"\n"+"password:\n"+password+"\n";
+		msgToSend+=delimiter;
+		stringToServer.println(msgToSend);
+		if(receivedMsg.contains("200ok")){
+			edited = true;
+		}
+		return edited;
+	}
+
+	@Override
+	public boolean editPost(Post p, String newText, String userName,
+			String password) {
+		boolean deleted = false;
+		int pId = p.getId();
+		ThreadMessage tm = p.getThread();
+		SubForum subForum = tm.getSubForum();
+		String subForumName = subForum.getSubForumName();
+		Forum forum = subForum.getForum();
+		String forumName = forum.getForumName();
+		int tmId = tm.getId();
+		msgToSend = "DELPST\n"+"forumName:\n"+forumName+"\n"+"subForumName:\n"+subForumName+"\n"+
+		"threadId:\n"+tmId+"\n"+"postId:\n"+pId+"newText:\n"+newText+"\n"+"userName:\n"+
+		userName+"\n"+"password:\n"+password+"\n";
+		msgToSend+=delimiter;
+		stringToServer.println(msgToSend);
+		if(receivedMsg.contains("200ok")){
+			deleted = true;
+		}
+		return deleted;
+	}
+
+	@Override
+	public boolean addModerator(String forumName, String subForumName,
+			String newModerator, String userName, String password) {
+		boolean added = false;
+		msgToSend = "ADDMOD\n"+"forumName:\n"+forumName+"\n"+"subForumName:\n"+subForumName+"\n"
+		+"newModerator:\n"+newModerator+"\n"+"userName:\n"+userName+"\n"+"password:\n"+password+"\n";
+		msgToSend+=delimiter;
+		stringToServer.println(msgToSend);
+		if(receivedMsg.contains("200ok")){
+			added = true;
+		}
+		return added;
+	}
+
+	
 }
