@@ -9,8 +9,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.List;
 import java.util.Vector;
-
-import Sadna.Client.ForumNotificationsþ;
 import Sadna.Server.API.ConnectionHandlerServerInterface;
 import Sadna.db.Forum;
 import Sadna.db.Post;
@@ -173,8 +171,8 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
         stringToClient.println("401 Unauthorized");
     }
 
-	@Override
-	public void sendNotifications(Vector<ForumNotificationsþ> notifications) {
+    @Override
+    public void sendNotifications(Vector<ForumNotification> notifications) {
 		try {
             objectOutputToClient.writeObject(notifications);
         } catch (IOException e) {
@@ -182,6 +180,6 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
             System.out.println(">> Got Exception in ServerConnectionWithClientHandler - sendNotifications");
 
         }
-		
-	}
+
+    }
 }

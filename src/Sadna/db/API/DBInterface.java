@@ -4,7 +4,6 @@
  */
 package Sadna.db.API;
 
-import Sadna.Client.ForumNotificationsþ;
 import Sadna.Client.Member;
 import Sadna.Client.Moderator;
 import Sadna.Client.SuperAdmin;
@@ -13,7 +12,6 @@ import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 import java.util.List;
-import java.util.Vector;
 
 
 /**
@@ -76,7 +74,4 @@ public interface DBInterface {
     
     SuperAdmin getSuperAdmin();
 
-    public boolean addNotifications(int threadId);
-
-	Vector<ForumNotificationsþ> getNotification(Member m);
 }

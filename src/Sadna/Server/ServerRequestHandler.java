@@ -5,7 +5,6 @@
 package Sadna.Server;
 
 import Sadna.Client.Admin;
-import Sadna.Client.ForumNotificationsþ;
 import Sadna.Client.Member;
 import Sadna.Client.Moderator;
 import Sadna.Server.API.ConnectionHandlerServerInterface;
@@ -155,7 +154,7 @@ public class ServerRequestHandler implements Runnable {
 		if(m.getPassword().equals(password)){
 			String forumName = m.getForum();
 			String userName = m.getUserName();
-			Vector<ForumNotificationsþ> notifications = _si.getNotifications(forumName, userName);
+			Vector<ForumNotification> notifications = _si.getNotifications(forumName, userName);
 			_ch.sendNotifications(notifications);
 		}
 		else{

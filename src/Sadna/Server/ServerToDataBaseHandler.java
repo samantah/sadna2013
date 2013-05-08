@@ -1,7 +1,6 @@
 package Sadna.Server;
 
 import Sadna.Client.Admin;
-import Sadna.Client.ForumNotificationsþ;
 import Sadna.Client.Member;
 import Sadna.Client.Moderator;
 import Sadna.Client.SuperAdmin;
@@ -309,10 +308,10 @@ public class ServerToDataBaseHandler implements ServerInterface {
 
 
 	@Override
-	public Vector<ForumNotificationsþ> getNotifications(String forumName,
+	public Vector<ForumNotification> getNotifications(String forumName,
 			String userName) {
 		Member m = _db.getMember(forumName, userName);
-		Vector<ForumNotificationsþ> notifications =  m.getNotifications();
+		Vector<ForumNotification> notifications =  m.getNotifications();
 		m.clearNotifications();
 		return m.getNotifications();
 	}

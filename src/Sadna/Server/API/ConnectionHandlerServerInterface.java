@@ -1,10 +1,10 @@
 package Sadna.Server.API;
 
+import Sadna.Server.ForumNotification;
+import Sadna.db.Forum;
 import java.util.List;
 import java.util.Vector;
 
-import Sadna.Client.ForumNotificationsþ;
-import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
@@ -38,6 +38,6 @@ public interface ConnectionHandlerServerInterface{
 
 	public void sendErrorNoAuthorized();
 
-	public void sendNotifications(Vector<ForumNotificationsþ> notifications);
+	public void sendNotifications(Vector<ForumNotification> notifications);
 }
 
