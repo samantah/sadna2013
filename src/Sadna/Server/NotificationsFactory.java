@@ -13,7 +13,7 @@ public class NotificationsFactory {
         _si = si;
     }
 
-    public void sendNotifications(Post post) {
+    public boolean sendNotifications(Post post) {
         String subForumName = post.getThread().getSubForum().getSubForumName();
         String forumName = post.getThread().getSubForum().getForum().getForumName();
         int threadID = post.getThread().getId();
@@ -24,8 +24,12 @@ public class NotificationsFactory {
             Member currMember = _si.getMember(forumName, memberName);
             if (currMember != null) {
                 currMember.addNotification(new ForumNotification(txt));
+                _si.addMember(currMember);
+            } else {
+                return false;
             }
         }
+        return true;
 
     }
 }
