@@ -802,8 +802,4 @@ public class DataBase implements DBInterface {
 
     }
 
-    @Override
-    public boolean addNotifications(int threadId) {
-        return false;
-    }
 }

@@ -7,11 +7,13 @@ package Sadna.Server.API;
 import Sadna.Client.Member;
 import Sadna.Client.Moderator;
 import Sadna.Client.SuperAdmin;
+import Sadna.Server.ForumNotification;
 import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 import java.util.List;
+import java.util.Vector;
 
 /**
  *
@@ -72,4 +74,6 @@ public interface ServerInterface {
      * 
      * boolean logout(String forumName, String userName);
      */
+
+    public Vector<ForumNotification> getNotifications(String forumName, String userName);
 }
