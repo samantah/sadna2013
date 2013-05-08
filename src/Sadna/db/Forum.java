@@ -4,7 +4,8 @@
  */
 package Sadna.db;
 
-import Sadna.Client.Admin;
+import Sadna.Server.Users.Admin;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

@@ -4,9 +4,9 @@
  */
 package Sadna.db;
 
-import Sadna.Client.Member;
-import Sadna.Client.Moderator;
-import Sadna.Client.SuperAdmin;
+import Sadna.Server.Users.Member;
+import Sadna.Server.Users.Moderator;
+import Sadna.Server.Users.SuperAdmin;
 import Sadna.db.API.DBInterface;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

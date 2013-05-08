@@ -6,9 +6,9 @@ package Sadna.db.API;
 
 import java.util.List;
 
-import Sadna.Client.Member;
-import Sadna.Client.Moderator;
-import Sadna.Client.SuperAdmin;
+import Sadna.Server.Users.Member;
+import Sadna.Server.Users.Moderator;
+import Sadna.Server.Users.SuperAdmin;
 import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
