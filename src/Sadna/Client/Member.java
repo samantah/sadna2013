@@ -31,6 +31,10 @@ public class Member extends User {
         this.notifications = new Vector<>();
     }
 
+    public Vector<ForumNotification> getNotifications() {
+        return notifications;
+    }
+
     public boolean postComment(Post post) {
         return conHand.postComment(post);
     }
