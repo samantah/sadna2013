@@ -299,6 +299,8 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		+userName+"\n"+"password:\n"+password+"\n";
 		msgToSend+=delimiter;
 		stringToServer.println(msgToSend);
+		try {receivedMsg = stringFromServer.readLine();}
+		catch (IOException e) {}
 		if(receivedMsg.contains("200ok")){
 			deleted = true;
 		}
@@ -313,6 +315,8 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		+userName+"\n"+"password:\n"+password+"\n";
 		msgToSend+=delimiter;
 		stringToServer.println(msgToSend);
+		try {receivedMsg = stringFromServer.readLine();}
+		catch (IOException e) {}
 		if(receivedMsg.contains("200ok")){
 			deleted = true;
 		}
@@ -331,6 +335,8 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		"threadId:\n"+tmId+"\n"+"userName:\n"+userName+"\n"+"password:\n"+password+"\n";
 		msgToSend+=delimiter;
 		stringToServer.println(msgToSend);
+		try {receivedMsg = stringFromServer.readLine();}
+		catch (IOException e) {}
 		if(receivedMsg.contains("200ok")){
 			deleted = true;
 		}
@@ -351,6 +357,8 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		"threadId:\n"+tmId+"\n"+"postId:\n"+pId+"\n"+"userName:\n"+userName+"\n"+"password:\n"+password+"\n";
 		msgToSend+=delimiter;
 		stringToServer.println(msgToSend);
+		try {receivedMsg = stringFromServer.readLine();}
+		catch (IOException e) {}
 		if(receivedMsg.contains("200ok")){
 			deleted = true;
 		}
@@ -372,6 +380,8 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		"\n"+"password:\n"+password+"\n";
 		msgToSend+=delimiter;
 		stringToServer.println(msgToSend);
+		try {receivedMsg = stringFromServer.readLine();}
+		catch (IOException e) {}
 		if(receivedMsg.contains("200ok")){
 			edited = true;
 		}
@@ -394,6 +404,8 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		userName+"\n"+"password:\n"+password+"\n";
 		msgToSend+=delimiter;
 		stringToServer.println(msgToSend);
+		try {receivedMsg = stringFromServer.readLine();}
+		catch (IOException e) {}
 		if(receivedMsg.contains("200ok")){
 			deleted = true;
 		}
@@ -408,7 +420,9 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		+"newModerator:\n"+newModerator+"\n"+"userName:\n"+userName+"\n"+"password:\n"+password+"\n";
 		msgToSend+=delimiter;
 		stringToServer.println(msgToSend);
-		if(receivedMsg.contains("200ok")){
+		try {receivedMsg = stringFromServer.readLine();}
+		catch (IOException e) {}
+		if(receivedMsg!=null && receivedMsg.contains("200ok")){
 			added = true;
 		}
 		return added;

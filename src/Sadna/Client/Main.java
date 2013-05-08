@@ -17,6 +17,9 @@ import Sadna.db.ThreadMessage;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.sun.org.apache.bcel.internal.generic.NEWARRAY;
+
 import Sadna.Client.*;
 public class Main {
 
@@ -99,14 +102,17 @@ public class Main {
 //		/*----GET-FORUM-LIST---*/
 //		//gfltest(c);
 //		
-        //Sadna.Client.Member u = c.login("forum1", "qwertyui", "1234qwer","dfsdf");
-        
-        Forum forum = new Forum("forum1");
-        SubForum subForum = new SubForum(forum, "subForum1");
-        ThreadMessage thread = new ThreadMessage(subForum, "", "", "publisher");
-        thread.setId(0);
-        boolean al_hazain = c.deleteThreadMessage(thread, "hhhhhhhhhh" , "1234qwer");
-        System.out.println(al_hazain);
+      //  Sadna.Client.Member u = c.register("forum1", "qwertyui", "1234qwer","dfsdf");
+//        c.initiateForum("myForum", "snirsnir", "snir1234");
+//        Forum forum = new Forum("myForum");
+//        SubForum subForum = new SubForum(forum, "subForum1");
+//        c.addSubForum(subForum, new ArrayList<Moderator>());
+//        System.out.println(c.register("myForum", "moshe", "moshe1234", "email").getUserName());
+        System.out.println(c.addModerator("myForum", "subForum1", "moshe", "snirsnir", "snir1234"));
+//        ThreadMessage thread = new ThreadMessage(subForum, "", "", "publisher");
+//        thread.setId(0);
+//        boolean al_hazain = c.deleteThreadMessage(thread, "hhhhhhhhhh" , "1234qwer");
+//        System.out.println(al_hazain);
         
         
         
