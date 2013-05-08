@@ -26,7 +26,7 @@ public interface ServerInterface {
     boolean initiateForum(String adminUserName, String adminPassword, String forumName);
 
     boolean deleteForum(String forumName);
-    
+
     boolean addSubForum(SubForum subForum, List<Moderator> moderators);
 
     boolean deleteSubForum(SubForum subForum);
@@ -54,21 +54,20 @@ public interface ServerInterface {
     List<Member> getModerators(String forumName, String subForumName);
 
     List<Post> getAllPosts(String forumName, String subForumName, int threadId);
-    
+
     Post getPost(String forumName, String subForumName, int threadId, int postId);
 
     boolean memberExistsInForum(String forumName, String posterName);
-    
+
     Member getMember(String forumName, String userName);
-    
-    boolean addNotification(int threadId);
-    
+
     boolean addModerator(Moderator moderator, SubForum subForum);
-    
+
     boolean setSuperAdmin();
-    
+
     SuperAdmin getSuperAdmin();
     
+    boolean addMember(Member member);
     /* For later use..  
      * 
      * boolean logout(String forumName, String userName);

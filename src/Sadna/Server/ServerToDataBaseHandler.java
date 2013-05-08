@@ -12,7 +12,6 @@ import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 import java.util.List;
 
-
 public class ServerToDataBaseHandler implements ServerInterface {
 
     private DBInterface _db;
@@ -317,8 +316,7 @@ public class ServerToDataBaseHandler implements ServerInterface {
     }
 
     @Override
-    public boolean addNotification(int threadId) {
-        return _db.addNotifications(threadId);
+    public boolean addMember(Member member) {
+       return _db.addMember(member);
     }
-
 }

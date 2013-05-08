@@ -18,7 +18,7 @@ import javax.swing.DefaultListModel;
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    String host = "192.168.0.107";
+    String host = "192.168.0.106";
     int port = 3333;
 
     public MainFrame() {

@@ -495,7 +495,7 @@ public class DataBase implements DBInterface {
         File listOfFiles[] = folder.listFiles();
         for (int i = 0; i < listOfFiles.length; i++) {
             String nameOfFile = listOfFiles[i].getName();
-            if (!nameOfFile.endsWith(".obj")) {
+            if (!nameOfFile.endsWith(".obj") || nameOfFile.contains("Admin")) {
                 continue;
             }
             try {
