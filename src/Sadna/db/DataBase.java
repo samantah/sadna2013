@@ -19,9 +19,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DataBase implements DBInterface {
 
@@ -587,8 +590,10 @@ public class DataBase implements DBInterface {
                 Member readObject = (Member) objin.readObject();
                 retList.add(readObject);
             }
-            objin.close();
-            inputStream.close();
+            if (objin != null && inputStream != null) {
+                objin.close();
+                inputStream.close();
+            }
 
         } catch (FileNotFoundException ex) {
             String message = ex.getMessage();
@@ -637,6 +642,124 @@ public class DataBase implements DBInterface {
         return retList;
     }
 
+    @Override
+    public boolean addModerator(Moderator moderator, SubForum subForum) {
+        String forum = moderator.getForum();
+        String userName = moderator.getUserName();
+        String subForumName = subForum.getSubForumName();
+        String path = this.dataBaseFolder + "/" + forum
+                + "/" + subForumName + "/moderators.txt";
+        try {
+            PrintWriter bw = new PrintWriter(new FileWriter(path, true));
+            bw.println(userName);
+            bw.close();
+            return true;
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+            return false;
+        }
+    }
+
+    @Override
+    public boolean deleteForum(Forum forum) {
+        //get the names and IDs of the post
+        String forumName = forum.getForumName();
+        String path = dataBaseFolder + "/";
+        String pathToFolder = path + "/" + forumName + "/";
+        String pathToForum = path + "/" + forumName + ".obj";
+        File fileToDelete = new File(pathToForum);
+        fileToDelete.delete();
+        deleteFolder(pathToFolder);
+        return true;
+    }
+
+    @Override
+    public boolean deleteSubForum(SubForum subForum) {
+        //get the names and IDs of the post
+        String forum = subForum.getForum().getForumName();
+        String subForumStr = subForum.getSubForumName();
+        ObjectOutputStream obj;
+        FileOutputStream outputstream;
+        String path = dataBaseFolder + "/" + forum + "/";
+        String pathToFolder = path + "/" + subForumStr + "/";
+        String pathToSubForum = path + "/" + subForumStr + ".obj";
+        File fileToDelete = new File(pathToSubForum);
+        fileToDelete.delete();
+        deleteFolder(pathToFolder);
+        return true;
+    }
+
+    @Override
+    public boolean deleteMember(Member member) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean deleteModerator(Moderator moderator) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean deletePost(Post post) {
+        //get the names and IDs of the post
+        String forum = post.getThread().getSubForum().getForum().getForumName();
+        String subForum = post.getThread().getSubForum().getSubForumName();
+        int threadMessage = post.getThread().getId();
+        int postid = post.getId();
+        ObjectOutputStream obj;
+        FileOutputStream outputstream;
+        File fileToDelete;
+
+
+        String path = dataBaseFolder + "/" + forum
+                + "/" + subForum + "/" + "thread" + df.format(threadMessage) + "/"; //save the path of the post
+        fileToDelete = new File(path + "/message" + df.format(postid) + ".obj");
+        if (fileToDelete.delete()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean deleteThread(ThreadMessage thread) {
+        //get the names and IDs of the thread
+        String forum = thread.getSubForum().getForum().getForumName();
+        String subForumStr = thread.getSubForum().getSubForumName();
+        int threadMessage = thread.getId();
+        ObjectOutputStream obj;
+        FileOutputStream outputstream;
+        File fileToDelete;
+        SubForum subForumToRewrite = thread.getSubForum();
+        String pathToSubForum = this.dataBaseFolder + "/" + forum + "/";
+        String path = dataBaseFolder + "/" + forum
+                + "/" + subForumStr + "/"; //save the path of the post
+        String pathToFolder = path + "thread" + df.format(threadMessage) + "/";
+        fileToDelete = new File(path + "thread"
+                + df.format(threadMessage) + ".obj");
+        fileToDelete.delete();
+        deleteFolder(pathToFolder);
+        return true;
+
+    }
+
+    private void deleteFolder(String path) {
+        File f = new File(path);
+        File[] listFiles = f.listFiles();
+        System.out.println(listFiles.length);
+        if (listFiles == null) {
+            return;
+        }
+        for (int i = 0; i < listFiles.length; i++) {
+            if (listFiles[i].isDirectory()) {
+                String newPath = listFiles[i] + "/";
+                deleteFolder(newPath);
+            }
+            listFiles[i].delete();
+        }
+        f.delete();
+    }
+
     public static void main(String args[]) {
         DataBase db = new DataBase();
         Forum forum = new Forum("forum1");
@@ -676,26 +799,7 @@ public class DataBase implements DBInterface {
         Member member = new Member("user1", "pass1234", "mail", "forum1", null);
         db.addMember(member);
         System.out.println(db.getMember("forum1", "user1").getUserName());
-    }
+//        db.deletePost(post2);
 
-    @Override
-    public boolean addModerator(Moderator moderator) {
-        return false;
-    }
-
-    public void deleteAll(String path) {
-        File f = new File(path);
-        File[] listFiles = f.listFiles();
-        System.out.println(listFiles.length);
-        if (listFiles == null) {
-            return;
-        }
-        for (int i = 0; i < listFiles.length; i++) {
-            if (listFiles[i].isDirectory()) {
-                String newPath = listFiles[i] + "/";
-                deleteAll(newPath);
-            }
-            listFiles[i].delete();
-        }
     }
 }

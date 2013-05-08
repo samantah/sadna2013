@@ -25,19 +25,19 @@ public interface DBInterface {
     SubForum getSubForum(String forumName, String subForumName);
 
     ThreadMessage getThread(String forumName, String subForumName, int threadID);
-    
+
     Post getPost(String forumName, String subForumName, int ThreadID, int postID);
 
     Member getMember(String forumName, String userName);
-    
+
     List<Member> getModerators(String forumName, String subForumName);
 
     List<SubForum> getSubForumsList(String forumName);
 
     List<ThreadMessage> getThreadsList(String forumName, String subForumName);
-    
+
     List<Post> getPostList(String forumName, String subForumName, int threadID);
-    
+
     List<Forum> getForumsList();
 
     int getNumberOfSubforums(String forumName);
@@ -49,18 +49,27 @@ public interface DBInterface {
     boolean addSubForum(SubForum subForum, List<Moderator> listOfModerators);
 
     boolean addMember(Member member);
-    
-    boolean addModerator(Moderator moderator);
 
     boolean addPost(Post post);
 
     boolean addThread(ThreadMessage thread);
+
+    boolean deleteForum(Forum forum);
+
+    boolean deleteSubForum(SubForum subForum);
+
+    boolean deleteMember(Member member);
+
+    boolean deleteModerator(Moderator moderator);
+
+    boolean deletePost(Post post);
+
+    boolean deleteThread(ThreadMessage thread);
     
     List<Member> getAllMembers(String forumName);
-    
+
     boolean setSuperAdmin();
     
+    boolean addModerator(Moderator moderator, SubForum subForum);
     //SuperAdmin getSuperAdmin();
-    
-
 }
