@@ -2,6 +2,7 @@ package Sadna.Client;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import java.io.*;
 import java.net.*;
 
@@ -427,6 +428,16 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface{
 		}
 		return added;
 	}
+	@Override
 
-	
+	public Vector<ForumNotificationsþ> getNotification(String forumName, String userName, String password){
+		Vector<ForumNotificationsþ> notifications = null;
+		msgToSend = "NOTI\n"+"forumName:\n"+forumName+"\n"+"userName:\n"+userName+"\n"+"password:\n"+password+"\n";
+		msgToSend += delimiter;
+		stringToServer.println(msgToSend);
+		try {notifications = (Vector<ForumNotificationsþ>)objectFromServer.readObject();}
+		catch (IOException e) {}
+		catch (ClassNotFoundException e){}
+		return notifications;	
+	}
 }

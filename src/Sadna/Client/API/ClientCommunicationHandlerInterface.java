@@ -4,6 +4,7 @@
  */
 package Sadna.Client.API;
 
+import Sadna.Client.ForumNotificationsþ;
 import Sadna.Client.Member;
 import Sadna.Client.Moderator;
 import Sadna.Client.User;
@@ -12,6 +13,7 @@ import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 import java.util.List;
+import java.util.Vector;
 
 /**
  *
@@ -60,6 +62,8 @@ public interface ClientCommunicationHandlerInterface {
     boolean editThread(ThreadMessage tm, String newText, String userName, String password);
 
     boolean editPost(Post p, String newText, String userName, String password);
+    
+    Vector<ForumNotificationsþ> getNotification(String forumName, String userName, String password);
 
     public boolean finishCommunication();
 }

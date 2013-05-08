@@ -1,7 +1,9 @@
 package Sadna.Server.API;
 
 import java.util.List;
+import java.util.Vector;
 
+import Sadna.Client.ForumNotificationsþ;
 import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
@@ -29,11 +31,13 @@ public interface ConnectionHandlerServerInterface{
 	public void sendForum(Forum forum);
 
 	public String receiveRequestFromClient();
-	
+
 	public void closeSocket();
 
 	public void sendAllPosts(List<Post> allPosts);
 
-        public void sendErrorNoAuthorized();
+	public void sendErrorNoAuthorized();
+
+	public void sendNotifications(Vector<ForumNotificationsþ> notifications);
 }
 
