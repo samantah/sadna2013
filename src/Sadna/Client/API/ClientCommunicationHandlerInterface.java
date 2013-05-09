@@ -21,8 +21,6 @@ import java.util.Vector;
  * @author fistuk
  */
 public interface ClientCommunicationHandlerInterface {
-	
-	// removeModerator()
      
     Member login(String forumName, String userName, String password);
 
@@ -69,4 +67,11 @@ public interface ClientCommunicationHandlerInterface {
     Vector<ForumNotification> getNotification(String forumName, String userName, String password);
 
     public boolean finishCommunication();
+    
+    boolean removeModerator(String forumName, String moderatorName, String userName, String password);
+
+    int getThreadCounter(String forumName, String userName, String password);
+    
+        
+    
 }
