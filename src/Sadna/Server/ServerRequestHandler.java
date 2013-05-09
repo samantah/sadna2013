@@ -28,15 +28,15 @@ public class ServerRequestHandler implements Runnable {
 
 	private ConnectionHandlerServerInterface _ch;
 	private ServerInterface _si;
-    private NotificationsFactory notificationsFactory;
+	private NotificationsFactory notificationsFactory;
 
-    public ServerRequestHandler(ConnectionHandlerServerInterface ch, ServerInterface si) {
-        _ch = ch;
-        _si = si;
-        this.notificationsFactory = new NotificationsFactory(si);
-        Thread t = new Thread(this);
-        t.start();
-    }
+	public ServerRequestHandler(ConnectionHandlerServerInterface ch, ServerInterface si) {
+		_ch = ch;
+		_si = si;
+		this.notificationsFactory = new NotificationsFactory(si);
+		Thread t = new Thread(this);
+		t.start();
+	}
 
 
 	@Override
@@ -132,7 +132,7 @@ public class ServerRequestHandler implements Runnable {
 			handleDeleteSubForum(sf, parsedReq[6], parsedReq[8]);
 			break;
 		case "DELF":
-			//TO DO!!!! 
+			//todo
 			break;
 		case "ADDMOD":
 			sf = _si.getSubForum(parsedReq[2], parsedReq[4]);
@@ -230,14 +230,15 @@ public class ServerRequestHandler implements Runnable {
 
 
 	public boolean handleDeletePost(Post p, String requester, String password) {
-		boolean succeeded = false;
 		String publisher = p.getPublisher();
 		String forumName = p.getThread().getSubForum().getForum().getForumName();
 		Member member = _si.getMember(forumName, publisher);
-		String publisherName = member.getUserName();
-		String publisherPassword = member.getPassword();
-		if (requester.equals(publisherName) && password.equals(publisherPassword)) {
-			return deletePostAndSendOk(p);
+		if(member != null){
+			String publisherName = member.getUserName();
+			String publisherPassword = member.getPassword();
+			if (requester.equals(publisherName) && password.equals(publisherPassword)) {
+				return deletePostAndSendOk(p);
+			}
 		}
 		SubForum subForum = p.getThread().getSubForum();
 		String subForumName = subForum.getSubForumName();
@@ -260,17 +261,17 @@ public class ServerRequestHandler implements Runnable {
 		return false;
 	}
 
-    public boolean handlePostComment(Post post) {
-        boolean succeeded = false;
-        succeeded = _si.postComment(post);
-        if (succeeded) {
-            _ch.sendOK();
-        } else {
-            _ch.sendErrorInServer();
-        }
-        notificationsFactory.sendNotifications(post);
-        return succeeded;
-    }
+	public boolean handlePostComment(Post post) {
+		boolean succeeded = false;
+		succeeded = _si.postComment(post);
+		if (succeeded) {
+			_ch.sendOK();
+		} else {
+			_ch.sendErrorInServer();
+		}
+		notificationsFactory.sendNotifications(post);
+		return succeeded;
+	}
 
 
 	public void handleGetForumsList() {
@@ -310,101 +311,102 @@ public class ServerRequestHandler implements Runnable {
      return null;
      }
 	 */
-	 public boolean handleDeleteThread(ThreadMessage tm, String requester, String password) {
-		 boolean succeeded = false;
-		 String publisher = tm.getPublisher();
-		 String forumName = tm.getSubForum().getForum().getForumName();
-		 Member member = _si.getMember(forumName, publisher);
-		 if (member != null) {
-			 String publisherName = member.getUserName();
-			 String publisherPassword = member.getPassword();
-			 if (requester.equals(publisherName) && password.equals(publisherPassword)) {
-				 return deleteThreadAndSendOk(tm);
-			 }
-		 }
-		 SubForum subForum = tm.getSubForum();
-		 String subForumName = subForum.getSubForumName();
-		 List<Member> moderators = _si.getModerators(forumName, subForumName);
-		 for (Iterator<Member> it = moderators.iterator(); it.hasNext();) {
-			 Member currModerator = it.next();
-			 String moderatorName = currModerator.getUserName();
-			 String moderatorPassword = currModerator.getPassword();
-			 if (requester.equals(moderatorName) && password.equals(moderatorPassword)) {
-				 return deleteThreadAndSendOk(tm);
-			 }
-		 }
-		 Admin admin = _si.getForum(forumName).getAdmin();
-		 String adminName = admin.getUserName();
-		 String adminPassword = admin.getPassword();
-		 if (requester.equals(adminName) && password.equals(adminPassword)) {
-			 return deleteThreadAndSendOk(tm);
-		 }
-		 _ch.sendErrorNoAuthorized();
-		 return false;
-	 }
+	public boolean handleDeleteThread(ThreadMessage tm, String requester, String password) {
+		String publisher = tm.getPublisher();
+		String forumName = tm.getSubForum().getForum().getForumName();
+		Member member = _si.getMember(forumName, publisher);
+		if (member != null) {
+			String publisherName = member.getUserName();
+			String publisherPassword = member.getPassword();
+			if (requester.equals(publisherName) && password.equals(publisherPassword)) {
+				return deleteThreadAndSendOk(tm);
+			}
+		}
+		SubForum subForum = tm.getSubForum();
+		String subForumName = subForum.getSubForumName();
+		List<Member> moderators = _si.getModerators(forumName, subForumName);
+		for (Iterator<Member> it = moderators.iterator(); it.hasNext();) {
+			Member currModerator = it.next();
+			String moderatorName = currModerator.getUserName();
+			String moderatorPassword = currModerator.getPassword();
+			if (requester.equals(moderatorName) && password.equals(moderatorPassword)) {
+				return deleteThreadAndSendOk(tm);
+			}
+		}
+		Admin admin = _si.getForum(forumName).getAdmin();
+		String adminName = admin.getUserName();
+		String adminPassword = admin.getPassword();
+		if (requester.equals(adminName) && password.equals(adminPassword)) {
+			return deleteThreadAndSendOk(tm);
+		}
+		_ch.sendErrorNoAuthorized();
+		return false;
+	}
 
-	 private boolean deletePostAndSendOk(Post p) {
-		 _si.deleteComment(p);
-		 _ch.sendOK();
-		 return true;
-	 }
+	private boolean deletePostAndSendOk(Post p) {
+		notificationsFactory.sendNotifications(p);
+		_si.deleteComment(p);
+		_ch.sendOK();
+		return true;
+	}
 
-	 private boolean deleteThreadAndSendOk(ThreadMessage tm) {
-		 _si.deleteThread(tm);
-		 _ch.sendOK();
-		 return true;
-	 }
+	private boolean deleteThreadAndSendOk(ThreadMessage tm) {
+		notificationsFactory.sendNotifications(tm);
+		_si.deleteThread(tm);
+		_ch.sendOK();
+		return true;
+	}
 
-	 private boolean deleteSubForumAndSendOk(SubForum sf) {
-		 _si.deleteSubForum(sf);
-		 _ch.sendOK();
-		 return true;
-	 }
+	private boolean deleteSubForumAndSendOk(SubForum sf) {
+		_si.deleteSubForum(sf);
+		_ch.sendOK();
+		return true;
+	}
 
-	 private boolean handleDeleteSubForum(SubForum sf, String requester, String password) {
-		 Admin admin = sf.getForum().getAdmin();
-		 boolean equals = admin.getUserName().equals(requester) && admin.getPassword().equals(password);
-		 if (equals) {
-			 _si.deleteSubForum(sf);
-			 _ch.sendOK();
-			 return true;
-		 }
-		 _ch.sendErrorNoAuthorized();
-		 return false;
-	 }
+	private boolean handleDeleteSubForum(SubForum sf, String requester, String password) {
+		Admin admin = sf.getForum().getAdmin();
+		boolean equals = admin.getUserName().equals(requester) && admin.getPassword().equals(password);
+		if (equals) {
+			_si.deleteSubForum(sf);
+			_ch.sendOK();
+			return true;
+		}
+		_ch.sendErrorNoAuthorized();
+		return false;
+	}
 
-	 private void handleAddModerator(SubForum sf, String moderatorToAdd,
-			 String userName, String password) {
-		 String forumName = sf.getForum().getForumName();
-		 Forum forum = _si.getForum(forumName);
-		 Admin admin = forum.getAdmin();
-		 if (admin == null || !admin.getUserName().equals(userName)
-				 || !admin.getPassword().equals(password)) {
-			 _ch.sendErrorNoAuthorized();
-			 return;
-		 }
-		 Member member = _si.getMember(forumName, moderatorToAdd);
-		 if (member == null) {
-			 _ch.sendNotFound();
-			 return;
-		 }
-		 String moderatorName = member.getUserName();
-		 String moderatorPassword = member.getPassword();
-		 String email = member.getEmail();
-		 List<Member> moderators = _si.getModerators(forumName, sf.getSubForumName());
-		 List<String> moderetorsAsString = new ArrayList<String>();
-		 for (Iterator<Member> it = moderators.iterator(); it.hasNext();) {
-			 Member member1 = it.next();
-			 moderetorsAsString.add(member1.getUserName());
-		 }
-		 if (moderetorsAsString.contains(moderatorToAdd)) {
-			 _ch.sendOK();
-			 return;
-		 }
-		 Moderator moderator = new Moderator(moderatorName, moderatorPassword, email, forumName, null);
-		 boolean addModerator = _si.addModerator(moderator, sf);
-		 if (addModerator) {
-			 _ch.sendOK();
-		 }
-	 }
+	private void handleAddModerator(SubForum sf, String moderatorToAdd,
+			String userName, String password) {
+		String forumName = sf.getForum().getForumName();
+		Forum forum = _si.getForum(forumName);
+		Admin admin = forum.getAdmin();
+		if (admin == null || !admin.getUserName().equals(userName)
+				|| !admin.getPassword().equals(password)) {
+			_ch.sendErrorNoAuthorized();
+			return;
+		}
+		Member member = _si.getMember(forumName, moderatorToAdd);
+		if (member == null) {
+			_ch.sendNotFound();
+			return;
+		}
+		String moderatorName = member.getUserName();
+		String moderatorPassword = member.getPassword();
+		String email = member.getEmail();
+		List<Member> moderators = _si.getModerators(forumName, sf.getSubForumName());
+		List<String> moderetorsAsString = new ArrayList<String>();
+		for (Iterator<Member> it = moderators.iterator(); it.hasNext();) {
+			Member member1 = it.next();
+			moderetorsAsString.add(member1.getUserName());
+		}
+		if (moderetorsAsString.contains(moderatorToAdd)) {
+			_ch.sendOK();
+			return;
+		}
+		Moderator moderator = new Moderator(moderatorName, moderatorPassword, email, forumName, null);
+		boolean addModerator = _si.addModerator(moderator, sf);
+		if (addModerator) {
+			_ch.sendOK();
+		}
+	}
 }
