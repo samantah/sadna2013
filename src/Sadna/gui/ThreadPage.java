@@ -24,6 +24,7 @@ public class ThreadPage extends javax.swing.JFrame {
         initComponents();
         this.setResizable(false);
         this.jLabelError.setVisible(false);
+        this.jLabelErrorCannotDelete.setVisible(false);
 
         if (CurrentStatus.currUser instanceof Member) {
             logInButton.setVisible(false);
@@ -33,6 +34,7 @@ public class ThreadPage extends javax.swing.JFrame {
             jTextFieldAddTitle.setVisible(false);
             jTextFieldAddContent.setVisible(false);
             jButtonAddPost.setVisible(false);
+            jButtonDeletePost.setVisible(false);
         }
 
         this.setResizable(false);
@@ -77,6 +79,8 @@ public class ThreadPage extends javax.swing.JFrame {
         jTextFieldAddContent = new javax.swing.JTextField();
         jButtonSignout = new javax.swing.JButton();
         jLabelError = new javax.swing.JLabel();
+        jButtonDeletePost = new javax.swing.JButton();
+        jLabelErrorCannotDelete = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -130,6 +134,16 @@ public class ThreadPage extends javax.swing.JFrame {
         jLabelError.setForeground(new java.awt.Color(255, 0, 0));
         jLabelError.setText("Error - didn't post");
 
+        jButtonDeletePost.setText("delete post");
+        jButtonDeletePost.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDeletePostActionPerformed(evt);
+            }
+        });
+
+        jLabelErrorCannotDelete.setForeground(new java.awt.Color(255, 0, 0));
+        jLabelErrorCannotDelete.setText("Error - cannot delete");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -137,22 +151,24 @@ public class ThreadPage extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jLabelThreadContent, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelThreadTitle, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButtonBack)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(56, 56, 56)
                         .addComponent(jButtonSignout)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonDeletePost)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(logInButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(registerButton))
-                    .addComponent(jLabelThreadContent, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
-                    .addComponent(jLabelThreadTitle, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addComponent(registerButton)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jTextFieldAddContent, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
+                            .addComponent(jTextFieldAddContent, javax.swing.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE)
                             .addComponent(jTextFieldAddTitle))
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
@@ -163,6 +179,10 @@ public class ThreadPage extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabelError, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(105, 105, 105))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(189, 189, 189)
+                .addComponent(jLabelErrorCannotDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -180,13 +200,16 @@ public class ThreadPage extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(jLabelError)
-                .addGap(43, 43, 43)
+                .addGap(23, 23, 23)
+                .addComponent(jLabelErrorCannotDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonBack)
                     .addComponent(registerButton)
                     .addComponent(logInButton)
                     .addComponent(jButtonAddPost)
-                    .addComponent(jButtonSignout))
+                    .addComponent(jButtonSignout)
+                    .addComponent(jButtonDeletePost))
                 .addContainerGap())
         );
 
@@ -244,11 +267,27 @@ public class ThreadPage extends javax.swing.JFrame {
         threadPage.setVisible(true);
     }//GEN-LAST:event_jButtonAddPostActionPerformed
 
+    private void jButtonDeletePostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeletePostActionPerformed
+        Post selectedPost = (Post)this.jListPosts.getSelectedValue();
+        Member currMember = (Member) CurrentStatus.currUser;
+        boolean deletePost = currMember.deletePost(selectedPost);
+        if (!deletePost) {
+            this.jLabelErrorCannotDelete.setVisible(true);
+        } else {
+            SubForumPage subForumPage = new SubForumPage();
+            this.setVisible(false);
+            this.dispose();
+            subForumPage.setVisible(true);
+        }
+    }//GEN-LAST:event_jButtonDeletePostActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAddPost;
     private javax.swing.JButton jButtonBack;
+    private javax.swing.JButton jButtonDeletePost;
     private javax.swing.JButton jButtonSignout;
     private javax.swing.JLabel jLabelError;
+    private javax.swing.JLabel jLabelErrorCannotDelete;
     private javax.swing.JLabel jLabelThreadContent;
     private javax.swing.JLabel jLabelThreadTitle;
     private javax.swing.JList jListPosts;

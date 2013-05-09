@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 import javax.swing.DefaultListModel;
 import javax.swing.border.BevelBorder;
+import sun.misc.FpUtils;
 
 /**
  *
@@ -27,12 +28,12 @@ public class ForumPage extends javax.swing.JFrame {
      */
     public ForumPage() {
         initComponents();
-//        addNewSubButton.setVisible(false);
-//        jLabelHeadNewSubForum.setVisible(false);
-//        jLabelNewSubName.setVisible(false);
-//        jTextFieldModerators.setVisible(false);
-//        jTextFieldNewSubName.setVisible(false);
-//        jLabelEnterModerators.setVisible(false);
+        addNewSubButton.setVisible(false);
+        jLabelHeadNewSubForum.setVisible(false);
+        jLabelNewSubName.setVisible(false);
+        jTextAreaListOfModerators.setVisible(false);
+        jTextFieldNewSubName.setVisible(false);
+        jLabelEnterModerators.setVisible(false);
 
         if (CurrentStatus.currUser instanceof Moderator) {
             addNewSubButton.setVisible(true);
@@ -179,22 +180,23 @@ public class ForumPage extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(enterSubForumButton))
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(39, 39, 39)
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabelHeadNewSubForum, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabelEnterModerators, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(26, 26, 26))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabelNewSubName)
-                                .addGap(55, 55, 55))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jTextFieldNewSubName, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())))))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabelHeadNewSubForum, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabelEnterModerators, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(26, 26, 26))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabelNewSubName)
+                                        .addGap(55, 55, 55))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jTextFieldNewSubName, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addContainerGap())))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -279,19 +281,23 @@ public class ForumPage extends javax.swing.JFrame {
 
     private void addNewSubButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNewSubButtonActionPerformed
         String text = jTextAreaListOfModerators.getText();
-        StringTokenizer stringTokenizer = new StringTokenizer(text,"\n");
+        StringTokenizer stringTokenizer = new StringTokenizer(text, "\n");
         ArrayList<Moderator> arrayList = new ArrayList<>();
-        while(stringTokenizer.hasMoreTokens()){
+        while (stringTokenizer.hasMoreTokens()) {
             String nextToken = stringTokenizer.nextToken();
             arrayList.add(new Moderator(nextToken, null, null, null, null));
         }
         String newSubForumName = jTextFieldNewSubName.getText();
-        Admin admin = (Admin)CurrentStatus.currUser;
+        Admin admin = (Admin) CurrentStatus.currUser;
         admin.addSubForum(newSubForumName, arrayList);
-        // handle with empty the text areas
-        
-    }//GEN-LAST:event_addNewSubButtonActionPerformed
+        jTextAreaListOfModerators.setText("");
+        jLabelEnterModerators.setText("");
+        ForumPage forumPage = new ForumPage();
+        this.setVisible(false);
+        this.dispose();
+        forumPage.setVisible(true);
 
+    }//GEN-LAST:event_addNewSubButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addNewSubButton;
     private javax.swing.JButton enterSubForumButton;
