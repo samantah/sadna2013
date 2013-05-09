@@ -103,7 +103,7 @@ public class Admin extends Moderator {
 			numberOfThreads = conHand.getThreadCounter(forumName, userName, password);
 		}
 		catch(Exception e){
-			System.out.println("Admin(getThreadCounter) " + e); 
+			System.out.println("Admin(getNumOfUserThread) " + e); 
 		}
 		return numberOfThreads;
 	}
