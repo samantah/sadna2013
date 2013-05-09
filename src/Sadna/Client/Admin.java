@@ -63,12 +63,21 @@ public class Admin extends Moderator {
 	 *	 Add to clientAPI removeModerator(String userName);
 	 *   Add to servertAPI removeModerator
 	 */
-	public void removeModerator(String userName) {
+	public void removeModerator(String moderatorName) {
 		try{
-			//conHand.removeModerator("userName");
+			//conHand.removeModerator(moderatorName);
 		}
 		catch(Exception e){
 			System.out.println("Admin(removeModerator) " + e); 
+		}
+	}
+	
+	public void deleteSubForum(String forumName, String subForumName, String moderatorName) {
+		try{
+			conHand.deleteSubForum(forumName, subForumName, moderatorName, moderatorName);
+		}
+		catch(Exception e){
+			System.out.println("Admin(deleteSubForum) " + e); 
 		}
 	}
 

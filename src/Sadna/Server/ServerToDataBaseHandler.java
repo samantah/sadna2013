@@ -17,6 +17,8 @@ public class ServerToDataBaseHandler implements ServerInterface {
 
     private DBInterface _db;
 
+    // removeModerator()
+    
     public ServerToDataBaseHandler(DBInterface db) {
         _db = db;
     }

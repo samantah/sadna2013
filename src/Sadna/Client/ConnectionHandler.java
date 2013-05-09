@@ -24,6 +24,8 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
     private String msgToSend;
     private String receivedMsg;
     private String delimiter = "\0";
+    
+	// removeModerator()
 
     public ConnectionHandler(String host, int port) {
         try {
