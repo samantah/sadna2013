@@ -18,4 +18,5 @@ public class Moderator extends Member {
         super(userName, password, email, forum, ch);
         // TODO Auto-generated constructor stub
     }
+    
 }

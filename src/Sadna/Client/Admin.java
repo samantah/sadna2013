@@ -40,4 +40,15 @@ public class Admin extends Moderator {
     public void addSubForum(String newSubForumName, ArrayList<Moderator> arrayList) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    
+    
+    public void addModerator(String userName, String password, String email,
+            String forum, ClientCommunicationHandlerInterface ch) {
+        throw new UnsupportedOperationException("Admin(addModerator) Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
+    
+    
 }
