@@ -34,8 +34,8 @@ public class Member extends User {
     public Vector<ForumNotification> getNotifications() {
         return notifications;
     }
-    
-    public void clearNotifications(){
+
+    public void clearNotifications() {
         this.notifications.clear();
     }
 
@@ -69,5 +69,13 @@ public class Member extends User {
 
     public void addNotification(ForumNotification forumNotification) {
         this.notifications.add(forumNotification);
+    }
+
+    public boolean deleteThread(ThreadMessage tm) {
+        return this.conHand.deleteThreadMessage(tm, userName, password);
+    }
+
+    public boolean deletePost(Post p) {
+        return this.conHand.deletePost(p, userName, password);
     }
 }
