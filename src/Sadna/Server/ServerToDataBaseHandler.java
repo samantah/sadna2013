@@ -95,8 +95,7 @@ public class ServerToDataBaseHandler implements ServerInterface {
         if (isForumNameUnique(forumName)) {
             System.out.println("is unique forum");
             Forum forumToAdd = new Forum(forumName);
-            admin = new Admin(adminUserName, adminPassword, "", null);
-            admin.setForum(forumName);
+            admin = new Admin(adminUserName, adminPassword, "", forumName, null);
             forumToAdd.setAdmin(admin);
             boolean addedForum = _db.addForum(forumToAdd);
             if (addedForum) {

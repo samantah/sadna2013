@@ -773,7 +773,6 @@ public class DataBase implements DBInterface {
         ArrayList<Moderator> arrayList = new ArrayList<Moderator>();
         arrayList.add(new Moderator("userNameMod", null, null, null, null));
         arrayList.add(new Moderator("userNameMod2", null, null, null, null));
-
         db.addSubForum(subForum, arrayList);
         db.addSubForum(subForum2, new ArrayList<Moderator>());
         db.addThread(threadMessage);

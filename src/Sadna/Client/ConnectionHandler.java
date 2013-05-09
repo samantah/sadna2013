@@ -62,6 +62,9 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
         if (receivedMsg.contains("200ok")) {
             loggedInMember = new Member(userName, password, null, forumName, this);
         }
+        if (receivedMsg.contains("202ok")){
+            
+        }
         return loggedInMember;
     }
 
