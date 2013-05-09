@@ -524,5 +524,21 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 		counter = Integer.parseInt(receivedMsg);
 		return counter;
 	}
+	
+	public int getNumOfUserThread(String forumName, String generalUserName, String userName, String password) {
+		int counter = 0;
+		msgToSend = "GETNUMUSRTHR\n" + "forumName:\n" + forumName + "\n" + "generalUserName:\n" + generalUserName + "\n" + "userName:\n" + userName + "\n" 
+		+ "password:\n" + password + "\n";
+		msgToSend += delimiter;
+		stringToServer.println(msgToSend);
+		try {
+			receivedMsg = stringFromServer.readLine();
+		} catch (IOException e) {
+			System.out.println("ConnectionHandler(getNumOfUserThread) " + e); 
+		}
+		counter = Integer.parseInt(receivedMsg);
+		return counter;
+	}
+	
 
 }

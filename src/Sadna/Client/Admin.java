@@ -37,11 +37,11 @@ public class Admin extends Moderator {
 		return conHand.addSubForum(subForum, lm);
 	}
 
-	
+
 	public void addSubForum(String newSubForumName, ArrayList<Moderator> arrayList) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
-	
+
 	public void deleteSubForum(String forumName, String subForumName, String moderatorName) {
 		try{
 			conHand.deleteSubForum(forumName, subForumName, moderatorName, moderatorName);
@@ -82,9 +82,9 @@ public class Admin extends Moderator {
 		}
 		return true;
 	}
-	
 
-	
+
+
 	public int getThreadCounter(String forumName, String userName, String password) {
 		int numberOfThreads = -1;
 		try{
@@ -97,5 +97,17 @@ public class Admin extends Moderator {
 	}
 
 
-	
+	public int getNumOfUserThread(String forumName, String generalUserName, String userName, String password) {
+		int numberOfThreads = -1;
+		try{
+			numberOfThreads = conHand.getThreadCounter(forumName, userName, password);
+		}
+		catch(Exception e){
+			System.out.println("Admin(getThreadCounter) " + e); 
+		}
+		return numberOfThreads;
+	}
+
+
+
 }

@@ -72,6 +72,8 @@ public interface ClientCommunicationHandlerInterface {
 
     int getThreadCounter(String forumName, String userName, String password);
     
+    public int getNumOfUserThread(String forumName, String generalUserName, String userName, String password);
+    
         
     
 }
