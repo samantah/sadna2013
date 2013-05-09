@@ -21,7 +21,9 @@ import java.util.Vector;
  * @author fistuk
  */
 public interface ClientCommunicationHandlerInterface {
-
+	
+	// removeModerator()
+     
     Member login(String forumName, String userName, String password);
 
     User logout(String forumName, String userName);

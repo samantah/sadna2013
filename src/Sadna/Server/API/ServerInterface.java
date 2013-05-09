@@ -20,6 +20,8 @@ import java.util.Vector;
  * @author fistuk
  */
 public interface ServerInterface {
+	
+	// removeModerator()
 
     boolean register(String forumName, String userName, String password, String email);
 
