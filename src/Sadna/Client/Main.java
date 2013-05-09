@@ -11,9 +11,10 @@ import java.util.List;
 public class Main {
 
     public static void main(String argv[]) throws Exception {
-        String host = "192.168.0.107";
+        String host = "172.16.90.161";
         int port = 3333;
         ConnectionHandler c = new ConnectionHandler(host, port);
+        c.initiateForum("newForum", "chen", "chen1234");
         //List<Forum> forumsList = c.getForumsList();
 //		SuperAdmin sa = new SuperAdmin("mega-admin", "megaadmin12", "mega@gmail.com", c);
 //		User guest = new User(c);

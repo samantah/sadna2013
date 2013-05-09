@@ -5,6 +5,7 @@
 package Sadna.gui;
 
 import Sadna.Client.API.ClientCommunicationHandlerInterface;
+import Sadna.Client.Admin;
 import Sadna.Client.ConnectionHandler;
 import Sadna.Client.SuperAdmin;
 import Sadna.Client.User;
@@ -25,7 +26,7 @@ public class MainFrame extends javax.swing.JFrame {
         initComponents();
         this.setResizable(false);
         ClientCommunicationHandlerInterface ch = new ConnectionHandler(host, port);
-        CurrentStatus.currUser = new SuperAdmin("superAdmin", "superAdmin1234", "", ch);
+        CurrentStatus.currUser = new Admin("chen", "chen1234", "", "newForum", ch);
 //        CurrentStatus.currUser = new User(ch);
         List<Forum> viewForums = CurrentStatus.currUser.viewForums();
         DefaultListModel listOfForums = new DefaultListModel();
