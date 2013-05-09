@@ -71,14 +71,7 @@ public class Admin extends Moderator {
 			System.out.println("Admin(removeModerator) " + e); 
 		}
 	}
-	public void remosddveModerator(String userName) {
-		try{
-			//conHand.removeModerator("userName");
-		}
-		catch(Exception e){
-			System.out.println("Admin(removeModerator) " + e); 
-		}
-	}
+
 
 	
 }
