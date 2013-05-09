@@ -33,12 +33,8 @@ public class Admin extends Moderator {
         }
     }
 
-    public boolean addSubForum(SubForum subForum, List<Moderator> lm) {
+    public boolean addSubForum(SubForum subForum, List<Moderator> lm) { // chen added this function
         return conHand.addSubForum(subForum, lm);
-    }
-
-    public void addSubForum(String newSubForumName, ArrayList<Moderator> arrayList) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     

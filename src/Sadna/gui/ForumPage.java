@@ -288,8 +288,9 @@ public class ForumPage extends javax.swing.JFrame {
             arrayList.add(new Moderator(nextToken, null, null, null, null));
         }
         String newSubForumName = jTextFieldNewSubName.getText();
+        SubForum subForum = new SubForum(CurrentStatus.currForum, newSubForumName);
         Admin admin = (Admin) CurrentStatus.currUser;
-        admin.addSubForum(newSubForumName, arrayList);
+        admin.addSubForum(subForum, arrayList);
         jTextAreaListOfModerators.setText("");
         jLabelEnterModerators.setText("");
         ForumPage forumPage = new ForumPage();
