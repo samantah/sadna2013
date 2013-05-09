@@ -74,6 +74,7 @@ public interface ClientCommunicationHandlerInterface {
     
     public int getNumOfUserThread(String forumName, String generalUserName, String userName, String password);
     
+    public Vector<Object> getUsersPostToUser(String forumName, String userName, String password);
         
     
 }

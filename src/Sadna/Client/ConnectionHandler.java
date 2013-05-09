@@ -540,5 +540,23 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 		return counter;
 	}
 	
+    public Vector<Object> getUsersPostToUser(String forumName, String userName, String password){
+		
+    	Vector<Object> usersResponeToUser = new Vector<Object>(); 
+    	
+		msgToSend = "GETUSRSPOSTUSER\n" + "forumName:\n" + forumName + "\n" + "\n" + "userName:\n" + userName + "\n" 
+		+ "password:\n" + password + "\n";
+		msgToSend += delimiter;
+		
+		stringToServer.println(msgToSend);
+		try {
+			receivedMsg = stringFromServer.readLine();
+		} catch (IOException e) {
+			System.out.println("ConnectionHandler(getNumOfUserThread) " + e); 
+		}
+
+		return usersResponeToUser;
+    }
+
 
 }

@@ -108,6 +108,16 @@ public class Admin extends Moderator {
 		return numberOfThreads;
 	}
 
+	
+	public int getUsersPostToUser(String forumName, String userName, String password) {
+		try{
+			conHand.getThreadCounter(forumName, userName, password);
+		}
+		catch(Exception e){
+			System.out.println("Admin(getUsersPostToUser) " + e); 
+		}
+		return 8;
+	}
 
 
 }
