@@ -25,7 +25,8 @@ public class MainFrame extends javax.swing.JFrame {
         initComponents();
         this.setResizable(false);
         ClientCommunicationHandlerInterface ch = new ConnectionHandler(host, port);
-        CurrentStatus.currUser = new User(ch);
+        CurrentStatus.currUser = new SuperAdmin("superAdmin", "superAdmin1234", "", ch);
+//        CurrentStatus.currUser = new User(ch);
         List<Forum> viewForums = CurrentStatus.currUser.viewForums();
         DefaultListModel listOfForums = new DefaultListModel();
         for (Forum f : viewForums) {

@@ -18,7 +18,7 @@ public class SuperAdmin extends Admin{
 	private static final long serialVersionUID = 3955980432575126358L;
 
 	public SuperAdmin(String userName, String password, String email, ClientCommunicationHandlerInterface ch) {
-        super(userName, password, email, ch);
+        super(userName, password, email,null ,ch);
     }
 
 	public boolean initiateForum(String forumName, String adminName, String adminPassword) {

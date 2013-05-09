@@ -119,8 +119,9 @@ public class Main {
     }
 
     private static void pttest(ConnectionHandler c) {
-        Admin m = new Admin("userName", "password", "email", null);
+        Admin m = new Admin("userName", "password", "email",null ,null);
         Forum f = new Forum(m, "forumName");
+        m.setForum(f.getForumName());
         SubForum sf = new SubForum(f, "subForumName");
         ThreadMessage t = new ThreadMessage(sf, "eminem", "hiiiiiiii", "userName");
         boolean ans = c.publishThread(t);
@@ -133,8 +134,9 @@ public class Main {
     }
 
     private static void pctest(ConnectionHandler c) {
-        Admin m = new Admin("userName", "password", "email", null);
+        Admin m = new Admin("userName", "password", "email", null, null);
         Forum f = new Forum(m, "forumName");
+        m.setForum(f.getForumName());
         SubForum sf = new SubForum(f, "subForumName");
         ThreadMessage t = new ThreadMessage(sf, "eminem", "hiiiiiiiiiiiii", "userName");
         Post p = new Post(t, "slim shady", "hiii my name is what, my name is who, my name  is-- chicki chiki, slim shady", "userName");
