@@ -145,7 +145,7 @@ public class ServerRequestHandler implements Runnable {
 			Member m = _si.getMember(forumName, userName);
 			handleNotification(m, password);
 		case "REMMOD":
-			handleRemoveModerator(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8]);
+			handleRemoveModerator(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8], parsedReq[10]);
 		case "GETCOUNT":
 			handleThreadCounter(parsedReq[2], parsedReq[4], parsedReq[6]);
 		default:
@@ -153,32 +153,54 @@ public class ServerRequestHandler implements Runnable {
 		}
 
 	}
-	
+
 
 	private void handleThreadCounter(String forumName, String userName, String password) {
-		if(_si.isValidMember(userName, password)){
-			_ch.sendThreadCounter(_si.getThreadCounter(forumName));
-		}
-		else{
+		Member admin = _si.getMember(forumName, userName);
+		if(!admin.getPassword().equals(password)){
 			_ch.sendErrorNoAuthorized();
+			return;
 		}
-		
+		if(!(admin instanceof Admin)){
+			_ch.sendErrorNoAuthorized();
+			return;
+		}
+		_ch.sendThreadCounter(_si.getNumberOfThreadsInForum(forumName));
 	}
 
 
-	private void handleRemoveModerator(String forumName, String moderatorName, String userName, String password) {
-		if(_si.isAdmin(userName, password, forumName)){
-			if(_si.removeModerator(forumName, moderatorName)){
-				_ch.sendOK();
+
+	private void handleRemoveModerator(String forumName,String subForumName, String moderatorName, String userName, String password) {
+		Member admin = _si.getMember(forumName, userName);
+		if(!admin.getPassword().equals(password)){
+			_ch.sendErrorNoAuthorized();
+			return;
+		}
+		if(!(admin instanceof Admin)){
+			_ch.sendErrorNoAuthorized();
+			return;
+		}
+		List<Member> mList = _si.getModerators(forumName, subForumName);
+		if(mList.size() == 1){
+			_ch.sendIsTheOnlyModeratorInTheSubForum();
+			return;
+		}
+		Moderator m = null;
+		for (int i = 0; i < mList.size(); i++) {
+			if(mList.get(i).getUserName().equals(moderatorName)){
+				m = (Moderator) mList.get(i);
+				break;
 			}
-			else{
-				_ch.sendErrorInServer();
-			}
+
+		}
+		if(_si.deleteModerator(m, subForumName)){
+			_ch.sendOK();
 		}
 		else{
-			_ch.sendErrorNoAuthorized();
+			_ch.sendErrorInServer();
 		}
 	}
+
 
 
 	private void handleNotification(Member m, String password) {
