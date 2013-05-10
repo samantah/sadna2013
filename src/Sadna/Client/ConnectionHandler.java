@@ -479,13 +479,13 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
     }
 
     @Override
-    public Vector<ForumNotification> getNotification(String forumName, String userName, String password) {
-        Vector<ForumNotification> notifications = null;
+    public List<ForumNotification> getNotification(String forumName, String userName, String password) {
+        List<ForumNotification> notifications = null;
         msgToSend = "NOTI\n" + "forumName:\n" + forumName + "\n" + "userName:\n" + userName + "\n" + "password:\n" + password + "\n";
         msgToSend += delimiter;
         stringToServer.println(msgToSend);
         try {
-            notifications = (Vector<ForumNotification>) objectFromServer.readObject();
+            notifications = (List<ForumNotification>) objectFromServer.readObject();
         } catch (IOException e) {
         } catch (ClassNotFoundException e) {
         }

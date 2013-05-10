@@ -109,10 +109,11 @@ public class Main {
         SubForum subForum = new SubForum(forum, "subForum1");
         ThreadMessage newThread = new ThreadMessage(subForum, "title123", "content", "snirelka");
         System.out.println(c.publishThread(newThread));
-        c.register("forum1", "snirelkar", "snir1234", "fdsz");
+        c.login("forum1", "snirelkar", "snir1234");
         //SubForum sf = c.getSubForum("forum1", "subForum1");
         List<ThreadMessage> l =  c.getThreadsList("forum1", "subForum1");
-        ThreadMessage t = l.get(2);
+        System.out.println(l);
+        ThreadMessage t = l.get(0);
         Post p = new Post(t, "title", "content", "snirelkar");
         c.postComment(p);
         System.out.println(c.getNotification("forum1","snirelka" ,"snir1234"));

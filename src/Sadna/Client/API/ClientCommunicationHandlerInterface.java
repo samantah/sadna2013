@@ -64,7 +64,7 @@ public interface ClientCommunicationHandlerInterface {
 
     boolean editPost(Post p, String newText, String userName, String password);
     
-    Vector<ForumNotification> getNotification(String forumName, String userName, String password);
+    List<ForumNotification> getNotification(String forumName, String userName, String password);
 
     public boolean finishCommunication();
     
