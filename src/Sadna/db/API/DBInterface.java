@@ -64,7 +64,7 @@ public interface DBInterface {
 
     boolean deleteMember(Member member);
 
-    boolean deleteModerator(Moderator moderator);
+    boolean deleteModerator(Moderator moderatorm, String subForum);
 
     boolean deletePost(Post post);
 
