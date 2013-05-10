@@ -27,7 +27,6 @@ public class SubForum implements Serializable {
         this.threadIDGenerator = new ThreadIDGenerator();
     }
 
-
     public ThreadIDGenerator getThreadIDGenerator() {
         return threadIDGenerator;
     }

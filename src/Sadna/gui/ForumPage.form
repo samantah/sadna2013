@@ -146,6 +146,7 @@
     <Component class="javax.swing.JButton" name="logInButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="log in"/>
+        <Property name="toolTipText" type="java.lang.String" value="log in with an existing member"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="logInButtonActionPerformed"/>
@@ -154,6 +155,7 @@
     <Component class="javax.swing.JButton" name="registerButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="register"/>
+        <Property name="toolTipText" type="java.lang.String" value="registers as a new member to the forum"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="registerButtonActionPerformed"/>
@@ -162,6 +164,7 @@
     <Component class="javax.swing.JButton" name="enterSubForumButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Enter Sub-Forum"/>
+        <Property name="toolTipText" type="java.lang.String" value="enters the selected sub forum"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="enterSubForumButtonActionPerformed"/>
@@ -170,6 +173,7 @@
     <Component class="javax.swing.JButton" name="jButtonBack">
       <Properties>
         <Property name="text" type="java.lang.String" value="back"/>
+        <Property name="toolTipText" type="java.lang.String" value="back to the main page"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonBackActionPerformed"/>
@@ -178,6 +182,7 @@
     <Component class="javax.swing.JButton" name="jButtonSignout">
       <Properties>
         <Property name="text" type="java.lang.String" value="sign out"/>
+        <Property name="toolTipText" type="java.lang.String" value="sign out to a user mode"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonSignoutActionPerformed"/>
@@ -201,6 +206,7 @@
     <Component class="javax.swing.JButton" name="addNewSubButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Add sub-forum"/>
+        <Property name="toolTipText" type="java.lang.String" value="adding a new sub forum&#xa;make sure the name is unique&#xa;and the moderators exist"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addNewSubButtonActionPerformed"/>

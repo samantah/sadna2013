@@ -88,6 +88,7 @@ public class SubForumPage extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jListThreads);
 
         jButtonEnterThread.setText("Enter Thread");
+        jButtonEnterThread.setToolTipText("enters the selected thread");
         jButtonEnterThread.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonEnterThreadActionPerformed(evt);
@@ -95,6 +96,7 @@ public class SubForumPage extends javax.swing.JFrame {
         });
 
         logInButton.setText("log in");
+        logInButton.setToolTipText("log in with an existing member");
         logInButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 logInButtonActionPerformed(evt);
@@ -102,6 +104,7 @@ public class SubForumPage extends javax.swing.JFrame {
         });
 
         registerButton.setText("register");
+        registerButton.setToolTipText("registers as a new member to the forum");
         registerButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 registerButtonActionPerformed(evt);
@@ -109,6 +112,7 @@ public class SubForumPage extends javax.swing.JFrame {
         });
 
         jButtonBack.setText("back");
+        jButtonBack.setToolTipText("back to the forum page");
         jButtonBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonBackActionPerformed(evt);
@@ -116,6 +120,7 @@ public class SubForumPage extends javax.swing.JFrame {
         });
 
         jButtonSignout.setText("sign out");
+        jButtonSignout.setToolTipText("sign out to a user mode");
         jButtonSignout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonSignoutActionPerformed(evt);
@@ -129,6 +134,7 @@ public class SubForumPage extends javax.swing.JFrame {
         });
 
         jButtonPublisThread.setText("publish thread");
+        jButtonPublisThread.setToolTipText("adds a new thread to the current sub forum");
         jButtonPublisThread.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonPublisThreadActionPerformed(evt);
@@ -139,6 +145,7 @@ public class SubForumPage extends javax.swing.JFrame {
         jLabelError.setText("Error - didn't publish");
 
         jButtonDeleteThread.setText("delete thread");
+        jButtonDeleteThread.setToolTipText("delete the selected thread\nauthorized only by the publisher, \n moderator or the admin");
         jButtonDeleteThread.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonDeleteThreadActionPerformed(evt);
@@ -290,6 +297,9 @@ public class SubForumPage extends javax.swing.JFrame {
 
     private void jButtonDeleteThreadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteThreadActionPerformed
         ThreadMessage selectedTM = (ThreadMessage) this.jListThreads.getSelectedValue();
+        if (selectedTM == null) {
+            return;
+        }
         Member currMember = (Member) CurrentStatus.currUser;
         boolean deleteThread = currMember.deleteThread(selectedTM);
         if (!deleteThread) {
