@@ -57,6 +57,7 @@ public class ServerToDataBaseHandler implements ServerInterface {
     private boolean userNameExist(String forumName, String userName) {
         boolean exist = false;
         List<Member> members = _db.getAllMembers(forumName);
+        if(members != null)
         for (Member m : members) {
             if (m.getUserName().equals(userName)) {
                 exist = true;
