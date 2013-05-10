@@ -14,6 +14,7 @@ import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 import java.util.List;
 
+
 /**
  *
  * @author fistuk
@@ -39,14 +40,12 @@ public interface DBInterface {
     List<Post> getPostList(String forumName, String subForumName, int threadID);
 
     List<Forum> getForumsList();
-
+    
     List<Admin> getAllAdmins();
 
     int getNumberOfSubforums(String forumName);
 
-    int getNumberOfThreadsInSubForum(String forumName, String subForumName);
-
-    int getNumberOfThreadsInForum(String forumName);
+    int getNumberOfThreads(String forumName, String subForumName);
 
     boolean addForum(Forum forum);
 
@@ -69,12 +68,21 @@ public interface DBInterface {
     boolean deletePost(Post post);
 
     boolean deleteThread(ThreadMessage thread);
-
+    
     List<Member> getAllMembers(String forumName);
 
     boolean setSuperAdmin();
-
+    
     boolean addModerator(Moderator moderator, SubForum subForum);
-
+    
     SuperAdmin getSuperAdmin();
+
+	boolean isAdmin(String userName, String password, String forumName); //checks if this is a valid moderator and valid password
+
+	boolean removeModerator(String forumName, String moderatorName);
+
+	int getThreadCounter(String forumName); //returns the number of threads in this forum
+
+	boolean isValidMember(String userName, String password); //checks if the user name and passward are valid.
+
 }
