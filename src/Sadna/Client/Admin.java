@@ -5,7 +5,9 @@
  */
 package Sadna.Client;
 
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Vector;
 
 import Sadna.Client.API.ClientCommunicationHandlerInterface;
 import Sadna.db.SubForum;
@@ -91,16 +93,19 @@ public class Admin extends Moderator {
         }
         return numberOfThreads;
     }
-    
-    //bengsj
-//****************************************************************************
-    public int getUsersPostToUser(String forumName, String userName, String password) {
+   
+    /*
+     * MAP(username:String, users that post:Vector<String>)
+     */
+    public Hashtable<String,Vector<String>> getUsersPostToUser(String forumName, String userName, String password) {
+		Hashtable<String,Vector<String>> map = null;
         try {
-            conHand.getThreadCounter(forumName, userName, password);
+        	map = conHand.getUsersPostToUser(forumName, userName, password);
         } catch (Exception e) {
             System.out.println("Admin(getUsersPostToUser) " + e);
         }
-        return 8;
+        return map;
     }
-//****************************************************************************
+    
+   
 }
