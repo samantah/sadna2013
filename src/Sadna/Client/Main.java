@@ -11,10 +11,10 @@ import java.util.List;
 public class Main {
 
     public static void main(String argv[]) throws Exception {
-        String host = "192.168.2.105";
+        String host = "192.168.1.101";
         int port = 3333;
         ConnectionHandler c = new ConnectionHandler(host, port);
-        c.initiateForum("newForum", "chen", "chen1234");
+//        c.initiateForum("newForum", "chen", "chen1234");
         //List<Forum> forumsList = c.getForumsList();
 //		SuperAdmin sa = new SuperAdmin("mega-admin", "megaadmin12", "mega@gmail.com", c);
 //		User guest = new User(c);
@@ -96,13 +96,26 @@ public class Main {
 //        SubForum subForum = new SubForum(forum, "subForum1");
 //        c.addSubForum(subForum, new ArrayList<Moderator>());
 //        System.out.println(c.register("myForum", "moshe", "moshe1234", "email").getUserName());
-        System.out.println(c.addModerator("myForum", "subForum1", "moshe", "snirsnir", "snir1234"));
+//        System.out.println(c.addModerator("myForum", "subForum1", "moshe", "snirsnir", "snir1234"));
 //        ThreadMessage thread = new ThreadMessage(subForum, "", "", "publisher");
 //        thread.setId(0);
 //        boolean al_hazain = c.deleteThreadMessage(thread, "hhhhhhhhhh" , "1234qwer");
 //        System.out.println(al_hazain);
+        	
+        System.out.println(c.login("forum1", "snirelka", "snir1234"));
         
         
+        Forum forum = new Forum("forum1");
+        SubForum subForum = new SubForum(forum, "subForum1");
+        ThreadMessage newThread = new ThreadMessage(subForum, "title123", "content", "snirelka");
+        System.out.println(c.publishThread(newThread));
+        c.register("forum1", "snirelkar", "snir1234", "fdsz");
+        //SubForum sf = c.getSubForum("forum1", "subForum1");
+        List<ThreadMessage> l =  c.getThreadsList("forum1", "subForum1");
+        ThreadMessage t = l.get(2);
+        Post p = new Post(t, "title", "content", "snirelkar");
+        c.postComment(p);
+        System.out.println(c.getNotification("forum1","snirelka" ,"snir1234"));
         
         c.finishCommunication();
 

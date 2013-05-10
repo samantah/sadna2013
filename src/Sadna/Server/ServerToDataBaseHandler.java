@@ -315,7 +315,7 @@ public class ServerToDataBaseHandler implements ServerInterface {
 		Member m = _db.getMember(forumName, userName);
 		Vector<ForumNotification> notifications =  m.getNotifications();
 		m.clearNotifications();
-		return m.getNotifications();
+		return notifications;
 	}
 
     @Override
