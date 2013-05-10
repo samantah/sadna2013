@@ -578,9 +578,9 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 		return counter;
 	}
 
-    /*
-     * MAP(forum name:String, number of members in forum:Integer)
-     */
+	/*
+	 * MAP(forum name:String, number of members in forum:Integer)
+	 */
 	public Hashtable<String, Integer> getNumMembersInEachForum(String userName, 
 			String password) {
 		Hashtable<String, Integer> map = null;
@@ -603,4 +603,4 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 
 
 
-	} 
+} 
