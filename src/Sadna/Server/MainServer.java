@@ -38,6 +38,8 @@ public class MainServer {
                 System.out.println("got new client");
                 ch = new ServerConnectionWithClientHandler(socket);
                 new ServerRequestHandler(ch, si);
+                System.out.println("in run");
+
             } catch (IOException e) {
                 //     e.printStackTrace();
                 System.out.println(">> Connection stopped in server (because client stopped)...");

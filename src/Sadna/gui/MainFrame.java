@@ -19,15 +19,15 @@ import javax.swing.DefaultListModel;
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    String host = "172.16.95.195";
+    String host = "192.168.2.105";
     int port = 3333;
 
     public MainFrame() {
         initComponents();
         this.setResizable(false);
         ClientCommunicationHandlerInterface ch = new ConnectionHandler(host, port);
-        CurrentStatus.currUser = new Admin("chen", "chen1234", "", "newForum", ch);
-//        CurrentStatus.currUser = new User(ch);
+//        CurrentStatus.currUser = new Admin("chen", "chen1234", "", "newForum", ch);
+        CurrentStatus.currUser = new User(ch);
         List<Forum> viewForums = CurrentStatus.currUser.viewForums();
         DefaultListModel listOfForums = new DefaultListModel();
         for (Forum f : viewForums) {
