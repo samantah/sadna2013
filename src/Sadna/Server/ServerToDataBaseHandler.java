@@ -311,10 +311,10 @@ public class ServerToDataBaseHandler implements ServerInterface {
 
 
 	@Override
-	public Vector<ForumNotification> getNotifications(String forumName,
+	public List<ForumNotification> getNotifications(String forumName,
 			String userName) {
 		Member m = _db.getMember(forumName, userName);
-		Vector<ForumNotification> notifications =  m.getNotifications();
+		List<ForumNotification> notifications =  m.getNotifications();
 		m.clearNotifications();
 		return notifications;
 	}

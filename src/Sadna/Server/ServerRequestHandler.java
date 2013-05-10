@@ -220,7 +220,7 @@ public class ServerRequestHandler implements Runnable {
         if (m.getPassword().equals(password)) {
             String forumName = m.getForum();
             String userName = m.getUserName();
-            Vector<ForumNotification> notifications = _si.getNotifications(forumName, userName);
+            List<ForumNotification> notifications = _si.getNotifications(forumName, userName);
             _ch.sendNotifications(notifications);
         } else {
             _ch.sendErrorNoAuthorized();

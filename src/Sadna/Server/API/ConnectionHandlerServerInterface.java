@@ -38,7 +38,7 @@ public interface ConnectionHandlerServerInterface{
 
 	public void sendErrorNoAuthorized();
 
-	public void sendNotifications(Vector<ForumNotification> notifications);
+	public void sendNotifications(List<ForumNotification> notifications);
 
 	public void sendThreadCounter(int threadCounter);
 
