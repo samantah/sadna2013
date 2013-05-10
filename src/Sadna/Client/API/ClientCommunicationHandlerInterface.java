@@ -13,6 +13,8 @@ import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
+
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
 
@@ -74,8 +76,7 @@ public interface ClientCommunicationHandlerInterface {
     
     public int getNumOfUserThreads(String forumName, String generalUserName, String userName, String password);
     
-    public Vector<Object> getUsersPostToUser(String forumName, String userName, String password);
-
+    public Hashtable<String,Vector<String>> getUsersPostToUser(String forumName, String userName, String password);
         
     
 }
