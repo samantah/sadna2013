@@ -39,7 +39,7 @@ public class SuperAdmin extends Admin{
 	}
 	
     /*
-     * MAP(forum name:String, number of members in forum:int)
+     * MAP(forum name:String, number of members in forum:Integer)
      */
     public Hashtable<String, Integer> getNumMembersInEachForum(String userName, String password) {
 		Hashtable<String,Integer> map = null;
