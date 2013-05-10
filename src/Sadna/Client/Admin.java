@@ -92,7 +92,7 @@ public class Admin extends Moderator {
         return numberOfThreads;
     }
     
-    
+    //bengsj
 //****************************************************************************
     public int getUsersPostToUser(String forumName, String userName, String password) {
         try {
