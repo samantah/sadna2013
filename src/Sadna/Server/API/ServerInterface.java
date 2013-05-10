@@ -78,4 +78,13 @@ public interface ServerInterface {
      */
 
     public Vector<ForumNotification> getNotifications(String forumName, String userName);
+    
+    public boolean removeModerator(String forumName, String moderatorName);
+
+	boolean isAdmin(String userName, String password, String forumName);
+
+	int getThreadCounter(String forumName);
+
+	boolean isValidMember(String userName, String password);
+
 }

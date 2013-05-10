@@ -182,4 +182,12 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
         }
 
     }
+
+	@Override
+	public void sendThreadCounter(int threadCounter) {
+		stringToClient.println(threadCounter);
+	}
+
+
+
 }
