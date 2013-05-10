@@ -26,7 +26,6 @@ public class ForumPage extends javax.swing.JFrame {
      */
     public ForumPage() {
         initComponents();
-        jLabel.setVisible(false);
         addNewSubButton.setVisible(false);
         jLabelHeadNewSubForum.setVisible(false);
         jLabelNewSubName.setVisible(false);
@@ -36,7 +35,6 @@ public class ForumPage extends javax.swing.JFrame {
 
         if (CurrentStatus.currUser instanceof Moderator) {
             addNewSubButton.setVisible(true);
-            jLabel.setVisible(true);
             jLabelNewSubName.setVisible(true);
             jTextAreaListOfModerators.setVisible(true);
             jTextFieldNewSubName.setVisible(true);
@@ -250,6 +248,12 @@ public class ForumPage extends javax.swing.JFrame {
     }//GEN-LAST:event_enterSubForumButtonActionPerformed
 
     private void jButtonBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBackActionPerformed
+        Member m = (Member) CurrentStatus.currUser;
+        String forumName = CurrentStatus.currForum.getForumName();
+        String userName = m.getUserName();
+//        User logout = m.logout(forumName, userName);
+//        CurrentStatus.currUser = logout;
+        CurrentStatus.currUser = null;
         CurrentStatus.currForum = null;
         MainFrame mainFrame = new MainFrame();
         this.setVisible(false);

@@ -251,10 +251,12 @@ public class ServerRequestHandler implements Runnable {
             }
         }
         Admin admin = _si.getForum(forumName).getAdmin();
-        String adminName = admin.getUserName();
-        String adminPassword = admin.getPassword();
-        if (requester.equals(adminName) && password.equals(adminPassword)) {
-            return deletePostAndSendOk(p);
+        if (admin != null) {
+            String adminName = admin.getUserName();
+            String adminPassword = admin.getPassword();
+            if (requester.equals(adminName) && password.equals(adminPassword)) {
+                return deletePostAndSendOk(p);
+            }
         }
         _ch.sendErrorNoAuthorized();
         return false;
@@ -323,6 +325,7 @@ public class ServerRequestHandler implements Runnable {
         SubForum subForum = tm.getSubForum();
         String subForumName = subForum.getSubForumName();
         List<Member> moderators = _si.getModerators(forumName, subForumName);
+        System.out.println(moderators);
         for (Iterator<Member> it = moderators.iterator(); it.hasNext();) {
             Member currModerator = it.next();
             String moderatorName = currModerator.getUserName();
@@ -332,10 +335,12 @@ public class ServerRequestHandler implements Runnable {
             }
         }
         Admin admin = _si.getForum(forumName).getAdmin();
-        String adminName = admin.getUserName();
-        String adminPassword = admin.getPassword();
-        if (requester.equals(adminName) && password.equals(adminPassword)) {
-            return deleteThreadAndSendOk(tm);
+        if (admin != null) {
+            String adminName = admin.getUserName();
+            String adminPassword = admin.getPassword();
+            if (requester.equals(adminName) && password.equals(adminPassword)) {
+                return deleteThreadAndSendOk(tm);
+            }
         }
         _ch.sendErrorNoAuthorized();
         return false;
