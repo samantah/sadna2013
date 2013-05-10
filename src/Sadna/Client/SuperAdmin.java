@@ -4,6 +4,9 @@
  */
 package Sadna.Client;
 
+import java.util.Hashtable;
+import java.util.Vector;
+
 import Sadna.Client.API.ClientCommunicationHandlerInterface;
 
 /**
@@ -25,15 +28,30 @@ public class SuperAdmin extends Admin{
 		return conHand.initiateForum(forumName, adminName, adminPassword);
 	}
 
-	public int getForumCounter(String forumName, String userName, String password) {
+	public int getForumCounter(String userName, String password) {
 		int numberOfForums = -1;
 		try {
-			numberOfForums = conHand.getForumCounter(forumName, userName, password);
+			numberOfForums = conHand.getForumCounter(userName, password);
 		} catch (Exception e) {
 			System.out.println("SuperAdmin(getForumCounter) " + e);
 		}
 		return numberOfForums;
 	}
+	
+    /*
+     * MAP(forum name:String, number of members in forum:int)
+     */
+    public Hashtable<String, Integer> getNumMembersInEachForum(String userName, String password) {
+		Hashtable<String,Integer> map = null;
+        try {
+        	map = conHand.getNumMembersInEachForum(userName, password);
+        } catch (Exception e) {
+            System.out.println("Admin(getNumMembersInEachForum) " + e);
+        }
+        return map;
+    }
+	
+	
 
 
 
