@@ -141,6 +141,10 @@ public class ServerRequestHandler implements Runnable {
                 String password = parsedReq[6];
                 Member m = _si.getMember(forumName, userName);
                 handleNotification(m, password);
+                break;
+            case "LOGOUT":
+                //Todo
+                break;
             default:
                 break;
         }
