@@ -27,9 +27,9 @@ public class ServerToDataBaseHandler implements ServerInterface {
     public boolean register(String forumName, String userName, String password, String email) {
         boolean isAdded = false;
         if (forumExists(forumName)) {
-            System.out.println("is unique forum");
+            //System.out.println("is unique forum");
             if (isUserNameUnique(forumName, userName)) {
-                System.out.println("is unique username");
+                //System.out.println("is unique username");
                 isAdded = _db.addMember(new Member(userName, password, email, forumName, null));
             }
         }
@@ -39,6 +39,7 @@ public class ServerToDataBaseHandler implements ServerInterface {
     private boolean isUserNameUnique(String forumName, String userName) {
         boolean isUnique = true;
         List<Member> members = _db.getAllMembers(forumName);
+        if(members != null)
         for (Member m : members) {
             if (m.getUserName().equals(userName)) {
                 isUnique = false;
@@ -95,7 +96,7 @@ public class ServerToDataBaseHandler implements ServerInterface {
         boolean isAdded = false;
         Admin admin = null;
         if (isForumNameUnique(forumName)) {
-            System.out.println("is unique forum");
+            //System.out.println("is unique forum");
             Forum forumToAdd = new Forum(forumName);
             admin = new Admin(adminUserName, adminPassword, "", forumName, null);
             forumToAdd.setAdmin(admin);
@@ -131,7 +132,7 @@ public class ServerToDataBaseHandler implements ServerInterface {
         if (subForum.getForum() != null) {
             if (isSubForumNameUnique(subForum.getForum().getForumName(),
                     subForum.getSubForumName())) {
-                System.out.println("is unique subforum");
+               // System.out.println("is unique subforum");
                 isAdded = _db.addSubForum(subForum, moderators);
             }
         }
