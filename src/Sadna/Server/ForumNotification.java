@@ -6,8 +6,9 @@ import java.util.Date;
 import java.util.List;
 import Sadna.db.Post;
 import Sadna.db.ThreadMessage;
+import java.io.Serializable;
 
-public class ForumNotification {
+public class ForumNotification implements Serializable{
 
     public static long notificationCounter = 0;
     private String text;

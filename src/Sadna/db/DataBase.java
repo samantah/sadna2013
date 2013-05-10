@@ -23,7 +23,8 @@ import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DataBase implements DBInterface {
 
@@ -580,28 +581,31 @@ public class DataBase implements DBInterface {
                 + subForumName + "/moderators.txt";
         String pathToMembers = this.dataBaseFolder + "/" + forumName
                 + "/members/";
+        BufferedReader br;
         try {
-            BufferedReader br = new BufferedReader(new FileReader(path));
-
+            br = new BufferedReader(new FileReader(path));
             while ((currMod = br.readLine()) != null) {
-                inputStream = new FileInputStream(pathToMembers + currMod + ".obj");
-                objin = new ObjectInputStream(inputStream);
-                Member readObject = (Member) objin.readObject();
-                retList.add(readObject);
+                try {
+                    inputStream = new FileInputStream(pathToMembers + currMod + ".obj");
+                    objin = new ObjectInputStream(inputStream);
+                    Member readObject = (Member) objin.readObject();
+                    retList.add(readObject);
+                } catch (FileNotFoundException ex) {
+                    String message = ex.getMessage();
+                    System.out.println(message);
+                } catch (IOException ex) {
+                    String message = ex.getMessage();
+                    System.out.println(message);
+                } catch (ClassNotFoundException ex) {
+                    String message = ex.getMessage();
+                    System.out.println(message);
+                }
             }
-            if (objin != null && inputStream != null) {
-                objin.close();
-                inputStream.close();
-            }
-
         } catch (FileNotFoundException ex) {
-            String message = ex.getMessage();
-            System.out.println(message);
+            System.out.println(ex.getMessage());
             return null;
-        } catch (IOException | ClassNotFoundException ex) {
-            String message = ex.getMessage();
-            System.out.println(message);
-            return null;
+        } catch (IOException ex) {
+            Logger.getLogger(DataBase.class.getName()).log(Level.SEVERE, null, ex);
         }
         return retList;
     }
@@ -760,7 +764,9 @@ public class DataBase implements DBInterface {
     }
 
     public static void main(String args[]) {
+
         DataBase db = new DataBase();
+        db.deleteFolder(db.dataBaseFolder);
         Forum forum = new Forum("forum1");
         SubForum subForum = new SubForum(forum, "subForum1");
         SubForum subForum2 = new SubForum(forum, "subForum2");
@@ -800,5 +806,4 @@ public class DataBase implements DBInterface {
 //        db.deletePost(post2);
 
     }
-
 }
