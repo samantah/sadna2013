@@ -173,7 +173,7 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 
     @Override
     public void sendNotifications(Vector<ForumNotification> notifications) {
-		try {
+        try {
             objectOutputToClient.writeObject(notifications);
         } catch (IOException e) {
             e.printStackTrace();

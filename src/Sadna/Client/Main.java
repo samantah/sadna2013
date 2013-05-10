@@ -11,7 +11,7 @@ import java.util.List;
 public class Main {
 
     public static void main(String argv[]) throws Exception {
-        String host = "172.16.90.161";
+        String host = "192.168.2.105";
         int port = 3333;
         ConnectionHandler c = new ConnectionHandler(host, port);
         c.initiateForum("newForum", "chen", "chen1234");
