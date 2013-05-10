@@ -8,6 +8,9 @@ import Sadna.Client.API.ClientCommunicationHandlerInterface;
 import Sadna.Server.ForumNotification;
 import Sadna.db.Post;
 import Sadna.db.ThreadMessage;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 public class Member extends User {
@@ -20,7 +23,7 @@ public class Member extends User {
     protected String password;
     protected String email;
     protected String forum;
-    protected Vector<ForumNotification> notifications;
+    protected List<ForumNotification> notifications;
 
     public Member(String userName, String password, String email, String forum, ClientCommunicationHandlerInterface ch) {
         super(ch);
@@ -28,10 +31,10 @@ public class Member extends User {
         this.password = password;
         this.email = email;
         this.forum = forum;
-        this.notifications = new Vector<ForumNotification>();
+        this.notifications = new ArrayList<ForumNotification>();
     }
 
-    public Vector<ForumNotification> getNotifications() {
+    public List<ForumNotification> getNotifications() {
         return notifications;
     }
 

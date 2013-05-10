@@ -79,7 +79,7 @@ public interface ServerInterface {
      * boolean logout(String forumName, String userName);
      */
 
-    public Vector<ForumNotification> getNotifications(String forumName, String userName);
+    public List<ForumNotification> getNotifications(String forumName, String userName);
 
 	int getNumberOfThreadsInForum(String forumName);
 	
