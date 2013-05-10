@@ -78,5 +78,5 @@ public interface ClientCommunicationHandlerInterface {
     
     public Hashtable<String,Vector<String>> getUsersPostToUser(String forumName, String userName, String password);
         
-    
+    public int getForumCounter(String forumName, String userName, String password);
 }

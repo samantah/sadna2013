@@ -24,5 +24,17 @@ public class SuperAdmin extends Admin{
 	public boolean initiateForum(String forumName, String adminName, String adminPassword) {
 		return conHand.initiateForum(forumName, adminName, adminPassword);
 	}
+
+    public int getForumCounter(String forumName, String userName, String password) {
+        int numberOfForums = -1;
+        try {
+            numberOfForums = conHand.getForumCounter(forumName, userName, password);
+        } catch (Exception e) {
+            System.out.println("SuperAdmin(getForumCounter) " + e);
+        }
+        return numberOfForums;
+    }
+	
+	
     
 }

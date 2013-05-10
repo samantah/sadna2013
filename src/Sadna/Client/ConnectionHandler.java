@@ -513,7 +513,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 
     public int getThreadCounter(String forumName, String userName, String password) {
         int counter = 0;
-        msgToSend = "GETCOUNT\n" + "forumName:\n" + forumName + "\n" + "userName:\n" + userName + "\n"
+        msgToSend = "GETTHRCOUNT\n" + "forumName:\n" + forumName + "\n" + "userName:\n" + userName + "\n"
                 + "password:\n" + password + "\n";
         msgToSend += delimiter;
         stringToServer.println(msgToSend);
@@ -559,6 +559,21 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 		}
 		return map;
 	}
+	
+	  public int getForumCounter(String forumName, String userName, String password) {
+        int counter = 0;
+        msgToSend = "GETFRMCOUNT\n" + "forumName:\n" + forumName + "\n" + "userName:\n" + userName + "\n"
+                + "password:\n" + password + "\n";
+        msgToSend += delimiter;
+        stringToServer.println(msgToSend);
+        try {
+            receivedMsg = stringFromServer.readLine();
+        } catch (IOException e) {
+            System.out.println("ConnectionHandler(getForumCounter) " + e);
+        }
+        counter = Integer.parseInt(receivedMsg);
+        return counter;
+    }
 
-
-}
+	  
+} 
