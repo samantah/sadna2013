@@ -333,24 +333,17 @@ public class ServerToDataBaseHandler implements ServerInterface {
     }
 
 	@Override
-	public boolean removeModerator(String forumName, String moderatorName) {
-		return _db.removeModerator(forumName, moderatorName);
-	}
-
-
-
-	@Override
-	public boolean isAdmin(String userName, String password, String forumName) {
-		return _db.isAdmin(userName, password, forumName);
+	public boolean deleteModerator(Moderator moderator, String subForumName) {
+		return _db.deleteModerator(moderator, subForumName);
 	}
 
 	@Override
-	public int getThreadCounter(String forumName) {
-		return _db.getThreadCounter(forumName);
+	public int getNumberOfThreadsInForum(String forumName) {
+		return _db.getNumberOfThreadsInForum(forumName);
 	}
 
-	@Override
-	public boolean isValidMember(String userName, String password) {
-		return _db.isValidMember(userName, password);
-	}
+
+
+
+
 }

@@ -38,6 +38,8 @@ public interface ServerInterface {
     boolean publishThread(ThreadMessage thread);
 
     boolean deleteThread(ThreadMessage thread);
+    
+    boolean deleteModerator(Moderator moderator, String subForumName);
 
     boolean postComment(Post comment);
 
@@ -78,13 +80,8 @@ public interface ServerInterface {
      */
 
     public Vector<ForumNotification> getNotifications(String forumName, String userName);
+
+	int getNumberOfThreadsInForum(String forumName);
     
-    public boolean removeModerator(String forumName, String moderatorName);
-
-	boolean isAdmin(String userName, String password, String forumName);
-
-	int getThreadCounter(String forumName);
-
-	boolean isValidMember(String userName, String password);
 
 }
