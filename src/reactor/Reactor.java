@@ -189,14 +189,16 @@ public class Reactor<T> implements Runnable {
      * number of threads in the thread pool are read from the command line.
      */
     public static void main(String args[]) {
-        if (args.length != 2) {
-            System.err.println("Usage: java Reactor <port> <pool_size>");
-            System.exit(1);
-        }
+//        if (args.length != 2) {
+//            System.err.println("Usage: java Reactor <port> <pool_size>");
+//            System.exit(1);
+//        }
 
         try {
-            int port = Integer.parseInt(args[0]);
-            int poolSize = Integer.parseInt(args[1]);
+//            int port = Integer.parseInt(args[0]);
+//            int poolSize = Integer.parseInt(args[1]);
+            int port = 3333;
+            int poolSize = 10;
 
             Reactor<HttpMessage> reactor = startHttpServer(port, poolSize);
 //            Reactor<StringMessage> reactor = startEchoServer(port, poolSize);
@@ -221,7 +223,7 @@ public class Reactor<T> implements Runnable {
         final Charset charset = Charset.forName("UTF-8");
         TokenizerFactory<StringMessage> tokenizerMaker = new TokenizerFactory<StringMessage>() {
             public MessageTokenizer<StringMessage> create() {
-                return new FixedSeparatorMessageTokenizer("\n", charset);
+                return new FixedSeparatorMessageTokenizer("\0", charset);
             }
         };
 

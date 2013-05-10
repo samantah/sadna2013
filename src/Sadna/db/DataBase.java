@@ -4,6 +4,7 @@
  */
 package Sadna.db;
 
+import Sadna.Client.Admin;
 import Sadna.Client.Member;
 import Sadna.Client.Moderator;
 import Sadna.Client.SuperAdmin;
@@ -806,4 +807,7 @@ public class DataBase implements DBInterface {
 //        db.deletePost(post2);
 
     }
+
+
+
 }

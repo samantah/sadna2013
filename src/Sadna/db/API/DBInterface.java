@@ -4,6 +4,7 @@
  */
 package Sadna.db.API;
 
+import Sadna.Client.Admin;
 import Sadna.Client.Member;
 import Sadna.Client.Moderator;
 import Sadna.Client.SuperAdmin;
@@ -39,6 +40,8 @@ public interface DBInterface {
     List<Post> getPostList(String forumName, String subForumName, int threadID);
 
     List<Forum> getForumsList();
+    
+    List<Admin> getAllAdmins();
 
     int getNumberOfSubforums(String forumName);
 
@@ -73,5 +76,13 @@ public interface DBInterface {
     boolean addModerator(Moderator moderator, SubForum subForum);
     
     SuperAdmin getSuperAdmin();
+
+	boolean isAdmin(String userName, String password, String forumName); //checks if this is a valid moderator and valid password
+
+	boolean removeModerator(String forumName, String moderatorName);
+
+	int getThreadCounter(String forumName); //returns the number of threads in this forum
+
+	boolean isValidMember(String userName, String password); //checks if the user name and passward are valid.
 
 }
