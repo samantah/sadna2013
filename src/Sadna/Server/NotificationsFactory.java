@@ -1,9 +1,12 @@
 package Sadna.Server;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import Sadna.Client.Member;
 import Sadna.Server.API.ServerInterface;
 import Sadna.db.Post;
+import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 
 public class NotificationsFactory {
@@ -26,12 +29,9 @@ public class NotificationsFactory {
 			if (currMember != null) {
 				currMember.addNotification(new ForumNotification(txt));
 				_si.addMember(currMember);
-			} else {
-				return false;
-			}
+			} 
 		}
 		return true;
-
 	}
 
 	public boolean sendNotifications(Post post) {
@@ -46,11 +46,35 @@ public class NotificationsFactory {
 			if (currMember != null) {
 				currMember.addNotification(new ForumNotification(txt));
 				_si.addMember(currMember);
-			} else {
-				return false;
-			}
+			} 
 		}
 		return true;
 
+	}
+
+	public boolean sendNotifications(SubForum sf) {
+		String txt = "Sub-forum: " + sf.getSubForumName() + "deleted.";
+		String forumName = sf.getForum().getForumName();
+		String subForumName = sf.getSubForumName();
+		List<ThreadMessage> threads = _si.getThreadsList(forumName, subForumName);
+		for (ThreadMessage threadMessage : threads) {
+			String memberName = threadMessage.getPublisher();
+			Member currMember = _si.getMember(forumName, memberName);
+			if (currMember != null) {
+				currMember.addNotification(new ForumNotification(txt));
+				_si.addMember(currMember);
+			}
+			ArrayList<Post> users = (ArrayList<Post>) _si.getAllPosts(forumName, subForumName, threadMessage.getId());
+			for (Post currPost : users) {
+				memberName = currPost.getPublisher();
+				currMember = _si.getMember(forumName, memberName);
+				if (currMember != null) {
+					currMember.addNotification(new ForumNotification(txt));
+					_si.addMember(currMember);
+				} 
+			}
+
+		}
+		return true;
 	}
 }

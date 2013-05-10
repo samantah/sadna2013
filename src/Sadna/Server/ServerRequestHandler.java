@@ -410,16 +410,12 @@ public class ServerRequestHandler implements Runnable {
 		return true;
 	}
 
-	private boolean deleteSubForumAndSendOk(SubForum sf) {
-		_si.deleteSubForum(sf);
-		_ch.sendOK();
-		return true;
-	}
 
 	private boolean handleDeleteSubForum(SubForum sf, String requester, String password) {
 		Admin admin = sf.getForum().getAdmin();
 		boolean equals = admin.getUserName().equals(requester) && admin.getPassword().equals(password);
 		if (equals) {
+			notificationsFactory.sendNotifications(sf);
 			_si.deleteSubForum(sf);
 			_ch.sendOK();
 			return true;
