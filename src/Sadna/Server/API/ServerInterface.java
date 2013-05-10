@@ -82,6 +82,8 @@ public interface ServerInterface {
     public Vector<ForumNotification> getNotifications(String forumName, String userName);
 
 	int getNumberOfThreadsInForum(String forumName);
+	
+	//int getNumberOfUserThreads(String forumName, String userName);
     
 
 }

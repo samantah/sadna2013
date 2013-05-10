@@ -183,4 +183,21 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 
     }
 
+	@Override
+	public void sendThreadCounter(int threadCounter) {
+		stringToClient.println("The number of Threads is: " + threadCounter);	
+	}
+
+	@Override
+	public void sendIsTheOnlyModeratorInTheSubForum() {
+		stringToClient.println("action not allowed");
+		
+	}
+
+/*	@Override
+	public void sendUserThreadsCounter(int numberOfUserThreads) {
+		// TODO Auto-generated method stub
+		
+	} */
+
 }

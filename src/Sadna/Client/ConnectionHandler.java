@@ -492,11 +492,11 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
         return notifications;
     }
 
-    public boolean removeModerator(String forumName, String moderatorName,
-            String userName, String password) {
-        boolean remove = false;
-        msgToSend = "REMMOD\n" + "forumName:\n" + forumName + "\n" + "moderatorName:\n" + moderatorName + "\n"
-                + "userName:\n" + userName + "\n" + "password:\n" + password + "\n";
+    @Override
+    public boolean removeModerator(String forumName, String subForum, String moderatorName, String userName, String password) {
+    	boolean remove = false;
+        msgToSend = "REMMOD\n" + "forumName:\n" + forumName + "\n" + "subForumName:\n" + subForum + "\n" 
+    	+ "moderatorName:\n" + moderatorName + "\n" + "userName:\n" + userName + "\n" + "password:\n" + password + "\n";
         msgToSend += delimiter;
         stringToServer.println(msgToSend);
         try {
@@ -525,7 +525,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
         return counter;
     }
 
-    public int getNumOfUserThread(String forumName, String generalUserName, String userName, String password) {
+    public int getNumOfUserThreads(String forumName, String generalUserName, String userName, String password) {
         int counter = 0;
         msgToSend = "GETNUMUSRTHR\n" + "forumName:\n" + forumName + "\n" + "generalUserName:\n" + generalUserName + "\n" + "userName:\n" + userName + "\n"
                 + "password:\n" + password + "\n";
@@ -557,4 +557,6 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 
         return usersResponeToUser;
     }
+
+
 }

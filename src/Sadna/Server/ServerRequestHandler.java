@@ -148,6 +148,9 @@ public class ServerRequestHandler implements Runnable {
             case "GETCOUNT":
                 handleThreadCounter(parsedReq[2], parsedReq[4], parsedReq[6]);
                 break;
+            case "GETNUMUSRTHR":
+            	//handleGetNumberOfThreads(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8]);
+            	break;
             case "LOGOUT":
                 //TO DO
                 break;
@@ -156,8 +159,21 @@ public class ServerRequestHandler implements Runnable {
         }
 
     }
+    //******************************************************************************  
+/*    private void handleGetNumberOfThreads(String forumName, String userName, String adminName, String password) {
+    	Member admin = _si.getMember(forumName, adminName);
+        if (!admin.getPassword().equals(password)) {
+            _ch.sendErrorNoAuthorized();
+            return;
+        }
+        if (!(admin instanceof Admin)) {
+            _ch.sendErrorNoAuthorized();
+            return;
+        }
+        _ch.sendUserThreadsCounter(_si.getNumberOfUserThreads(forumName, userName));	}*/	
+    //******************************************************************************  
 
-    private void handleThreadCounter(String forumName, String userName, String password) {
+	private void handleThreadCounter(String forumName, String userName, String password) {
         Member admin = _si.getMember(forumName, userName);
         if (!admin.getPassword().equals(password)) {
             _ch.sendErrorNoAuthorized();
