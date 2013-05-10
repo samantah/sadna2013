@@ -44,5 +44,7 @@ public interface ConnectionHandlerServerInterface{
 
 	public void sendIsTheOnlyModeratorInTheSubForum();
 
+	//public void sendUserThreadsCounter(int numberOfUserThreads);
+
 }
 

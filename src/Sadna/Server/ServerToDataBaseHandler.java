@@ -342,6 +342,11 @@ public class ServerToDataBaseHandler implements ServerInterface {
 		return _db.getNumberOfThreadsInForum(forumName);
 	}
 
+/*	@Override
+	public int getNumberOfUserThreads(String forumName, String userName) {
+		return _db.getNumberOfUserThreads(forumName, userName);
+	}
+*/
 
 
 

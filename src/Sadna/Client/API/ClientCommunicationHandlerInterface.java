@@ -68,13 +68,14 @@ public interface ClientCommunicationHandlerInterface {
 
     public boolean finishCommunication();
     
-    boolean removeModerator(String forumName, String moderatorName, String userName, String password);
+    boolean removeModerator(String forumName, String subForum, String moderatorName, String userName, String password);
 
     int getThreadCounter(String forumName, String userName, String password);
     
-    public int getNumOfUserThread(String forumName, String generalUserName, String userName, String password);
+    public int getNumOfUserThreads(String forumName, String generalUserName, String userName, String password);
     
     public Vector<Object> getUsersPostToUser(String forumName, String userName, String password);
+
         
     
 }
