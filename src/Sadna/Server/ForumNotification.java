@@ -1,15 +1,16 @@
 package Sadna.Server;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import Sadna.db.Post;
-import Sadna.db.ThreadMessage;
 
-public class ForumNotification {
+public class ForumNotification implements Serializable {
 
-    public static long notificationCounter = 0;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -622839538827284549L;
+	public static long notificationCounter = 0;
     private String text;
     private long notificationID;
     private String notificationTime;
