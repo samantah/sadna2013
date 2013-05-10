@@ -1,6 +1,7 @@
 package Sadna.Client;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import java.io.*;
 import java.net.*;
@@ -540,23 +541,24 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
         return counter;
     }
 
-    public Vector<Object> getUsersPostToUser(String forumName, String userName, String password) {
-
-        Vector<Object> usersResponeToUser = new Vector<Object>();
-
-        msgToSend = "GETUSRSPOSTUSER\n" + "forumName:\n" + forumName + "\n" + "\n" + "userName:\n" + userName + "\n"
-                + "password:\n" + password + "\n";
-        msgToSend += delimiter;
-
-        stringToServer.println(msgToSend);
-        try {
-            receivedMsg = stringFromServer.readLine();
-        } catch (IOException e) {
-            System.out.println("ConnectionHandler(getNumOfUserThread) " + e);
-        }
-
-        return usersResponeToUser;
-    }
+    /*
+     * MAP(username:String, users that post:Vector<String>)
+     */
+	public Hashtable<String,Vector<String>> getUsersPostToUser(String forumName, String userName, String password) {
+		Hashtable<String,Vector<String>> map = null;
+		msgToSend = "GETUSRSPOSTUSER\n" + "forumName:\n" + forumName + "\n"+ "userName:\n" 
+		+ userName + "\n" + "password:\n" + password + "\n";
+		msgToSend += delimiter;
+		stringToServer.println(msgToSend);
+		try {
+			map = (Hashtable<String,Vector<String>>)objectFromServer.readObject();
+		} catch (IOException e) {
+			System.out.println("ConnectionHandler(getUsersPostToUser) " + e);
+		} catch (ClassNotFoundException e) {
+			System.out.println("ConnectionHandler(getUsersPostToUser) error in objectFromServer " + e);
+		}
+		return map;
+	}
 
 
 }
