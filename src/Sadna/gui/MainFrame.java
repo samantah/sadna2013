@@ -61,6 +61,7 @@ public class MainFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         logInButton.setText("log in as admin");
+        logInButton.setToolTipText("log in as super admin");
         logInButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 logInButtonActionPerformed(evt);
@@ -78,6 +79,7 @@ public class MainFrame extends javax.swing.JFrame {
         jScrollPane1.setViewportView(forumsList);
 
         enterForumButton.setText("Enter Forum");
+        enterForumButton.setToolTipText("enters the selected forum from the list above");
         enterForumButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 enterForumButtonActionPerformed(evt);
@@ -86,6 +88,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jButtonInitiateForum.setFont(new java.awt.Font("Arial", 2, 12)); // NOI18N
         jButtonInitiateForum.setText("initiate new forum");
+        jButtonInitiateForum.setToolTipText("an option to initiate a new forum");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

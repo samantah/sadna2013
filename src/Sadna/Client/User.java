@@ -64,4 +64,8 @@ public class User implements Serializable {
     public List<Post> getAllPosts(ThreadMessage tm) {
         return conHand.getAllPosts(tm);
     }
+
+    public ClientCommunicationHandlerInterface getConHand() {
+        return conHand;
+    }
 }

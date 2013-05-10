@@ -5,7 +5,6 @@
 package Sadna.Client;
 
 import Sadna.Client.API.ClientCommunicationHandlerInterface;
-import Sadna.db.SubForum;
 
 public class Moderator extends Member {
     /**
@@ -16,7 +15,13 @@ public class Moderator extends Member {
     public Moderator(String userName, String password, String email,
             String forum, ClientCommunicationHandlerInterface ch) {
         super(userName, password, email, forum, ch);
-        // TODO Auto-generated constructor stub
     }
+
+    public Moderator(Member member) {
+        super(member.getUserName(), member.getPassword(), member.getEmail(),
+                member.getForum(), member.getConHand());
+    }
+    
+    
     
 }

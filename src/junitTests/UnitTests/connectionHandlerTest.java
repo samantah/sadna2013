@@ -164,7 +164,7 @@ public class connectionHandlerTest {
             System.out.println(threadMessage1.getContent());
         }
         System.out.println(db.getNumberOfSubforums("forum1"));
-        System.out.println(db.getNumberOfThreads("forum1", "subForum1"));
+        System.out.println(db.getNumberOfThreadsInSubForum("forum1", "subForum1"));
         Member member = new Member("user1", "pass1234", "mail", "forum1", null);
         db.addMember(member);
         System.out.println(db.getMember("forum1", "user1").getUserName());

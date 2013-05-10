@@ -25,10 +25,9 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+              <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="jLabelThreadContent" alignment="0" max="32767" attributes="0"/>
                   <Component id="jLabelThreadTitle" alignment="0" max="32767" attributes="0"/>
-                  <Component id="jScrollPane1" alignment="1" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="jButtonBack" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
@@ -39,21 +38,22 @@
                       <Component id="logInButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="registerButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
                   </Group>
+                  <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
               </Group>
+              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="jTextFieldAddContent" pref="295" max="32767" attributes="0"/>
-                          <Component id="jTextFieldAddTitle" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <EmptySpace max="32767" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
                       <Component id="jButtonAddPost" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="113" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="jTextFieldAddTitle" pref="241" max="32767" attributes="0"/>
+                          <Component id="jTextFieldAddContent" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -107,6 +107,7 @@
     <Component class="javax.swing.JButton" name="jButtonBack">
       <Properties>
         <Property name="text" type="java.lang.String" value="back"/>
+        <Property name="toolTipText" type="java.lang.String" value="back to the sub forum page"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonBackActionPerformed"/>
@@ -115,6 +116,7 @@
     <Component class="javax.swing.JButton" name="logInButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="log in"/>
+        <Property name="toolTipText" type="java.lang.String" value="log in with an existing member"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="logInButtonActionPerformed"/>
@@ -123,6 +125,7 @@
     <Component class="javax.swing.JButton" name="registerButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="register"/>
+        <Property name="toolTipText" type="java.lang.String" value="registers as a new member to the forum"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="registerButtonActionPerformed"/>
@@ -163,6 +166,7 @@
     <Component class="javax.swing.JButton" name="jButtonAddPost">
       <Properties>
         <Property name="text" type="java.lang.String" value="add post"/>
+        <Property name="toolTipText" type="java.lang.String" value="adds a new post to the current thread"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonAddPostActionPerformed"/>
@@ -175,6 +179,7 @@
     <Component class="javax.swing.JButton" name="jButtonSignout">
       <Properties>
         <Property name="text" type="java.lang.String" value="sign out"/>
+        <Property name="toolTipText" type="java.lang.String" value="sign out to a user mode"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonSignoutActionPerformed"/>
@@ -191,6 +196,7 @@
     <Component class="javax.swing.JButton" name="jButtonDeletePost">
       <Properties>
         <Property name="text" type="java.lang.String" value="delete post"/>
+        <Property name="toolTipText" type="java.lang.String" value="delete the selected post&#xa;authorized only by the publisher, &#xa;moderator or the admin"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonDeletePostActionPerformed"/>

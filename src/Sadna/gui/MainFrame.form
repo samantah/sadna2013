@@ -68,6 +68,7 @@
     <Component class="javax.swing.JButton" name="logInButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="log in as admin"/>
+        <Property name="toolTipText" type="java.lang.String" value="log in as super admin"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="logInButtonActionPerformed"/>
@@ -103,6 +104,7 @@
     <Component class="javax.swing.JButton" name="enterForumButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Enter Forum"/>
+        <Property name="toolTipText" type="java.lang.String" value="enters the selected forum from the list above"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="enterForumButtonActionPerformed"/>
@@ -114,6 +116,7 @@
           <Font name="Arial" size="12" style="2"/>
         </Property>
         <Property name="text" type="java.lang.String" value="initiate new forum"/>
+        <Property name="toolTipText" type="java.lang.String" value="an option to initiate a new forum"/>
       </Properties>
     </Component>
   </SubComponents>

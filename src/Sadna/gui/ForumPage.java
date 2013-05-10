@@ -95,6 +95,7 @@ public class ForumPage extends javax.swing.JFrame {
         jScrollPane2.setViewportView(subForumsList);
 
         logInButton.setText("log in");
+        logInButton.setToolTipText("log in with an existing member");
         logInButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 logInButtonActionPerformed(evt);
@@ -102,6 +103,7 @@ public class ForumPage extends javax.swing.JFrame {
         });
 
         registerButton.setText("register");
+        registerButton.setToolTipText("registers as a new member to the forum");
         registerButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 registerButtonActionPerformed(evt);
@@ -109,6 +111,7 @@ public class ForumPage extends javax.swing.JFrame {
         });
 
         enterSubForumButton.setText("Enter Sub-Forum");
+        enterSubForumButton.setToolTipText("enters the selected sub forum");
         enterSubForumButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 enterSubForumButtonActionPerformed(evt);
@@ -116,6 +119,7 @@ public class ForumPage extends javax.swing.JFrame {
         });
 
         jButtonBack.setText("back");
+        jButtonBack.setToolTipText("back to the main page");
         jButtonBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonBackActionPerformed(evt);
@@ -123,6 +127,7 @@ public class ForumPage extends javax.swing.JFrame {
         });
 
         jButtonSignout.setText("sign out");
+        jButtonSignout.setToolTipText("sign out to a user mode");
         jButtonSignout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonSignoutActionPerformed(evt);
@@ -135,6 +140,7 @@ public class ForumPage extends javax.swing.JFrame {
         jLabelHeadNewSubForum.setText("New SubForum");
 
         addNewSubButton.setText("Add sub-forum");
+        addNewSubButton.setToolTipText("adding a new sub forum\nmake sure the name is unique\nand the moderators exist");
         addNewSubButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addNewSubButtonActionPerformed(evt);
