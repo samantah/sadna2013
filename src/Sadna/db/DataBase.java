@@ -28,13 +28,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DataBase implements DBInterface {
-
+    
     private DecimalFormat df = new DecimalFormat("000");
     private String dataBaseFolder = "dataBase";
-
+    
     public DataBase() {
     }
-
+    
     @Override
     public Forum getForum(String forumName) {
         FileInputStream inputStream;
@@ -57,7 +57,7 @@ public class DataBase implements DBInterface {
         }
         return returnForum;
     }
-
+    
     @Override
     public SubForum getSubForum(String forumName, String subForumName) {
         FileInputStream inputStream;
@@ -81,7 +81,7 @@ public class DataBase implements DBInterface {
         }
         return returnSubForum;
     }
-
+    
     @Override
     public ThreadMessage getThread(String forumName, String subForumName, int threadID) {
         FileInputStream inputStream;
@@ -104,9 +104,9 @@ public class DataBase implements DBInterface {
             return null;
         }
         return returnThreadMessage;
-
+        
     }
-
+    
     @Override
     public Post getPost(String forumName, String subForumName, int threadID, int postID) {
         FileInputStream inputStream;
@@ -132,7 +132,7 @@ public class DataBase implements DBInterface {
         }
         return returnPost;
     }
-
+    
     @Override
     public Member getMember(String forumName, String userName) {
         FileInputStream inputStream;
@@ -157,7 +157,7 @@ public class DataBase implements DBInterface {
         }
         return returnMemeber;
     }
-
+    
     @Override
     public boolean addForum(Forum forum) {
         //get the names and IDs of the post
@@ -185,11 +185,11 @@ public class DataBase implements DBInterface {
             System.out.println(message);
             return false;
         }
-
+        
         return true;
-
+        
     }
-
+    
     @Override
     public boolean addSubForum(SubForum subForum, List<Moderator> listOfModerators) {
         //get the names and IDs of the post
@@ -197,9 +197,9 @@ public class DataBase implements DBInterface {
         String subForumStr = subForum.getSubForumName();
         ObjectOutputStream obj;
         FileOutputStream outputstream;
-
-
-
+        
+        
+        
         try {
             String path = dataBaseFolder + "/" + forum + "/"; //save the path of the post
             new File(path).mkdirs();
@@ -212,7 +212,7 @@ public class DataBase implements DBInterface {
                 bw.write(m.getUserName() + "\n");
             }
             bw.close();
-
+            
             outputstream = new FileOutputStream(path + subForumStr + ".obj");
             obj = new ObjectOutputStream(outputstream);
             obj.writeObject(subForum);//write the object to the file
@@ -227,10 +227,10 @@ public class DataBase implements DBInterface {
             System.out.println(message);
             return false;
         }
-
+        
         return true;
     }
-
+    
     @Override
     public boolean addPost(Post post) {
         //get the names and IDs of the post
@@ -240,7 +240,7 @@ public class DataBase implements DBInterface {
         int postid = post.getId();
         ObjectOutputStream obj;
         FileOutputStream outputstream;
-
+        
         ThreadMessage thread = post.getThread();
         String pathToThread = this.dataBaseFolder + "/" + forum + "/"
                 + subForum + "/";
@@ -255,7 +255,7 @@ public class DataBase implements DBInterface {
             System.out.println(ex.getMessage());
             return false;
         }
-
+        
         try {
             String path = dataBaseFolder + "/" + forum
                     + "/" + subForum + "/" + "thread" + df.format(threadMessage) + "/"; //save the path of the post
@@ -274,10 +274,10 @@ public class DataBase implements DBInterface {
             System.out.println(message);
             return false;
         }
-
+        
         return true;
     }
-
+    
     @Override
     public boolean addThread(ThreadMessage thread) {
         //get the names and IDs of the thread
@@ -298,7 +298,7 @@ public class DataBase implements DBInterface {
             System.out.println(ex.getMessage());
             return false;
         }
-
+        
         try {
             String path = dataBaseFolder + "/" + forum
                     + "/" + subForumStr + "/"; //save the path of the post
@@ -320,11 +320,11 @@ public class DataBase implements DBInterface {
             System.out.println(message);
             return false;
         }
-
+        
         return true;
-
+        
     }
-
+    
     @Override
     public boolean addMember(Member member) {
         String forumStr = member.getForum();
@@ -339,7 +339,7 @@ public class DataBase implements DBInterface {
             obj.writeObject(member);
             obj.close();
             outputstream.close();
-
+            
         } catch (FileNotFoundException ex) { //cannot open the file
             String message = ex.getMessage();
             System.out.println(message);
@@ -349,10 +349,10 @@ public class DataBase implements DBInterface {
             System.out.println(message);
             return false;
         }
-
+        
         return true;
     }
-
+    
     @Override
     public List<SubForum> getSubForumsList(String forumName) {
         FileInputStream inputStream;
@@ -373,7 +373,7 @@ public class DataBase implements DBInterface {
                 retList.add(readObject);
                 obj.close();
                 inputStream.close();
-
+                
             } catch (FileNotFoundException ex) {
                 String message = ex.getMessage();
                 System.out.println(message);
@@ -386,7 +386,7 @@ public class DataBase implements DBInterface {
         }
         return retList;
     }
-
+    
     @Override
     public List<ThreadMessage> getThreadsList(String forumName, String subForumName) {
         FileInputStream inputStream;
@@ -408,7 +408,7 @@ public class DataBase implements DBInterface {
                 retList.add(readObject);
                 obj.close();
                 inputStream.close();
-
+                
             } catch (FileNotFoundException ex) {
                 String message = ex.getMessage();
                 System.out.println(message);
@@ -421,7 +421,7 @@ public class DataBase implements DBInterface {
         }
         return retList;
     }
-
+    
     @Override
     public int getNumberOfSubforums(String forumName) {
         String pathToFolder = dataBaseFolder + "/" + forumName + "/";
@@ -436,9 +436,9 @@ public class DataBase implements DBInterface {
         }
         return numberOfSubForums;
     }
-
+    
     @Override
-    public int getNumberOfThreads(String forumName, String subForumName) {
+    public int getNumberOfThreadsInSubForum(String forumName, String subForumName) {
         String pathToFolder = dataBaseFolder + "/" + forumName + "/"
                 + subForumName + "/";
         File folder = new File(pathToFolder);
@@ -452,7 +452,7 @@ public class DataBase implements DBInterface {
         }
         return numberOfThreads;
     }
-
+    
     @Override
     public List<Member> getAllMembers(String forumName) {
         FileInputStream inputStream;
@@ -473,7 +473,7 @@ public class DataBase implements DBInterface {
                 retList.add(readObject);
                 obj.close();
                 inputStream.close();
-
+                
             } catch (FileNotFoundException ex) {
                 String message = ex.getMessage();
                 System.out.println(message);
@@ -486,7 +486,7 @@ public class DataBase implements DBInterface {
         }
         return retList;
     }
-
+    
     @Override
     public List<Forum> getForumsList() {
         FileInputStream inputStream;
@@ -507,7 +507,7 @@ public class DataBase implements DBInterface {
                 retList.add(readObject);
                 obj.close();
                 inputStream.close();
-
+                
             } catch (FileNotFoundException ex) {
                 String message = ex.getMessage();
                 System.out.println(message);
@@ -520,7 +520,7 @@ public class DataBase implements DBInterface {
         }
         return retList;
     }
-
+    
     @Override
     public boolean setSuperAdmin() {
         String userName = "superAdmin";
@@ -535,7 +535,7 @@ public class DataBase implements DBInterface {
             obj.writeObject(sa);
             obj.close();
             outputstream.close();
-
+            
         } catch (FileNotFoundException ex) { //cannot open the file
             String message = ex.getMessage();
             System.out.println(message);
@@ -545,7 +545,7 @@ public class DataBase implements DBInterface {
             System.out.println(message);
             return false;
         }
-
+        
         return true;
     }
 
@@ -571,7 +571,7 @@ public class DataBase implements DBInterface {
         }
         return superAdmin;
     }
-
+    
     @Override
     public List<Member> getModerators(String forumName, String subForumName) {
         FileInputStream inputStream = null;
@@ -610,7 +610,7 @@ public class DataBase implements DBInterface {
         }
         return retList;
     }
-
+    
     @Override
     public List<Post> getPostList(String forumName, String subForumName, int threadID) {
         FileInputStream inputStream;
@@ -632,7 +632,7 @@ public class DataBase implements DBInterface {
                 retList.add(readObject);
                 obj.close();
                 inputStream.close();
-
+                
             } catch (FileNotFoundException ex) {
                 String message = ex.getMessage();
                 System.out.println(message);
@@ -645,7 +645,7 @@ public class DataBase implements DBInterface {
         }
         return retList;
     }
-
+    
     @Override
     public boolean addModerator(Moderator moderator, SubForum subForum) {
         String forum = moderator.getForum();
@@ -663,7 +663,7 @@ public class DataBase implements DBInterface {
             return false;
         }
     }
-
+    
     @Override
     public boolean deleteForum(Forum forum) {
         //get the names and IDs of the post
@@ -676,7 +676,7 @@ public class DataBase implements DBInterface {
         deleteFolder(pathToFolder);
         return true;
     }
-
+    
     @Override
     public boolean deleteSubForum(SubForum subForum) {
         //get the names and IDs of the post
@@ -692,17 +692,17 @@ public class DataBase implements DBInterface {
         deleteFolder(pathToFolder);
         return true;
     }
-
+    
     @Override
     public boolean deleteMember(Member member) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
     @Override
-    public boolean deleteModerator(Moderator moderator) {
+    public boolean deleteModerator(Moderator moderator, String subForum) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
     @Override
     public boolean deletePost(Post post) {
         //get the names and IDs of the post
@@ -713,8 +713,8 @@ public class DataBase implements DBInterface {
         ObjectOutputStream obj;
         FileOutputStream outputstream;
         File fileToDelete;
-
-
+        
+        
         String path = dataBaseFolder + "/" + forum
                 + "/" + subForum + "/" + "thread" + df.format(threadMessage) + "/"; //save the path of the post
         fileToDelete = new File(path + "/message" + df.format(postid) + ".obj");
@@ -724,7 +724,7 @@ public class DataBase implements DBInterface {
             return false;
         }
     }
-
+    
     @Override
     public boolean deleteThread(ThreadMessage thread) {
         //get the names and IDs of the thread
@@ -744,9 +744,9 @@ public class DataBase implements DBInterface {
         fileToDelete.delete();
         deleteFolder(pathToFolder);
         return true;
-
+        
     }
-
+    
     private void deleteFolder(String path) {
         File f = new File(path);
         File[] listFiles = f.listFiles();
@@ -763,9 +763,9 @@ public class DataBase implements DBInterface {
         }
         f.delete();
     }
-
+    
     public static void main(String args[]) {
-
+        
         DataBase db = new DataBase();
         db.deleteFolder(db.dataBaseFolder);
         Forum forum = new Forum("forum1");
@@ -800,14 +800,65 @@ public class DataBase implements DBInterface {
             System.out.println(threadMessage1.getContent());
         }
         System.out.println(db.getNumberOfSubforums("forum1"));
-        System.out.println(db.getNumberOfThreads("forum1", "subForum1"));
+        System.out.println(db.getNumberOfThreadsInSubForum("forum1", "subForum1"));
         Member member = new Member("user1", "pass1234", "mail", "forum1", null);
         db.addMember(member);
         System.out.println(db.getMember("forum1", "user1").getUserName());
 //        db.deletePost(post2);
 
     }
-
-
-
+    
+    @Override
+    public List<Admin> getAllAdmins() {
+        FileInputStream inputStream;
+        ObjectInputStream obj;
+        String path = dataBaseFolder;
+        File folder = new File(path);
+        File[] listFiles = folder.listFiles();
+        ArrayList<Admin> adminsList = new ArrayList<>();
+        for (int i = 0; i < listFiles.length; i++) {
+            String fileName = listFiles[i].getName();
+            if (listFiles[i].isDirectory()) {
+                String pathToMembers = path + "/" + fileName + "members/";
+                File membersFolder = new File(pathToMembers);
+                File[] members = membersFolder.listFiles();
+                for (int j = 0; j < members.length; j++) {
+                    try {
+                        String member = members[i].getName();
+                        inputStream = new FileInputStream(pathToMembers + member);
+                        obj = new ObjectInputStream(inputStream);
+                        Member currMember = (Member) obj.readObject();
+                        if (currMember instanceof Admin) {
+                            adminsList.add((Admin) currMember);
+                            break;
+                        }
+                    } catch (FileNotFoundException ex) {
+                        System.out.println(ex.getMessage());
+                    } catch (IOException ex) {
+                        System.out.println(ex.getMessage());
+                    } catch (ClassNotFoundException ex) {
+                        System.out.println(ex.getMessage());
+                    }
+                    
+                }
+            }
+        }
+        
+        return adminsList;
+    }
+    
+    @Override
+    public int getNumberOfThreadsInForum(String forumName) {
+        String pathToFolder = dataBaseFolder + "/" + forumName + "/";
+        File folder = new File(pathToFolder);
+        File listOfFiles[] = folder.listFiles();
+        int numberOfThreads = 0;
+        for (int i = 0; i < listOfFiles.length; i++) {
+            String folderName = listOfFiles[i].getName();
+            if (listOfFiles[i].isDirectory() && !folderName.equals("members")) {
+                numberOfThreads += getNumberOfThreadsInSubForum(forumName, folderName);
+            }
+        }
+        return numberOfThreads;
+    }
 }
