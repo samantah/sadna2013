@@ -38,9 +38,9 @@ public class Admin extends Moderator {
         return conHand.addSubForum(subForum, lm);
     }
 
-    public void deleteSubForum(String forumName, String subForumName, String moderatorName) {
+    public void deleteSubForum(String forumName, String subForumName) {
         try {
-            conHand.deleteSubForum(forumName, subForumName, moderatorName, moderatorName);
+            conHand.deleteSubForum(forumName, subForumName, this.userName, this.password);
         } catch (Exception e) {
             System.out.println("Admin(deleteSubForum) " + e);
         }
@@ -49,10 +49,9 @@ public class Admin extends Moderator {
     /*
      *  ?s c m?
      */
-    public void addModerator(String forumName, String subForumName, String newModerator,
-            String userName, String password) {
+    public void addModerator(String forumName, String subForumName, String newModerator) {
         try {
-            conHand.addModerator(forumName, subForumName, newModerator, userName, password);
+            conHand.addModerator(forumName, subForumName, newModerator, this.userName, this.password);
         } catch (Exception e) {
             System.out.println("Admin(addModerator) " + e);
         }
@@ -66,29 +65,29 @@ public class Admin extends Moderator {
      *	 Add to clientAPI removeModerator(String userName);
      *   Add to servertAPI removeModerator
      */
-    public boolean removeModerator(String forumName,String subForumName, String moderatorName, String userName, String password) {
+    public boolean removeModerator(String forumName,String subForumName, String moderatorName) {
         try {
-            conHand.removeModerator(forumName,subForumName, moderatorName, userName, password);
+            conHand.removeModerator(forumName,subForumName, moderatorName, this.userName, this.password);
         } catch (Exception e) {
             System.out.println("Admin(removeModerator) " + e);
         }
         return true;
     }
 
-    public int getThreadCounter(String forumName, String userName, String password) {
+    public int getThreadCounter(String forumName) {
         int numberOfThreads = -1;
         try {
-            numberOfThreads = conHand.getThreadCounter(forumName, userName, password);
+            numberOfThreads = conHand.getThreadCounter(forumName, this.userName, this.password);
         } catch (Exception e) {
             System.out.println("Admin(getThreadCounter) " + e);
         }
         return numberOfThreads;
     }
 
-    public int getNumOfUserThreads(String forumName, String generalUserName, String userName, String password) {
+    public int getNumOfUserThreads(String forumName, String generalUserName) {
         int numberOfThreads = -1;
         try {
-            numberOfThreads = conHand.getNumOfUserThreads(forumName, generalUserName, userName, password);
+            numberOfThreads = conHand.getNumOfUserThreads(forumName, generalUserName, this.userName, this.password);
         } catch (Exception e) {
             System.out.println("Admin(getNumOfUserThreads) " + e);
         }
@@ -98,10 +97,10 @@ public class Admin extends Moderator {
     /*
      * MAP(username:String, users that post:Vector<String>)
      */
-    public List<List<String>> getUsersPostToUser(String forumName, String userName, String password) {
+    public List<List<String>> getUsersPostToUser(String forumName) {
     	List<List<String>> map = null;
         try {
-        	map = conHand.getUsersPostToUser(forumName, userName, password);
+        	map = conHand.getUsersPostToUser(forumName, this.userName, this.password);
         } catch (Exception e) {
             System.out.println("Admin(getUsersPostToUser) " + e);
         }

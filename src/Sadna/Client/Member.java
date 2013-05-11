@@ -37,11 +37,11 @@ public class Member extends User {
     public List<ForumNotification> getNotifications() {
         return notifications;
     }
-
+    //Server Use Only
     public void clearNotifications() {
         this.notifications.clear();
     }
-
+    
     public boolean postComment(Post post) {
         return conHand.postComment(post);
     }
@@ -65,11 +65,11 @@ public class Member extends User {
     public String getForum() {
         return forum;
     }
-
+    
     public User logout(String forum, String userName) {
         return this.conHand.logout(forum, userName);
     }
-
+    //Server Use Only 
     public void addNotification(ForumNotification forumNotification) {
         this.notifications.add(forumNotification);
     }

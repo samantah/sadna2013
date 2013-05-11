@@ -3,15 +3,18 @@ package Sadna.Client;
 
 
 
+import Sadna.Server.ForumNotification;
 import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 import java.util.List;
+
+import com.sun.nio.sctp.Notification;
 public class Main {
 
     public static void main(String argv[]) throws Exception {
-        String host = "192.168.1.101";
+        String host = "192.168.1.105";
         int port = 3333;
         ConnectionHandler c = new ConnectionHandler(host, port);
 //        c.initiateForum("newForum", "chen", "chen1234");
@@ -105,18 +108,23 @@ public class Main {
         System.out.println(c.login("forum1", "snirelka", "snir1234"));
         
         
-        Forum forum = new Forum("forum1");
-        SubForum subForum = new SubForum(forum, "subForum1");
-        ThreadMessage newThread = new ThreadMessage(subForum, "title123", "content", "snirelka");
-        System.out.println(c.publishThread(newThread));
-        c.login("forum1", "snirelkar", "snir1234");
-        //SubForum sf = c.getSubForum("forum1", "subForum1");
-        List<ThreadMessage> l =  c.getThreadsList("forum1", "subForum1");
-        System.out.println(l);
-        ThreadMessage t = l.get(0);
-        Post p = new Post(t, "title", "content", "snirelkar");
-        c.postComment(p);
-        System.out.println(c.getNotification("forum1","snirelka" ,"snir1234"));
+//        Forum forum = new Forum("forum1");
+//        SubForum subForum = new SubForum(forum, "subForum1");
+//        ThreadMessage newThread = new ThreadMessage(subForum, "title123", "content", "snirelka");
+//        System.out.println(c.publishThread(newThread));
+        
+//        c.login("forum1", "snirelkar", "snir1234");
+//        //SubForum sf = c.getSubForum("forum1", "subForum1");
+//        List<ThreadMessage> l =  c.getThreadsList("forum1", "subForum1");
+//        System.out.println(l);
+//        ThreadMessage t = l.get(0);
+//        Post p = new Post(t, "title", "content", "snirelkar");
+//        c.postComment(p);
+//        List<ForumNotification> x = c.getNotification("forum1","snirelka" ,"snir1234");
+//        for (ForumNotification forumNotification : x) {
+//        	System.out.println(forumNotification.getText());
+		}
+        
         
         c.finishCommunication();
 

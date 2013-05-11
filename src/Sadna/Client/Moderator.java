@@ -22,6 +22,6 @@ public class Moderator extends Member {
                 member.getForum(), member.getConHand());
     }
     
-    
+
     
 }
