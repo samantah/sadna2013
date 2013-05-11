@@ -7,6 +7,7 @@ package Sadna.Server.API;
 import Sadna.Client.Member;
 import Sadna.Client.Moderator;
 import Sadna.Client.SuperAdmin;
+import Sadna.Client.API.ClientCommunicationHandlerInterface;
 import Sadna.Server.ForumNotification;
 import Sadna.db.Forum;
 import Sadna.db.Post;
@@ -70,7 +71,7 @@ public interface ServerInterface {
 
     boolean addModerator(Moderator moderator, SubForum subForum, String userName, String password);
 
-    boolean setSuperAdmin(String host, int port);
+    boolean setSuperAdmin(ClientCommunicationHandlerInterface ch);
 
     SuperAdmin getSuperAdmin();
     

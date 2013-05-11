@@ -63,7 +63,8 @@ public class ServerRequestHandler implements Runnable {
 
 	private void parseAndHandleRequest(String request) {
 		String[] parsedReq = request.split("\n");
-		SubForum sf, fr;
+		SubForum sf;
+		Forum fr;
 		ThreadMessage tm;
 		Post p;
 		switch (parsedReq[0]) {
@@ -113,10 +114,10 @@ public class ServerRequestHandler implements Runnable {
 		case "POST":
 			tm = _si.getThreadMessage(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]));
 			p = new Post(tm, parsedReq[10], parsedReq[12], parsedReq[8]);
-			handlePostComment(p, parsedReq[14]);
+			handlePostComment(p, parsedReq[8], parsedReq[14]);
 			break;
 		case "THREAD":
-			handlePublishThread(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8], parsedReq[10]);
+			handlePublishThread(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8], parsedReq[10], parsedReq[12]);
 			break;
 		case "DELPST":
 			p = _si.getPost(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]), Integer.parseInt(parsedReq[8]));
@@ -151,26 +152,29 @@ public class ServerRequestHandler implements Runnable {
 		case "GETCOUNT":
 			handleThreadCounter(parsedReq[2], parsedReq[4], parsedReq[6]);
 			break;
-		case "GETNUMUSRTHR":
+		case "GETNUT":
 			handleGetNumberOfUserThreads(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8]);
 			break;
-		case "GETUSRSPOSTUSER":
+		case "GETUPU":
 			handleGetUsersPostToUser(parsedReq[2], parsedReq[4], parsedReq[6]);
 			break;
-		case "GETFRMCOUNT":
+		case "GETNF":
 			handleForumCounter(parsedReq[2], parsedReq[4]);
 			break;
-		case "GETCOMMEM":
+		case "GETCOM":
 			handleCommonMembers(parsedReq[2], parsedReq[4]);
 			break;
 		case "LOGOUT":
 			//TO DO
 			break;
-		case "GETALLMEM":
-			handleGetAllMembers(parsedReq[2], parsedReq[4], parsedReq[6]);
-		case "LOGINSUPER":
+		case "GETAM":
+			handleGetAllForumMembers(parsedReq[2], parsedReq[4], parsedReq[6]);
+		case "LOGINS":
 			handleLoginAsSuperAdmin(parsedReq[2], parsedReq[4]);
-			
+		case "EDTTHRD":
+			//handleEditThread(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8], parsedReq[10], parsedReq[12], parsedReq[14]);
+		case "EDTPST":
+			//handleEditPost(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8], parsedReq[10], parsedReq[12], parsedReq[14], parsedReq[16]);
 		default:
 			break;
 		}
@@ -187,7 +191,7 @@ public class ServerRequestHandler implements Runnable {
 		}
 	}
 
-	private void handleGetAllMembers(String forumName, String userName,
+	private void handleGetAllForumMembers(String forumName, String userName,
 			String password) {
 		Member admin = _si.getMember(forumName, userName);
 		if (!admin.getPassword().equals(password)) {
@@ -198,7 +202,7 @@ public class ServerRequestHandler implements Runnable {
 			_ch.sendErrorNoAuthorized();
 			return;
 		}
-		_ch.sendAllMembers(_si.getAllMembers(forumName));			
+		_ch.sendAllMembers(_si.getAllForumMembers(forumName, userName, password));			
 	}
 
 	private void handleCommonMembers(String adminName, String password) {
@@ -207,7 +211,7 @@ public class ServerRequestHandler implements Runnable {
 			_ch.sendErrorNoAuthorized();
 			return;
 		}
-		_ch.sendCommonMembers(_si.getCommonMembers());	
+		_ch.sendCommonMembers(_si.getCommonMembers(adminName, password));	
 	}
 
 	private void handleForumCounter(String superAdminName, String password) {
@@ -216,7 +220,7 @@ public class ServerRequestHandler implements Runnable {
 			_ch.sendErrorNoAuthorized();
 			return;
 		}
-		_ch.sendNumberOfForums(_si.getForumCounter());	
+		_ch.sendNumberOfForums(_si.getForumCounter(superAdminName, password));	
 	}
 
 
@@ -230,7 +234,7 @@ public class ServerRequestHandler implements Runnable {
 			_ch.sendErrorNoAuthorized();
 			return;
 		}
-		_ch.sendUsersPostToUser(_si.getUsersPostToUser(forumName));	
+		_ch.sendUsersPostToUser(_si.getUsersPostToUser(forumName, adminName, password));	
 	}
 
 	private void handleGetNumberOfUserThreads(String forumName, String userName, String adminName, String password) {
@@ -243,7 +247,7 @@ public class ServerRequestHandler implements Runnable {
 			_ch.sendErrorNoAuthorized();
 			return;
 		}
-		_ch.sendUserThreadsCounter(_si.getNumberOfUserThreads(forumName, _si.getMember(forumName, userName)));	
+		_ch.sendUserThreadsCounter(_si.getNumberOfUserThreads(forumName, userName, adminName, password));	
 	}
 
 
@@ -257,7 +261,7 @@ public class ServerRequestHandler implements Runnable {
 			_ch.sendErrorNoAuthorized();
 			return;
 		}
-		_ch.sendThreadCounter(_si.getNumberOfThreadsInForum(forumName));
+		_ch.sendThreadCounter(_si.getNumberOfThreadsInForum(forumName, userName, password));
 	}
 
 	private void handleRemoveModerator(String forumName, String subForumName, String moderatorName, String userName, String password) {
@@ -283,7 +287,7 @@ public class ServerRequestHandler implements Runnable {
 			}
 
 		}
-		if (_si.deleteModerator(m, subForumName)) {
+		if (_si.deleteModerator(m, subForumName, moderatorName, userName, password)) {
 			_ch.sendOK();
 		} else {
 			_ch.sendErrorInServer();
@@ -294,7 +298,7 @@ public class ServerRequestHandler implements Runnable {
 		if (m.getPassword().equals(password)) {
 			String forumName = m.getForum();
 			String userName = m.getUserName();
-			List<ForumNotification> notifications = _si.getNotifications(forumName, userName);
+			List<ForumNotification> notifications = _si.getNotifications(forumName, userName, password);
 			_ch.sendNotifications(notifications);
 			m.clearNotifications();
 			_si.addMember(m);
@@ -348,9 +352,9 @@ public class ServerRequestHandler implements Runnable {
 		return isAdded;
 	}
 
-	public boolean handleAddSubForum(SubForum subForum, List<Moderator> moderators) {
+	public boolean handleAddSubForum(SubForum subForum, List<Moderator> moderators, String username, String password) {
 		boolean subForumIsAdded = false;
-		subForumIsAdded = _si.addSubForum(subForum, moderators);
+		subForumIsAdded = _si.addSubForum(subForum, moderators, username, password);
 		if (subForumIsAdded) {
 			_ch.sendOK();
 		} else {
@@ -360,12 +364,12 @@ public class ServerRequestHandler implements Runnable {
 	}
 
 	public boolean handlePublishThread(String forumName, String subForumName,
-			String posterName, String threadTitle, String threadContent) {
+			String posterName, String threadTitle, String threadContent, String password) {
 		boolean succeeded = false;
 		SubForum sf = _si.getSubForum(forumName, subForumName);
 		if (sf != null && _si.memberExistsInForum(forumName, posterName)) {
 			ThreadMessage threadM = new ThreadMessage(sf, threadTitle, threadContent, posterName);
-			succeeded = _si.publishThread(threadM);
+			succeeded = _si.publishThread(threadM, posterName, password);
 		}
 		if (succeeded) {
 			_ch.sendOK();
@@ -383,7 +387,7 @@ public class ServerRequestHandler implements Runnable {
 			String publisherName = member.getUserName();
 			String publisherPassword = member.getPassword();
 			if (requester.equals(publisherName) && password.equals(publisherPassword)) {
-				return deletePostAndSendOk(p);
+				return deletePostAndSendOk(p, requester, password);
 			}
 		}
 		SubForum subForum = p.getThread().getSubForum();
@@ -394,7 +398,7 @@ public class ServerRequestHandler implements Runnable {
 			String moderatorName = currModerator.getUserName();
 			String moderatorPassword = currModerator.getPassword();
 			if (requester.equals(moderatorName) && password.equals(moderatorPassword)) {
-				return deletePostAndSendOk(p);
+				return deletePostAndSendOk(p, moderatorName, moderatorPassword);
 			}
 		}
 		Admin admin = _si.getForum(forumName).getAdmin();
@@ -402,16 +406,16 @@ public class ServerRequestHandler implements Runnable {
 			String adminName = admin.getUserName();
 			String adminPassword = admin.getPassword();
 			if (requester.equals(adminName) && password.equals(adminPassword)) {
-				return deletePostAndSendOk(p);
+				return deletePostAndSendOk(p, adminName, adminPassword);
 			}
 		}
 		_ch.sendErrorNoAuthorized();
 		return false;
 	}
 
-	public boolean handlePostComment(Post post) {
+	public boolean handlePostComment(Post post, String userName, String password) {
 		boolean succeeded = false;
-		succeeded = _si.postComment(post);
+		succeeded = _si.postComment(post, userName, password);
 		if (succeeded) {
 			_ch.sendOK();
 		} else {
@@ -466,7 +470,8 @@ public class ServerRequestHandler implements Runnable {
 			String publisherName = member.getUserName();
 			String publisherPassword = member.getPassword();
 			if (requester.equals(publisherName) && password.equals(publisherPassword)) {
-				return deleteThreadAndSendOk(tm);
+				return deleteThreadAndSendOk(tm, requester, password);
+				
 			}
 		}
 		SubForum subForum = tm.getSubForum();
@@ -477,7 +482,7 @@ public class ServerRequestHandler implements Runnable {
 			String moderatorName = currModerator.getUserName();
 			String moderatorPassword = currModerator.getPassword();
 			if (requester.equals(moderatorName) && password.equals(moderatorPassword)) {
-				return deleteThreadAndSendOk(tm);
+				return deleteThreadAndSendOk(tm, moderatorName, moderatorPassword);
 			}
 		}
 		Admin admin = _si.getForum(forumName).getAdmin();
@@ -485,23 +490,23 @@ public class ServerRequestHandler implements Runnable {
 			String adminName = admin.getUserName();
 			String adminPassword = admin.getPassword();
 			if (requester.equals(adminName) && password.equals(adminPassword)) {
-				return deleteThreadAndSendOk(tm);
+				return deleteThreadAndSendOk(tm, adminName, adminPassword);
 			}
 		}
 		_ch.sendErrorNoAuthorized();
 		return false;
 	}
 
-	private boolean deletePostAndSendOk(Post p) {
+	private boolean deletePostAndSendOk(Post p, String userName, String password) {
 		notificationsFactory.sendNotifications(p);
-		_si.deleteComment(p);
+		_si.deleteComment(p, userName, password);
 		_ch.sendOK();
 		return true;
 	}
 
-	private boolean deleteThreadAndSendOk(ThreadMessage tm) {
+	private boolean deleteThreadAndSendOk(ThreadMessage tm, String userName, String password) {
 		notificationsFactory.sendNotifications(tm);
-		_si.deleteThread(tm);
+		_si.deleteThread(tm, userName, password);
 		_ch.sendOK();
 		return true;
 	}
@@ -511,7 +516,7 @@ public class ServerRequestHandler implements Runnable {
 		boolean equals = admin.getUserName().equals(requester) && admin.getPassword().equals(password);
 		if (equals) {
 			notificationsFactory.sendNotifications(sf);
-			_si.deleteSubForum(sf);
+			_si.deleteSubForum(sf, requester, password);
 			_ch.sendOK();
 			return true;
 		}
@@ -545,7 +550,7 @@ public class ServerRequestHandler implements Runnable {
 			return;
 		}
 		Moderator moderator = new Moderator(member);
-		boolean addModerator = _si.addModerator(moderator, sf);
+		boolean addModerator = _si.addModerator(moderator, sf, moderator.getUserName(), moderator.getPassword());
 		if (addModerator) {
 			_ch.sendOK();
 		}
@@ -561,6 +566,6 @@ public class ServerRequestHandler implements Runnable {
 			_ch.sendErrorNoAuthorized();
 			return;
 		}
-		_ch.deleteForum(_si.deleteForum(fr.getForumName()));
+		_ch.deleteForum(_si.deleteForum(fr.getForumName(), userName, password));
 	}
 }
