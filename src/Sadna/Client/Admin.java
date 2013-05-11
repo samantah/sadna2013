@@ -36,7 +36,7 @@ public class Admin extends Moderator {
     }
 
     public boolean addSubForum(SubForum subForum, List<Moderator> lm) {
-        return conHand.addSubForum(subForum, lm);
+        return conHand.addSubForum(subForum, lm, this.userName, this.password);
     }
 
     public void deleteSubForum(String forumName, String subForumName) {
@@ -79,7 +79,7 @@ public class Admin extends Moderator {
     public int getThreadCounter(String forumName) {
         int numberOfThreads = -1;
         try {
-            numberOfThreads = conHand.getThreadCounter(forumName, this.userName, this.password);
+            numberOfThreads = conHand.getNumOfThreadsInForum(forumName, this.userName, this.password);
         } catch (Exception e) {
             System.out.println("Admin(getThreadCounter) " + e);
         }

@@ -43,11 +43,11 @@ public class Member extends User {
     }
     
     public boolean postComment(Post post) {
-        return conHand.postComment(post);
+        return conHand.postComment(post, this.password);
     }
 
     public boolean publishThread(ThreadMessage newThread) {
-        return conHand.publishThread(newThread);
+        return conHand.publishThread(newThread, this.password);
     }
 
     public String getUserName() {
