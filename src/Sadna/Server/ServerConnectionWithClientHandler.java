@@ -255,7 +255,7 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 
 	@Override
 	public void sendSuperAdminOK() {
-		stringToClient.println("203ok");
+		stringToClient.println("200ok");
 	}
 
 
