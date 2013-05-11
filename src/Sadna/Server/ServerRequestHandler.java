@@ -177,7 +177,7 @@ public class ServerRequestHandler implements Runnable {
 		boolean logedIn = _si.loginAsSuperAdmin(userName, password);
 		if (logedIn) {
 			Member member = _si.getSuperAdmin();
-			if(member instanceof SuperAdmin)
+			if(member != null && member instanceof SuperAdmin)
 				_ch.sendSuperAdminOK();
 		} else {
 			_ch.sendNotFound();

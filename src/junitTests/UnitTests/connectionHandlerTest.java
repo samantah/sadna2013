@@ -63,8 +63,13 @@ public class connectionHandlerTest {
     
     private static void initiateTestPlatform() {
         DataBase db = new DataBase();
-        //db.deleteAll("DataBase/");
-        Forum forum = new Forum("forum1");
+        //db.deleteFolder(db.dataBaseFolder);
+        User u = new User(ch);
+        SuperAdmin sa = db.getSuperAdmin(); 
+        System.out.println(sa);
+        		//new SuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD, "sdasd@asd.as", ch); 
+        sa.initiateForum(FORUM_NAME, ADMIN_NAME	, ADMIN_PASSWORD);
+        Forum forum = u.getForum(FORUM_NAME);
         SubForum subForum = new SubForum(forum, "subForum1");
         SubForum subForum2 = new SubForum(forum, "subForum2");
         ThreadMessage threadMessage = new ThreadMessage(subForum, "NA", "hi11", "publisher");
@@ -141,13 +146,17 @@ public class connectionHandlerTest {
 
     @Test
     public void getSubForumTest() {
+    	User u = new User(ch);
+    	Member a = u.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
+    	assertNotNull(a);
+    	Admin ad = (Admin) a;
         SubForum sf2 = new SubForum(new Forum(FORUM_NAME), "FASHION");
-        ch.addSubForum(sf2, null);
-        SubForum sf3 = ch.getSubForum("notExist", "FASHION");
+        assertTrue(ad.addSubForum(sf2, null));
+        SubForum sf3 = ad.getSubForum("notExist", "FASHION");
         assertNull(sf3);
-        sf3 = ch.getSubForum(FORUM_NAME, "FAMILY");
+        sf3 = ad.getSubForum(FORUM_NAME, "FAMILY");
         assertNull(sf3);
-        sf3 = ch.getSubForum(FORUM_NAME, "FASHION");
+        sf3 = ad.getSubForum(FORUM_NAME, "FASHION");
         assertNotNull(sf3);
         boolean isEqual = sf2.getForum() == sf3.getForum() && sf2.getSubForumName() == sf3.getSubForumName();
         assertTrue(isEqual);
@@ -214,15 +223,6 @@ public class connectionHandlerTest {
     }
     
 
-    @Test
-    public void logoutTest(){
-    User u = new User(ch);
-    Member mem = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
-    assertTrue(mem instanceof Member);
-    ch.logout(FORUM_NAME, USER_NAME);
-    assertFalse(mem instanceof Member);
-    mem.logout(FORUM_NAME);
-    }
 
     @Test
     public void publishThreadTest(){
@@ -331,5 +331,15 @@ public class connectionHandlerTest {
     	List<ThreadMessage> ltm = mem.viewThreadMessages("forumTest2", "subForumTest2");
     	assertNotNull(ltm);
     	assertTrue(mem.deleteThread(ltm.get(0)));
+    }
+    
+    @Test
+    public void logoutTest(){
+    User u = new User(ch);
+    Member mem = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+    assertTrue(mem instanceof Member);
+    ch.logout(FORUM_NAME, USER_NAME);
+    assertFalse(mem instanceof Member);
+    mem.logout(FORUM_NAME);
     }
 }
