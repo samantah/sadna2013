@@ -69,11 +69,11 @@ public class Admin extends Moderator {
      */
     public boolean removeModerator(String forumName,String subForumName, String moderatorName) {
         try {
-            conHand.removeModerator(forumName,subForumName, moderatorName, this.userName, this.password);
+            return conHand.removeModerator(forumName,subForumName, moderatorName, this.userName, this.password);
         } catch (Exception e) {
             System.out.println("Admin(removeModerator) " + e);
         }
-        return true;
+        return false;
     }
 
     public int getThreadCounter(String forumName) {
