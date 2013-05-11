@@ -12,6 +12,7 @@ import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
+import java.util.HashMap;
 
 import java.util.Hashtable;
 import java.util.List;
@@ -81,14 +82,11 @@ public interface DBInterface {
 
     SuperAdmin getSuperAdmin();
 
-	int getNumberOfUserThreads(String forumName, Member member); //returns the number of threads that the user write in the specified forum.
+    int getNumberOfUserThreads(String forumName, Member member); //returns the number of threads that the user write in the specified forum.
 
-	List<List<String>> getUsersPostToUser(String forumName); //returns for each member in this forum list that his user name in the first index and in the other indices  the users names of the members that post comments for his threads. 
+    HashMap<String, List<String>> getUsersPostToUser(String forumName); //returns for each member in this forum list that his user name in the first index and in the other indices  the users names of the members that post comments for his threads. 
 
-	int getNumberOfForums(); // super admin method - returns number of forums.
+    int getNumberOfForums(); // super admin method - returns number of forums.
 
-	List<String> getCommonMembers(); // returns list of users names that registered to more than one forum.
-	
-	
-
+    List<String> getCommonMembers(); // returns list of users names that registered to more than one forum.
 }

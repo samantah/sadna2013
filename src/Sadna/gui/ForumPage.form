@@ -57,13 +57,6 @@
                       <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="jLabelHeadNewSubForum" min="-2" pref="116" max="-2" attributes="0"/>
-                                  <Component id="jLabelEnterModerators" min="-2" pref="110" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="1" attributes="0">
                               <Component id="jLabelNewSubName" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
                           </Group>
@@ -75,6 +68,14 @@
                               <Component id="jTextAreaListOfModerators" pref="0" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="jButtonToAdminPage" min="-2" pref="93" max="-2" attributes="0"/>
+                                  <Component id="jLabelHeadNewSubForum" min="-2" pref="116" max="-2" attributes="0"/>
+                                  <Component id="jLabelEnterModerators" min="-2" pref="110" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                   </Group>
               </Group>
@@ -85,8 +86,11 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
-              <Component id="jLabel" min="-2" pref="21" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="64" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jLabel" min="-2" pref="21" max="-2" attributes="0"/>
+                  <Component id="jButtonToAdminPage" min="-2" pref="36" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Component id="jLabelHeadNewSubForum" min="-2" pref="24" max="-2" attributes="0"/>
@@ -223,6 +227,15 @@
         <Property name="lineWrap" type="boolean" value="true"/>
         <Property name="rows" type="int" value="5"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButtonToAdminPage">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="admin page"/>
+        <Property name="toolTipText" type="java.lang.String" value="a link to the admin page"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonToAdminPageActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

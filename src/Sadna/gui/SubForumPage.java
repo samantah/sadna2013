@@ -266,7 +266,7 @@ public class SubForumPage extends javax.swing.JFrame {
         Member m = (Member) CurrentStatus.currUser;
         String forumName = CurrentStatus.currForum.getForumName();
         String userName = m.getUserName();
-        User logout = m.logout(forumName, userName);
+        User logout = m.logout(forumName);
         CurrentStatus.currUser = logout;
         SubForumPage subForumPage = new SubForumPage();
         this.setVisible(false);

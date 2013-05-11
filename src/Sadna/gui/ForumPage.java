@@ -32,6 +32,10 @@ public class ForumPage extends javax.swing.JFrame {
         jTextAreaListOfModerators.setVisible(false);
         jTextFieldNewSubName.setVisible(false);
         jLabelEnterModerators.setVisible(false);
+        jButtonToAdminPage.setVisible(false);
+        if (CurrentStatus.currUser instanceof Admin) {
+            jButtonToAdminPage.setVisible(true);
+        }
 
         if (CurrentStatus.currUser instanceof Moderator) {
             addNewSubButton.setVisible(true);
@@ -82,6 +86,7 @@ public class ForumPage extends javax.swing.JFrame {
         addNewSubButton = new javax.swing.JButton();
         jLabelEnterModerators = new javax.swing.JLabel();
         jTextAreaListOfModerators = new javax.swing.JTextArea();
+        jButtonToAdminPage = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -153,6 +158,14 @@ public class ForumPage extends javax.swing.JFrame {
         jTextAreaListOfModerators.setLineWrap(true);
         jTextAreaListOfModerators.setRows(5);
 
+        jButtonToAdminPage.setText("admin page");
+        jButtonToAdminPage.setToolTipText("a link to the admin page");
+        jButtonToAdminPage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonToAdminPageActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -185,11 +198,6 @@ public class ForumPage extends javax.swing.JFrame {
                         .addGap(39, 39, 39)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabelHeadNewSubForum, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabelEnterModerators, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(26, 26, 26))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jLabelNewSubName)
                                 .addGap(55, 55, 55))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -197,14 +205,22 @@ public class ForumPage extends javax.swing.JFrame {
                                 .addContainerGap())
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jTextAreaListOfModerators, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addContainerGap())))))
+                                .addContainerGap())
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jButtonToAdminPage, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabelHeadNewSubForum, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabelEnterModerators, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(26, 26, 26))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addComponent(jLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(64, 64, 64)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonToAdminPage, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(49, 49, 49)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabelHeadNewSubForum, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -278,7 +294,7 @@ public class ForumPage extends javax.swing.JFrame {
         Member m = (Member) CurrentStatus.currUser;
         String forumName = CurrentStatus.currForum.getForumName();
         String userName = m.getUserName();
-        User logout = m.logout(forumName, userName);
+        User logout = m.logout(forumName);
         CurrentStatus.currUser = logout;
         ForumPage forumPage = new ForumPage();
         this.setVisible(false);
@@ -306,11 +322,19 @@ public class ForumPage extends javax.swing.JFrame {
         forumPage.setVisible(true);
 
     }//GEN-LAST:event_addNewSubButtonActionPerformed
+
+    private void jButtonToAdminPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonToAdminPageActionPerformed
+        AdminPage adminPage = new AdminPage();
+        this.setVisible(false);
+        this.dispose();
+        adminPage.setVisible(true);
+    }//GEN-LAST:event_jButtonToAdminPageActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addNewSubButton;
     private javax.swing.JButton enterSubForumButton;
     private javax.swing.JButton jButtonBack;
     private javax.swing.JButton jButtonSignout;
+    private javax.swing.JButton jButtonToAdminPage;
     private javax.swing.JLabel jLabel;
     private javax.swing.JLabel jLabelEnterModerators;
     private javax.swing.JLabel jLabelHeadNewSubForum;
