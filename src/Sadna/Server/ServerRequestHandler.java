@@ -130,7 +130,7 @@ public class ServerRequestHandler implements Runnable {
 			handleDeleteSubForum(sf, parsedReq[6], parsedReq[8]);
 			break;
 		case "DELF":
-			//todo
+			//@Todo
 			break;
 		case "ADDMOD":
 			sf = _si.getSubForum(parsedReq[2], parsedReq[4]);
