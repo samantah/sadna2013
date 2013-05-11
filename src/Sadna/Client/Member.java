@@ -35,7 +35,7 @@ public class Member extends User {
     }
 
     public List<ForumNotification> getNotifications() {
-        return notifications;
+        return this.conHand.getNotification(this.forum, this.userName, this.password);
     }
     //Server Use Only
     public void clearNotifications() {
