@@ -7,6 +7,7 @@ package Sadna.Client.API;
 
 import Sadna.Client.Member;
 import Sadna.Client.Moderator;
+import Sadna.Client.SuperAdmin;
 import Sadna.Client.User;
 import Sadna.Server.ForumNotification;
 import Sadna.db.Forum;
@@ -23,32 +24,32 @@ import java.util.Vector;
  * @author fistuk
  */
 public interface ClientCommunicationHandlerInterface {
-     
+    //tested 
     Member login(String forumName, String userName, String password);
-
+    //tested
     User logout(String forumName, String userName);
-
+    //tested
     boolean postComment(Post post);
-
+    //tested
     boolean publishThread(ThreadMessage newThread);
-
+    //tested
     Member register(String forumName, String userName, String password, String email);
-
+    //tested
     SubForum getSubForum(String forum, String subForumName);
-
+    //tested
     Forum getForum(String forumName);
-
+    //tested
     List<SubForum> getSubForumsList(String forumName);
-
+    //tested
     List<ThreadMessage> getThreadsList(String forumName, String subForumName);
-
+    //tested
     List<Forum> getForumsList();
-
+    //tested
     ThreadMessage getThreadMessage(String forumName, String subForumName, int messageID);
-
+    //tested
     boolean addSubForum(SubForum subForum, List<Moderator> lm);
-
-    boolean initiateForum(String forumName, String adminName, String adminPassword);
+    //tested
+    boolean initiateForum(String forumName, String adminName, String adminPassword, String superAdminName, String superAdminPasswaord);
 
     List<Post> getAllPosts(ThreadMessage tm);
 
@@ -82,7 +83,7 @@ public interface ClientCommunicationHandlerInterface {
     
     public List<String> getCommonMembers(String userName, String password);
     
-    public User loginAsSuperAdmin(String userName, String password);
+    public SuperAdmin loginAsSuperAdmin(String userName, String password);
 
 	public List<Member> getAllForumMembers(String forum, String userName,
 			String password);

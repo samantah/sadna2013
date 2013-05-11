@@ -84,8 +84,8 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 	}
 
 	@Override
-	public User loginAsSuperAdmin(String userName, String password) {
-		User loggedInSuperAdmin = null;
+	public SuperAdmin loginAsSuperAdmin(String userName, String password) {
+		SuperAdmin loggedInSuperAdmin = null;
 		msgToSend = "LOGINSUPER\n" + "forumName:\n" + userName + "\n" + "password:\n" + password + "\n";
 		msgToSend += delimiter;
 		stringToServer.println(msgToSend);
@@ -95,9 +95,6 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 		}
 		if (receivedMsg.contains("200ok")) {
 			loggedInSuperAdmin = new SuperAdmin(userName, password, null, this);
-		}
-		else{
-			loggedInSuperAdmin = new User(this);
 		}
 		return loggedInSuperAdmin;
 	}
@@ -327,10 +324,13 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 	}
 
 	@Override
-	public boolean initiateForum(String forumName, String adminName, String AdminPassword) {
+	public boolean initiateForum(String forumName, String adminName, String AdminPassword, String superAdminName, String superAdminPasswaord) {
 		boolean initiated = false;
 		msgToSend = "ADDF\n" + "forumName:\n" + forumName + "\n"
-				+ "adminName:\n" + adminName + "\n" + "adminPassword:\n" + AdminPassword + "\n";
+				+ "adminName:\n" + adminName + "\n" + "adminPassword:\n" + AdminPassword + "\n"
+				+ "superAdminName:\n" + superAdminName+"\n"
+				+ "superAdminPasswaord:\n" + superAdminPasswaord+"\n";
+				
 		msgToSend += delimiter;
 		stringToServer.println(msgToSend);
 		try {
