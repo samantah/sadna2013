@@ -89,4 +89,8 @@ public class Member extends User {
     public boolean editThread(ThreadMessage newTM){
     	return conHand.editThread(newTM, this.userName, this.password);
     }
+    @Override
+    public String toString(){
+    	return this.userName;
+    }
 }
