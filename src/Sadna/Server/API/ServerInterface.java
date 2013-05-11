@@ -72,7 +72,7 @@ public interface ServerInterface {
 
     boolean addModerator(Moderator moderator, SubForum subForum);
 
-    boolean setSuperAdmin();
+    boolean setSuperAdmin(String host, int port);
 
     SuperAdmin getSuperAdmin();
     

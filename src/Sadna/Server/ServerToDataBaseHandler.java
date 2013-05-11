@@ -4,6 +4,7 @@ import Sadna.Client.Admin;
 import Sadna.Client.Member;
 import Sadna.Client.Moderator;
 import Sadna.Client.SuperAdmin;
+import Sadna.Server.API.ConnectionHandlerServerInterface;
 import Sadna.Server.API.ServerInterface;
 import Sadna.db.API.DBInterface;
 import Sadna.db.Forum;
@@ -331,8 +332,8 @@ public class ServerToDataBaseHandler implements ServerInterface {
 	}
 
 	@Override
-	public boolean setSuperAdmin() {
-		return _db.setSuperAdmin();
+	public boolean setSuperAdmin(String host, int port) {
+		return _db.setSuperAdmin(host, port);
 	}
 
 	@Override
