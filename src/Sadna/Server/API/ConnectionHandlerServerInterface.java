@@ -42,9 +42,12 @@ public interface ConnectionHandlerServerInterface{
 
 	public void sendThreadCounter(int threadCounter);
 
+	public void sendUserThreadsCounter(int numberOfUserThreads);
+
+	public void sendUsersPostToUser(List<List<String>> usersPostToUser);
+
 	public void sendIsTheOnlyModeratorInTheSubForum();
 
-	//public void sendUserThreadsCounter(int numberOfUserThreads);
 
 }
 

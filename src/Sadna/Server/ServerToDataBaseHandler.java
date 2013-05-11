@@ -10,6 +10,8 @@ import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
+
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
 
@@ -344,11 +346,17 @@ public class ServerToDataBaseHandler implements ServerInterface {
 		return _db.getNumberOfThreadsInForum(forumName);
 	}
 
-/*	@Override
-	public int getNumberOfUserThreads(String forumName, String userName) {
-		return _db.getNumberOfUserThreads(forumName, userName);
+
+	@Override
+	public int getNumberOfUserThreads(String forumName, Member member) {
+		return _db.getNumberOfUserThreads(forumName, member);
 	}
-*/
+
+	@Override
+	public List<List<String>> getUsersPostToUser(String forumName) {
+		return _db.getUsersPostToUser(forumName);
+	}
+
 
 
 

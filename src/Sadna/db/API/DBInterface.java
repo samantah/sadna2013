@@ -12,7 +12,10 @@ import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
+
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Vector;
 
 /**
  *
@@ -77,4 +80,11 @@ public interface DBInterface {
     boolean addModerator(Moderator moderator, SubForum subForum);
 
     SuperAdmin getSuperAdmin();
+
+	int getNumberOfUserThreads(String forumName, Member member); //returns the number of threads that the user write in the specified forum.
+
+	List<List<String>> getUsersPostToUser(String forumName); //returns for each member in this forum list that his user name in the first index and in the other indices  the users names of the members that post comments for his threads. 
+	
+	
+
 }

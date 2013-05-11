@@ -560,15 +560,15 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 	/*
 	 * MAP(username:String, users that post:Vector<String>)
 	 */
-	public Hashtable<String,Vector<String>> getUsersPostToUser(String forumName, 
+	public List<List<String>> getUsersPostToUser(String forumName, 
 			String userName, String password) {
-		Hashtable<String,Vector<String>> map = null;
+		List<List<String>> map = null;
 		msgToSend = "GETUSRSPOSTUSER\n" + "forumName:\n" + forumName + "\n"+ "userName:\n" 
 				+ userName + "\n" + "password:\n" + password + "\n";
 		msgToSend += delimiter;
 		stringToServer.println(msgToSend);
 		try {
-			map = (Hashtable<String,Vector<String>>)objectFromServer.readObject();
+			map = (List<List<String>>)objectFromServer.readObject();
 		} catch (IOException e) {
 			System.out.println("ConnectionHandler(getUsersPostToUser) " + e);
 		} catch (ClassNotFoundException e) {
