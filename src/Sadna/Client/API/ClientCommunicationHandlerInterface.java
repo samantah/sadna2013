@@ -15,6 +15,7 @@ import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -24,7 +25,7 @@ import java.util.Vector;
  *
  * @author fistuk
  */
-public interface ClientCommunicationHandlerInterface {
+public interface ClientCommunicationHandlerInterface extends Serializable {
     //tested 
     Member login(String forumName, String userName, String password);
     //tested
