@@ -264,6 +264,8 @@ public class ServerRequestHandler implements Runnable {
 			String userName = m.getUserName();
 			List<ForumNotification> notifications = _si.getNotifications(forumName, userName);
 			_ch.sendNotifications(notifications);
+			 m.clearNotifications();
+			_si.addMember(m);
 		} else {
 			_ch.sendErrorNoAuthorized();
 		}
