@@ -10,11 +10,8 @@ import Sadna.Client.Member;
 import Sadna.Client.SuperAdmin;
 import Sadna.Client.User;
 import Sadna.db.Forum;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.DefaultListModel;
-import javax.swing.JList;
 
 /**
  *
@@ -31,16 +28,24 @@ public class MainFrame extends javax.swing.JFrame {
         ClientCommunicationHandlerInterface ch = new ConnectionHandler(host, port);
 //        CurrentStatus.currUser = new SuperAdmin("chen", "chen1234", "", "newForum", ch);
         DefaultListModel listOfForums;
-        CurrentStatus.currUser = new User(ch);
+        if (CurrentStatus.currUser == null) {
+            CurrentStatus.currUser = new User(ch);
+        }
         List<Forum> viewForums = UpdateListOfForums();
 
+        jLabelNumberOfMembersInForum.setVisible(false);
         if (!(CurrentStatus.currUser instanceof SuperAdmin)) {
             jButtonInitiateForum.setVisible(false);
             jLabelNumberOfForums.setVisible(false);
-            jLabelNumberOfMembersInForum.setVisible(false);
             commonMembersList.setVisible(false);
             jButtonDeleteForum.setVisible(false);
             jScrollPane2.setVisible(false);
+            jLabelNewForumName.setVisible(false);
+            jLabelNewAdminPassword.setVisible(false);
+            jLabelNewAdminUserName.setVisible(false);
+            jTextFieldNewAdminPassword.setVisible(false);
+            jTextFieldNewAdminUser.setVisible(false);
+            jTextFieldNewForumName.setVisible(false);
         } else {
             logInButton.setVisible(false);
             String text = jLabelNumberOfForums.getText();
@@ -70,6 +75,12 @@ public class MainFrame extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         commonMembersList = new javax.swing.JList();
         jButtonDeleteForum = new javax.swing.JButton();
+        jTextFieldNewAdminUser = new javax.swing.JTextField();
+        jTextFieldNewAdminPassword = new javax.swing.JTextField();
+        jLabelNewAdminUserName = new javax.swing.JLabel();
+        jLabelNewAdminPassword = new javax.swing.JLabel();
+        jLabelNewForumName = new javax.swing.JLabel();
+        jTextFieldNewForumName = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -107,6 +118,11 @@ public class MainFrame extends javax.swing.JFrame {
         jButtonInitiateForum.setFont(new java.awt.Font("Arial", 2, 12)); // NOI18N
         jButtonInitiateForum.setText("initiate new forum");
         jButtonInitiateForum.setToolTipText("an option to initiate a new forum");
+        jButtonInitiateForum.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonInitiateForumActionPerformed(evt);
+            }
+        });
 
         jLabelNumberOfForums.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabelNumberOfForums.setText("Number of forums: ");
@@ -135,6 +151,12 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        jLabelNewAdminUserName.setText("Admin userName");
+
+        jLabelNewAdminPassword.setText("Admin password");
+
+        jLabelNewForumName.setText("new forum name");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -142,7 +164,7 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(9, 9, 9)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(headLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
@@ -152,12 +174,24 @@ public class MainFrame extends javax.swing.JFrame {
                                 .addComponent(logInButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(enterForumButton)))
-                        .addGap(36, 36, 36)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButtonInitiateForum, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabelNumberOfForums, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
-                            .addComponent(jLabelNumberOfMembersInForum, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonDeleteForum, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(36, 36, 36)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jButtonInitiateForum, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabelNumberOfForums, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButtonDeleteForum, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabelNewAdminUserName, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextFieldNewAdminPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+                                    .addComponent(jLabelNewAdminPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextFieldNewAdminUser, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabelNewForumName, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jTextFieldNewForumName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabelNumberOfMembersInForum, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -170,9 +204,21 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabelNumberOfForums, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(32, 32, 32)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabelNumberOfMembersInForum, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(181, 181, 181)
+                        .addGap(32, 32, 32)
+                        .addComponent(jLabelNewForumName, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldNewForumName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabelNewAdminUserName, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldNewAdminUser, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabelNewAdminPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(1, 1, 1)
+                        .addComponent(jTextFieldNewAdminPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(21, 21, 21)
                         .addComponent(jButtonDeleteForum, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -208,21 +254,21 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_logInButtonActionPerformed
 
     private void clickHandler(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_clickHandler
-        if (!(CurrentStatus.currUser instanceof SuperAdmin)) {
-            return;
-        }
-        int clickCount = evt.getClickCount();
-        if (clickCount == 1) {
-            String text = "";
-            text = "Number of members in forum: ";
-            Forum selectedForum = (Forum) this.forumsList.getSelectedValue();
-            SuperAdmin admin = (SuperAdmin) CurrentStatus.currUser;
-            List<Member> allForumMembers = admin.getAllForumMembers(selectedForum.getForumName());
-            text += allForumMembers.size();
-            this.jLabelNumberOfMembersInForum.setText(text);
-
-
-        }
+//        if (!(CurrentStatus.currUser instanceof SuperAdmin)) {
+//            return;
+//        }
+//        int clickCount = evt.getClickCount();
+//        if (clickCount == 1) {
+//            String text = "";
+//            text = "Number of members in forum: ";
+//            Forum selectedForum = (Forum) this.forumsList.getSelectedValue();
+//            SuperAdmin admin = (SuperAdmin) CurrentStatus.currUser;
+//            List<Member> allForumMembers = admin.getAllForumMembers(selectedForum.getForumName());
+//            text += allForumMembers.size();
+//            this.jLabelNumberOfMembersInForum.setText(text);
+//
+//
+//        }
     }//GEN-LAST:event_clickHandler
 
     private void commonMembersListclickHandler(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_commonMembersListclickHandler
@@ -241,6 +287,19 @@ public class MainFrame extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_jButtonDeleteForumActionPerformed
+
+    private void jButtonInitiateForumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInitiateForumActionPerformed
+        String userName = this.jTextFieldNewAdminUser.getText();
+        String password = this.jTextFieldNewAdminPassword.getText();
+        String forumName = this.jTextFieldNewForumName.getText();
+        SuperAdmin admin = (SuperAdmin) CurrentStatus.currUser;
+        admin.initiateForum(forumName, userName, password);
+        this.jTextFieldNewAdminUser.setText("");
+        this.jTextFieldNewAdminPassword.setText("");
+        this.jTextFieldNewForumName.setText("");
+        UpdateListOfForums();
+
+    }//GEN-LAST:event_jButtonInitiateForumActionPerformed
 
     /**
      * @param args the command line arguments
@@ -283,10 +342,16 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel headLabel;
     private javax.swing.JButton jButtonDeleteForum;
     private javax.swing.JButton jButtonInitiateForum;
+    private javax.swing.JLabel jLabelNewAdminPassword;
+    private javax.swing.JLabel jLabelNewAdminUserName;
+    private javax.swing.JLabel jLabelNewForumName;
     private javax.swing.JLabel jLabelNumberOfForums;
     private javax.swing.JLabel jLabelNumberOfMembersInForum;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextField jTextFieldNewAdminPassword;
+    private javax.swing.JTextField jTextFieldNewAdminUser;
+    private javax.swing.JTextField jTextFieldNewForumName;
     private javax.swing.JButton logInButton;
     // End of variables declaration//GEN-END:variables
 

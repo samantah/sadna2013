@@ -631,7 +631,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 	public List<String> getCommonMembers(String superAdminName, 
 			String password) {
 		List<String> map = null;
-		msgToSend = "GETCOM\n" + "\n"+ "userName:\n" 
+		msgToSend = "GETCOM\n" + "userName:\n" 
 				+ superAdminName + "\n" + "password:\n" + password + "\n";
 		msgToSend += delimiter;
 		stringToServer.println(msgToSend);
@@ -650,7 +650,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 	public List<Member> getAllForumMembers(String forum, String userName,
 			String password) {
 		List<Member> members = null;
-		msgToSend = "GETAM\n" + "\n"+ "forum:\n" 
+		msgToSend = "GETAM\n" + "forum:\n" 
 		+ forum +"\n"+ "userName:\n" + userName + "\n" + "password:\n" + password + "\n";
 		msgToSend += delimiter;
 		stringToServer.println(msgToSend);

@@ -4,13 +4,11 @@
  */
 package Sadna.gui;
 
-import Sadna.Client.Admin;
-import Sadna.Client.Member;
+import Sadna.Client.SuperAdmin;
 import static Sadna.gui.EnumPages.FORUM;
 import static Sadna.gui.EnumPages.MAIN;
 import static Sadna.gui.EnumPages.SUBFORUM;
 import static Sadna.gui.EnumPages.THREAD;
-import java.awt.geom.CubicCurve2D;
 import javax.swing.JFrame;
 
 /**
@@ -148,7 +146,7 @@ public class LogInAsAdminPage extends javax.swing.JFrame {
     private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLoginActionPerformed
         String userNameStr = jTextFieldUserName.getText();
         String passwordStr = jPasswordField1.getText();
-        Admin login = CurrentStatus.currUser.loginAsSuperAdmin(userNameStr, passwordStr);
+        SuperAdmin login = CurrentStatus.currUser.loginAsSuperAdmin(userNameStr, passwordStr);
         if (login == null) {
             jLabelInvalidData.setVisible(true);
             jTextFieldUserName.setText("");

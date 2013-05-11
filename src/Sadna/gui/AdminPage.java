@@ -25,23 +25,8 @@ public class AdminPage extends javax.swing.JFrame {
         this.setResizable(false);
         this.jLabelCurrentMessage.setVisible(false);
         jLabelHead.setText("Admin page - Forum: " + CurrentStatus.currForum.getForumName());
-        Forum f = CurrentStatus.currForum;
-        DefaultListModel listModel = new DefaultListModel();
-        List<SubForum> listOfSubForums;
-        listOfSubForums = CurrentStatus.currUser.viewSubForums(f.getForumName());
-        for (SubForum sf : listOfSubForums) {
-            listModel.addElement(sf);
-        }
-        this.jListSubForums.setModel(listModel);
-        
-        listModel = new DefaultListModel();
-        List<Member> listOfMembers;
-        Admin admin = (Admin) CurrentStatus.currUser;
-        listOfMembers = admin.getAllForumMembers();
-        for (Member member : listOfMembers) {
-            listModel.addElement(member);
-        }
-        this.jListMembers.setModel(listModel);
+        updateListOfSubForums();
+        updateListOfMembers();
 
     }
 
@@ -298,9 +283,9 @@ public class AdminPage extends javax.swing.JFrame {
             this.jLabelCurrentMessage.setText(memberUserName + " was added to "
                     + "be a moderator of sub-forum " + subForumName);
         } else {
-            this.jLabelCurrentMessage.setText("cannot add " + memberUserName 
+            this.jLabelCurrentMessage.setText("cannot add " + memberUserName
                     + " as moderator to sub-forum " + subForumName);
-            
+
         }
 
     }//GEN-LAST:event_jButtonAddModeratorActionPerformed
@@ -308,6 +293,9 @@ public class AdminPage extends javax.swing.JFrame {
     private void jButtonRemoveModeratorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoveModeratorActionPerformed
         SubForum selectedSubForum = (SubForum) this.jListSubForums.getSelectedValue();
         Member selectedMember = (Member) this.jListMembers.getSelectedValue();
+        if (selectedSubForum==null || selectedMember==null){
+            return;
+        }
         Admin admin = (Admin) CurrentStatus.currUser;
         String forumName = CurrentStatus.currForum.getForumName();
         String subForumName = selectedSubForum.getSubForumName();
@@ -332,6 +320,8 @@ public class AdminPage extends javax.swing.JFrame {
         String forumName = CurrentStatus.currForum.getForumName();
         String subForumName = selectedSubForum.getSubForumName();
         admin.deleteSubForum(forumName, subForumName);
+        updateListOfSubForums();
+
     }//GEN-LAST:event_jButtonDeleteSubForumActionPerformed
 
     private void jButtonBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBackActionPerformed
@@ -396,4 +386,26 @@ public class AdminPage extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     // End of variables declaration//GEN-END:variables
+
+    private void updateListOfSubForums() {
+        Forum f = CurrentStatus.currForum;
+        DefaultListModel listModel = new DefaultListModel();
+        List<SubForum> listOfSubForums;
+        listOfSubForums = CurrentStatus.currUser.viewSubForums(f.getForumName());
+        for (SubForum sf : listOfSubForums) {
+            listModel.addElement(sf);
+        }
+        this.jListSubForums.setModel(listModel);
+    }
+
+    private void updateListOfMembers() {
+        DefaultListModel listModel = new DefaultListModel();
+        List<Member> listOfMembers;
+        Admin admin = (Admin) CurrentStatus.currUser;
+        listOfMembers = admin.getAllForumMembers();
+        for (Member member : listOfMembers) {
+            listModel.addElement(member);
+        }
+        this.jListMembers.setModel(listModel);
+    }
 }
