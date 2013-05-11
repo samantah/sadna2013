@@ -45,7 +45,9 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="logInButton" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="getNotificationsButton" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                           <Component id="registerButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="jButtonEnterThread" min="-2" max="-2" attributes="0"/>
@@ -99,6 +101,7 @@
                   <Component id="jButtonSignout" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jButtonBack" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jButtonDeleteThread" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="getNotificationsButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -218,6 +221,15 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Error - cannot delete"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="getNotificationsButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="get notifications"/>
+        <Property name="toolTipText" type="java.lang.String" value="get all the unread notifications"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="getNotificationsButtonActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
