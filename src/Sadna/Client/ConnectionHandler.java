@@ -275,6 +275,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 		User loggedOutMember = null;
 		msgToSend = "LOGOUT\n" + "forumName:\n" + forumName + "\n"
 				+ "userName:\n" + userName + "\n";
+                msgToSend+=delimiter;
 		stringToServer.println(msgToSend);
 		try {
 			receivedMsg = stringFromServer.readLine();
