@@ -31,12 +31,16 @@ public class MainServer {
         // The server do a loop here to accept all connection initiated by the
         // client application.
         //
-        si.setSuperAdmin();
+        boolean firstRun = true;
         while (true) {
             try {
                 Socket socket = serverSocket.accept();
                 System.out.println("got new client");
                 ch = new ServerConnectionWithClientHandler(socket);
+                if(firstRun){
+                	si.setSuperAdmin(ch);
+                	firstRun = false;
+                }
                 new ServerRequestHandler(ch, si);
             } catch (IOException e) {
                 //     e.printStackTrace();
