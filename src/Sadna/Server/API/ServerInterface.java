@@ -92,6 +92,8 @@ public interface ServerInterface {
 	int getForumCounter();
 
 	List<String> getCommonMembers();
+
+
 	
     
 

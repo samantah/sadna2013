@@ -317,7 +317,6 @@ public class ServerToDataBaseHandler implements ServerInterface {
 			String userName) {
 		Member m = _db.getMember(forumName, userName);
 		List<ForumNotification> notifications =  m.getNotifications();
-		m.clearNotifications();
 		return notifications;
 	}
 
