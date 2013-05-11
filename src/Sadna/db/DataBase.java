@@ -6,6 +6,7 @@ package Sadna.db;
 
 import Sadna.Client.API.ClientCommunicationHandlerInterface;
 import Sadna.Client.Admin;
+import Sadna.Client.ConnectionHandler;
 import Sadna.Client.Member;
 import Sadna.Client.Moderator;
 import Sadna.Client.SuperAdmin;
@@ -523,10 +524,10 @@ public class DataBase implements DBInterface {
     }
 
     @Override
-    public boolean setSuperAdmin() {
+    public boolean setSuperAdmin(ConnectionHandler ch) {
         String userName = "superAdmin";
         String password = "superAdmin1234";
-        SuperAdmin sa = new SuperAdmin(userName, password, "AdminMail", null);
+        SuperAdmin sa = new SuperAdmin(userName, password, "AdminMail", ch);
         ObjectOutputStream obj;
         FileOutputStream outputstream;
         try {

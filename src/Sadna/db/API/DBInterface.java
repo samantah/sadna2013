@@ -5,6 +5,7 @@
 package Sadna.db.API;
 
 import Sadna.Client.Admin;
+import Sadna.Client.ConnectionHandler;
 import Sadna.Client.Member;
 import Sadna.Client.Moderator;
 import Sadna.Client.SuperAdmin;
@@ -14,9 +15,7 @@ import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 import java.util.HashMap;
 
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Vector;
 
 /**
  *
@@ -76,7 +75,7 @@ public interface DBInterface {
 
     List<Member> getAllMembers(String forumName);
 
-    boolean setSuperAdmin();
+    boolean setSuperAdmin(ConnectionHandler ch);
 
     boolean addModerator(Moderator moderator, SubForum subForum);
 
