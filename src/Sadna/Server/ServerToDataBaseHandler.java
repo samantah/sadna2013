@@ -366,6 +366,11 @@ public class ServerToDataBaseHandler implements ServerInterface {
 		return _db.getCommonMembers();
 	}
 
+	@Override
+	public List<Member> getAllMembers(String forumName) {
+		return _db.getAllMembers(forumName);
+	}
+
 
 
 

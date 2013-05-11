@@ -164,11 +164,27 @@ public class ServerRequestHandler implements Runnable {
 		case "LOGOUT":
 			//TO DO
 			break;
+		case "GETALLMEM":
+			handleGetAllMembers(parsedReq[2], parsedReq[4], parsedReq[6]);
 		default:
 			break;
 		}
 
 	}
+	private void handleGetAllMembers(String forumName, String userName,
+			String password) {
+		Member admin = _si.getMember(forumName, userName);
+		if (!admin.getPassword().equals(password)) {
+			_ch.sendErrorNoAuthorized();
+			return;
+		}
+		if (!(admin instanceof Admin)) {
+			_ch.sendErrorNoAuthorized();
+			return;
+		}
+		_ch.sendAllMembers(_si.getAllMembers(forumName));			
+	}
+
 	private void handleCommonMembers(String adminName, String password) {
 		SuperAdmin superAdmin = _si.getSuperAdmin();
 		if (!superAdmin.getPassword().equals(password)) {
@@ -287,12 +303,12 @@ public class ServerRequestHandler implements Runnable {
 		boolean logedIn = _si.login(forumName, userName, password);
 		if (logedIn) {
 			Member member = _si.getMember(forumName, userName);
-			if(member instanceof Member)
-				_ch.sendOK();
-			if(member instanceof Moderator)
-				_ch.sendModeratorOK();
 			if(member instanceof Admin)
 				_ch.sendAdminOK();
+			else if(member instanceof Moderator)
+				_ch.sendModeratorOK();
+			else if(member instanceof Member)
+				_ch.sendOK();
 		} else {
 			_ch.sendNotFound();
 		}

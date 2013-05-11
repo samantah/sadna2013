@@ -9,6 +9,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.List;
 import java.util.Vector;
+
+import Sadna.Client.Member;
 import Sadna.Server.API.ConnectionHandlerServerInterface;
 import Sadna.db.Forum;
 import Sadna.db.Post;
@@ -238,6 +240,16 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 	public void sendAdminOK() {
 		stringToClient.println("202ok");
 		
+	}
+
+	@Override
+	public void sendAllMembers(List<Member> allMembers) {
+		try {
+			objectOutputToClient.writeObject(allMembers);
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println(">> Got Exception in ServerConnectionWithClientHandler - sendAllMembers");
+		}
 	}
 
 
