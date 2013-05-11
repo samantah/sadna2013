@@ -60,6 +60,50 @@ public class connectionHandlerTest {
     public void tearDown() {
     }
 
+    
+    private static void initiateTestPlatform() {
+        DataBase db = new DataBase();
+        //db.deleteAll("DataBase/");
+        Forum forum = new Forum("forum1");
+        SubForum subForum = new SubForum(forum, "subForum1");
+        SubForum subForum2 = new SubForum(forum, "subForum2");
+        ThreadMessage threadMessage = new ThreadMessage(subForum, "NA", "hi11", "publisher");
+        ThreadMessage threadMessage2 = new ThreadMessage(subForum, "NA", "hi2aaa2", "publisher");
+        Post post = new Post(threadMessage, "NA", "hi11post1", "publisher");
+        Post post2 = new Post(threadMessage, "NA", "hi11post2", "publisher");
+        Post post3 = new Post(threadMessage2, "NA", "hii222", "publisher");
+        db.addForum(forum);
+        ArrayList<Moderator> arrayList = new ArrayList<Moderator>();
+        arrayList.add(new Moderator("userNameMod", null, null, null, null));
+        arrayList.add(new Moderator("userNameMod2", null, null, null, null));
+
+        db.addSubForum(subForum, arrayList);
+        db.addSubForum(subForum2, new ArrayList<Moderator>());
+        db.addThread(threadMessage);
+        db.addThread(threadMessage2);
+        db.addPost(post);
+        db.addPost(post2);
+        db.addPost(post3);
+        ThreadMessage thread = db.getThread("forum1", "subForum1", 1);
+        System.out.println("thread: " + thread.getContent());
+        Post post1 = db.getPost("forum1", "subForum1", 0, 0);
+        System.out.println("post: " + post1.getContent());
+        List<SubForum> subForumsList = db.getSubForumsList("forum1");
+        for (SubForum sf : subForumsList) {
+            System.out.println(sf.getSubForumName());
+        }
+        List<ThreadMessage> threadsList = db.getThreadsList("forum1", "subForum1");
+        for (ThreadMessage threadMessage1 : threadsList) {
+            System.out.println(threadMessage1.getContent());
+        }
+        System.out.println(db.getNumberOfSubforums("forum1"));
+        System.out.println(db.getNumberOfThreadsInSubForum("forum1", "subForum1"));
+        Member member = new Member("user1", "pass1234", "mail", "forum1", null);
+        db.addMember(member);
+        System.out.println(db.getMember("forum1", "user1").getUserName());
+    }
+    
+    
     @Test
     public void test_logIn() throws InterruptedException {
         Member _member1 = ch.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
@@ -132,50 +176,10 @@ public class connectionHandlerTest {
     }
 
     
-    private static void initiateTestPlatform() {
-        DataBase db = new DataBase();
-       // db.deleteAll("DataBase/");
-        Forum forum = new Forum("forum1");
-        SubForum subForum = new SubForum(forum, "subForum1");
-        SubForum subForum2 = new SubForum(forum, "subForum2");
-        ThreadMessage threadMessage = new ThreadMessage(subForum, "NA", "hi11", "publisher");
-        ThreadMessage threadMessage2 = new ThreadMessage(subForum, "NA", "hi2aaa2", "publisher");
-        Post post = new Post(threadMessage, "NA", "hi11post1", "publisher");
-        Post post2 = new Post(threadMessage, "NA", "hi11post2", "publisher");
-        Post post3 = new Post(threadMessage2, "NA", "hii222", "publisher");
-        db.addForum(forum);
-        ArrayList<Moderator> arrayList = new ArrayList<Moderator>();
-        arrayList.add(new Moderator("userNameMod", null, null, null, null));
-        arrayList.add(new Moderator("userNameMod2", null, null, null, null));
-
-        db.addSubForum(subForum, arrayList);
-        db.addSubForum(subForum2, new ArrayList<Moderator>());
-        db.addThread(threadMessage);
-        db.addThread(threadMessage2);
-        db.addPost(post);
-        db.addPost(post2);
-        db.addPost(post3);
-        ThreadMessage thread = db.getThread("forum1", "subForum1", 1);
-        System.out.println("thread: " + thread.getContent());
-        Post post1 = db.getPost("forum1", "subForum1", 0, 0);
-        System.out.println("post: " + post1.getContent());
-        List<SubForum> subForumsList = db.getSubForumsList("forum1");
-        for (SubForum sf : subForumsList) {
-            System.out.println(sf.getSubForumName());
-        }
-        List<ThreadMessage> threadsList = db.getThreadsList("forum1", "subForum1");
-        for (ThreadMessage threadMessage1 : threadsList) {
-            System.out.println(threadMessage1.getContent());
-        }
-        System.out.println(db.getNumberOfSubforums("forum1"));
-        System.out.println(db.getNumberOfThreadsInSubForum("forum1", "subForum1"));
-        Member member = new Member("user1", "pass1234", "mail", "forum1", null);
-        db.addMember(member);
-        System.out.println(db.getMember("forum1", "user1").getUserName());
-    }
+    
     
     @Test
-    private static void getForumTest() {
+    public void getForumTest() {
     	User u = new User(ch);
     	SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
     	assertNotNull(sa);
@@ -189,7 +193,7 @@ public class connectionHandlerTest {
     }
     
     @Test
-    private static void getThreadsListTest() {
+    public void getThreadsListTest() {
     	User u = new User(ch);
     	SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
     	assertNotNull(sa);
