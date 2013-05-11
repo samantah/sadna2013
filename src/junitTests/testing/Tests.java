@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package junitTests.testing;
+package testing;
 
 import Sadna.Client.Member;
 import Sadna.Client.Moderator;
@@ -14,8 +14,8 @@ import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 import java.util.ArrayList;
 import java.util.List;
-import junitTests.Driver.ClientBridge;
-import junitTests.Driver.ClientDriver;
+import Driver.ClientBridge;
+import Driver.ClientDriver;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -151,7 +151,7 @@ public class Tests {
 
     private static void initiateTestPlatform() {
         DataBase db = new DataBase();
-        db.deleteAll("DataBase/");
+       // db.deleteAll("DataBase/");
         Forum forum = new Forum("forum1");
         SubForum subForum = new SubForum(forum, "subForum1");
         SubForum subForum2 = new SubForum(forum, "subForum2");
