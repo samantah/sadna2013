@@ -4,6 +4,7 @@ import Sadna.Client.Admin;
 import Sadna.Client.Member;
 import Sadna.Client.Moderator;
 import Sadna.Client.SuperAdmin;
+import Sadna.Client.API.ClientCommunicationHandlerInterface;
 import Sadna.Server.API.ConnectionHandlerServerInterface;
 import Sadna.Server.API.ServerInterface;
 import Sadna.db.API.DBInterface;
@@ -141,7 +142,7 @@ public class ServerToDataBaseHandler implements ServerInterface {
 	}
 
 	@Override
-	public boolean addSubForum(SubForum subForum, List<Moderator> moderators) {
+	public boolean addSubForum(SubForum subForum, List<Moderator> moderators, String username, String password) {
 		boolean isAdded = false;
 		if (subForum.getForum() != null) {
 			if (isSubForumNameUnique(subForum.getForum().getForumName(),
@@ -166,21 +167,21 @@ public class ServerToDataBaseHandler implements ServerInterface {
 	}
 
 	@Override
-	public boolean publishThread(ThreadMessage thread) {
+	public boolean publishThread(ThreadMessage thread, String username, String password) {
 		boolean succeeded = false;
 		succeeded = _db.addThread(thread);
 		return succeeded;
 	}
 
 	@Override
-	public boolean postComment(Post comment) {
+	public boolean postComment(Post comment, String username, String password) {
 		boolean posted = false;
 		posted = _db.addPost(comment);
 		return posted;
 	}
 
 	@Override
-	public boolean deleteComment(Post comment) {
+	public boolean deleteComment(Post comment, String userName, String password) {
 		boolean deleted = _db.deletePost(comment);
 		return deleted;
 	}
@@ -291,17 +292,17 @@ public class ServerToDataBaseHandler implements ServerInterface {
 	}
 
 	@Override
-	public boolean deleteSubForum(SubForum subForum) {
+	public boolean deleteSubForum(SubForum subForum, String userName, String password) {
 		return _db.deleteSubForum(subForum);
 	}
 
 	@Override
-	public boolean deleteThread(ThreadMessage thread) {
+	public boolean deleteThread(ThreadMessage thread, String userName, String password) {
 		return _db.deleteThread(thread);
 	}
 
 	@Override
-	public boolean deleteForum(String forumName) {
+	public boolean deleteForum(String forumName, String userName, String password) {
 	Forum f = _db.getForum(forumName);
 	return _db.deleteForum(f);
 	}
@@ -317,22 +318,21 @@ public class ServerToDataBaseHandler implements ServerInterface {
 	}
 
 	@Override
-	public boolean addModerator(Moderator moderator, SubForum subForum) {
+	public boolean addModerator(Moderator moderator, SubForum subForum, String userName, String password) {
 		return _db.addModerator(moderator, subForum);
 	}
 
 
 	@Override
-	public List<ForumNotification> getNotifications(String forumName,
-			String userName) {
+	public List<ForumNotification> getNotifications(String forumName, String userName, String password) {
 		Member m = _db.getMember(forumName, userName);
 		List<ForumNotification> notifications =  m.getNotifications();
 		return notifications;
 	}
 
 	@Override
-	public boolean setSuperAdmin(String host, int port) {
-		return _db.setSuperAdmin(host, port);
+	public boolean setSuperAdmin(ClientCommunicationHandlerInterface ch) {
+		return _db.setSuperAdmin(ch);
 	}
 
 	@Override
@@ -346,38 +346,38 @@ public class ServerToDataBaseHandler implements ServerInterface {
 	}
 
 	@Override
-	public boolean deleteModerator(Moderator moderator, String subForumName) {
+	public boolean deleteModerator(Moderator moderator, String subForumName, String modName, String userName, String password) {
 		return _db.deleteModerator(moderator, subForumName);
 	}
 
 	@Override
-	public int getNumberOfThreadsInForum(String forumName) {
+	public int getNumberOfThreadsInForum(String forumName, String userName, String password) {
 		return _db.getNumberOfThreadsInForum(forumName);
 	}
 
 
 	@Override
-	public int getNumberOfUserThreads(String forumName, Member member) {
-		return _db.getNumberOfUserThreads(forumName, member);
+	public int getNumberOfUserThreads(String forumName, String username, String requesterUsername, String requesterPassword){
+		return _db.getNumberOfUserThreads(forumName, _db.getMember(forumName, username));
 	}
 
 	@Override
-	public HashMap<String ,List<String>> getUsersPostToUser(String forumName) {
+	public HashMap<String ,List<String>> getUsersPostToUser(String forumName, String userName, String password) {
 		return _db.getUsersPostToUser(forumName);
 	}
 
 	@Override
-	public int getForumCounter() {
+	public int getForumCounter(String userName, String password) {
 		return _db.getNumberOfForums();
 	}
 
 	@Override
-	public List<String> getCommonMembers() {
+	public List<String> getCommonMembers(String userName, String password) {
 		return _db.getCommonMembers();
 	}
 
 	@Override
-	public List<Member> getAllMembers(String forumName) {
+	public List<Member> getAllForumMembers(String forumName, String userName, String password) {
 		return _db.getAllMembers(forumName);
 	}
 
