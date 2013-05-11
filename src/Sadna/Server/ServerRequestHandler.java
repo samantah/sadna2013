@@ -465,12 +465,6 @@ public class ServerRequestHandler implements Runnable {
 		_ch.sendThreadMeassage(_si.getThreadMessage(forumName, subForumName, messageID));
 	}
 
-	/*  For later use..
-
-     private User handleLogout(String forumName, String userName){ 
-     return null;
-     }
-	 */
 	public boolean handleDeleteThread(ThreadMessage tm, String requester, String password) {
 		String publisher = tm.getPublisher();
 		String forumName = tm.getSubForum().getForum().getForumName();
