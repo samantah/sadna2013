@@ -87,6 +87,7 @@ public class ForumPage extends javax.swing.JFrame {
         jLabelEnterModerators = new javax.swing.JLabel();
         jTextAreaListOfModerators = new javax.swing.JTextArea();
         jButtonToAdminPage = new javax.swing.JButton();
+        getNotificationsButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -166,6 +167,14 @@ public class ForumPage extends javax.swing.JFrame {
             }
         });
 
+        getNotificationsButton.setText("get notifications");
+        getNotificationsButton.setToolTipText("get all the unread notifications");
+        getNotificationsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                getNotificationsButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -188,6 +197,8 @@ public class ForumPage extends javax.swing.JFrame {
                                 .addComponent(jButtonBack)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jButtonSignout)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(getNotificationsButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(logInButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -241,7 +252,8 @@ public class ForumPage extends javax.swing.JFrame {
                     .addComponent(registerButton)
                     .addComponent(enterSubForumButton)
                     .addComponent(jButtonBack)
-                    .addComponent(jButtonSignout))
+                    .addComponent(jButtonSignout)
+                    .addComponent(getNotificationsButton))
                 .addContainerGap())
         );
 
@@ -329,9 +341,16 @@ public class ForumPage extends javax.swing.JFrame {
         this.dispose();
         adminPage.setVisible(true);
     }//GEN-LAST:event_jButtonToAdminPageActionPerformed
+
+    private void getNotificationsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getNotificationsButtonActionPerformed
+        NotificationsPage notificationsPage = new NotificationsPage();
+        notificationsPage.setVisible(true);
+    }//GEN-LAST:event_getNotificationsButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addNewSubButton;
     private javax.swing.JButton enterSubForumButton;
+    private javax.swing.JButton getNotificationsButton;
     private javax.swing.JButton jButtonBack;
     private javax.swing.JButton jButtonSignout;
     private javax.swing.JButton jButtonToAdminPage;
