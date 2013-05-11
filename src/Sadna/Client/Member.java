@@ -75,10 +75,18 @@ public class Member extends User {
     }
 
     public boolean deleteThread(ThreadMessage tm) {
-        return this.conHand.deleteThreadMessage(tm, userName, password);
+        return this.conHand.deleteThreadMessage(tm, this.userName, this.password);
     }
 
     public boolean deletePost(Post p) {
-        return this.conHand.deletePost(p, userName, password);
+        return this.conHand.deletePost(p, this.userName, this.password);
+    }
+    
+    public boolean editPost(Post p, String newText){
+    	return conHand.editPost(p, newText, this.userName, this.password);
+    }
+    
+    public boolean editThread(ThreadMessage tm, String newText){
+    	return conHand.editThread(tm, newText, this.userName, this.password);
     }
 }

@@ -6,6 +6,7 @@
 package Sadna.Client;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
@@ -98,8 +99,8 @@ public class Admin extends Moderator {
     /*
      * MAP(username:String, users that post:Vector<String>)
      */
-    public List<List<String>> getUsersPostToUser(String forumName) {
-    	List<List<String>> map = null;
+    public HashMap<String, List<String>> getUsersPostToUser(String forumName) {
+    	HashMap<String, List<String>> map = null;
         try {
         	map = conHand.getUsersPostToUser(forumName, this.userName, this.password);
         } catch (Exception e) {

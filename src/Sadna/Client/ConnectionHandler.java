@@ -1,6 +1,7 @@
 package Sadna.Client;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.io.*;
@@ -86,7 +87,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 	@Override
 	public SuperAdmin loginAsSuperAdmin(String userName, String password) {
 		SuperAdmin loggedInSuperAdmin = null;
-		msgToSend = "LOGINSUPER\n" + "forumName:\n" + userName + "\n" + "password:\n" + password + "\n";
+		msgToSend = "LOGINSUPER\n" + "userName:\n" + userName + "\n" + "password:\n" + password + "\n";
 		msgToSend += delimiter;
 		stringToServer.println(msgToSend);
 		try {
@@ -475,7 +476,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 	@Override
 	public boolean editPost(Post p, String newText, String userName,
 			String password) {
-		boolean deleted = false;
+		boolean edited = false;
 		int pId = p.getId();
 		ThreadMessage tm = p.getThread();
 		SubForum subForum = tm.getSubForum();
@@ -493,9 +494,9 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 		} catch (IOException e) {
 		}
 		if (receivedMsg.contains("200ok")) {
-			deleted = true;
+			edited = true;
 		}
-		return deleted;
+		return edited;
 	}
 
 	@Override
@@ -580,26 +581,9 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 		return counter;
 	}
 
-	/*
-	 * MAP(username:String, users that post:Vector<String>)
-	 */
-	@Override
-	public List<List<String>> getUsersPostToUser(String forumName, 
-			String userName, String password) {
-		List<List<String>> map = null;
-		msgToSend = "GETUSRSPOSTUSER\n" + "forumName:\n" + forumName + "\n"+ "userName:\n" 
-				+ userName + "\n" + "password:\n" + password + "\n";
-		msgToSend += delimiter;
-		stringToServer.println(msgToSend);
-		try {
-			map = (List<List<String>>)objectFromServer.readObject();
-		} catch (IOException e) {
-			System.out.println("ConnectionHandler(getUsersPostToUser) " + e);
-		} catch (ClassNotFoundException e) {
-			System.out.println("ConnectionHandler(getUsersPostToUser) error in objectFromServer " + e);
-		}
-		return map;
-	}
+
+	
+	
 	@Override
 	public int getForumCounter(String userName, String password) {
 		int counter = 0;
@@ -658,4 +642,21 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 		return members;
 	}
 
+	@Override
+	public HashMap<String, List<String>> getUsersPostToUser(String forumName,
+			String userName, String password) {
+			HashMap<String, List<String>> map = null;
+			msgToSend = "GETUSRSPOSTUSER\n" + "forumName:\n" + forumName + "\n"+ "userName:\n" 
+					+ userName + "\n" + "password:\n" + password + "\n";
+			msgToSend += delimiter;
+			stringToServer.println(msgToSend);
+			try {
+				map = (HashMap<String, List<String>>)objectFromServer.readObject();
+			} catch (IOException e) {
+				System.out.println("ConnectionHandler(getUsersPostToUser) " + e);
+			} catch (ClassNotFoundException e) {
+				System.out.println("ConnectionHandler(getUsersPostToUser) error in objectFromServer " + e);
+			}
+			return map;
+	}
 } 
