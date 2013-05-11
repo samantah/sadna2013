@@ -24,29 +24,27 @@ import java.util.Vector;
  */
 public interface ServerInterface {
 	
-	// removeModerator()
-
     boolean register(String forumName, String userName, String password, String email);
 
     boolean login(String forumName, String userName, String password);
 
     boolean initiateForum(String adminUserName, String adminPassword, String forumName, String superAdminUserName, String superAdminPassword);
 
-    boolean deleteForum(String forumName);
+    boolean deleteForum(String forumName, String userName, String password);
 
-    boolean addSubForum(SubForum subForum, List<Moderator> moderators);
+    boolean addSubForum(SubForum subForum, List<Moderator> moderators, String username, String password);
 
-    boolean deleteSubForum(SubForum subForum);
+    boolean deleteSubForum(SubForum subForum, String userName, String password);
 
-    boolean publishThread(ThreadMessage thread);
+    boolean publishThread(ThreadMessage thread, String username, String password);
 
-    boolean deleteThread(ThreadMessage thread);
+    boolean deleteThread(ThreadMessage thread, String userName, String password);
     
-    boolean deleteModerator(Moderator moderator, String subForumName);
+    boolean deleteModerator(Moderator moderator, String subForumName, String modName, String userName, String password);
 
-    boolean postComment(Post comment);
+    boolean postComment(Post comment, String username, String password);
 
-    boolean deleteComment(Post comment);
+    boolean deleteComment(Post comment, String userName, String password);
 
     List<Forum> getForumsList();
 
@@ -70,32 +68,36 @@ public interface ServerInterface {
 
     Member getMember(String forumName, String userName);
 
-    boolean addModerator(Moderator moderator, SubForum subForum);
+    boolean addModerator(Moderator moderator, SubForum subForum, String userName, String password);
 
     boolean setSuperAdmin(String host, int port);
 
     SuperAdmin getSuperAdmin();
     
     boolean addMember(Member member);
-    /* For later use..  
-     * 
-     * boolean logout(String forumName, String userName);
-     */
+ 
+    boolean logout(String forumName, String userName);
+   
+    public List<ForumNotification> getNotifications(String forumName, String userName, String password);
 
-    public List<ForumNotification> getNotifications(String forumName, String userName);
+	int getNumberOfThreadsInForum(String forumName, String userName, String password);
 
-	int getNumberOfThreadsInForum(String forumName);
+	int getNumberOfUserThreads(String forumName, String username, String requesterUsername, String requesterPassword);
 
-	int getNumberOfUserThreads(String forumName, Member member);
+	HashMap<String, List<String>> getUsersPostToUser(String forumName, String userName, String password);
 
-	HashMap<String, List<String>> getUsersPostToUser(String forumName);
+	int getForumCounter(String userName, String password);
 
-	int getForumCounter();
+	List<String> getCommonMembers(String userName, String password);
 
-	List<String> getCommonMembers();
-
-	List<Member> getAllMembers(String forumName);
+	List<Member> getAllForumMembers(String forumName, String userName, String password);
 
 	boolean loginAsSuperAdmin(String userName, String password);    
+	
+	//mod or admin or publisher (String userName, String password)
+	boolean editThread(ThreadMessage tm, String userName, String password);
+
+	//mod or admin or publisher (String userName, String password)
+	boolean editPost(Post p, String userName, String password);
 
 }
