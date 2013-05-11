@@ -43,7 +43,7 @@ public class connectionHandlerTest {
     @BeforeClass
     public static void setUpClass() {
         initiateTestPlatform();
-        ch = new ConnectionHandler("192.168.1.100", 3333);
+        ch = new ConnectionHandler("192.168.1.105", 3333);
     }
 
     @AfterClass
@@ -93,6 +93,7 @@ public class connectionHandlerTest {
         assertTrue(ch.addSubForum(legal, mods));
     }
 
+    @Test
     public void getSubForumTest() {
         SubForum sf2 = new SubForum(new Forum(FORUM_NAME), "FASHION");
         ch.addSubForum(sf2, null);
@@ -128,9 +129,10 @@ public class connectionHandlerTest {
         assertEquals(post.getId(), allPosts.get(size - 1).getId());
     }
 
+    @Test
     private static void initiateTestPlatform() {
         DataBase db = new DataBase();
-        db.deleteAll("DataBase/");
+       // db.deleteAll("DataBase/");
         Forum forum = new Forum("forum1");
         SubForum subForum = new SubForum(forum, "subForum1");
         SubForum subForum2 = new SubForum(forum, "subForum2");
@@ -168,5 +170,33 @@ public class connectionHandlerTest {
         Member member = new Member("user1", "pass1234", "mail", "forum1", null);
         db.addMember(member);
         System.out.println(db.getMember("forum1", "user1").getUserName());
+    }
+    
+    @Test
+    private static void getForumTest() {
+    	assertTrue(ch.initiateForum("forumTest1", "samanta", "1234567a"));
+    	Member m = ch.register("forumTest1", "sam11111", "lasjflkJDF1", "ASFADF@asd.com");
+    	Forum exists = ch.getForum("forumTest1");
+    	assertNotNull(exists);
+    	assertEquals("forumTest1", exists.getForumName());
+     	Forum doesntExist = ch.getForum("forumThatDoesn'tExisttttttt");
+    	assertNull(doesntExist);
+    }
+    
+    @Test
+    private static void getThreadsListTest() {
+    	assertTrue(ch.initiateForum("forumTest2", "samanta111", "1234567a"));
+    	Forum exists = ch.getForum("forumTest2");
+    	Member m = ch.register("forumTest2", "member123", "lasjflkJDF1", "ASFADF@asd.com");
+    	List<Moderator> lm = new ArrayList<Moderator>();
+    	Moderator mo = new Moderator(m);
+    	lm.add(mo);
+    	ch.addSubForum(new SubForum(exists, "subForumTest2"), lm);
+    	assertNotNull(ch.getThreadsList("forumTest2", "subForumTest2"));
+    	assertEquals(0, ch.getThreadsList("forumTest2", "subForumTest2").size());
+    	SubForum sf = ch.getSubForum("forumTest2", "subForumTest2");
+    	ThreadMessage t = new ThreadMessage(sf, "title222", "lalala", "samanta111");
+    	ch.publishThread(t);
+    	assertEquals(1, ch.getThreadsList("forumTest2", "subForumTest2").size());
     }
 }

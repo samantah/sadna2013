@@ -29,7 +29,7 @@ public interface ServerInterface {
 
     boolean login(String forumName, String userName, String password);
 
-    boolean initiateForum(String adminUserName, String adminPassword, String forumName);
+    boolean initiateForum(String adminUserName, String adminPassword, String forumName, String superAdminUserName, String superAdminPassword);
 
     boolean deleteForum(String forumName);
 

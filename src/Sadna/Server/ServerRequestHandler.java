@@ -102,7 +102,7 @@ public class ServerRequestHandler implements Runnable {
 			handleAddSubForum(subF, moderators);
 			break;
 		case "ADDF":
-			if (handleInitiateForum(parsedReq[2], parsedReq[4], parsedReq[6])) {
+			if (handleInitiateForum(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8], parsedReq[10])) {
 				System.out.println("After add forum");
 			}
 			break;
@@ -316,17 +316,17 @@ public class ServerRequestHandler implements Runnable {
 	}
 
 	public boolean handleInitiateForum(String forumName, String adminName,
-			String adminPassword) {
+			String adminPassword, String superAdminUserName, String superAdminPassword) {
 		boolean isAdded = false;
-		isAdded = _si.initiateForum(adminName, adminPassword, forumName);
+		isAdded = _si.initiateForum(adminName, adminPassword, forumName, superAdminUserName, superAdminPassword);
 		if (isAdded) {
-			System.out.println("isAdded");
+			//System.out.println("isAdded");
 			_ch.sendOK();
-			System.out.println("Sent ok");
+			//System.out.println("Sent ok");
 		} else {
-			System.out.println("notAdded");
-			_ch.sendErrorInServer();
-			System.out.println("Sent ErrorInServer");
+			//System.out.println("notAdded");
+			_ch.sendErrorNoAuthorized();
+			//System.out.println("Sent ErrorInServer");
 		}
 
 		return isAdded;
