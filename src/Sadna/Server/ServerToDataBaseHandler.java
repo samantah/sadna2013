@@ -251,9 +251,11 @@ public class ServerToDataBaseHandler implements ServerInterface {
 	private boolean subForumExists(String forumName, String subForumName) {
 		if (forumExists(forumName)) {
 			List<SubForum> subForums = _db.getSubForumsList(forumName);
-			for (SubForum s : subForums) {
-				if (s.getSubForumName().equals(subForumName)) {
-					return true;
+			if(subForums != null){
+				for (SubForum s : subForums) {
+					if (s.getSubForumName().equals(subForumName)) {
+						return true;
+					}
 				}
 			}
 		}
@@ -303,8 +305,8 @@ public class ServerToDataBaseHandler implements ServerInterface {
 
 	@Override
 	public boolean deleteForum(String forumName, String userName, String password) {
-	Forum f = _db.getForum(forumName);
-	return _db.deleteForum(f);
+		Forum f = _db.getForum(forumName);
+		return _db.deleteForum(f);
 	}
 
 	@Override
