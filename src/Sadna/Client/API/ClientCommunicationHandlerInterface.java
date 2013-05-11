@@ -15,6 +15,7 @@ import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
@@ -77,7 +78,7 @@ public interface ClientCommunicationHandlerInterface {
     
     public int getNumOfUserThreads(String forumName, String generalUserName, String userName, String password);
     //not to test right now
-    public Hashtable<String ,List<String>> getUsersPostToUser(String forumName, String userName, String password);
+    public HashMap<String ,List<String>> getUsersPostToUser(String forumName, String userName, String password);
     //tested
     public int getForumCounter(String userName, String password);
     //tested
