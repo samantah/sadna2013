@@ -287,12 +287,12 @@ public class ForumPage extends javax.swing.JFrame {
     }//GEN-LAST:event_enterSubForumButtonActionPerformed
 
     private void jButtonBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBackActionPerformed
-        Member m = (Member) CurrentStatus.currUser;
-        String forumName = CurrentStatus.currForum.getForumName();
-        String userName = m.getUserName();
-//        User logout = m.logout(forumName, userName);
-//        CurrentStatus.currUser = logout;
-        CurrentStatus.currUser = null;
+        if (CurrentStatus.currUser instanceof Member) {
+            Member m = (Member) CurrentStatus.currUser;
+            String forumName = CurrentStatus.currForum.getForumName();
+            User logout = m.logout(forumName);
+            CurrentStatus.currUser = logout;
+        }
         CurrentStatus.currForum = null;
         MainFrame mainFrame = new MainFrame();
         this.setVisible(false);

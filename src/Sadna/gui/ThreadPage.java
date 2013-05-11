@@ -31,6 +31,7 @@ public class ThreadPage extends javax.swing.JFrame {
             logInButton.setVisible(false);
             registerButton.setVisible(false);
         } else {
+            getNotificationsButton.setVisible(false);
             jButtonSignout.setVisible(false);
             jTextFieldAddTitle.setVisible(false);
             jTextFieldAddContent.setVisible(false);
@@ -72,6 +73,7 @@ public class ThreadPage extends javax.swing.JFrame {
         jLabelErrorCannotDelete = new javax.swing.JLabel();
         jButtonEditPost = new javax.swing.JButton();
         jButtonEdit = new javax.swing.JButton();
+        getNotificationsButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -157,6 +159,14 @@ public class ThreadPage extends javax.swing.JFrame {
             }
         });
 
+        getNotificationsButton.setText("get notifications");
+        getNotificationsButton.setToolTipText("get all the unread notifications");
+        getNotificationsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                getNotificationsButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -170,7 +180,9 @@ public class ThreadPage extends javax.swing.JFrame {
                         .addComponent(jButtonBack)
                         .addGap(149, 149, 149)
                         .addComponent(jButtonSignout)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(getNotificationsButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonEditPost)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButtonDeletePost)
@@ -227,7 +239,8 @@ public class ThreadPage extends javax.swing.JFrame {
                     .addComponent(jButtonAddPost)
                     .addComponent(jButtonSignout)
                     .addComponent(jButtonDeletePost)
-                    .addComponent(jButtonEditPost))
+                    .addComponent(jButtonEditPost)
+                    .addComponent(getNotificationsButton))
                 .addContainerGap())
         );
 
@@ -331,7 +344,13 @@ public class ThreadPage extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButtonEditActionPerformed
 
+    private void getNotificationsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getNotificationsButtonActionPerformed
+        NotificationsPage notificationsPage = new NotificationsPage();
+        notificationsPage.setVisible(true);
+    }//GEN-LAST:event_getNotificationsButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton getNotificationsButton;
     private javax.swing.JButton jButtonAddPost;
     private javax.swing.JButton jButtonBack;
     private javax.swing.JButton jButtonDeletePost;
