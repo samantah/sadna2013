@@ -34,8 +34,12 @@ public class Member extends User {
         this.notifications = new ArrayList<ForumNotification>();
     }
 
-    public List<ForumNotification> getNotifications() {
+    
+    public List<ForumNotification> getNotificationsFromServer(){
         return this.conHand.getNotification(this.forum, this.userName, this.password);
+    }
+    public List<ForumNotification> getNotifications() {
+        return notifications;
     }
     //Server Use Only
     public void clearNotifications() {
