@@ -5,8 +5,8 @@
 package Sadna.gui;
 
 import Sadna.Client.API.ClientCommunicationHandlerInterface;
-import Sadna.Client.Admin;
 import Sadna.Client.ConnectionHandler;
+import Sadna.Client.Member;
 import Sadna.Client.SuperAdmin;
 import Sadna.Client.User;
 import Sadna.db.Forum;
@@ -42,26 +42,32 @@ public class MainFrame extends javax.swing.JFrame {
             jButtonInitiateForum.setVisible(false);
             jLabelNumberOfForums.setVisible(false);
             jLabelNumberOfMembersInForum.setVisible(false);
+            commonMembersList.setVisible(false);
+        } else {
             String text = jLabelNumberOfForums.getText();
             jLabelNumberOfForums.setText(text + " " + String.valueOf(viewForums.size()));
+            SuperAdmin admin = (SuperAdmin) CurrentStatus.currUser;
+            List<String> commonMembers = admin.getCommonMembers();
+            listOfForums = new DefaultListModel();
+            for (String string : commonMembers) {
+                listOfForums.addElement(string);
+            }
+            commonMembersList.setModel(listOfForums);
         }
 
-        
-        
+
+
         this.forumsList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 JList list = (JList) evt.getSource();
                 if (evt.getClickCount() == 1) {
-                    
-                } 
+                }
             }
         });
     }
-                
-    
-        
-        @SuppressWarnings("unchecked")
+
+    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -73,6 +79,8 @@ public class MainFrame extends javax.swing.JFrame {
         jButtonInitiateForum = new javax.swing.JButton();
         jLabelNumberOfForums = new javax.swing.JLabel();
         jLabelNumberOfMembersInForum = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        commonMembersList = new javax.swing.JList();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -117,12 +125,26 @@ public class MainFrame extends javax.swing.JFrame {
         jLabelNumberOfMembersInForum.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabelNumberOfMembersInForum.setText("Number of members in forum: ");
 
+        commonMembersList.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "list of common members" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        commonMembersList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                commonMembersListclickHandler(evt);
+            }
+        });
+        jScrollPane2.setViewportView(commonMembersList);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(278, 278, 278)
+                .addGap(9, 9, 9)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(44, 44, 44)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(headLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
@@ -151,7 +173,8 @@ public class MainFrame extends javax.swing.JFrame {
                         .addComponent(jLabelNumberOfForums, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(32, 32, 32)
                         .addComponent(jLabelNumberOfMembersInForum, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -186,14 +209,22 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void clickHandler(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_clickHandler
         int clickCount = evt.getClickCount();
-        if (clickCount==1){
+        if (clickCount == 1) {
             String text = "";
             text = "Number of members in forum: ";
             Forum selectedForum = (Forum) this.forumsList.getSelectedValue();
-            SuperAdmin admin = (SuperAdmin)CurrentStatus.currUser;
+            SuperAdmin admin = (SuperAdmin) CurrentStatus.currUser;
+            List<Member> allForumMembers = admin.getAllForumMembers(selectedForum.getForumName());
+            text += allForumMembers.size();
             this.jLabelNumberOfMembersInForum.setText(text);
+
+
         }
     }//GEN-LAST:event_clickHandler
+
+    private void commonMembersListclickHandler(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_commonMembersListclickHandler
+        // TODO add your handling code here:
+    }//GEN-LAST:event_commonMembersListclickHandler
 
     /**
      * @param args the command line arguments
@@ -230,6 +261,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JList commonMembersList;
     private javax.swing.JButton enterForumButton;
     private javax.swing.JList forumsList;
     private javax.swing.JLabel headLabel;
@@ -237,6 +269,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelNumberOfForums;
     private javax.swing.JLabel jLabelNumberOfMembersInForum;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton logInButton;
     // End of variables declaration//GEN-END:variables
 }

@@ -20,12 +20,13 @@ public class ThreadPage extends javax.swing.JFrame {
     /**
      * Creates new form ThreadPage
      */
+    private Post currPost;
     public ThreadPage() {
         initComponents();
         this.setResizable(false);
         this.jLabelError.setVisible(false);
         this.jLabelErrorCannotDelete.setVisible(false);
-
+        this.jButtonEdit.setVisible(false);
         if (CurrentStatus.currUser instanceof Member) {
             logInButton.setVisible(false);
             registerButton.setVisible(false);
@@ -35,6 +36,7 @@ public class ThreadPage extends javax.swing.JFrame {
             jTextFieldAddContent.setVisible(false);
             jButtonAddPost.setVisible(false);
             jButtonDeletePost.setVisible(false);
+            jButtonEditPost.setVisible(false);
         }
 
         this.setResizable(false);
@@ -81,6 +83,8 @@ public class ThreadPage extends javax.swing.JFrame {
         jLabelError = new javax.swing.JLabel();
         jButtonDeletePost = new javax.swing.JButton();
         jLabelErrorCannotDelete = new javax.swing.JLabel();
+        jButtonEditPost = new javax.swing.JButton();
+        jButtonEdit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -150,6 +154,22 @@ public class ThreadPage extends javax.swing.JFrame {
         jLabelErrorCannotDelete.setForeground(new java.awt.Color(255, 0, 0));
         jLabelErrorCannotDelete.setText("Error - cannot delete");
 
+        jButtonEditPost.setText("edit post");
+        jButtonEditPost.setToolTipText("delete the selected post\nauthorized only by the publisher, \nmoderator or the admin");
+        jButtonEditPost.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEditPostActionPerformed(evt);
+            }
+        });
+
+        jButtonEdit.setText("edit");
+        jButtonEdit.setToolTipText("delete the selected post\nauthorized only by the publisher, \nmoderator or the admin");
+        jButtonEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEditActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -161,9 +181,11 @@ public class ThreadPage extends javax.swing.JFrame {
                     .addComponent(jLabelThreadTitle, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButtonBack)
-                        .addGap(56, 56, 56)
+                        .addGap(149, 149, 149)
                         .addComponent(jButtonSignout)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                        .addComponent(jButtonEditPost)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButtonDeletePost)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(logInButton)
@@ -174,21 +196,21 @@ public class ThreadPage extends javax.swing.JFrame {
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButtonAddPost)
-                        .addGap(113, 113, 113))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jTextFieldAddTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
                             .addComponent(jTextFieldAddContent))
-                        .addContainerGap())))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButtonEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButtonAddPost))
+                        .addGap(113, 113, 113))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabelError, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(105, 105, 105))
-            .addGroup(layout.createSequentialGroup()
                 .addGap(189, 189, 189)
                 .addComponent(jLabelErrorCannotDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabelError, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(105, 105, 105))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -203,11 +225,13 @@ public class ThreadPage extends javax.swing.JFrame {
                         .addComponent(jTextFieldAddTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jTextFieldAddContent))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(jLabelError)
-                .addGap(23, 23, 23)
-                .addComponent(jLabelErrorCannotDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelErrorCannotDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonEdit))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonBack)
@@ -215,7 +239,8 @@ public class ThreadPage extends javax.swing.JFrame {
                     .addComponent(logInButton)
                     .addComponent(jButtonAddPost)
                     .addComponent(jButtonSignout)
-                    .addComponent(jButtonDeletePost))
+                    .addComponent(jButtonDeletePost)
+                    .addComponent(jButtonEditPost))
                 .addContainerGap())
         );
 
@@ -289,10 +314,30 @@ public class ThreadPage extends javax.swing.JFrame {
             threadPage.setVisible(true);
         }
     }//GEN-LAST:event_jButtonDeletePostActionPerformed
+
+    private void jButtonEditPostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditPostActionPerformed
+        Post selectedPost = (Post) this.jListPosts.getSelectedValue();
+        if (selectedPost==null)
+            return;
+        String title = selectedPost.getTitle();
+        String content = selectedPost.getContent();
+        this.jTextFieldAddTitle.setText(title);
+        this.jTextFieldAddContent.setText(content);
+        this.jButtonEdit.setVisible(true);
+        this.jButtonAddPost.setVisible(false);
+        this.currPost = selectedPost;
+    }//GEN-LAST:event_jButtonEditPostActionPerformed
+
+    private void jButtonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditActionPerformed
+        
+    }//GEN-LAST:event_jButtonEditActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAddPost;
     private javax.swing.JButton jButtonBack;
     private javax.swing.JButton jButtonDeletePost;
+    private javax.swing.JButton jButtonEdit;
+    private javax.swing.JButton jButtonEditPost;
     private javax.swing.JButton jButtonSignout;
     private javax.swing.JLabel jLabelError;
     private javax.swing.JLabel jLabelErrorCannotDelete;

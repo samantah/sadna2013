@@ -4,6 +4,7 @@
  */
 package Sadna.gui;
 
+import Sadna.Client.Admin;
 import Sadna.Client.Member;
 import static Sadna.gui.EnumPages.FORUM;
 import static Sadna.gui.EnumPages.MAIN;
@@ -147,14 +148,13 @@ public class LogInAsAdminPage extends javax.swing.JFrame {
     private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLoginActionPerformed
         String userNameStr = jTextFieldUserName.getText();
         String passwordStr = jPasswordField1.getText();
-        String forumName = CurrentStatus.currForum.getForumName();
-        Member login = CurrentStatus.currUser.login(forumName, userNameStr, passwordStr);
+        Admin login = CurrentStatus.currUser.loginAsSuperAdmin(userNameStr, passwordStr);
         if (login == null) {
             jLabelInvalidData.setVisible(true);
             jTextFieldUserName.setText("");
             jPasswordField1.setText("");
             return;
-        }
+        } 
         CurrentStatus.currUser = login;
         goBack();
     }//GEN-LAST:event_jButtonLoginActionPerformed

@@ -46,6 +46,8 @@
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="jButtonSignout" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
+                              <Component id="getNotificationsButton" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
                               <Component id="logInButton" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="registerButton" min="-2" max="-2" attributes="0"/>
@@ -114,6 +116,7 @@
                   <Component id="enterSubForumButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jButtonBack" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jButtonSignout" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="getNotificationsButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -235,6 +238,15 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonToAdminPageActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="getNotificationsButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="get notifications"/>
+        <Property name="toolTipText" type="java.lang.String" value="get all the unread notifications"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="getNotificationsButtonActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
