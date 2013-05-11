@@ -82,11 +82,11 @@ public class Member extends User {
         return this.conHand.deletePost(p, this.userName, this.password);
     }
     
-    public boolean editPost(Post p, String newText){
-    	return conHand.editPost(p, newText, this.userName, this.password);
+    public boolean editPost(Post newP){
+    	return conHand.editPost(newP, this.userName, this.password);
     }
     
-    public boolean editThread(ThreadMessage tm, String newText){
-    	return conHand.editThread(tm, newText, this.userName, this.password);
+    public boolean editThread(ThreadMessage newTM){
+    	return conHand.editThread(newTM, this.userName, this.password);
     }
 }

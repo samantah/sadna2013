@@ -450,17 +450,18 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 	}
 
 	@Override
-	public boolean editThread(ThreadMessage tm, String newTest,
-			String userName, String password) {
+	public boolean editThread(ThreadMessage newTM, String editorName, String editorPassword) {
 		boolean edited = false;
-		SubForum subForum = tm.getSubForum();
+		SubForum subForum = newTM.getSubForum();
 		String subForumName = subForum.getSubForumName();
 		Forum forum = subForum.getForum();
 		String forumName = forum.getForumName();
-		int tmId = tm.getId();
-		msgToSend = "EDTTHRD\n" + "forumName:\n" + forumName + "\n" + "subForumName:\n" + subForumName + "\n"
-				+ "threadId:\n" + tmId + "\n" + "newText:\n" + newTest + "\n" + "userName:\n" + userName
-				+ "\n" + "password:\n" + password + "\n";
+		String posterName = newTM.getPublisher();
+		String title = newTM.getTitle();
+		String content = newTM.getContent();
+		msgToSend = "EDTTHRD\n" + "forumName:\n" + forumName + "\n"
+		+ "subForumName:\n" + subForumName + "\n" + "posterName:\n" + posterName + "\n" + "threadTitle:\n" + title + "\n"
+		+ "threadContent:\n" + content + "\n"+"editorName:\n" + editorName + "\n"+"editorPassword:\n" + editorPassword + "\n";
 		msgToSend += delimiter;
 		stringToServer.println(msgToSend);
 		try {
@@ -474,19 +475,21 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 	}
 
 	@Override
-	public boolean editPost(Post p, String newText, String userName,
-			String password) {
+	public boolean editPost(Post newP, String editorName, String editorPassword) {
 		boolean edited = false;
-		int pId = p.getId();
-		ThreadMessage tm = p.getThread();
-		SubForum subForum = tm.getSubForum();
+		ThreadMessage newTM = newP.getThread();
+		int newTMid = newTM.getId();
+		SubForum subForum = newTM.getSubForum();
 		String subForumName = subForum.getSubForumName();
 		Forum forum = subForum.getForum();
 		String forumName = forum.getForumName();
-		int tmId = tm.getId();
-		msgToSend = "DELPST\n" + "forumName:\n" + forumName + "\n" + "subForumName:\n" + subForumName + "\n"
-				+ "threadId:\n" + tmId + "\n" + "postId:\n" + pId + "newText:\n" + newText + "\n" + "userName:\n"
-				+ userName + "\n" + "password:\n" + password + "\n";
+		String posterName = newP.getPublisher();
+		String title = newP.getTitle();
+		String content = newP.getContent();
+		msgToSend = "EDTPST\n" + "forumName:\n" + forumName + "\n"
+		+ "subForumName:\n" + subForumName + "\n" + "threadId:\n" +  newTMid + "\n"+
+		"posterName:\n" + posterName + "\n" + "postTitle:\n" + title + "\n"
+		+ "postContent:\n" + content + "\n"+"editorName:\n" + editorName + "\n"+"editorPassword:\n" + editorPassword + "\n";
 		msgToSend += delimiter;
 		stringToServer.println(msgToSend);
 		try {
