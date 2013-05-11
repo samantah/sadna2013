@@ -14,48 +14,49 @@ import Sadna.Client.API.ClientCommunicationHandlerInterface;
  *
  * @author fistuk
  */
-public class SuperAdmin extends Admin{
+public class SuperAdmin extends Admin {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3955980432575126358L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 3955980432575126358L;
 
-	public SuperAdmin(String userName, String password, String email, ClientCommunicationHandlerInterface ch) {
-		super(userName, password, email,null ,ch);
-	}
+    public SuperAdmin(String userName, String password, String email, ClientCommunicationHandlerInterface ch) {
+        super(userName, password, email, null, ch);
+    }
 
-	public boolean initiateForum(String forumName, String adminName, String adminPassword) {
-		return conHand.initiateForum(forumName, adminName, adminPassword, this.userName, this.password);
-	}
+    public boolean initiateForum(String forumName, String adminName, String adminPassword) {
+        return conHand.initiateForum(forumName, adminName, adminPassword, this.userName, this.password);
+    }
 
-	public int getForumCounter() {
-		int numberOfForums = -1;
-		try {
-			numberOfForums = conHand.getForumCounter(this.userName, this.password);
-		} catch (Exception e) {
-			System.out.println("SuperAdmin(getForumCounter) " + e);
-		}
-		return numberOfForums;
-	}
-	
+    public int getForumCounter() {
+        int numberOfForums = -1;
+        try {
+            numberOfForums = conHand.getForumCounter(this.userName, this.password);
+        } catch (Exception e) {
+            System.out.println("SuperAdmin(getForumCounter) " + e);
+        }
+        return numberOfForums;
+    }
+
     /*
      * MAP(forum name:String, number of members in forum:Integer)
      */
     public List<String> getCommonMembers() {
-		List<String> map = null;
+        List<String> map = null;
         try {
-        	map = conHand.getCommonMembers(this.userName, this.password);
+            map = conHand.getCommonMembers(this.userName, this.password);
         } catch (Exception e) {
             System.out.println("Admin(getNumMembersInEachForum) " + e);
         }
         return map;
     }
-    
-    public List<Member> getAllForumMembers(String forumName){
-    	return conHand.getAllForumMembers(forum, userName, password);
+
+    public List<Member> getAllForumMembers(String forumName) {
+        return conHand.getAllForumMembers(forum, userName, password);
     }
-
-
-
+    
+    public boolean deleteForum(String forumName){
+        return conHand.deleteForum(forumName, this.userName, this.password);
+    }
 }
