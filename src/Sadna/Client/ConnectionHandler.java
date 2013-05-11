@@ -15,6 +15,8 @@ import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 
@@ -25,6 +27,12 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 	private String msgToSend;
 	private String receivedMsg;
 	private String delimiter = "\0";
+	private Pattern emailPattern;
+	private Matcher emailMatcher;
+	private static final String EMAIL_PATTERN = 
+			"^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+					+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+
 
 	// removeModerator()
 	public ConnectionHandler(String host, int port) {
@@ -109,6 +117,12 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 			}
 		}
 		return (charFlag && numFlag);
+	}
+
+	public boolean EmailValidator(String email) {
+		emailPattern = Pattern.compile(EMAIL_PATTERN);
+		emailMatcher = emailPattern.matcher(email);
+		return emailMatcher.matches();
 	}
 
 	@Override
