@@ -3,17 +3,18 @@
  */
 package Sadna.Client;
 
- 
+
 
 import static org.junit.Assert.*;
+import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import Sadna.Server.Users.Member;
-import Sadna.Server.Users.SuperAdmin;
-import Sadna.Server.Users.User;
+//import Sadna.Server.Users.Member;
+//import Sadna.Server.Users.SuperAdmin;
+//import Sadna.Server.Users.User;
 import Sadna.db.Forum;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
@@ -46,9 +47,9 @@ public class connectionHandlerTest {
 		sf = new SubForum(forum1, "CARS");
 		Member m = new Member("avielh", "dolev1234", "avi@nana.com", "forum1", ch);
 		ch.register("forum1", "avielh", "dolev1234", "avi@nana.com");
-		
-		
-		
+
+
+
 	}
 
 	/**
@@ -102,6 +103,7 @@ public class connectionHandlerTest {
 		SubForum legal = new SubForum(forum1, "succeesfullAttemp");
 		assertTrue(ch.addSubForum(legal, null));
 	}
+	
 	public void getSubForumTest(){
 		SubForum sf2 = new SubForum(forum1, "FASHION");
 		ch.addSubForum(sf2, null);
@@ -114,10 +116,43 @@ public class connectionHandlerTest {
 		boolean isEqual = sf2.getForum()==sf3.getForum() && sf2.getSubForumName()==sf3.getSubForumName();
 		assertTrue(isEqual);
 	}
-/*	public void getThreadMessageTest(){
+
+	@Test
+	public void ValidEmailValidatorTest(String[] Email) {
+		String[] email  =  new String[] { "sadna@live.com",
+				"sadna-100@live.com", "sadna.100@live.com",
+				"sadna111@sadna.com", "sadna-100@sadna.net",
+				"sadna.100@sadna.com.au", "sadna@1.com",
+				"sadna@gmail.com.com", "sadna+100@gmail.com",
+				"sadna-100@live-test.com" };
+		for (String temp : email) {
+			boolean valid = ch.EmailValidator(temp);
+			System.out.println("Email is valid : " + temp + " , " + valid);
+			Assert.assertEquals(valid, true);
+		}
+
+	}
+
+	@Test
+	public void InValidEmailValidatorTest(String[] Email) {
+		String[] email = new String[] { "sadna", "sadna@.com.my",
+				"sadna123@gmail.a", "sadna123@.com", "sadna123@.com.com",
+				".sadna@sadna.com", "sadna()*@gmail.com", "sadna@%*.com",
+				"sadna..2002@gmail.com", "sadna.@gmail.com",
+				"sadna@sadna@gmail.com", "sadna@gmail.com.1a" };
+		for (String temp : email) {
+			boolean valid = ch.EmailValidator(temp);
+			System.out.println("Email is valid : " + temp + " , " + valid);
+			Assert.assertEquals(valid, false);
+		}
+	}
+
+
+
+	/*	public void getThreadMessageTest(){
 		tm = new ThreadMessage(sf, "Audi", "how much a new Audi A4 cost?", "avielh");
 		ch.publishThread(tm);
 		ch.getThreadMessage("forum1", "Audi", );
 	}*///problem with the thread id
-	
+
 }
