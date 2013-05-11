@@ -8,16 +8,33 @@ import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import com.sun.nio.sctp.Notification;
 public class Main {
 
-    public static void main(String argv[]) throws Exception {
+    
+
+	public static void main(String argv[]) throws Exception {
         String host = "192.168.1.105";
         int port = 3333;
         ConnectionHandler c = new ConnectionHandler(host, port);
-//        c.initiateForum("newForum", "chen", "chen1234");
+        
+        //c.initiateForum("newForum", "chen", "chen1234");
+        User chen = new User(c);
+        chen = chen.login("newForum", "chen", "chen1234");
+//        SubForum sf = new SubForum(new Forum("newForum"), "sf");
+//        List<Moderator> lm = new ArrayList<Moderator>();
+//        Member m1 = new Member("dotan", "dotan1234", "dotan@gmail.com", "newForum", null);
+//        Member m2 = new Member("shai", "shai1234", "shai@gmail.com", "newForum", null);
+//        Moderator e1 = new Moderator(m1);
+//        Moderator e2 = new Moderator(m2);
+//        lm.add(e1);
+//        lm.add(e2);
+//        System.out.println(((Admin)chen).addSubForum(sf, lm));
+       
         //List<Forum> forumsList = c.getForumsList();
 //		SuperAdmin sa = new SuperAdmin("mega-admin", "megaadmin12", "mega@gmail.com", c);
 //		User guest = new User(c);
@@ -105,7 +122,7 @@ public class Main {
 //        boolean al_hazain = c.deleteThreadMessage(thread, "hhhhhhhhhh" , "1234qwer");
 //        System.out.println(al_hazain);
         	
-        System.out.println(c.login("forum1", "snirelka", "snir1234"));
+//        System.out.println(c.login("forum1", "snirelka", "snir1234"));
         
         
 //        Forum forum = new Forum("forum1");
@@ -123,7 +140,7 @@ public class Main {
 //        List<ForumNotification> x = c.getNotification("forum1","snirelka" ,"snir1234");
 //        for (ForumNotification forumNotification : x) {
 //        	System.out.println(forumNotification.getText());
-		}
+//		}
         
         
         c.finishCommunication();

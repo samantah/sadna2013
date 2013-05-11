@@ -84,4 +84,7 @@ public interface ClientCommunicationHandlerInterface {
     
     public User loginAsSuperAdmin(String userName, String password);
 
+	public List<Member> getAllForumMembers(String forum, String userName,
+			String password);
+
 }

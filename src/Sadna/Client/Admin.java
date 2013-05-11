@@ -107,5 +107,9 @@ public class Admin extends Moderator {
         return map;
     }
     
+    public List<Member> getAllForumMembers(){
+		return conHand.getAllForumMembers(this.forum, this.userName, this.password);
+    }
+    
    
 }
