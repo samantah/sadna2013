@@ -64,9 +64,9 @@ public interface ClientCommunicationHandlerInterface {
     //tested
     boolean addModerator(String forumName, String subForumName, String newModerator, String userName, String password);
     //not supported
-    boolean editThread(ThreadMessage tm, String newText, String userName, String password);
+    boolean editThread(ThreadMessage newTM, String userName, String password);
     //not supported
-    boolean editPost(Post p, String newText, String userName, String password);
+    boolean editPost(Post newP, String userName, String password);
     
     List<ForumNotification> getNotification(String forumName, String userName, String password);
     //not need to be tested
