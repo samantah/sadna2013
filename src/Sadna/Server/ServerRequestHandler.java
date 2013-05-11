@@ -203,7 +203,7 @@ public class ServerRequestHandler implements Runnable {
 	private void handleGetAllForumMembers(String forumName, String userName,
 			String password) {
 		Member admin = _si.getMember(forumName, userName);
-		if (!admin.getPassword().equals(password)) {
+		if (admin != null && !admin.getPassword().equals(password)) {
 			_ch.sendErrorNoAuthorized();
 			return;
 		}
