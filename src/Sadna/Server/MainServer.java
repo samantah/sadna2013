@@ -34,7 +34,7 @@ public class MainServer {
         // client application.
         //
     	try {
-			si.setSuperAdmin(InetAddress.getLocalHost().getHostAddress(), portNumber);
+    		si.setSuperAdmin(InetAddress.getLocalHost().getHostAddress(), portNumber);
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
 			System.out.println("Couldn't get local host for SuperAdmin");
