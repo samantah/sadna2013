@@ -51,6 +51,10 @@ public class SuperAdmin extends Admin{
         }
         return map;
     }
+    
+    public List<Member> getAllForumMembers(String forumName){
+    	return conHand.getAllForumMembers(forum, userName, password);
+    }
 
 
 
