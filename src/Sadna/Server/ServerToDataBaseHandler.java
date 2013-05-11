@@ -94,11 +94,13 @@ public class ServerToDataBaseHandler implements ServerInterface {
      }
      */
     @Override
-    public boolean initiateForum(String adminUserName, String adminPassword,
-            String forumName) {
+	public boolean initiateForum(String adminUserName, String adminPassword,
+			String forumName, String superAdminUserName,
+			String superAdminPassword) {
         boolean isAdded = false;
         Admin admin = null;
-        if (isForumNameUnique(forumName)) {
+        if (isForumNameUnique(forumName) && 
+        		isSuperAdmin(superAdminUserName, superAdminPassword)) {
             //System.out.println("is unique forum");
             Forum forumToAdd = new Forum(forumName);
             admin = new Admin(adminUserName, adminPassword, "", forumName, null);
@@ -117,7 +119,14 @@ public class ServerToDataBaseHandler implements ServerInterface {
         return isAdded;
     }
 
-    private boolean isForumNameUnique(String forumName) {
+    private boolean isSuperAdmin(String superAdminUserName,
+			String superAdminPassword) {
+    	SuperAdmin sa = _db.getSuperAdmin();
+    	return (sa.getUserName().equals(superAdminUserName) &&
+    			sa.getPassword().equals(superAdminPassword));
+	}
+
+	private boolean isForumNameUnique(String forumName) {
         boolean isUnique = true;
         List<Forum> forums = _db.getForumsList();
         for (Forum f : forums) {
@@ -370,8 +379,6 @@ public class ServerToDataBaseHandler implements ServerInterface {
 	public List<Member> getAllMembers(String forumName) {
 		return _db.getAllMembers(forumName);
 	}
-
-
 
 
 
