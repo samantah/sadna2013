@@ -217,7 +217,7 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 	@Override
 	public void sendNumberOfForums(int forumCounter) {
 		stringToClient.println("The number of Forums is: " + forumCounter);
-		
+
 	}
 
 	@Override
@@ -234,13 +234,13 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 	@Override
 	public void sendModeratorOK() {
 		stringToClient.println("201ok");
-		
+
 	}
 
 	@Override
 	public void sendAdminOK() {
 		stringToClient.println("202ok");
-		
+
 	}
 
 	@Override
@@ -258,5 +258,13 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 		stringToClient.println("200ok");
 	}
 
+	@Override
+	public void deleteForum(boolean deleteForum) {
+		if(deleteForum)
+			stringToClient.println("200ok");
+		else
+			stringToClient.println("500 Internal Server Error");
+
+	}
 
 }

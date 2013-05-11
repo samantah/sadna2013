@@ -302,9 +302,8 @@ public class ServerToDataBaseHandler implements ServerInterface {
 
 	@Override
 	public boolean deleteForum(String forumName) {
-		Forum f = new Forum(forumName);
-		boolean deleteForum = _db.deleteForum(f);
-		return deleteForum;
+	Forum f = _db.getForum(forumName);
+	return _db.deleteForum(f);
 	}
 
 	@Override

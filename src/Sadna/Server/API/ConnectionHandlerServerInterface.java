@@ -62,6 +62,8 @@ public interface ConnectionHandlerServerInterface{
 	public void sendAllMembers(List<Member> allMembers);
 
 	public void sendSuperAdminOK();
+	
+	public void deleteForum(boolean deleteForum);
 
 }
 
