@@ -82,7 +82,7 @@ public interface ClientCommunicationHandlerInterface {
     public int getForumCounter(String userName, String password);
     
     public List<String> getCommonMembers(String userName, String password);
-    
+    //tested
     public SuperAdmin loginAsSuperAdmin(String userName, String password);
 
 	public List<Member> getAllForumMembers(String forum, String userName,
