@@ -165,7 +165,7 @@ public class ServerRequestHandler implements Runnable {
 			handleCommonMembers(parsedReq[2], parsedReq[4]);
 			break;
 		case "LOGOUT":
-			//TO DO
+			handleLogout(parsedReq[2], parsedReq[4]);
 			break;
 		case "GETAM":
 			handleGetAllForumMembers(parsedReq[2], parsedReq[4], parsedReq[6]);
@@ -180,6 +180,15 @@ public class ServerRequestHandler implements Runnable {
 		}
 
 	}
+	private void handleLogout(String forumName, String userName) {
+		if(_si.logout(forumName, userName)){
+			_ch.sendOK();
+		}
+		else{
+			_ch.sendErrorInServer();
+		}
+	}
+
 	private void handleLoginAsSuperAdmin(String userName, String password) {
 		boolean logedIn = _si.loginAsSuperAdmin(userName, password);
 		if (logedIn) {

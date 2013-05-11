@@ -397,8 +397,7 @@ public class ServerToDataBaseHandler implements ServerInterface {
 
 	@Override
 	public boolean logout(String forumName, String userName) {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
