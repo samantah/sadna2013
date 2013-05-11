@@ -5,6 +5,7 @@
 package Sadna.Client;
 
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
 
 import Sadna.Client.API.ClientCommunicationHandlerInterface;
@@ -41,10 +42,10 @@ public class SuperAdmin extends Admin{
     /*
      * MAP(forum name:String, number of members in forum:Integer)
      */
-    public Hashtable<String, Integer> getNumMembersInEachForum(String userName, String password) {
-		Hashtable<String,Integer> map = null;
+    public List<String> getCommonMembers(String superAdminName, String password) {
+		List<String> map = null;
         try {
-        	map = conHand.getNumMembersInEachForum(userName, password);
+        	map = conHand.getCommonMembers(userName, password);
         } catch (Exception e) {
             System.out.println("Admin(getNumMembersInEachForum) " + e);
         }

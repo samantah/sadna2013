@@ -48,6 +48,10 @@ public interface ConnectionHandlerServerInterface{
 
 	public void sendIsTheOnlyModeratorInTheSubForum();
 
+	public void sendNumberOfForums(int forumCounter);
+
+	public void sendCommonMembers(List<String> commonMembers);
+
 
 }
 
