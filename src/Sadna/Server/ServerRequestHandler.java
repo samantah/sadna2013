@@ -560,15 +560,11 @@ public class ServerRequestHandler implements Runnable {
 	}
 
 	private void handleDeleteForum(Forum fr, String userName, String password) {
-		Member superAdmin = _si.getMember(fr.getForumName(), userName);
-		if (!superAdmin.getPassword().equals(password)) {
+		SuperAdmin superAdmin = _si.getSuperAdmin();
+		if (superAdmin == null || !superAdmin.getPassword().equals(password)) {
 			_ch.sendErrorNoAuthorized();
 			return;
 		}
-		if (!(superAdmin instanceof SuperAdmin)) {
-			_ch.sendErrorNoAuthorized();
-			return;
-		}
-		_ch.deleteForum(_si.deleteForum(fr.getForumName(), userName, password));
+		else _ch.deleteForum(_si.deleteForum(fr.getForumName(), userName, password));
 	}
 }
