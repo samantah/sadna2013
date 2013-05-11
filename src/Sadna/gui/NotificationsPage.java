@@ -25,7 +25,7 @@ public class NotificationsPage extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         Member member = (Member) CurrentStatus.currUser;
         DefaultListModel listModel = new DefaultListModel();
-        List<ForumNotification> notifications = member.getNotifications();
+        List<ForumNotification> notifications = member.getNotificationsFromServer();
         for (ForumNotification forumNotification : notifications) {
             listModel.addElement(forumNotification);
         }
