@@ -33,12 +33,12 @@ public class MainServer {
         // The server do a loop here to accept all connection initiated by the
         // client application.
         //
-    	try {
-    		si.setSuperAdmin(InetAddress.getLocalHost().getHostAddress(), portNumber);
-		} catch (UnknownHostException e1) {
-			e1.printStackTrace();
-			System.out.println("Couldn't get local host for SuperAdmin");
-		}
+//    	try {
+//    		si.setSuperAdmin(InetAddress.getLocalHost().getHostAddress(), portNumber);
+//		} catch (UnknownHostException e1) {
+//			e1.printStackTrace();
+//			System.out.println("Couldn't get local host for SuperAdmin");
+//		}
         while (true) {
             try {
                 Socket socket = serverSocket.accept();

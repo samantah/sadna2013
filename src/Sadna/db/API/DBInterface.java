@@ -77,7 +77,7 @@ public interface DBInterface {
 
     List<Member> getAllMembers(String forumName);
 
-    boolean setSuperAdmin(String host, int port);
+    boolean setSuperAdmin(ClientCommunicationHandlerInterface ch);
 
     boolean addModerator(Moderator moderator, SubForum subForum);
 

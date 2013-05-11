@@ -42,4 +42,11 @@ public class SubForum implements Serializable {
     public String getSubForumName() {
         return subForumName;
     }
+
+    @Override
+    public String toString() {
+        return this.subForumName;
+    }
+    
+    
 }

@@ -44,20 +44,7 @@ public class ThreadPage extends javax.swing.JFrame {
         jListPosts.setFixedCellWidth(80);
         jLabelThreadTitle.setText("Title: " + CurrentStatus.currThread.getTitle());
         jLabelThreadContent.setText("Content: " + CurrentStatus.currThread.getContent());
-
-        String forumName = CurrentStatus.currForum.getForumName();
-        String subForumName = CurrentStatus.currSubForum.getSubForumName();
-        int threadId = CurrentStatus.currThread.getId();
-
-        DefaultListModel listModel = new DefaultListModel();
-        List<Post> listOfPosts;
-        ThreadMessage thread = CurrentStatus.currUser.getThread(forumName,
-                subForumName, threadId);
-        listOfPosts = CurrentStatus.currUser.getAllPosts(thread);
-        for (Post p : listOfPosts) {
-            listModel.addElement(p);
-        }
-        jListPosts.setModel(listModel);
+        updateListOfPosts();
     }
 
     /**
@@ -329,7 +316,19 @@ public class ThreadPage extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonEditPostActionPerformed
 
     private void jButtonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditActionPerformed
-        
+        String content = this.jTextFieldAddContent.getText();
+        String title = this.jTextFieldAddTitle.getText();
+        Member member = (Member) CurrentStatus.currUser;
+        currPost.setContent(content);
+        currPost.setTitle(title);
+        boolean editPost = member.editPost(currPost);
+        if (editPost){
+            updateListOfPosts();
+            this.jTextFieldAddContent.setText("");
+            this.jTextFieldAddTitle.setText("");
+            this.jButtonEdit.setVisible(false);
+            this.jButtonAddPost.setVisible(true);
+        }
     }//GEN-LAST:event_jButtonEditActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -350,4 +349,19 @@ public class ThreadPage extends javax.swing.JFrame {
     private javax.swing.JButton logInButton;
     private javax.swing.JButton registerButton;
     // End of variables declaration//GEN-END:variables
+
+    private void updateListOfPosts() {
+        String forumName = CurrentStatus.currForum.getForumName();
+        String subForumName = CurrentStatus.currSubForum.getSubForumName();
+        int threadId = CurrentStatus.currThread.getId();
+        DefaultListModel listModel = new DefaultListModel();
+        List<Post> listOfPosts;
+        ThreadMessage thread = CurrentStatus.currUser.getThread(forumName,
+                subForumName, threadId);
+        listOfPosts = CurrentStatus.currUser.getAllPosts(thread);
+        for (Post p : listOfPosts) {
+            listModel.addElement(p);
+        }
+        jListPosts.setModel(listModel);
+    }
 }

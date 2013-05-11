@@ -30,9 +30,18 @@ public class AdminPage extends javax.swing.JFrame {
         List<SubForum> listOfSubForums;
         listOfSubForums = CurrentStatus.currUser.viewSubForums(f.getForumName());
         for (SubForum sf : listOfSubForums) {
-            listModel.addElement(sf.getSubForumName());
+            listModel.addElement(sf);
         }
         this.jListSubForums.setModel(listModel);
+        
+        listModel = new DefaultListModel();
+        List<Member> listOfMembers;
+        Admin admin = (Admin) CurrentStatus.currUser;
+        listOfMembers = admin.getAllForumMembers();
+        for (Member member : listOfMembers) {
+            listModel.addElement(member);
+        }
+        this.jListMembers.setModel(listModel);
 
     }
 
