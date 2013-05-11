@@ -26,7 +26,7 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
               <Component id="jScrollPane2" min="-2" pref="225" max="-2" attributes="0"/>
-              <EmptySpace pref="44" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="headLabel" alignment="0" min="-2" pref="264" max="-2" attributes="0"/>
                   <Group type="102" attributes="0">
@@ -38,12 +38,29 @@
                               <Component id="enterForumButton" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jButtonInitiateForum" max="32767" attributes="0"/>
-                          <Component id="jLabelNumberOfForums" pref="226" max="32767" attributes="0"/>
-                          <Component id="jLabelNumberOfMembersInForum" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jButtonDeleteForum" alignment="0" pref="226" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="jButtonInitiateForum" max="32767" attributes="0"/>
+                                  <Component id="jLabelNumberOfForums" max="32767" attributes="0"/>
+                                  <Component id="jButtonDeleteForum" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jLabelNewAdminUserName" alignment="0" min="-2" pref="120" max="-2" attributes="0"/>
+                                  <Component id="jTextFieldNewAdminPassword" alignment="0" pref="275" max="32767" attributes="0"/>
+                                  <Component id="jLabelNewAdminPassword" alignment="0" min="-2" pref="118" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jTextFieldNewAdminUser" alignment="1" min="-2" pref="275" max="-2" attributes="0"/>
+                                  <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                                      <Component id="jLabelNewForumName" alignment="0" min="-2" pref="120" max="-2" attributes="0"/>
+                                      <Component id="jTextFieldNewForumName" alignment="1" min="-2" pref="275" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="jLabelNumberOfMembersInForum" alignment="1" min="-2" pref="275" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
                       </Group>
                   </Group>
               </Group>
@@ -61,9 +78,21 @@
                   <Component id="jScrollPane1" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Component id="jLabelNumberOfForums" min="-2" pref="60" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabelNumberOfMembersInForum" min="-2" pref="60" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="181" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                      <Component id="jLabelNewForumName" min="-2" pref="26" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jTextFieldNewForumName" min="-2" pref="30" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jLabelNewAdminUserName" min="-2" pref="26" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jTextFieldNewAdminUser" min="-2" pref="30" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jLabelNewAdminPassword" min="-2" pref="21" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                      <Component id="jTextFieldNewAdminPassword" min="-2" pref="32" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                       <Component id="jButtonDeleteForum" max="32767" attributes="0"/>
                   </Group>
                   <Component id="jScrollPane2" alignment="1" max="32767" attributes="0"/>
@@ -138,6 +167,9 @@
         <Property name="text" type="java.lang.String" value="initiate new forum"/>
         <Property name="toolTipText" type="java.lang.String" value="an option to initiate a new forum"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonInitiateForumActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabelNumberOfForums">
       <Properties>
@@ -187,6 +219,27 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonDeleteForumActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JTextField" name="jTextFieldNewAdminUser">
+    </Component>
+    <Component class="javax.swing.JTextField" name="jTextFieldNewAdminPassword">
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabelNewAdminUserName">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Admin userName"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabelNewAdminPassword">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Admin password"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabelNewForumName">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="new forum name"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="jTextFieldNewForumName">
     </Component>
   </SubComponents>
 </Form>

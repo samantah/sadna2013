@@ -532,7 +532,9 @@ public class DataBase implements DBInterface {
         ObjectOutputStream obj;
         FileOutputStream outputstream;
         try {
+            
             String path = dataBaseFolder + "/";
+            new File(path).mkdir();
             outputstream = new FileOutputStream(path + userName + ".obj");
             obj = new ObjectOutputStream(outputstream);
             obj.writeObject(sa);
@@ -605,6 +607,7 @@ public class DataBase implements DBInterface {
                     System.out.println(message);
                 }
             }
+            br.close();
         } catch (FileNotFoundException ex) {
             System.out.println(ex.getMessage());
             return null;

@@ -188,7 +188,7 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 
 	@Override
 	public void sendThreadCounter(int threadCounter) {
-		stringToClient.println("The number of Threads is: " + threadCounter);	
+		stringToClient.println(String.valueOf(threadCounter));	
 	}
 
 	@Override
@@ -216,7 +216,7 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 
 	@Override
 	public void sendNumberOfForums(int forumCounter) {
-		stringToClient.println("The number of Forums is: " + forumCounter);
+		stringToClient.println(String.valueOf(forumCounter));
 
 	}
 

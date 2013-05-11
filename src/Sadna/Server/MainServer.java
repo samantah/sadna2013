@@ -1,5 +1,6 @@
 package Sadna.Server;
 
+import Sadna.Client.ConnectionHandler;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -9,6 +10,8 @@ import java.net.UnknownHostException;
 import Sadna.Server.API.ConnectionHandlerServerInterface;
 import Sadna.Server.API.ServerInterface;
 import Sadna.db.DataBase;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MainServer {
 
@@ -39,6 +42,7 @@ public class MainServer {
 //			e1.printStackTrace();
 //			System.out.println("Couldn't get local host for SuperAdmin");
 //		}
+        si.setSuperAdmin(null);
         while (true) {
             try {
                 Socket socket = serverSocket.accept();
@@ -57,4 +61,5 @@ public class MainServer {
         MainServer main = new MainServer();
         main.handleConnection();
     }
+
 }
