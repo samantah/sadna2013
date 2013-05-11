@@ -93,8 +93,6 @@ public interface ServerInterface {
 
 	List<String> getCommonMembers();
 
-
-	
-    
+	List<Member> getAllMembers(String forumName);    
 
 }

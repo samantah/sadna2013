@@ -1,5 +1,6 @@
 package Sadna.Server.API;
 
+import Sadna.Client.Member;
 import Sadna.Server.ForumNotification;
 import Sadna.db.Forum;
 import java.util.List;
@@ -55,6 +56,8 @@ public interface ConnectionHandlerServerInterface{
 	public void sendModeratorOK();
 
 	public void sendAdminOK();
+
+	public void sendAllMembers(List<Member> allMembers);
 
 
 
