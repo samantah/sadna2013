@@ -7,7 +7,6 @@ package Sadna.gui;
 import Sadna.Client.Member;
 import javax.swing.JFrame;
 
-
 /**
  *
  * @author fistuk
@@ -137,10 +136,17 @@ public class RegistrationPage extends javax.swing.JFrame {
         String userNameStr = jTextFieldUserName.getText();
         String passwordStr = jPasswordField1.getText();
         String email = jTextFieldEmail.getText();
-        String forumName = CurrentStatus.currForum.getForumName();  
-        Member register = CurrentStatus.currUser.register(forumName, 
+        if (userNameStr.equals("") || passwordStr.equals("") || email.equals("")) {
+            jTextFieldUserName.setText("");
+            jTextFieldEmail.setText("");
+            jPasswordField1.setText("");
+            jLabelInvalidData.setVisible(true);
+            return;
+        }
+        String forumName = CurrentStatus.currForum.getForumName();
+        Member register = CurrentStatus.currUser.register(forumName,
                 userNameStr, passwordStr, email);
-        if (register==null){
+        if (register == null) {
             jTextFieldUserName.setText("");
             jTextFieldEmail.setText("");
             jPasswordField1.setText("");
@@ -152,9 +158,8 @@ public class RegistrationPage extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonRegisterActionPerformed
 
     private void jButtonBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBackActionPerformed
-       goBack();
+        goBack();
     }//GEN-LAST:event_jButtonBackActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonBack;
     private javax.swing.JButton jButtonRegister;
@@ -167,6 +172,7 @@ public class RegistrationPage extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldEmail;
     private javax.swing.JTextField jTextFieldUserName;
     // End of variables declaration//GEN-END:variables
+
     private void goBack() {
         EnumPages whereToGo = null;
         JFrame frame = null;
