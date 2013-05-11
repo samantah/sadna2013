@@ -89,4 +89,6 @@ public interface DBInterface {
     int getNumberOfForums(); // super admin method - returns number of forums.
 
     List<String> getCommonMembers(); // returns list of users names that registered to more than one forum.
+    
+    void deleteFolder(String folder);
 }
