@@ -26,7 +26,6 @@ public class MainFrame extends javax.swing.JFrame {
         initComponents();
         this.setResizable(false);
         ClientCommunicationHandlerInterface ch = new ConnectionHandler(host, port);
-//        CurrentStatus.currUser = new SuperAdmin("chen", "chen1234", "", "newForum", ch);
         DefaultListModel listOfForums;
         if (CurrentStatus.currUser == null) {
             CurrentStatus.currUser = new User(ch);
@@ -46,8 +45,10 @@ public class MainFrame extends javax.swing.JFrame {
             jTextFieldNewAdminPassword.setVisible(false);
             jTextFieldNewAdminUser.setVisible(false);
             jTextFieldNewForumName.setVisible(false);
+            jButtonLogOut.setVisible(false);
         } else {
             logInButton.setVisible(false);
+            
             String text = jLabelNumberOfForums.getText();
             jLabelNumberOfForums.setText(text + " " + String.valueOf(viewForums.size()));
             SuperAdmin admin = (SuperAdmin) CurrentStatus.currUser;
@@ -81,6 +82,7 @@ public class MainFrame extends javax.swing.JFrame {
         jLabelNewAdminPassword = new javax.swing.JLabel();
         jLabelNewForumName = new javax.swing.JLabel();
         jTextFieldNewForumName = new javax.swing.JTextField();
+        jButtonLogOut = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -157,13 +159,22 @@ public class MainFrame extends javax.swing.JFrame {
 
         jLabelNewForumName.setText("new forum name");
 
+        jButtonLogOut.setText("log out");
+        jButtonLogOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonLogOutActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(9, 9, 9)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonLogOut))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(headLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -225,7 +236,8 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(logInButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(enterForumButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(enterForumButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonLogOut))
                     .addComponent(jButtonInitiateForum, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -301,6 +313,16 @@ public class MainFrame extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButtonInitiateForumActionPerformed
 
+    private void jButtonLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLogOutActionPerformed
+        SuperAdmin sa = (SuperAdmin) CurrentStatus.currUser;
+        User logout = sa.logout("");
+        CurrentStatus.currUser = logout;
+        MainFrame mainFrame = new MainFrame();
+        this.setVisible(false);
+        this.dispose();
+        mainFrame.setVisible(true);
+    }//GEN-LAST:event_jButtonLogOutActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -342,6 +364,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel headLabel;
     private javax.swing.JButton jButtonDeleteForum;
     private javax.swing.JButton jButtonInitiateForum;
+    private javax.swing.JButton jButtonLogOut;
     private javax.swing.JLabel jLabelNewAdminPassword;
     private javax.swing.JLabel jLabelNewAdminUserName;
     private javax.swing.JLabel jLabelNewForumName;

@@ -25,7 +25,10 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
-              <Component id="jScrollPane2" min="-2" pref="225" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="jScrollPane2" min="-2" pref="225" max="-2" attributes="0"/>
+                  <Component id="jButtonLogOut" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="headLabel" alignment="0" min="-2" pref="264" max="-2" attributes="0"/>
@@ -102,6 +105,7 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="logInButton" max="32767" attributes="0"/>
                       <Component id="enterForumButton" max="32767" attributes="0"/>
+                      <Component id="jButtonLogOut" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="jButtonInitiateForum" max="32767" attributes="0"/>
               </Group>
@@ -240,6 +244,14 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldNewForumName">
+    </Component>
+    <Component class="javax.swing.JButton" name="jButtonLogOut">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="log out"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonLogOutActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

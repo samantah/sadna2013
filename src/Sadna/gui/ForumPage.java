@@ -311,7 +311,9 @@ public class ForumPage extends javax.swing.JFrame {
         Member m = (Member) CurrentStatus.currUser;
         String forumName = CurrentStatus.currForum.getForumName();
         String userName = m.getUserName();
+        System.out.println("before");
         User logout = m.logout(forumName);
+        System.out.println("after");
         CurrentStatus.currUser = logout;
         ForumPage forumPage = new ForumPage();
         this.setVisible(false);
