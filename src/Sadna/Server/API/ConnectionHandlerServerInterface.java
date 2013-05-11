@@ -52,6 +52,12 @@ public interface ConnectionHandlerServerInterface{
 
 	public void sendCommonMembers(List<String> commonMembers);
 
+	public void sendModeratorOK();
+
+	public void sendAdminOK();
+
+
+
 
 }
 

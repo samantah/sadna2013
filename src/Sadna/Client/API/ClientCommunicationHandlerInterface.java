@@ -82,6 +82,6 @@ public interface ClientCommunicationHandlerInterface {
     
     public List<String> getCommonMembers(String userName, String password);
     
-    public Member loginAsSuperAdmin(String userName, String password);
+    public User loginAsSuperAdmin(String userName, String password);
 
 }
