@@ -4,11 +4,13 @@
  */
 package Sadna.db.API;
 
+import Sadna.Client.API.ClientCommunicationHandlerInterface;
 import Sadna.Client.Admin;
 import Sadna.Client.ConnectionHandler;
 import Sadna.Client.Member;
 import Sadna.Client.Moderator;
 import Sadna.Client.SuperAdmin;
+import Sadna.Server.API.ConnectionHandlerServerInterface;
 import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
@@ -75,7 +77,7 @@ public interface DBInterface {
 
     List<Member> getAllMembers(String forumName);
 
-    boolean setSuperAdmin(ConnectionHandler ch);
+    boolean setSuperAdmin(String host, int port);
 
     boolean addModerator(Moderator moderator, SubForum subForum);
 

@@ -12,7 +12,6 @@ import Sadna.Client.Moderator;
 import Sadna.Client.SuperAdmin;
 import Sadna.db.API.DBInterface;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -524,9 +523,10 @@ public class DataBase implements DBInterface {
     }
 
     @Override
-    public boolean setSuperAdmin(ConnectionHandler ch) {
+    public boolean setSuperAdmin(String host, int port) {
         String userName = "superAdmin";
         String password = "superAdmin1234";
+        ConnectionHandler ch = new ConnectionHandler(host, port);
         SuperAdmin sa = new SuperAdmin(userName, password, "AdminMail", ch);
         ObjectOutputStream obj;
         FileOutputStream outputstream;
@@ -1002,7 +1002,7 @@ public class DataBase implements DBInterface {
                 List<Post> postsList = getPostList(forumName, subForumName, threadID);
                 for (Post post : postsList) {
                     String postPublisher = post.getPublisher();
-                    if (!arrayList.contains(postPublisher)){
+                    if (!arrayList.contains(postPublisher)) {
                         arrayList.add(postPublisher);
                     }
                 }
