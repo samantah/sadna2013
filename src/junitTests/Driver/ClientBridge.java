@@ -35,7 +35,7 @@ public interface ClientBridge {
     
     boolean addSubForum(SubForum subForum);
     
-    boolean initiateForum(String forumName, String adminName, String adminPassword);
+    boolean initiateForum(String forumName, String adminName, String adminPassword, String superAdminName, String superAdminPasswaord);
 
     List<Post> getAllPosts(ThreadMessage tm);
     

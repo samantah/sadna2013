@@ -55,9 +55,8 @@ public class ClientRealBridgeImpl implements ClientBridge {
         return _clientHandler.getThreadsList(forumName, subForumName);
     }
 
-    public boolean initiateForum(String forumName, String adminName,
-            String adminPassword) {
-        return _clientHandler.initiateForum(forumName, adminName, adminPassword);
+    public boolean initiateForum(String forumName, String adminName, String adminPassword, String superAdminName, String superAdminPasswaord){
+        return _clientHandler.initiateForum(forumName, adminName, adminPassword, "SDF", "Sdf");
     }
 
     public Member login(String forumName, String userName, String password) {
@@ -90,4 +89,5 @@ public class ClientRealBridgeImpl implements ClientBridge {
     public boolean finishCommunication() {
         return _clientHandler.finishCommunication();
     }
+
 }

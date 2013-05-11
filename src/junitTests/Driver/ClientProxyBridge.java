@@ -77,10 +77,11 @@ public class ClientProxyBridge implements ClientBridge {
     }
 
     public boolean initiateForum(String forumName, String adminName,
-            String adminPassword) {
+			String adminPassword, String superAdminName,
+			String superAdminPasswaord) {
         if (this.real != null) {
             return this.real.initiateForum(forumName, adminName,
-                    adminPassword);
+                    adminPassword, superAdminName, superAdminPasswaord);
         }
         return false;
     }
@@ -137,4 +138,5 @@ public class ClientProxyBridge implements ClientBridge {
         }
         return false;
     }
+
 }

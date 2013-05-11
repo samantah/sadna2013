@@ -19,8 +19,8 @@ import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 import java.util.ArrayList;
 import java.util.List;
-import junitTests.Driver.ClientBridge;
-import junitTests.Driver.ClientDriver;
+import Driver.ClientBridge;
+import Driver.ClientDriver;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
@@ -38,6 +38,8 @@ public class connectionHandlerTest {
     public static final String USER_PASSWORD = "abcdefg34";
     public static final String ADMIN_NAME = "admin1";
     public static final String ADMIN_PASSWORD = "password1234";
+    public static final String SUPER_ADMIN_NAME = "superAdmin";
+    public static final String SUPER_ADMIN_PASSWORD = "superAdmin1234";
     private static ConnectionHandler ch;
 
     @BeforeClass
@@ -129,7 +131,7 @@ public class connectionHandlerTest {
         assertEquals(post.getId(), allPosts.get(size - 1).getId());
     }
 
-    @Test
+    
     private static void initiateTestPlatform() {
         DataBase db = new DataBase();
        // db.deleteAll("DataBase/");
@@ -174,7 +176,7 @@ public class connectionHandlerTest {
     
     @Test
     private static void getForumTest() {
-    	assertTrue(ch.initiateForum("forumTest1", "samanta", "1234567a"));
+    	assertTrue(ch.initiateForum("forumTest1", "samanta", "1234567a", SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD));
     	Member m = ch.register("forumTest1", "sam11111", "lasjflkJDF1", "ASFADF@asd.com");
     	Forum exists = ch.getForum("forumTest1");
     	assertNotNull(exists);
@@ -185,7 +187,7 @@ public class connectionHandlerTest {
     
     @Test
     private static void getThreadsListTest() {
-    	assertTrue(ch.initiateForum("forumTest2", "samanta111", "1234567a"));
+    	assertTrue(ch.initiateForum("forumTest2", "samanta111", "1234567a", SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD));
     	Forum exists = ch.getForum("forumTest2");
     	Member m = ch.register("forumTest2", "member123", "lasjflkJDF1", "ASFADF@asd.com");
     	List<Moderator> lm = new ArrayList<Moderator>();
@@ -198,5 +200,52 @@ public class connectionHandlerTest {
     	ThreadMessage t = new ThreadMessage(sf, "title222", "lalala", "samanta111");
     	ch.publishThread(t);
     	assertEquals(1, ch.getThreadsList("forumTest2", "subForumTest2").size());
+    }
+    
+  //to commit
+    @Test
+    public void logoutTest(){
+    User u = new User(ch);
+    Member mem = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+    assertTrue(mem instanceof Member);
+    ch.logout(FORUM_NAME, USER_NAME);
+    assertFalse(mem instanceof Member);
+    mem.logout(FORUM_NAME);
+    }
+
+    @Test
+    public void publishThreadTest(){
+    User u = new User(ch);
+    Member mem = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+    Forum f = new Forum(FORUM_NAME);
+    SubForum sf = new SubForum(f, SUB_FORUM_NAME);
+    ThreadMessage tm = new ThreadMessage(sf, "test", "test", USER_NAME);
+    assertTrue(mem.publishThread(tm));
+    mem.logout(FORUM_NAME);
+    }
+
+    @Test
+    public void getSubForumsListTest(){
+    User u = new User(ch);
+    assertNotNull(u.viewSubForums(FORUM_NAME));
+    }
+    @Test
+    public void getForumsListTest(){
+    User u = new User(ch);
+    assertNotNull(u.viewForums());
+    }
+
+    @Test
+    public void loginAsSuperAdminTest(){
+    User u = new User(ch);
+    assertNull(u.loginAsSuperAdmin("notAnAdmin", "notAnAdmin123"));
+    assertTrue(u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD) instanceof SuperAdmin);
+    }
+
+    @Test
+    public void initiateForumTest(){
+    User u = new User(ch);
+    SuperAdmin sa = ch.loginAsSuperAdmin(ADMIN_NAME, ADMIN_PASSWORD);
+    sa.initiateForum(forumName, adminName, adminPassword)
     }
 }
