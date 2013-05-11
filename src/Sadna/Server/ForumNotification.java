@@ -22,4 +22,8 @@ public class ForumNotification implements Serializable {
         this.text = text;
         this.notificationID = notificationCounter++;
     }
+
+	public String getText() {
+		return text;
+	}
 }

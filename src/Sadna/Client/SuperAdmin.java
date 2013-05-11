@@ -29,10 +29,10 @@ public class SuperAdmin extends Admin{
 		return conHand.initiateForum(forumName, adminName, adminPassword);
 	}
 
-	public int getForumCounter(String userName, String password) {
+	public int getForumCounter() {
 		int numberOfForums = -1;
 		try {
-			numberOfForums = conHand.getForumCounter(userName, password);
+			numberOfForums = conHand.getForumCounter(this.userName, this.password);
 		} catch (Exception e) {
 			System.out.println("SuperAdmin(getForumCounter) " + e);
 		}
@@ -42,17 +42,15 @@ public class SuperAdmin extends Admin{
     /*
      * MAP(forum name:String, number of members in forum:Integer)
      */
-    public List<String> getCommonMembers(String superAdminName, String password) {
+    public List<String> getCommonMembers() {
 		List<String> map = null;
         try {
-        	map = conHand.getCommonMembers(userName, password);
+        	map = conHand.getCommonMembers(this.userName, this.password);
         } catch (Exception e) {
             System.out.println("Admin(getNumMembersInEachForum) " + e);
         }
         return map;
     }
-	
-	
 
 
 

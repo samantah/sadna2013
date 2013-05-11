@@ -289,7 +289,7 @@ public class ForumPage extends javax.swing.JFrame {
     private void addNewSubButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNewSubButtonActionPerformed
         String text = jTextAreaListOfModerators.getText();
         StringTokenizer stringTokenizer = new StringTokenizer(text, "\n");
-        ArrayList<Moderator> arrayList = new ArrayList<>();
+        ArrayList<Moderator> arrayList = new ArrayList<Moderator>();
         while (stringTokenizer.hasMoreTokens()) {
             String nextToken = stringTokenizer.nextToken();
             arrayList.add(new Moderator(nextToken, null, null, null, null));
