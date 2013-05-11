@@ -246,6 +246,16 @@ public class connectionHandlerTest {
     public void initiateForumTest(){
     User u = new User(ch);
     SuperAdmin sa = ch.loginAsSuperAdmin(ADMIN_NAME, ADMIN_PASSWORD);
-    sa.initiateForum(forumName, adminName, adminPassword)
+    assertTrue(sa.initiateForum("new"+FORUM_NAME, "new"+ADMIN_NAME, ADMIN_PASSWORD));
+    }
+
+    @Test
+    public void getAllPostsTest(){
+    User u = new User(ch);
+    List<ThreadMessage> threadsList = u.viewThreadMessages(FORUM_NAME, SUB_FORUM_NAME);
+    ThreadMessage thread1 = threadsList.get(0);
+    Post post = new Post(thread1, "new", "post", "chen");
+    ch.postComment(post);
+    assertNotNull(u.getAllPosts(thread1));
     }
 }
