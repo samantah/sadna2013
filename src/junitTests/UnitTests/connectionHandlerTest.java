@@ -63,7 +63,7 @@ public class connectionHandlerTest {
     
     private static void initiateTestPlatform() {
         DataBase db = new DataBase();
-        //db.deleteFolder(db.dataBaseFolder);
+        db.deleteFolder(db.dataBaseFolder);
         User u = new User(ch);
         SuperAdmin sa = db.getSuperAdmin(); 
         System.out.println(sa);
@@ -135,13 +135,18 @@ public class connectionHandlerTest {
 
     @Test
     public void addSubForumTest() {
-        Forum fake = new Forum(null, "non-exist");
+    	User u = new User(ch);
+    	Member m = u.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
+    	assertNotNull(m);
+    	assertTrue(m instanceof Admin);
+    	Admin a = (Admin)m;
+        Forum fake = new Forum(a, "not-exist");
         SubForum illegal = new SubForum(fake, "firstAttemp");
         ArrayList<Moderator> mods = new ArrayList<Moderator>();
-        assertFalse(ch.addSubForum(illegal, mods));
+        assertFalse(a.addSubForum(illegal, mods));
         Forum forum = new Forum(FORUM_NAME);
         SubForum legal = new SubForum(forum, "succeesfullAttemp");
-        assertTrue(ch.addSubForum(legal, mods));
+        assertTrue(a.addSubForum(legal, mods));
     }
 
     @Test
@@ -174,12 +179,14 @@ public class connectionHandlerTest {
 
     @Test
     public void postCommentTest() {
-        List<ThreadMessage> threadsList = ch.getThreadsList(FORUM_NAME, SUB_FORUM_NAME);
+    	User u = new User(ch);
+        List<ThreadMessage> threadsList = u.viewThreadMessages(FORUM_NAME, SUB_FORUM_NAME);
         ThreadMessage thread1 = threadsList.get(0);
+        Member m = u.register(FORUM_NAME, "sami5432", "password7655", "asa@af.sdf");
         Post post = new Post(thread1, "new", "post", "chen");
-        boolean postComment = ch.postComment(post);
+        boolean postComment = m.postComment(post);
         assertTrue(postComment);
-        List<Post> allPosts = ch.getAllPosts(thread1);
+        List<Post> allPosts = m.getAllPosts(thread1);
         int size = allPosts.size();
         assertEquals(post.getId(), allPosts.get(size - 1).getId());
     }
@@ -265,8 +272,9 @@ public class connectionHandlerTest {
     User u = new User(ch);
     List<ThreadMessage> threadsList = u.viewThreadMessages(FORUM_NAME, SUB_FORUM_NAME);
     ThreadMessage thread1 = threadsList.get(0);
+    Member m = u.register(FORUM_NAME, "eliSDDhana", "ASASD7678", "assd@af.vo");
     Post post = new Post(thread1, "new", "post", "chen");
-    ch.postComment(post);
+    m.postComment(post);
     assertNotNull(u.getAllPosts(thread1));
     }
     
