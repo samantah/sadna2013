@@ -37,6 +37,10 @@ public class MainFrame extends javax.swing.JFrame {
 
         if (!(CurrentStatus.currUser instanceof SuperAdmin)) {
             jButtonInitiateForum.setVisible(false);
+            jLabelNumberOfForums.setVisible(false);
+            jLabelNumberOfMembersInForum.setVisible(false);
+            String text = jLabelNumberOfForums.getText();
+            jLabelNumberOfForums.setText(text + " " + String.valueOf(viewForums.size()));
         }
 
 
@@ -57,6 +61,8 @@ public class MainFrame extends javax.swing.JFrame {
         forumsList = new javax.swing.JList();
         enterForumButton = new javax.swing.JButton();
         jButtonInitiateForum = new javax.swing.JButton();
+        jLabelNumberOfForums = new javax.swing.JLabel();
+        jLabelNumberOfMembersInForum = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -90,6 +96,12 @@ public class MainFrame extends javax.swing.JFrame {
         jButtonInitiateForum.setText("initiate new forum");
         jButtonInitiateForum.setToolTipText("an option to initiate a new forum");
 
+        jLabelNumberOfForums.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabelNumberOfForums.setText("Number of forums: ");
+
+        jLabelNumberOfMembersInForum.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabelNumberOfMembersInForum.setText("Number of members in forum: ");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -106,8 +118,11 @@ public class MainFrame extends javax.swing.JFrame {
                                 .addGap(45, 45, 45)
                                 .addComponent(enterForumButton)))
                         .addGap(18, 18, 18)
-                        .addComponent(jButtonInitiateForum, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(40, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButtonInitiateForum, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabelNumberOfForums, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
+                            .addComponent(jLabelNumberOfMembersInForum, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -115,8 +130,14 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(69, 69, 69)
                 .addComponent(headLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabelNumberOfForums, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)
+                        .addComponent(jLabelNumberOfMembersInForum, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(logInButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -187,6 +208,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JList forumsList;
     private javax.swing.JLabel headLabel;
     private javax.swing.JButton jButtonInitiateForum;
+    private javax.swing.JLabel jLabelNumberOfForums;
+    private javax.swing.JLabel jLabelNumberOfMembersInForum;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton logInButton;
     // End of variables declaration//GEN-END:variables

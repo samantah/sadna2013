@@ -248,7 +248,7 @@ public class ThreadPage extends javax.swing.JFrame {
         Member m = (Member) CurrentStatus.currUser;
         String forumName = CurrentStatus.currForum.getForumName();
         String userName = m.getUserName();
-        User logout = m.logout(forumName, userName);
+        User logout = m.logout(forumName);
         CurrentStatus.currUser = logout;
         ThreadPage threadPage = new ThreadPage();
         this.setVisible(false);

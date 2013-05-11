@@ -24,7 +24,9 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -928,27 +930,82 @@ public class DataBase implements DBInterface {
         return numberOfThreads;
     }
 
-	@Override
-	public int getNumberOfUserThreads(String forumName, Member member) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    @Override
+    public int getNumberOfUserThreads(String forumName, Member member) {
+        int counter = 0;
+        String userName = member.getUserName();
+        List<SubForum> subForumsList = getSubForumsList(forumName);
+        for (SubForum subForum : subForumsList) {
+            String subForumName = subForum.getSubForumName();
+            List<ThreadMessage> threadsList = getThreadsList(forumName, subForumName);
+            for (ThreadMessage threadMessage : threadsList) {
+                if (threadMessage.getPublisher().equals(userName)) {
+                    counter++;
+                }
+            }
+        }
+        return counter;
+    }
 
-	@Override
-	public List<List<String>> getUsersPostToUser(String forumName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public int getNumberOfForums() {
+        List<Forum> forumsList = getForumsList();
+        return forumsList.size();
+    }
 
-	@Override
-	public int getNumberOfForums() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    @Override
+    public List<String> getCommonMembers() {
+        List<Forum> forumsList = getForumsList();
+        HashMap<Member, Integer> hashMap = new HashMap<>();
+        for (Forum forum : forumsList) {
+            String forumName = forum.getForumName();
+            List<Member> allMembers = getAllMembers(forumName);
+            for (Member member : allMembers) {
+                if (hashMap.containsKey(member)) {
+                    Integer numberOfOccurance = hashMap.get(member);
+                    int intValue = numberOfOccurance.intValue();
+                    intValue++;
+                    hashMap.put(member, new Integer(intValue));
+                }
+                hashMap.put(member, 1);
+            }
+        }
+        ArrayList<String> listOfCommonMembers = new ArrayList<>();
+        for (Map.Entry<Member, Integer> entry : hashMap.entrySet()) {
+            Member member = entry.getKey();
+            int numberOfOccurances = entry.getValue().intValue();
+            if (numberOfOccurances > 1) {
+                listOfCommonMembers.add(member.getUserName());
+            }
+        }
+        return listOfCommonMembers;
+    }
 
-	@Override
-	public List<String> getCommonMembers() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public HashMap<String, List<String>> getUsersPostToUser(String forumName) {
+        HashMap<String, List<String>> hashMap = new HashMap<>();
+        List<SubForum> subForumsList = getSubForumsList(forumName);
+        for (SubForum subForum : subForumsList) {
+            String subForumName = subForum.getSubForumName();
+            List<ThreadMessage> threadsList = getThreadsList(forumName, subForumName);
+            for (ThreadMessage threadMessage : threadsList) {
+                int threadID = threadMessage.getId();
+                String threadPublisher = threadMessage.getPublisher();
+                ArrayList<String> arrayList;
+                if (!hashMap.containsKey(threadPublisher)) {
+                    arrayList = new ArrayList<>();
+                } else {
+                    arrayList = (ArrayList<String>) hashMap.get(threadPublisher);
+                }
+                List<Post> postsList = getPostList(forumName, subForumName, threadID);
+                for (Post post : postsList) {
+                    String postPublisher = post.getPublisher();
+                    if (!arrayList.contains(postPublisher)){
+                        arrayList.add(postPublisher);
+                    }
+                }
+            }
+        }
+        return hashMap;
+    }
 }
