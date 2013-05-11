@@ -31,9 +31,9 @@ public interface ClientCommunicationHandlerInterface extends Serializable {
     //tested
     User logout(String forumName, String userName);
     //tested
-    boolean postComment(Post post);
+    boolean postComment(Post post, String password);
     //tested
-    boolean publishThread(ThreadMessage newThread);
+    boolean publishThread(ThreadMessage newThread, String password);
     //tested
     Member register(String forumName, String userName, String password, String email);
     //tested
@@ -49,7 +49,7 @@ public interface ClientCommunicationHandlerInterface extends Serializable {
     //tested
     ThreadMessage getThreadMessage(String forumName, String subForumName, int messageID);
     //tested
-    boolean addSubForum(SubForum subForum, List<Moderator> lm);
+    boolean addSubForum(SubForum subForum, List<Moderator> lm, String userName, String password);
     //tested
     boolean initiateForum(String forumName, String adminName, String adminPassword, String superAdminName, String superAdminPasswaord);
     //tested
@@ -75,13 +75,13 @@ public interface ClientCommunicationHandlerInterface extends Serializable {
     //tested
     boolean removeModerator(String forumName, String subForum, String moderatorName, String userName, String password);
 
-    int getThreadCounter(String forumName, String userName, String password);
+    int getNumOfThreadsInForum(String forumName, String userName, String password);
     
-    public int getNumOfUserThreads(String forumName, String generalUserName, String userName, String password);
+    public int getNumOfUserThreads(String forumName, String userName, String requesterUserName, String requesterpassword);
     //not to test right now
     public HashMap<String ,List<String>> getUsersPostToUser(String forumName, String userName, String password);
     //tested
-    public int getForumCounter(String userName, String password);
+    public int getNumOfForums(String userName, String password);
     //tested
     public List<String> getCommonMembers(String userName, String password);
     //tested
