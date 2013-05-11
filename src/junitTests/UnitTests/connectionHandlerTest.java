@@ -176,33 +176,40 @@ public class connectionHandlerTest {
     
     @Test
     private static void getForumTest() {
-    	assertTrue(ch.initiateForum("forumTest1", "samanta", "1234567a", SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD));
-    	Member m = ch.register("forumTest1", "sam11111", "lasjflkJDF1", "ASFADF@asd.com");
-    	Forum exists = ch.getForum("forumTest1");
+    	User u = new User(ch);
+    	SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
+    	assertNotNull(sa);
+    	assertTrue(sa.initiateForum("forumTest1", "samanta", "1234567a"));
+    	Member m = u.register("forumTest1", "sam11111", "lasjflkJDF1", "ASFADF@asd.com");
+    	Forum exists = m.getForum("forumTest1");
     	assertNotNull(exists);
     	assertEquals("forumTest1", exists.getForumName());
-     	Forum doesntExist = ch.getForum("forumThatDoesn'tExisttttttt");
+     	Forum doesntExist = m.getForum("forumThatDoesn'tExisttttttt");
     	assertNull(doesntExist);
     }
     
     @Test
     private static void getThreadsListTest() {
-    	assertTrue(ch.initiateForum("forumTest2", "samanta111", "1234567a", SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD));
-    	Forum exists = ch.getForum("forumTest2");
-    	Member m = ch.register("forumTest2", "member123", "lasjflkJDF1", "ASFADF@asd.com");
+    	User u = new User(ch);
+    	SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
+    	assertNotNull(sa);
+    	assertTrue(sa.initiateForum("forumTest2", "samanta111", "1234567a"));
+    	Admin admin = (Admin)u.login("forumTest2", "samanta111", "1234567a");
+    	Forum exists = admin.getForum("forumTest2");
+    	Member m = u.register("forumTest2", "member123", "lasjflkJDF1", "ASFADF@asd.com");
     	List<Moderator> lm = new ArrayList<Moderator>();
     	Moderator mo = new Moderator(m);
     	lm.add(mo);
-    	ch.addSubForum(new SubForum(exists, "subForumTest2"), lm);
-    	assertNotNull(ch.getThreadsList("forumTest2", "subForumTest2"));
-    	assertEquals(0, ch.getThreadsList("forumTest2", "subForumTest2").size());
-    	SubForum sf = ch.getSubForum("forumTest2", "subForumTest2");
+    	admin.addSubForum(new SubForum(exists, "subForumTest2"), lm);
+    	assertNotNull(m.viewThreadMessages("forumTest2", "subForumTest2"));
+    	assertEquals(0, m.viewThreadMessages("forumTest2", "subForumTest2").size());
+    	SubForum sf = m.getSubForum("forumTest2", "subForumTest2");
     	ThreadMessage t = new ThreadMessage(sf, "title222", "lalala", "samanta111");
-    	ch.publishThread(t);
-    	assertEquals(1, ch.getThreadsList("forumTest2", "subForumTest2").size());
+    	m.publishThread(t);
+    	assertEquals(1, m.viewThreadMessages("forumTest2", "subForumTest2").size());
     }
     
-  //to commit
+
     @Test
     public void logoutTest(){
     User u = new User(ch);
@@ -257,5 +264,68 @@ public class connectionHandlerTest {
     Post post = new Post(thread1, "new", "post", "chen");
     ch.postComment(post);
     assertNotNull(u.getAllPosts(thread1));
+    }
+    
+    @Test
+    public void addModeratorTest(){
+    User u = new User(ch);
+    u.register(FORUM_NAME, "willbemode", "willbemode12", "willbe@gmail.com");
+    Admin ad = (Admin) u.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
+    assertTrue(ad.addModerator(FORUM_NAME, SUB_FORUM_NAME, "willbemode"));
+    ad.logout(FORUM_NAME);
+    }
+
+    @Test
+    public void removeModeratorTest(){
+    User u = new User(ch);
+    Admin ad = (Admin) u.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
+    assertTrue(ad.removeModerator(FORUM_NAME, SUB_FORUM_NAME, "willbemode"));
+    ad.logout(FORUM_NAME);
+    }
+
+    @Test
+    public void getAllForumMembersTest(){
+    User u = new User(ch);
+    Admin ad = (Admin) u.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
+    assertNotNull(ad.getAllForumMembers());
+    ad.logout(FORUM_NAME);
+    }
+
+    @Test
+    public void getCommonMembersTest(){
+    User u = new User(ch);
+    SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
+    assertNotNull(sa.getCommonMembers());
+    sa.logout(FORUM_NAME);
+    }
+
+    @Test
+    public void getForumCounterTest(){
+    User u = new User(ch);
+    SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
+    assertTrue(sa.getForumCounter()>0);
+    sa.logout(FORUM_NAME);
+    }
+    
+    @Test
+    public void deletePostTest(){
+    	User u = new User(ch);
+        Member mem = u.login("forumTest2", "samanta111", "1234567a");
+        SubForum sf = mem.getSubForum("forumTest2", "subForumTest2");
+    	ThreadMessage t = new ThreadMessage(sf, "title333", "lalala", "samanta111");
+    	mem.publishThread(t);
+    	Post p = new Post(t, "title11", "contenttttttt", "samanta111");
+    	mem.postComment(p);
+    	assertTrue(mem.deletePost(p));
+    }
+    
+    @Test
+    public void deleteThreadMessageTest(){
+    	User u = new User(ch);
+        Member mem = u.login("forumTest2", "samanta111", "1234567a");
+        SubForum sf = mem.getSubForum("forumTest2", "subForumTest2");
+    	List<ThreadMessage> ltm = mem.viewThreadMessages("forumTest2", "subForumTest2");
+    	assertNotNull(ltm);
+    	assertTrue(mem.deleteThread(ltm.get(0)));
     }
 }
