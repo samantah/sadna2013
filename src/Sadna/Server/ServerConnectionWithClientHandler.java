@@ -211,5 +211,22 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 		}
 	}
 
+	@Override
+	public void sendNumberOfForums(int forumCounter) {
+		stringToClient.println("The number of Forums is: " + forumCounter);
+		
+	}
+
+	@Override
+	public void sendCommonMembers(List<String> commonMembers) {
+		try {
+			objectOutputToClient.writeObject(commonMembers);
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println(">> Got Exception in ServerConnectionWithClientHandler - sendCommonMembers");
+
+		}
+	}
+
 
 }

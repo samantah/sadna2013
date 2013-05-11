@@ -88,6 +88,10 @@ public interface ServerInterface {
 	int getNumberOfUserThreads(String forumName, Member member);
 
 	List<List<String>> getUsersPostToUser(String forumName);
+
+	int getForumCounter();
+
+	List<String> getCommonMembers();
 	
     
 

@@ -7,6 +7,7 @@ package Sadna.Server;
 import Sadna.Client.Admin;
 import Sadna.Client.Member;
 import Sadna.Client.Moderator;
+import Sadna.Client.SuperAdmin;
 import Sadna.Server.API.ConnectionHandlerServerInterface;
 import Sadna.Server.API.ServerInterface;
 import Sadna.db.Forum;
@@ -154,6 +155,12 @@ public class ServerRequestHandler implements Runnable {
 		case "GETUSRSPOSTUSER":
 			handleGetUsersPostToUser(parsedReq[2], parsedReq[4], parsedReq[6]);
 			break;
+		case "GETFRMCOUNT":
+			handleForumCounter(parsedReq[2], parsedReq[4]);
+			break;
+		case "GETCOMMEM":
+			handleCommonMembers(parsedReq[2], parsedReq[4]);
+			break;
 		case "LOGOUT":
 			//TO DO
 			break;
@@ -162,6 +169,25 @@ public class ServerRequestHandler implements Runnable {
 		}
 
 	}
+	private void handleCommonMembers(String adminName, String password) {
+		SuperAdmin superAdmin = _si.getSuperAdmin();
+		if (!superAdmin.getPassword().equals(password)) {
+			_ch.sendErrorNoAuthorized();
+			return;
+		}
+		_ch.sendCommonMembers(_si.getCommonMembers());	
+	}
+
+	private void handleForumCounter(String superAdminName, String password) {
+		SuperAdmin superAdmin = _si.getSuperAdmin();
+		if (!superAdmin.getPassword().equals(password)) {
+			_ch.sendErrorNoAuthorized();
+			return;
+		}
+		_ch.sendNumberOfForums(_si.getForumCounter());	
+	}
+	
+	
 	private void handleGetUsersPostToUser(String forumName, String adminName, String password) {
 		Member admin = _si.getMember(forumName, adminName);
 		if (!admin.getPassword().equals(password)) {

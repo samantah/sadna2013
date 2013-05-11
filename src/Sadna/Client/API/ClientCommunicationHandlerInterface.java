@@ -80,7 +80,7 @@ public interface ClientCommunicationHandlerInterface {
         
     public int getForumCounter(String userName, String password);
     
-    public Hashtable<String, Integer> getNumMembersInEachForum(String userName, String password);
+    public List<String> getCommonMembers(String userName, String password);
     
     public Member loginAsSuperAdmin(String userName, String password);
 

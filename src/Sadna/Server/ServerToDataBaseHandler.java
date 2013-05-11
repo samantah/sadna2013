@@ -357,6 +357,16 @@ public class ServerToDataBaseHandler implements ServerInterface {
 		return _db.getUsersPostToUser(forumName);
 	}
 
+	@Override
+	public int getForumCounter() {
+		return _db.getNumberOfForums();
+	}
+
+	@Override
+	public List<String> getCommonMembers() {
+		return _db.getCommonMembers();
+	}
+
 
 
 

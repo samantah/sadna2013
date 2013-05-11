@@ -543,7 +543,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 		}
 		return remove;
 	}
-
+	@Override
 	public int getThreadCounter(String forumName, String userName, String password) {
 		int counter = 0;
 		msgToSend = "GETTHRCOUNT\n" + "forumName:\n" + forumName + "\n" + "userName:\n" + userName + "\n"
@@ -558,7 +558,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 		counter = Integer.parseInt(receivedMsg);
 		return counter;
 	}
-
+	@Override
 	public int getNumOfUserThreads(String forumName, String generalUserName, 
 			String userName, String password) {
 		int counter = 0;
@@ -578,6 +578,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 	/*
 	 * MAP(username:String, users that post:Vector<String>)
 	 */
+	@Override
 	public List<List<String>> getUsersPostToUser(String forumName, 
 			String userName, String password) {
 		List<List<String>> map = null;
@@ -594,7 +595,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 		}
 		return map;
 	}
-
+	@Override
 	public int getForumCounter(String userName, String password) {
 		int counter = 0;
 		msgToSend = "GETFRMCOUNT\n" + "\n" + "userName:\n" + userName + "\n"
@@ -613,15 +614,17 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 	/*
 	 * MAP(forum name:String, number of members in forum:Integer)
 	 */
-	public Hashtable<String, Integer> getNumMembersInEachForum(String userName, 
+	
+	@Override
+	public List<String> getCommonMembers(String superAdminName, 
 			String password) {
-		Hashtable<String, Integer> map = null;
-		msgToSend = "GETNUMMBRBYFRM\n" + "\n"+ "userName:\n" 
-				+ userName + "\n" + "password:\n" + password + "\n";
+		List<String> map = null;
+		msgToSend = "GETCOMMEM\n" + "\n"+ "userName:\n" 
+				+ superAdminName + "\n" + "password:\n" + password + "\n";
 		msgToSend += delimiter;
 		stringToServer.println(msgToSend);
 		try {
-			map = (Hashtable<String, Integer>)objectFromServer.readObject();
+			map = (List<String>) objectFromServer.readObject();
 		} catch (IOException e) {
 			System.out.println("ConnectionHandler(getNumMembersInEachForum) " + e);
 		} catch (ClassNotFoundException e) {
@@ -630,6 +633,8 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 		}
 		return map;
 	}
+
+
 
 
 
