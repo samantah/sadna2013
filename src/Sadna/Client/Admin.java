@@ -49,12 +49,13 @@ public class Admin extends Moderator {
     /*
      *  ?s c m?
      */
-    public void addModerator(String forumName, String subForumName, String newModerator) {
+    public boolean addModerator(String forumName, String subForumName, String newModerator) {
         try {
-            conHand.addModerator(forumName, subForumName, newModerator, this.userName, this.password);
+            return conHand.addModerator(forumName, subForumName, newModerator, this.userName, this.password);
         } catch (Exception e) {
             System.out.println("Admin(addModerator) " + e);
         }
+        return false;
     }
 
     /*
