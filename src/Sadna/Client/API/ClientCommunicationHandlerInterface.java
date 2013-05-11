@@ -50,7 +50,7 @@ public interface ClientCommunicationHandlerInterface {
     boolean addSubForum(SubForum subForum, List<Moderator> lm);
     //tested
     boolean initiateForum(String forumName, String adminName, String adminPassword, String superAdminName, String superAdminPasswaord);
-
+    //tested
     List<Post> getAllPosts(ThreadMessage tm);
 
     boolean deleteForum(String forumName, String userName, String password);
