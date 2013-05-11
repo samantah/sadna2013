@@ -29,15 +29,15 @@ public class SuperAdmin extends Admin {
         return conHand.initiateForum(forumName, adminName, adminPassword, this.userName, this.password);
     }
 
-    public int getForumCounter() {
-        int numberOfForums = -1;
-        try {
-            numberOfForums = conHand.getForumCounter(this.userName, this.password);
-        } catch (Exception e) {
-            System.out.println("SuperAdmin(getForumCounter) " + e);
-        }
-        return numberOfForums;
-    }
+	public int getForumCounter() {
+		int numberOfForums = -1;
+		try {
+			numberOfForums = conHand.getNumOfForums(this.userName, this.password);
+		} catch (Exception e) {
+			System.out.println("SuperAdmin(getForumCounter) " + e);
+		}
+		return numberOfForums;
+	}
 
     /*
      * MAP(forum name:String, number of members in forum:Integer)
