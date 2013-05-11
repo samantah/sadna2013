@@ -395,6 +395,24 @@ public class ServerToDataBaseHandler implements ServerInterface {
 		return (sa.getUserName().equals(userName) && sa.getPassword().equals(password));
 	}
 
+	@Override
+	public boolean logout(String forumName, String userName) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean editThread(ThreadMessage tm, String userName, String password) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean editPost(Post p, String userName, String password) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 
 
 }
