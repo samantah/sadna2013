@@ -166,11 +166,24 @@ public class ServerRequestHandler implements Runnable {
 			break;
 		case "GETALLMEM":
 			handleGetAllMembers(parsedReq[2], parsedReq[4], parsedReq[6]);
+		case "LOGINSUPER":
+			handleLoginAsSuperAdmin(parsedReq[2], parsedReq[4]);
 		default:
 			break;
 		}
 
 	}
+	private void handleLoginAsSuperAdmin(String userName, String password) {
+		boolean logedIn = _si.loginAsSuperAdmin(userName, password);
+		if (logedIn) {
+			Member member = _si.getSuperAdmin();
+			if(member instanceof SuperAdmin)
+				_ch.sendSuperAdminOK();
+		} else {
+			_ch.sendNotFound();
+		}
+	}
+
 	private void handleGetAllMembers(String forumName, String userName,
 			String password) {
 		Member admin = _si.getMember(forumName, userName);

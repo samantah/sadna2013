@@ -3,6 +3,8 @@ package Sadna.Server.API;
 import Sadna.Client.Member;
 import Sadna.Server.ForumNotification;
 import Sadna.db.Forum;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
@@ -45,7 +47,7 @@ public interface ConnectionHandlerServerInterface{
 
 	public void sendUserThreadsCounter(int numberOfUserThreads);
 
-	public void sendUsersPostToUser(List<List<String>> usersPostToUser);
+	public void sendUsersPostToUser(HashMap<String,List<String>> hashMap);
 
 	public void sendIsTheOnlyModeratorInTheSubForum();
 
@@ -59,8 +61,7 @@ public interface ConnectionHandlerServerInterface{
 
 	public void sendAllMembers(List<Member> allMembers);
 
-
-
+	public void sendSuperAdminOK();
 
 }
 

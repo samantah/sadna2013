@@ -13,6 +13,7 @@ import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
@@ -87,12 +88,14 @@ public interface ServerInterface {
 
 	int getNumberOfUserThreads(String forumName, Member member);
 
-	List<List<String>> getUsersPostToUser(String forumName);
+	HashMap<String, List<String>> getUsersPostToUser(String forumName);
 
 	int getForumCounter();
 
 	List<String> getCommonMembers();
 
-	List<Member> getAllMembers(String forumName);    
+	List<Member> getAllMembers(String forumName);
+
+	boolean loginAsSuperAdmin(String userName, String password);    
 
 }

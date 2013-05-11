@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
@@ -203,7 +204,7 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 	}
 
 	@Override
-	public void sendUsersPostToUser(List<List<String>> usersPostToUser) {
+	public void sendUsersPostToUser(HashMap<String ,List<String>> usersPostToUser) {
 		try {
 			objectOutputToClient.writeObject(usersPostToUser);
 		} catch (IOException e) {
@@ -250,6 +251,11 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 			e.printStackTrace();
 			System.out.println(">> Got Exception in ServerConnectionWithClientHandler - sendAllMembers");
 		}
+	}
+
+	@Override
+	public void sendSuperAdminOK() {
+		stringToClient.println("203ok");
 	}
 
 
