@@ -284,7 +284,13 @@ public class ServerRequestHandler implements Runnable {
 	public boolean handleLogin(String forumName, String userName, String password) {
 		boolean logedIn = _si.login(forumName, userName, password);
 		if (logedIn) {
-			_ch.sendOK();
+			Member member = _si.getMember(forumName, userName);
+			if(member instanceof Member)
+				_ch.sendOK();
+			if(member instanceof Moderator)
+				_ch.sendModeratorOK();
+			if(member instanceof Admin)
+				_ch.sendAdminOK();
 		} else {
 			_ch.sendNotFound();
 		}

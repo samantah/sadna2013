@@ -228,5 +228,17 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 		}
 	}
 
+	@Override
+	public void sendModeratorOK() {
+		stringToClient.println("201ok");
+		
+	}
+
+	@Override
+	public void sendAdminOK() {
+		stringToClient.println("202ok");
+		
+	}
+
 
 }

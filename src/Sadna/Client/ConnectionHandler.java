@@ -74,14 +74,18 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 		if (receivedMsg.contains("200ok")) {
 			loggedInMember = new Member(userName, password, null, forumName, this);
 		}
+		if (receivedMsg.contains("201ok")) {
+			loggedInMember = new Moderator(userName, password, null, forumName, this);
+		}
 		if (receivedMsg.contains("202ok")) {
+			loggedInMember = new Admin(userName, password, null, forumName, this);
 		}
 		return loggedInMember;
 	}
-	
+
 	@Override
-	public Member loginAsSuperAdmin(String userName, String password) {
-		SuperAdmin loggedInSuperAdmin = null;
+	public User loginAsSuperAdmin(String userName, String password) {
+		User loggedInSuperAdmin = null;
 		msgToSend = "LOGINSUPER\n" + "forumName:\n" + userName + "\n" + "password:\n" + password + "\n";
 		msgToSend += delimiter;
 		stringToServer.println(msgToSend);
@@ -92,7 +96,8 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 		if (receivedMsg.contains("200ok")) {
 			loggedInSuperAdmin = new SuperAdmin(userName, password, null, this);
 		}
-		if (receivedMsg.contains("202ok")) {
+		else{
+			loggedInSuperAdmin = new User(this);
 		}
 		return loggedInSuperAdmin;
 	}
@@ -614,7 +619,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 	/*
 	 * MAP(forum name:String, number of members in forum:Integer)
 	 */
-	
+
 	@Override
 	public List<String> getCommonMembers(String superAdminName, 
 			String password) {
