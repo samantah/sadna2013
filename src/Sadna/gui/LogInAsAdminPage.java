@@ -62,7 +62,7 @@ public class LogInAsAdminPage extends javax.swing.JFrame {
         });
 
         jLabelTitle.setFont(new java.awt.Font("Arial", 3, 24)); // NOI18N
-        jLabelTitle.setText("admin login");
+        jLabelTitle.setText("Super admin login");
 
         jPasswordField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -105,8 +105,8 @@ public class LogInAsAdminPage extends javax.swing.JFrame {
                                         .addComponent(jButtonLogin)
                                         .addGap(21, 21, 21))))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(176, 176, 176)
-                        .addComponent(jLabelTitle)))
+                        .addGap(143, 143, 143)
+                        .addComponent(jLabelTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(106, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(

@@ -33,6 +33,7 @@ public class ForumPage extends javax.swing.JFrame {
         jTextFieldNewSubName.setVisible(false);
         jLabelEnterModerators.setVisible(false);
         jButtonToAdminPage.setVisible(false);
+        this.getNotificationsButton.setVisible(false);
         if (CurrentStatus.currUser instanceof Admin) {
             jButtonToAdminPage.setVisible(true);
         }
@@ -45,6 +46,7 @@ public class ForumPage extends javax.swing.JFrame {
             jLabelEnterModerators.setVisible(true);
         }
         if (CurrentStatus.currUser instanceof Member) {
+            this.getNotificationsButton.setVisible(true);
             logInButton.setVisible(false);
             registerButton.setVisible(false);
         } else {
@@ -218,10 +220,10 @@ public class ForumPage extends javax.swing.JFrame {
                                 .addComponent(jTextAreaListOfModerators, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                                 .addContainerGap())
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jButtonToAdminPage, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabelHeadNewSubForum, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabelEnterModerators, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jLabelHeadNewSubForum, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
+                                    .addComponent(jLabelEnterModerators, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jButtonToAdminPage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(26, 26, 26))))))
         );
         layout.setVerticalGroup(
@@ -346,7 +348,6 @@ public class ForumPage extends javax.swing.JFrame {
         NotificationsPage notificationsPage = new NotificationsPage();
         notificationsPage.setVisible(true);
     }//GEN-LAST:event_getNotificationsButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addNewSubButton;
     private javax.swing.JButton enterSubForumButton;

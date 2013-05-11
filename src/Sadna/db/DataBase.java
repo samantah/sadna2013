@@ -209,6 +209,8 @@ public class DataBase implements DBInterface {
             new File(path).mkdirs();
             String pathToFolder = path + "/" + subForumStr + "/";
             new File(pathToFolder).mkdirs();
+            PrintWriter bw = new PrintWriter(new FileWriter(pathToFolder + "moderators.txt"));
+            bw.close();
             String pathToMembers = pathToFolder;
             for (Moderator m : listOfModerators) {
                 addModerator(m, subForum);
@@ -523,10 +525,9 @@ public class DataBase implements DBInterface {
     }
 
     @Override
-    public boolean setSuperAdmin(String host, int port) {
+    public boolean setSuperAdmin(ClientCommunicationHandlerInterface ch) {
         String userName = "superAdmin";
         String password = "superAdmin1234";
-        ConnectionHandler ch = new ConnectionHandler(host, port);
         SuperAdmin sa = new SuperAdmin(userName, password, "AdminMail", ch);
         ObjectOutputStream obj;
         FileOutputStream outputstream;

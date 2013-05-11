@@ -71,10 +71,10 @@
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="jButtonToAdminPage" min="-2" pref="93" max="-2" attributes="0"/>
-                                  <Component id="jLabelHeadNewSubForum" min="-2" pref="116" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                  <Component id="jLabelHeadNewSubForum" pref="116" max="32767" attributes="0"/>
                                   <Component id="jLabelEnterModerators" min="-2" pref="110" max="-2" attributes="0"/>
+                                  <Component id="jButtonToAdminPage" alignment="1" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                           </Group>

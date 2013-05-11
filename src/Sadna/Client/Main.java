@@ -18,14 +18,16 @@ public class Main {
     
 
 	public static void main(String argv[]) throws Exception {
-        String host = "192.168.1.105";
+        String host = "192.168.1.108";
         int port = 3333;
         ConnectionHandler c = new ConnectionHandler(host, port);
-        
-        //c.initiateForum("newForum", "chen", "chen1234");
-        User chen = new User(c);
-        chen = chen.login("newForum", "chen", "chen1234");
-        
+        c.initiateForum("newForum", "chen", "chen1234","superAdmin", "superAdmin1234");
+//        SuperAdmin sa = new SuperAdmin("superAdmin", "superAdmin1234", "", c);
+//        sa.initiateForum("newForum", "aviel", "aviel1234");
+//        c.initiateForum("newForum", "chen", "chen1234");
+//        User chen = new User(c);
+//        chen = chen.login("newForum", "chen", "chen1234");
+         
 //        SubForum sf = new SubForum(new Forum("newForum"), "sf");
 //        List<Moderator> lm = new ArrayList<Moderator>();
 //        Member m1 = new Member("dotan", "dotan1234", "dotan@gmail.com", "newForum", null);
@@ -165,7 +167,7 @@ public class Main {
         m.setForum(f.getForumName());
         SubForum sf = new SubForum(f, "subForumName");
         ThreadMessage t = new ThreadMessage(sf, "eminem", "hiiiiiiii", "userName");
-        boolean ans = c.publishThread(t);
+        boolean ans = c.publishThread(t, "");
         if (ans) {
             System.out.println(t.getContent());
             System.out.println(t.getTitle());
@@ -181,7 +183,7 @@ public class Main {
         SubForum sf = new SubForum(f, "subForumName");
         ThreadMessage t = new ThreadMessage(sf, "eminem", "hiiiiiiiiiiiii", "userName");
         Post p = new Post(t, "slim shady", "hiii my name is what, my name is who, my name  is-- chicki chiki, slim shady", "userName");
-        boolean posted = c.postComment(p);
+        boolean posted = c.postComment(p, "");
         System.out.println(posted);
         if (posted) {
             System.out.println(p.getTitle());

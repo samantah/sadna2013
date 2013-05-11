@@ -4,7 +4,6 @@
  */
 package Sadna.db;
 
-
 import Sadna.Client.Admin;
 import java.io.Serializable;
 
@@ -45,6 +44,11 @@ public class Forum implements Serializable {
     }
 
     public String getForumName() {
+        return forumName;
+    }
+
+    @Override
+    public String toString() {
         return forumName;
     }
 }
