@@ -657,4 +657,5 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 		}
 		return members;
 	}
+	//re
 } 
