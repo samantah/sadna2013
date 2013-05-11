@@ -34,7 +34,7 @@ import java.util.logging.Logger;
 public class DataBase implements DBInterface {
 
     private DecimalFormat df = new DecimalFormat("000");
-    private String dataBaseFolder = "dataBase";
+    public String dataBaseFolder = "dataBase";
 
     public DataBase() {
     }
@@ -810,6 +810,7 @@ public class DataBase implements DBInterface {
 
     }
 
+    @Override
     public void deleteFolder(String path) {
         File f = new File(path);
         File[] listFiles = f.listFiles();
