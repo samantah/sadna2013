@@ -25,6 +25,7 @@ public class Main {
         //c.initiateForum("newForum", "chen", "chen1234");
         User chen = new User(c);
         chen = chen.login("newForum", "chen", "chen1234");
+        
 //        SubForum sf = new SubForum(new Forum("newForum"), "sf");
 //        List<Moderator> lm = new ArrayList<Moderator>();
 //        Member m1 = new Member("dotan", "dotan1234", "dotan@gmail.com", "newForum", null);

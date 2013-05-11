@@ -808,7 +808,7 @@ public class DataBase implements DBInterface {
 
     }
 
-    private void deleteFolder(String path) {
+    public void deleteFolder(String path) {
         File f = new File(path);
         File[] listFiles = f.listFiles();
         if (listFiles == null) {
@@ -927,4 +927,28 @@ public class DataBase implements DBInterface {
         }
         return numberOfThreads;
     }
+
+	@Override
+	public int getNumberOfUserThreads(String forumName, Member member) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<List<String>> getUsersPostToUser(String forumName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getNumberOfForums() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<String> getCommonMembers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

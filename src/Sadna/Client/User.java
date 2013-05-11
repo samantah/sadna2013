@@ -32,6 +32,10 @@ public class User implements Serializable {
     public Member login(String forum, String userName, String password) {
         return conHand.login(forum, userName, password);
     }
+    
+    public SuperAdmin loginAsSuperAdmin(String userName, String password) {
+        return conHand.loginAsSuperAdmin(userName, password);
+    }
 
     public List<SubForum> viewSubForums(String forum) {
         return conHand.getSubForumsList(forum);
