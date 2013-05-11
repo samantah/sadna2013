@@ -92,4 +92,6 @@ public interface DBInterface {
     List<String> getCommonMembers(); // returns list of users names that registered to more than one forum.
     
     void deleteFolder(String folder);
+    
+    void initiateDataBase();
 }

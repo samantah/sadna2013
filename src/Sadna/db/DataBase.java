@@ -532,7 +532,7 @@ public class DataBase implements DBInterface {
         ObjectOutputStream obj;
         FileOutputStream outputstream;
         try {
-            
+
             String path = dataBaseFolder + "/";
             new File(path).mkdir();
             outputstream = new FileOutputStream(path + userName + ".obj");
@@ -1013,5 +1013,25 @@ public class DataBase implements DBInterface {
             }
         }
         return hashMap;
+    }
+
+    @Override
+    public void initiateDataBase() {
+        String path = this.dataBaseFolder + "/";
+        File file = new File(path);
+        File[] listFiles = file.listFiles();
+        for (int i = 0; i < listFiles.length; i++) {
+            File currFile = listFiles[i];
+            String name = currFile.getName();
+            if (name.contains("superAdmin")) {
+                continue;
+            }
+            if (currFile.isDirectory()){
+                deleteFolder(path + name);
+            } else{
+                file.delete();
+            }
+        }
+
     }
 }
