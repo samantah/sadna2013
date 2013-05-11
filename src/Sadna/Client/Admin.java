@@ -110,22 +110,3 @@ public class Admin extends Moderator {
     
    
 }
-
-/*
- 
-	public Hashtable<String,Vector<String>> getUsersPostToUser(String forumName, String userName, String password) {
-		Hashtable<String,Vector<String>> map = null;
-		msgToSend = "GETUSRSPOSTUSER\n" + "forumName:\n" + forumName + "\n"+ "userName:\n" 
-		+ userName + "\n" + "password:\n" + password + "\n";
-		msgToSend += delimiter;
-		stringToServer.println(msgToSend);
-		try {
-			map = (Hashtable<String,Vector<String>>)objectFromServer.readObject();
-		} catch (IOException e) {
-			System.out.println("ConnectionHandler(getUsersPostToUser) " + e);
-		} catch (ClassNotFoundException e) {
-			System.out.println("ConnectionHandler(getUsersPostToUser) error in objectFromServer " + e);
-		}
-		return map;
-	}
-*/
