@@ -76,7 +76,7 @@ public interface ClientCommunicationHandlerInterface {
     
     public int getNumOfUserThreads(String forumName, String generalUserName, String userName, String password);
     
-    public Hashtable<String,Vector<String>> getUsersPostToUser(String forumName, String userName, String password);
+    public List<List<String>> getUsersPostToUser(String forumName, String userName, String password);
         
     public int getForumCounter(String userName, String password);
     

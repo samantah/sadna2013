@@ -98,8 +98,8 @@ public class Admin extends Moderator {
     /*
      * MAP(username:String, users that post:Vector<String>)
      */
-    public Hashtable<String,Vector<String>> getUsersPostToUser(String forumName, String userName, String password) {
-		Hashtable<String,Vector<String>> map = null;
+    public List<List<String>> getUsersPostToUser(String forumName, String userName, String password) {
+    	List<List<String>> map = null;
         try {
         	map = conHand.getUsersPostToUser(forumName, userName, password);
         } catch (Exception e) {

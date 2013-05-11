@@ -12,6 +12,8 @@ import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
+
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
 
@@ -82,8 +84,11 @@ public interface ServerInterface {
     public List<ForumNotification> getNotifications(String forumName, String userName);
 
 	int getNumberOfThreadsInForum(String forumName);
+
+	int getNumberOfUserThreads(String forumName, Member member);
+
+	List<List<String>> getUsersPostToUser(String forumName);
 	
-	//int getNumberOfUserThreads(String forumName, String userName);
     
 
 }
