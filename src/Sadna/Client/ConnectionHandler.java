@@ -639,10 +639,22 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 		return map;
 	}
 
-
-
-
-
-
-
+	@Override
+	public List<Member> getAllForumMembers(String forum, String userName,
+			String password) {
+		List<Member> members = null;
+		msgToSend = "GETALLMEM\n" + "\n"+ "forum:\n" 
+		+ forum +"\n"+ "userName:\n" + userName + "\n" + "password:\n" + password + "\n";
+		msgToSend += delimiter;
+		stringToServer.println(msgToSend);
+		try {
+			members = (List<Member>) objectFromServer.readObject();
+		} catch (IOException e) {
+			System.out.println("ConnectionHandler(getNumMembersInEachForum) " + e);
+		} catch (ClassNotFoundException e) {
+			System.out.println("ConnectionHandler(getNumMembersInEachForum) " +
+					"error in objectFromServer " + e);
+		}
+		return members;
+	}
 } 

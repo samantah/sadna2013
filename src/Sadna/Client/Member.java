@@ -66,8 +66,8 @@ public class Member extends User {
         return forum;
     }
     
-    public User logout(String forum, String userName) {
-        return this.conHand.logout(forum, userName);
+    public User logout(String forum) {
+        return this.conHand.logout(forum, this.userName);
     }
     //Server Use Only 
     public void addNotification(ForumNotification forumNotification) {
