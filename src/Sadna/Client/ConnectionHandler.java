@@ -78,6 +78,24 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 		}
 		return loggedInMember;
 	}
+	
+	@Override
+	public Member loginAsSuperAdmin(String userName, String password) {
+		SuperAdmin loggedInSuperAdmin = null;
+		msgToSend = "LOGINSUPER\n" + "forumName:\n" + userName + "\n" + "password:\n" + password + "\n";
+		msgToSend += delimiter;
+		stringToServer.println(msgToSend);
+		try {
+			receivedMsg = stringFromServer.readLine();
+		} catch (IOException e) {
+		}
+		if (receivedMsg.contains("200ok")) {
+			loggedInSuperAdmin = new SuperAdmin(userName, password, null, this);
+		}
+		if (receivedMsg.contains("202ok")) {
+		}
+		return loggedInSuperAdmin;
+	}
 
 	@Override
 	public Member register(String forumName, String userName, String password,
