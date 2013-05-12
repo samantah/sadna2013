@@ -199,7 +199,7 @@ public class ServerConnectionWithClientHandler implements ConnectionHandlerServe
 
 	@Override
 	public void sendUserThreadsCounter(int numberOfUserThreads) {
-		stringToClient.println("The number of Threads is: " + numberOfUserThreads);
+		stringToClient.println(String.valueOf(numberOfUserThreads));
 
 	}
 
