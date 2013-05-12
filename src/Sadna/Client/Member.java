@@ -11,6 +11,7 @@ import Sadna.db.ThreadMessage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Vector;
 
 public class Member extends User {
@@ -97,4 +98,27 @@ public class Member extends User {
     public String toString(){
     	return this.userName;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Member other = (Member) obj;
+        if (!Objects.equals(this.userName, other.userName)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 }

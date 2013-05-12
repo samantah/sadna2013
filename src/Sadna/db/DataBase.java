@@ -972,8 +972,9 @@ public class DataBase implements DBInterface {
                     int intValue = numberOfOccurance.intValue();
                     intValue++;
                     hashMap.put(member, new Integer(intValue));
+                } else {
+                    hashMap.put(member, 1);
                 }
-                hashMap.put(member, 1);
             }
         }
         ArrayList<String> listOfCommonMembers = new ArrayList<>();
@@ -1010,8 +1011,10 @@ public class DataBase implements DBInterface {
                         arrayList.add(postPublisher);
                     }
                 }
+                hashMap.put(threadPublisher, arrayList);
             }
         }
+        System.out.println(hashMap);
         return hashMap;
     }
 
@@ -1026,10 +1029,10 @@ public class DataBase implements DBInterface {
             if (name.contains("superAdmin")) {
                 continue;
             }
-            if (currFile.isDirectory()){
+            if (currFile.isDirectory()) {
                 deleteFolder(path + name);
-            } else{
-                file.delete();
+            } else {
+                currFile.delete();
             }
         }
 

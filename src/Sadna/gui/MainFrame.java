@@ -263,6 +263,10 @@ public class MainFrame extends javax.swing.JFrame {
         }
         Forum forum = CurrentStatus.currUser.getForum(selectedForum.getForumName());
         CurrentStatus.currForum = forum;
+        if (CurrentStatus.currUser instanceof SuperAdmin){
+            SuperAdmin sa = (SuperAdmin) CurrentStatus.currUser;
+            CurrentStatus.currUser = new User(sa.getConHand());
+        }
         ForumPage forumPage = new ForumPage();
         this.setVisible(false);
         this.dispose();

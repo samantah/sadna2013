@@ -222,7 +222,7 @@
     <Component class="javax.swing.JButton" name="jButtonEditPost">
       <Properties>
         <Property name="text" type="java.lang.String" value="edit post"/>
-        <Property name="toolTipText" type="java.lang.String" value="delete the selected post&#xa;authorized only by the publisher, &#xa;moderator or the admin"/>
+        <Property name="toolTipText" type="java.lang.String" value="edit the selected post&#xa;authorized only by the publisher, &#xa;moderator or the admin"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonEditPostActionPerformed"/>

@@ -8,6 +8,7 @@ import Sadna.Client.Admin;
 import Sadna.Client.Member;
 import Sadna.db.Forum;
 import Sadna.db.SubForum;
+import java.util.HashMap;
 import java.util.List;
 import javax.swing.DefaultListModel;
 
@@ -54,7 +55,7 @@ public class AdminPage extends javax.swing.JFrame {
         jButtonNumberOfThreadsForMember = new javax.swing.JButton();
         jLabelNumberOfThreadsForMember = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jListMembersPostsInThreads = new javax.swing.JList();
+        jListFollowersToMember = new javax.swing.JList();
         jButtonListOfMembersForThreads = new javax.swing.JButton();
         jLabelCurrentMessage = new javax.swing.JLabel();
         jButtonBack = new javax.swing.JButton();
@@ -127,12 +128,7 @@ public class AdminPage extends javax.swing.JFrame {
 
         jLabelNumberOfThreadsForMember.setFont(new java.awt.Font("Tahoma", 2, 12)); // NOI18N
 
-        jListMembersPostsInThreads.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "list of members posts in selected member threads" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane3.setViewportView(jListMembersPostsInThreads);
+        jScrollPane3.setViewportView(jListFollowersToMember);
 
         jButtonListOfMembersForThreads.setText("Get list of followers for member");
         jButtonListOfMembersForThreads.setToolTipText("shows the number of threads written by the selected member");
@@ -246,12 +242,15 @@ public class AdminPage extends javax.swing.JFrame {
     private void jButtonNumberOfThreadsForMemberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNumberOfThreadsForMemberActionPerformed
         Admin admin = (Admin) CurrentStatus.currUser;
         Member selectedMember = (Member) this.jListMembers.getSelectedValue();
+        if (selectedMember == null) {
+            return;
+        }
         String forumName = CurrentStatus.currForum.getForumName();
         String userName = selectedMember.getUserName();
         String adminUserName = admin.getUserName();
         String adminPassword = admin.getPassword();
         int numOfUserThreads = admin.getNumOfUserThreads(forumName, userName);
-        this.jLabelNumberOfThreads.setText(String.valueOf(numOfUserThreads));
+        this.jLabelNumberOfThreadsForMember.setText(String.valueOf(numOfUserThreads));
     }//GEN-LAST:event_jButtonNumberOfThreadsForMemberActionPerformed
 
     private void jButtonGetNumberOfThreadsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGetNumberOfThreadsActionPerformed
@@ -264,8 +263,17 @@ public class AdminPage extends javax.swing.JFrame {
     private void jButtonListOfMembersForThreadsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonListOfMembersForThreadsActionPerformed
         Admin admin = (Admin) CurrentStatus.currUser;
         Member selectedMember = (Member) this.jListMembers.getSelectedValue();
+        if (selectedMember == null) {
+            return;
+        }
         String userName = selectedMember.getUserName();
-        //to do
+        HashMap<String, List<String>> usersPostToUser = admin.getUsersPostToUser(CurrentStatus.currForum.getForumName());
+        List<String> listOfFollowers = usersPostToUser.get(userName);
+        DefaultListModel listModel = new DefaultListModel();
+        for (String string : listOfFollowers) {
+            listModel.addElement(string);
+        }
+        this.jListFollowersToMember.setModel(listModel);
     }//GEN-LAST:event_jButtonListOfMembersForThreadsActionPerformed
 
     private void jButtonAddModeratorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddModeratorActionPerformed
@@ -293,7 +301,7 @@ public class AdminPage extends javax.swing.JFrame {
     private void jButtonRemoveModeratorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoveModeratorActionPerformed
         SubForum selectedSubForum = (SubForum) this.jListSubForums.getSelectedValue();
         Member selectedMember = (Member) this.jListMembers.getSelectedValue();
-        if (selectedSubForum==null || selectedMember==null){
+        if (selectedSubForum == null || selectedMember == null) {
             return;
         }
         Admin admin = (Admin) CurrentStatus.currUser;
@@ -379,8 +387,8 @@ public class AdminPage extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelNumberOfThreads;
     private javax.swing.JLabel jLabelNumberOfThreadsForMember;
     private javax.swing.JLabel jLabelSubForumList;
+    private javax.swing.JList jListFollowersToMember;
     private javax.swing.JList jListMembers;
-    private javax.swing.JList jListMembersPostsInThreads;
     private javax.swing.JList jListSubForums;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

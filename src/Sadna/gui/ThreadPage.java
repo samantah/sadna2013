@@ -144,7 +144,7 @@ public class ThreadPage extends javax.swing.JFrame {
         jLabelErrorCannotDelete.setText("Error - cannot delete");
 
         jButtonEditPost.setText("edit post");
-        jButtonEditPost.setToolTipText("delete the selected post\nauthorized only by the publisher, \nmoderator or the admin");
+        jButtonEditPost.setToolTipText("edit the selected post\nauthorized only by the publisher, \nmoderator or the admin");
         jButtonEditPost.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonEditPostActionPerformed(evt);
