@@ -1,4 +1,4 @@
-package Driver;
+package junitTests.Driver;
 
 import java.util.List;
 
@@ -15,9 +15,9 @@ public interface ClientBridge {
     
     User logout(String forumName, String userName);
 
-    boolean postComment(Post post);
+    boolean postComment(Post post, String password);
 
-    boolean publishThread(ThreadMessage newThread);
+    boolean publishThread(ThreadMessage newThread,  String password);
 
     Member register(String forumName, String userName, String password, String email);
 
@@ -33,7 +33,7 @@ public interface ClientBridge {
     
     ThreadMessage getThreadMessage(String forumName ,String subForumName, int messageID);
     
-    boolean addSubForum(SubForum subForum);
+    boolean addSubForum(SubForum subForum, String userName, String password);
     
     boolean initiateForum(String forumName, String adminName, String adminPassword, String superAdminName, String superAdminPasswaord);
 

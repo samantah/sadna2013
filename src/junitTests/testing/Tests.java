@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package testing;
+package junitTests.testing;
 
 import Sadna.Client.Member;
 import Sadna.Client.Moderator;
@@ -14,8 +14,8 @@ import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 import java.util.ArrayList;
 import java.util.List;
-import Driver.ClientBridge;
-import Driver.ClientDriver;
+import junitTests.Driver.ClientBridge;
+import junitTests.Driver.ClientDriver;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
