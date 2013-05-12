@@ -1,4 +1,4 @@
-package Driver;
+package junitTests.Driver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +25,8 @@ public class ClientRealBridgeImpl implements ClientBridge {
         _clientHandler = new ConnectionHandler(_host, _port);
     }
 
-    public boolean addSubForum(SubForum subForum) {
-        return _clientHandler.addSubForum(subForum, new ArrayList<Moderator>());
+    public boolean addSubForum(SubForum subForum, String user, String pass) {
+        return _clientHandler.addSubForum(subForum, new ArrayList<Moderator>(), user, pass);
     }
 
     public Forum getForum(String forumName) {
@@ -55,7 +55,7 @@ public class ClientRealBridgeImpl implements ClientBridge {
         return _clientHandler.getThreadsList(forumName, subForumName);
     }
 
-    public boolean initiateForum(String forumName, String adminName, String adminPassword, String superAdminName, String superAdminPasswaord){
+    public boolean initiateForum(String forumName, String adminName, String adminPassword, String superAdminName, String superAdminPasswaord) {
         return _clientHandler.initiateForum(forumName, adminName, adminPassword, "SDF", "Sdf");
     }
 
@@ -67,12 +67,12 @@ public class ClientRealBridgeImpl implements ClientBridge {
         return _clientHandler.logout(forumName, userName);
     }
 
-    public boolean postComment(Post post) {
-        return _clientHandler.postComment(post);
+    public boolean postComment(Post post, String password) {
+        return _clientHandler.postComment(post, password);
     }
 
-    public boolean publishThread(ThreadMessage newThread) {
-        return _clientHandler.publishThread(newThread);
+    public boolean publishThread(ThreadMessage newThread, String password) {
+        return _clientHandler.publishThread(newThread, password);
     }
 
     public Member register(String forumName, String userName, String password,
@@ -89,5 +89,4 @@ public class ClientRealBridgeImpl implements ClientBridge {
     public boolean finishCommunication() {
         return _clientHandler.finishCommunication();
     }
-
 }

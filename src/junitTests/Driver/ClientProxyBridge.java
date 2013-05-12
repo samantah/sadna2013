@@ -1,4 +1,4 @@
-package Driver;
+package junitTests.Driver;
 
 import java.util.List;
 
@@ -23,9 +23,9 @@ public class ClientProxyBridge implements ClientBridge {
 
 ///////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////
-    public boolean addSubForum(SubForum subForum) {
+    public boolean addSubForum(SubForum subForum, String user, String pass) {
         if (this.real != null) {
-            return this.real.addSubForum(subForum);
+            return this.real.addSubForum(subForum, user, pass);
         }
         return false;
     }
@@ -77,8 +77,8 @@ public class ClientProxyBridge implements ClientBridge {
     }
 
     public boolean initiateForum(String forumName, String adminName,
-			String adminPassword, String superAdminName,
-			String superAdminPasswaord) {
+            String adminPassword, String superAdminName,
+            String superAdminPasswaord) {
         if (this.real != null) {
             return this.real.initiateForum(forumName, adminName,
                     adminPassword, superAdminName, superAdminPasswaord);
@@ -100,16 +100,16 @@ public class ClientProxyBridge implements ClientBridge {
         return null;
     }
 
-    public boolean postComment(Post post) {
+    public boolean postComment(Post post, String password) {
         if (this.real != null) {
-            return this.real.postComment(post);
+            return this.real.postComment(post, password);
         }
         return false;
     }
 
-    public boolean publishThread(ThreadMessage newThread) {
+    public boolean publishThread(ThreadMessage newThread, String password) {
         if (this.real != null) {
-            return this.real.publishThread(newThread);
+            return this.real.publishThread(newThread, password);
         }
         return false;
     }
@@ -138,5 +138,4 @@ public class ClientProxyBridge implements ClientBridge {
         }
         return false;
     }
-
 }
