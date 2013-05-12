@@ -68,7 +68,7 @@ public class connectionHandlerTest {
 	private static void initiateTestPlatform() {
 		DataBase db = new DataBase();
 		db.initiateDataBase();
-		ch = new ConnectionHandler("192.168.1.105", 3333);
+		ch = new ConnectionHandler("172.16.106.179", 3333);
 		User u = new User(ch);
 		SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
 //		if(sa == null) System.out.println("nullllllllll");
