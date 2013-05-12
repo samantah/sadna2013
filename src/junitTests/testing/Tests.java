@@ -4,16 +4,19 @@
  */
 package junitTests.testing;
 
+import Sadna.Client.ConnectionHandler;
 import Sadna.Client.Member;
 import Sadna.Client.Moderator;
+import Sadna.Client.SuperAdmin;
 import Sadna.Client.User;
 import Sadna.db.DataBase;
 import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
+import static UnitTests.connectionHandlerTest.SUPER_ADMIN_NAME;
+import static UnitTests.connectionHandlerTest.SUPER_ADMIN_PASSWORD;
 import java.util.ArrayList;
-import java.util.List;
 import junitTests.Driver.ClientBridge;
 import junitTests.Driver.ClientDriver;
 import org.junit.After;
@@ -37,11 +40,12 @@ public class Tests {
     public static final String USER_PASSWORD = "abcdefg34";
     public static final String ADMIN_NAME = "admin1";
     public static final String ADMIN_PASSWORD = "password1234";
+    private static ConnectionHandler ch;
 
     @BeforeClass
     public static void setUpClass() {
         initiateTestPlatform();
-        bridge = ClientDriver.getBridge();
+//        bridge = ClientDriver.getBridge();
     }
 
     @AfterClass
@@ -50,27 +54,28 @@ public class Tests {
 
     @Before
     public void setUp() {
+//        bridge = ClientDriver.getBridge();
         initiateTestPlatform();
-        bridge = ClientDriver.getBridge();
     }
 
     @After
     public void tearDown() {
     }
 
-//    @Test
-//    public void test_RegisterInvalidPass() {
-//        Member _member1 = bridge.register(FORUM_NAME, USER_NAME, "short", USER_EMAIL);
-//        assertNull(_member1);
-//        Member _member2 = bridge.register(FORUM_NAME, USER_NAME, "goodButNoNum", USER_EMAIL);
-//        assertNull(_member2);
-//        Member _member3 = bridge.register(FORUM_NAME, USER_NAME, "longVeryVeryVeryLong", USER_EMAIL);
-//        assertNull(_member3);
-//        Member _member4 = bridge.register(FORUM_NAME, USER_NAME, "3456", USER_EMAIL);
-//        assertNull(_member4);
-//        Member _member5 = bridge.register(FORUM_NAME, USER_NAME, "3456565547456", USER_EMAIL);
-//        assertNull(_member5);
-//    }
+    @Test
+    public void test_RegisterInvalidPass() {
+        Member _member1 = bridge.register(FORUM_NAME, USER_NAME, "short", USER_EMAIL);
+        assertNull(_member1);
+        Member _member2 = bridge.register(FORUM_NAME, USER_NAME, "goodButNoNum", USER_EMAIL);
+        assertNull(_member2);
+        Member _member3 = bridge.register(FORUM_NAME, USER_NAME, "longVeryVeryVeryLong", USER_EMAIL);
+        assertNull(_member3);
+        Member _member4 = bridge.register(FORUM_NAME, USER_NAME, "3456", USER_EMAIL);
+        assertNull(_member4);
+        Member _member5 = bridge.register(FORUM_NAME, USER_NAME, "3456565547456", USER_EMAIL);
+        assertNull(_member5);
+    }
+
     @Test
     public void test_RegisterValidPass() {
         Member _member1 = bridge.register(FORUM_NAME, USER_NAME, "1234567k", USER_EMAIL);
@@ -151,43 +156,45 @@ public class Tests {
 
     private static void initiateTestPlatform() {
         DataBase db = new DataBase();
-       // db.deleteAll("DataBase/");
-        Forum forum = new Forum("forum1");
-        SubForum subForum = new SubForum(forum, "subForum1");
-        SubForum subForum2 = new SubForum(forum, "subForum2");
-        ThreadMessage threadMessage = new ThreadMessage(subForum, "NA", "hi11", "publisher");
-        ThreadMessage threadMessage2 = new ThreadMessage(subForum, "NA", "hi2aaa2", "publisher");
-        Post post = new Post(threadMessage, "NA", "hi11post1", "publisher");
-        Post post2 = new Post(threadMessage, "NA", "hi11post2", "publisher");
-        Post post3 = new Post(threadMessage2, "NA", "hii222", "publisher");
-        db.addForum(forum);
-        ArrayList<Moderator> arrayList = new ArrayList<Moderator>();
-        arrayList.add(new Moderator("userNameMod", null, null, null, null));
-        arrayList.add(new Moderator("userNameMod2", null, null, null, null));
+        db.initiateDataBase();
+        ch = new ConnectionHandler("172.16.106.179", 3333);
+        User u = new User(ch);
+        SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
+//		if(sa == null) System.out.println("nullllllllll");
+//		else System.out.println(sa.getUserName());
+        sa.initiateForum(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
+        Forum forum = sa.getForum(FORUM_NAME);
 
-        db.addSubForum(subForum, arrayList);
-        db.addSubForum(subForum2, new ArrayList<Moderator>());
-        db.addThread(threadMessage);
-        db.addThread(threadMessage2);
-        db.addPost(post);
-        db.addPost(post2);
-        db.addPost(post3);
-        ThreadMessage thread = db.getThread("forum1", "subForum1", 1);
-        System.out.println("thread: " + thread.getContent());
-        Post post1 = db.getPost("forum1", "subForum1", 0, 0);
-        System.out.println("post: " + post1.getContent());
-        List<SubForum> subForumsList = db.getSubForumsList("forum1");
-        for (SubForum sf : subForumsList) {
-            System.out.println(sf.getSubForumName());
-        }
-        List<ThreadMessage> threadsList = db.getThreadsList("forum1", "subForum1");
-        for (ThreadMessage threadMessage1 : threadsList) {
-            System.out.println(threadMessage1.getContent());
-        }
-        System.out.println(db.getNumberOfSubforums("forum1"));
-        System.out.println(db.getNumberOfThreadsInSubForum("forum1", "subForum1"));
-        Member member = new Member("user1", "pass1234", "mail", "forum1", null);
-        db.addMember(member);
-        System.out.println(db.getMember("forum1", "user1").getUserName());
+        Member m1 = u.register(FORUM_NAME, "laaaaa", "ksjdf66asd", "sdf@adf.com");
+        Member m2 = u.register(FORUM_NAME, "baaaaa", "ksjdf66asd", "sdf@adf.com");
+        Member m3 = u.register(FORUM_NAME, "eaaaaa", "ksjdf66asd", "sdf@adf.com");
+        Member m4 = u.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
+
+        SubForum subForum = new SubForum(forum, "zubizubi1");
+        SubForum subForum2 = new SubForum(forum, "zubizubi2");
+        Moderator mod1 = new Moderator(m1);
+        Moderator mod2 = new Moderator(m2);
+        Moderator mod3 = new Moderator(m3);
+        ArrayList<Moderator> al = new ArrayList<Moderator>();
+        al.add(mod1);
+        sa.addSubForum(subForum2, al);
+        ArrayList<Moderator> al2 = new ArrayList<Moderator>();
+        al2.add(mod2);
+        al2.add(mod3);
+        sa.addSubForum(subForum, al2);
+        ThreadMessage threadMessage = new ThreadMessage(subForum, "zzzz", "hi11", "laaaaa");
+        ThreadMessage threadMessage2 = new ThreadMessage(subForum, "ccccc", "hi2aaa2", "eaaaaa");
+
+        m1.publishThread(threadMessage);
+        m2.publishThread(threadMessage2);
+
+        Post post = new Post(threadMessage, "uuuuuuu", "hi11post1", "laaaaa");
+        Post post2 = new Post(threadMessage, "iiiiiiii", "hi11post2", "eaaaaa");
+        Post post3 = new Post(threadMessage2, "wwww", "hii222", "baaaaa");
+
+        m3.postComment(post);
+        m2.postComment(post2);
+        m1.postComment(post3);
+        System.out.println("Finished initializing test");
     }
 }
