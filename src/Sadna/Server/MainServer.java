@@ -1,6 +1,6 @@
 package Sadna.Server;
 
-import Sadna.Client.ConnectionHandler;
+import Sadna.Client.ClientConnectionHandler;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;

@@ -3,7 +3,7 @@ package Driver;
 import java.util.ArrayList;
 import java.util.List;
 
-import Sadna.Client.ConnectionHandler;
+import Sadna.Client.ClientConnectionHandler;
 import Sadna.Client.Member;
 import Sadna.Client.Moderator;
 import Sadna.Client.User;
@@ -22,7 +22,7 @@ public class ClientRealBridgeImpl implements ClientBridge {
     public ClientRealBridgeImpl(String host, int port) {
         _host = host;
         _port = port;
-        _clientHandler = new ConnectionHandler(_host, _port);
+        _clientHandler = new ClientConnectionHandler(_host, _port);
     }
 
     public boolean addSubForum(SubForum subForum, String user, String pass) {
