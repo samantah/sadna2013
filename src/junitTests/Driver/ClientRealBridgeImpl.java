@@ -1,4 +1,4 @@
-package junitTests.Driver;
+package Driver;
 
 import java.util.ArrayList;
 import java.util.List;

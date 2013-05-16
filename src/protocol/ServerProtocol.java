@@ -10,7 +10,7 @@ public interface ServerProtocol<T> {
      * @param msg the message to process
      * @return the reply that should be sent to the client, or null if no reply needed
      */
-    T processMessage(T msg);
+    Object processMessage(T msg);
 
     /**
      * detetmine whether the given message is the termination message

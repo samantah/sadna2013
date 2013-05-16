@@ -1,4 +1,4 @@
-package junitTests.Driver;
+package Driver;
 
 public class ClientDriver {
 
