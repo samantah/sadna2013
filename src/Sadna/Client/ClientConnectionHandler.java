@@ -2,7 +2,6 @@ package Sadna.Client;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.io.*;
 import java.net.*;
@@ -15,11 +14,10 @@ import Sadna.db.Message;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
-import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ConnectionHandler implements ClientCommunicationHandlerInterface {
+public class ClientConnectionHandler implements ClientCommunicationHandlerInterface {
 
 	private Socket clientSocket;
 	private PrintWriter stringToServer;
@@ -36,7 +34,7 @@ public class ConnectionHandler implements ClientCommunicationHandlerInterface {
 
 
 	// removeModerator()
-	public ConnectionHandler(String host, int port) {
+	public ClientConnectionHandler(String host, int port) {
 		try {
 			clientSocket = new Socket(host, port);
 			stringToServer = new PrintWriter(clientSocket.getOutputStream(), true);

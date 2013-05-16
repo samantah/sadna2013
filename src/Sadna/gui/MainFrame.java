@@ -5,7 +5,7 @@
 package Sadna.gui;
 
 import Sadna.Client.API.ClientCommunicationHandlerInterface;
-import Sadna.Client.ConnectionHandler;
+import Sadna.Client.ClientConnectionHandler;
 import Sadna.Client.Member;
 import Sadna.Client.SuperAdmin;
 import Sadna.Client.User;
@@ -19,13 +19,13 @@ import javax.swing.DefaultListModel;
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    String host = "192.168.1.108";
+    String host = "192.168.0.104";
     int port = 3333;
 
     public MainFrame() {
         initComponents();
         this.setResizable(false);
-        ClientCommunicationHandlerInterface ch = new ConnectionHandler(host, port);
+        ClientCommunicationHandlerInterface ch = new ClientConnectionHandler(host, port);
         DefaultListModel listOfForums;
         if (CurrentStatus.currUser == null) {
             CurrentStatus.currUser = new User(ch);

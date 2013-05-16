@@ -4,7 +4,7 @@
  */
 package testing;
 
-import Sadna.Client.ConnectionHandler;
+import Sadna.Client.ClientConnectionHandler;
 import Sadna.Client.Member;
 import Sadna.Client.Moderator;
 import Sadna.Client.SuperAdmin;
@@ -47,7 +47,7 @@ public class Tests {
 	public static final String USER_EMAIL = "sadna@bgu.ac.il";
 	public static final String USER_PASSWORD = "abcdefg34";
 	
-    private static ConnectionHandler ch;
+    private static ClientConnectionHandler ch;
 
     @BeforeClass
     public static void setUpClass() {
@@ -165,7 +165,7 @@ public class Tests {
     private static void initiateTestPlatform() {
         DataBase db = new DataBase();
         db.initiateDataBase();
-        ch = new ConnectionHandler("172.16.106.179", 3333);
+        ch = new ClientConnectionHandler("172.16.106.179", 3333);
         User u = new User(ch);
         SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
 //		if(sa == null) System.out.println("nullllllllll");

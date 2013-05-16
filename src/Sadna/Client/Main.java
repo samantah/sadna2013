@@ -1,8 +1,5 @@
 package Sadna.Client;
 
-
-
-
 import Sadna.Server.ForumNotification;
 import Sadna.db.Forum;
 import Sadna.db.Post;
@@ -13,21 +10,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sun.nio.sctp.Notification;
+
 public class Main {
 
-    
-
-	public static void main(String argv[]) throws Exception {
-        String host = "192.168.1.108";
+    public static void main(String argv[]) throws Exception {
+        String host = "192.168.0.107";
         int port = 3333;
-        ConnectionHandler c = new ConnectionHandler(host, port);
-        c.initiateForum("newForum", "chen", "chen1234","superAdmin", "superAdmin1234");
+        ClientConnectionHandler c = new ClientConnectionHandler(host, port);
+        c.initiateForum("newForum", "chen", "chen1234", "superAdmin", "superAdmin1234");
 //        SuperAdmin sa = new SuperAdmin("superAdmin", "superAdmin1234", "", c);
 //        sa.initiateForum("newForum", "aviel", "aviel1234");
 //        c.initiateForum("newForum", "chen", "chen1234");
 //        User chen = new User(c);
 //        chen = chen.login("newForum", "chen", "chen1234");
-         
+
 //        SubForum sf = new SubForum(new Forum("newForum"), "sf");
 //        List<Moderator> lm = new ArrayList<Moderator>();
 //        Member m1 = new Member("dotan", "dotan1234", "dotan@gmail.com", "newForum", null);
@@ -37,7 +33,7 @@ public class Main {
 //        lm.add(e1);
 //        lm.add(e2);
 //        System.out.println(((Admin)chen).addSubForum(sf, lm));
-       
+
         //List<Forum> forumsList = c.getForumsList();
 //		SuperAdmin sa = new SuperAdmin("mega-admin", "megaadmin12", "mega@gmail.com", c);
 //		User guest = new User(c);
@@ -113,7 +109,7 @@ public class Main {
 //		/*----GET-FORUM-LIST---*/
 //		//gfltest(c);
 //		
-      //  Sadna.Client.Member u = c.register("forum1", "qwertyui", "1234qwer","dfsdf");
+        //  Sadna.Client.Member u = c.register("forum1", "qwertyui", "1234qwer","dfsdf");
 //        c.initiateForum("myForum", "snirsnir", "snir1234");
 //        Forum forum = new Forum("myForum");
 //        SubForum subForum = new SubForum(forum, "subForum1");
@@ -124,15 +120,15 @@ public class Main {
 //        thread.setId(0);
 //        boolean al_hazain = c.deleteThreadMessage(thread, "hhhhhhhhhh" , "1234qwer");
 //        System.out.println(al_hazain);
-        	
+
 //        System.out.println(c.login("forum1", "snirelka", "snir1234"));
-        
-        
+
+
 //        Forum forum = new Forum("forum1");
 //        SubForum subForum = new SubForum(forum, "subForum1");
 //        ThreadMessage newThread = new ThreadMessage(subForum, "title123", "content", "snirelka");
 //        System.out.println(c.publishThread(newThread));
-        
+
 //        c.login("forum1", "snirelkar", "snir1234");
 //        //SubForum sf = c.getSubForum("forum1", "subForum1");
 //        List<ThreadMessage> l =  c.getThreadsList("forum1", "subForum1");
@@ -144,13 +140,13 @@ public class Main {
 //        for (ForumNotification forumNotification : x) {
 //        	System.out.println(forumNotification.getText());
 //		}
-        
-        
+
+
         c.finishCommunication();
 
     }
 
-    private static void gfltest(ConnectionHandler c) {
+    private static void gfltest(ClientConnectionHandler c) {
         List<Forum> fl = c.getForumsList();
         if (fl != null) {
             for (Forum f : fl) {
@@ -161,8 +157,8 @@ public class Main {
         }
     }
 
-    private static void pttest(ConnectionHandler c) {
-        Admin m = new Admin("userName", "password", "email",null ,null);
+    private static void pttest(ClientConnectionHandler c) {
+        Admin m = new Admin("userName", "password", "email", null, null);
         Forum f = new Forum(m, "forumName");
         m.setForum(f.getForumName());
         SubForum sf = new SubForum(f, "subForumName");
@@ -176,7 +172,7 @@ public class Main {
         }
     }
 
-    private static void pctest(ConnectionHandler c) {
+    private static void pctest(ClientConnectionHandler c) {
         Admin m = new Admin("userName", "password", "email", null, null);
         Forum f = new Forum(m, "forumName");
         m.setForum(f.getForumName());
@@ -192,7 +188,7 @@ public class Main {
         }
     }
 
-    private static void gtmtest(ConnectionHandler c) {
+    private static void gtmtest(ClientConnectionHandler c) {
         ThreadMessage tm = c.getThreadMessage("forumName", "subForumName", 50);
         if (tm != null) {
             System.out.println(tm.getId());
@@ -206,7 +202,7 @@ public class Main {
     /**
      * @param c
      */
-    private static void litest(ConnectionHandler c) {
+    private static void litest(ClientConnectionHandler c) {
         Sadna.Client.Member m = c.login("forum1", "userName", "password");
         if (m != null) {
             System.out.println(m.userName);
@@ -220,7 +216,7 @@ public class Main {
     /**
      * @param c
      */
-    private static void regitest(ConnectionHandler c) {
+    private static void regitest(ClientConnectionHandler c) {
         Sadna.Client.Member m = c.register("forum1", "snirElkaras1", "snirfh1234", "email");
         if (m != null) {
             System.out.println(m.userName);
@@ -235,7 +231,7 @@ public class Main {
     /**
      * @param c
      */
-    private static void lotest(ConnectionHandler c) {
+    private static void lotest(ClientConnectionHandler c) {
         Sadna.Client.User u = c.logout("forumName", "userName");
         if (u != null) {
             System.out.println("yesh");
@@ -247,7 +243,7 @@ public class Main {
     /**
      * @param c
      */
-    private static void gsftest(ConnectionHandler c) {
+    private static void gsftest(ClientConnectionHandler c) {
         SubForum f = c.getSubForum("forum", "subForumName");
         if (f != null) {
             System.out.println(f.getForum().getForumName());
@@ -257,7 +253,7 @@ public class Main {
         }
     }
 
-    private static void gsfltest(ConnectionHandler c) {
+    private static void gsfltest(ClientConnectionHandler c) {
         List<SubForum> f = c.getSubForumsList("forumName");
         if (f != null) {
             for (SubForum sf : f) {
@@ -268,7 +264,7 @@ public class Main {
         }
     }
 
-    private static void gtltest(ConnectionHandler c) {
+    private static void gtltest(ClientConnectionHandler c) {
         List<ThreadMessage> tl = c.getThreadsList("forumName", "subForumName");
         if (tl != null) {
             for (ThreadMessage t : tl) {

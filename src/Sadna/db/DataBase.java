@@ -6,7 +6,7 @@ package Sadna.db;
 
 import Sadna.Client.API.ClientCommunicationHandlerInterface;
 import Sadna.Client.Admin;
-import Sadna.Client.ConnectionHandler;
+import Sadna.Client.ClientConnectionHandler;
 import Sadna.Client.Member;
 import Sadna.Client.Moderator;
 import Sadna.Client.SuperAdmin;
