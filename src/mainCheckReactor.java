@@ -32,8 +32,8 @@ public class mainCheckReactor {
         System.out.println("sending:" + msgToSend);
         pw.print(msgToSend);
         pw.flush();
-        System.out.println("sent");
         ObjectInputStream objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
+        System.out.println("sent");
         System.out.println("wait for answer");
         String readObject = (String)objectFromServer.readObject();
         System.out.println(readObject);

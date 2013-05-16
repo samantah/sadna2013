@@ -17,12 +17,12 @@ public class Main {
         String host = "192.168.0.107";
         int port = 3333;
         ClientConnectionHandler c = new ClientConnectionHandler(host, port);
-        c.initiateForum("newForum", "chen", "chen1234", "superAdmin", "superAdmin1234");
-//        SuperAdmin sa = new SuperAdmin("superAdmin", "superAdmin1234", "", c);
-//        sa.initiateForum("newForum", "aviel", "aviel1234");
-//        c.initiateForum("newForum", "chen", "chen1234");
-//        User chen = new User(c);
-//        chen = chen.login("newForum", "chen", "chen1234");
+        //        c.initiateForum("newForum", "chen", "chen1234", "superAdmin", "superAdmin1234");
+        //        SuperAdmin sa = new SuperAdmin("superAdmin", "superAdmin1234", "", c);
+        //        sa.initiateForum("newForum", "aviel", "aviel1234");
+        //        c.initiateForum("newForum", "chen", "chen1234");
+        //        User chen = new User(c);
+        //        chen = chen.login("newForum", "chen", "chen1234");
 
 //        SubForum sf = new SubForum(new Forum("newForum"), "sf");
 //        List<Moderator> lm = new ArrayList<Moderator>();
@@ -80,7 +80,7 @@ public class Main {
 //
 //		
 //		/*----LOGIN-----*/
-//		//litest(c);
+        litest(c);
 //
 //		/*-----REGISTER----*/
 //		//regitest(c);
@@ -203,7 +203,7 @@ public class Main {
      * @param c
      */
     private static void litest(ClientConnectionHandler c) {
-        Sadna.Client.Member m = c.login("forum1", "userName", "password");
+        Sadna.Client.Member m = c.login("forum1", "m1", "password1");
         if (m != null) {
             System.out.println(m.userName);
             System.out.println(m.password);
