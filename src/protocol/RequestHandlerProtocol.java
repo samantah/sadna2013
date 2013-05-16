@@ -96,6 +96,8 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		ThreadMessage tm;
 		Post p;
 		switch (parsedReq[0]) {
+		case "HELLO":
+			return "HELLO";
 		case "LOGIN":
 			return handleLogin(parsedReq[2], parsedReq[4], parsedReq[6]);
 		case "REGISTER":

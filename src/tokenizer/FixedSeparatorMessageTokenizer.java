@@ -93,7 +93,6 @@ public class FixedSeparatorMessageTokenizer implements MessageTokenizer<StringMe
 			ObjectOutputStream o = new ObjectOutputStream(b);
 			o.writeObject(msg);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if(b!=null){
