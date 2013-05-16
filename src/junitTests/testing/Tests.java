@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package junitTests.testing;
+package testing;
 
 import Sadna.Client.ConnectionHandler;
 import Sadna.Client.Member;
@@ -17,8 +17,8 @@ import Sadna.db.ThreadMessage;
 import static UnitTests.connectionHandlerTest.SUPER_ADMIN_NAME;
 import static UnitTests.connectionHandlerTest.SUPER_ADMIN_PASSWORD;
 import java.util.ArrayList;
-import junitTests.Driver.ClientBridge;
-import junitTests.Driver.ClientDriver;
+import Driver.ClientBridge;
+import Driver.ClientDriver;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -34,18 +34,25 @@ public class Tests {
 
     private static ClientBridge bridge;
     //ALL fields need to be valid
-    public static final String FORUM_NAME = "forum1"; //valid forum
-    public static final String USER_NAME = "sadnaUser";  //valid username
-    public static final String USER_EMAIL = "sadna@bgu.ac.il";
-    public static final String USER_PASSWORD = "abcdefg34";
-    public static final String ADMIN_NAME = "admin1";
-    public static final String ADMIN_PASSWORD = "password1234";
+    public static final String SUPER_ADMIN_NAME = "superAdmin";
+	public static final String SUPER_ADMIN_PASSWORD = "superAdmin1234";
+	
+	public static final String FORUM_NAME = "forum233"; //valid forum
+	public static final String ADMIN_NAME = "adminsami";
+	public static final String ADMIN_PASSWORD = "adminpass12";
+	
+	public static final String SUB_FORUM_NAME = "zubizubi1"; //valid sub forum
+	
+	public static final String USER_NAME = "sadnaUser";  //valid username
+	public static final String USER_EMAIL = "sadna@bgu.ac.il";
+	public static final String USER_PASSWORD = "abcdefg34";
+	
     private static ConnectionHandler ch;
 
     @BeforeClass
     public static void setUpClass() {
         initiateTestPlatform();
-//        bridge = ClientDriver.getBridge();
+        bridge = ClientDriver.getBridge();
     }
 
     @AfterClass
@@ -54,7 +61,7 @@ public class Tests {
 
     @Before
     public void setUp() {
-//        bridge = ClientDriver.getBridge();
+        bridge = ClientDriver.getBridge();
         initiateTestPlatform();
     }
 
@@ -78,7 +85,7 @@ public class Tests {
 
     @Test
     public void test_RegisterValidPass() {
-        Member _member1 = bridge.register(FORUM_NAME, USER_NAME, "1234567k", USER_EMAIL);
+        Member _member1 = bridge.register(FORUM_NAME, "aclient333", "1234567k", USER_EMAIL);
         System.out.println(_member1);
         assertNotNull(_member1);
         bridge.finishCommunication();
@@ -136,9 +143,9 @@ public class Tests {
      */
     @Test
     public void test_sameUserName() {
-        Member _member1 = bridge.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
+        Member _member1 = bridge.register(FORUM_NAME, "oneclient", USER_PASSWORD, USER_EMAIL);
         assertNotNull(_member1);
-        Member _member2 = bridge.register(FORUM_NAME, USER_NAME, USER_PASSWORD + 'a', USER_EMAIL + 'a');
+        Member _member2 = bridge.register(FORUM_NAME, "oneclient", USER_PASSWORD + "a", USER_EMAIL + 'a');
         assertNull(_member2);
         bridge.finishCommunication();
 
@@ -149,7 +156,8 @@ public class Tests {
      */
     @Test
     public void test_logOut() {
-        User _user = bridge.logout(FORUM_NAME, USER_NAME);
+    	Member mem = bridge.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+        User _user = mem.logout(FORUM_NAME);
         assertFalse(_user instanceof Member);
         bridge.finishCommunication();
     }

@@ -13,6 +13,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
+import Sadna.Server.ServerToDataBaseHandler;
+import Sadna.db.DataBase;
+
 import protocol.*;
 import tokenizer.*;
 import tokenizer.http.HttpMessage;
@@ -200,9 +203,11 @@ public class Reactor<T> implements Runnable {
             int port = 3333;
             int poolSize = 10;
 
-            Reactor<HttpMessage> reactor = startHttpServer(port, poolSize);
+//            Reactor<HttpMessage> reactor = startHttpServer(port, poolSize);
 //            Reactor<StringMessage> reactor = startEchoServer(port, poolSize);
+            Reactor<StringMessage> reactor = startRequestHandlerServer(port, poolSize);
 
+            
             Thread thread = new Thread(reactor);
             thread.start();
             logger.info("Reactor is ready on port " + reactor.getPort());
@@ -212,10 +217,11 @@ public class Reactor<T> implements Runnable {
         }
     }
 
-    public static Reactor<StringMessage> startEchoServer(int port, int poolSize) {
+    
+    public static Reactor<StringMessage> startRequestHandlerServer(int port, int poolSize) {
         ServerProtocolFactory<StringMessage> protocolMaker = new ServerProtocolFactory<StringMessage>() {
             public AsyncServerProtocol<StringMessage> create() {
-                return new EchoProtocol();
+                return new RequestHandlerProtocol(new ServerToDataBaseHandler(new DataBase()));
             }
         };
 
@@ -231,20 +237,4 @@ public class Reactor<T> implements Runnable {
         return reactor;
     }
 
-    public static Reactor<HttpMessage> startHttpServer(int port, int poolSize) throws Exception {
-        ServerProtocolFactory<HttpMessage> protocolMaker = new ServerProtocolFactory<HttpMessage>() {
-            public AsyncServerProtocol<HttpMessage> create() {
-                return new HttpProtocol();
-            }
-        };
-
-        TokenizerFactory<HttpMessage> tokenizerMaker = new TokenizerFactory<HttpMessage>() {
-            public MessageTokenizer<HttpMessage> create() {
-                return new HttpMessageTokenizer();
-            }
-        };
-
-        Reactor<HttpMessage> reactor = new Reactor<HttpMessage>(port, poolSize, protocolMaker, tokenizerMaker);
-        return reactor;
-    }
 }
