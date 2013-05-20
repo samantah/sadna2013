@@ -5,9 +5,11 @@ import java.util.List;
 
 import Sadna.Client.Member;
 import Sadna.Server.API.ServerInterface;
+import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
+import Sadna.db.PolicyEnums.enumNotiFriends;
 
 public class NotificationsFactory {
 
@@ -17,19 +19,24 @@ public class NotificationsFactory {
 		_si = si;
 	}
 
-	public boolean sendNotifications(ThreadMessage tm) {
+	public boolean sendNotifications(ThreadMessage tm){
 		String subForumName = tm.getSubForum().getSubForumName();
-		String forumName = tm.getSubForum().getForum().getForumName();
+		Forum forum = tm.getSubForum().getForum();
 		int threadID = tm.getId();
+		String forumName = forum.getForumName();
 		String txt = "Thread: " + threadID + " in forum: " + forumName + " sub-forum: " + subForumName + " was modified.";
-		ArrayList<Post> users = (ArrayList<Post>) _si.getAllPosts(forumName, subForumName, threadID);
-		for (Post currPost : users) {
-			String memberName = currPost.getPublisher();
-			Member currMember = _si.getMember(forumName, memberName);
-			if (currMember != null) {
+		ArrayList<Member> members;
+		if(forum.getPolicy().getFriendsNotiPolicy()==enumNotiFriends.ALLMEMBERS){
+			members = (ArrayList<Member>) _si.getAllForumMembers(forumName, null, null);
+			for (Member currMember : members) {
 				currMember.addNotification(new ForumNotification(txt));
-				_si.addMember(currMember);
-			} 
+			}
+		}
+		if(forum.getPolicy().getFriendsNotiPolicy()==enumNotiFriends.PUBLISHERS){
+			members = (ArrayList<Member>) getForumMembersWhoPublishInThisSubForum(forumName, subForumName);
+			for (Member currMember : members) {
+				currMember.addNotification(new ForumNotification(txt));
+			}
 		}
 		return true;
 	}
@@ -37,55 +44,55 @@ public class NotificationsFactory {
 	public boolean sendNotifications(Post post) {
 		ThreadMessage tm= post.getThread();
 		String subForumName = tm.getSubForum().getSubForumName();
-		String forumName = tm.getSubForum().getForum().getForumName();
+		Forum forum = tm.getSubForum().getForum();
+		String forumName = forum.getForumName();
 		int threadID = tm.getId();
 		String txt = "Thread: " + threadID + " in forum: " + forumName + " sub-forum: " + subForumName + " was modified.";
-		ArrayList<Post> users = (ArrayList<Post>) _si.getAllPosts(forumName, subForumName, threadID);
-		// send also to the thread publiser
-		String threadPublisher = tm.getPublisher();
-		Member currMember = _si.getMember(forumName, threadPublisher);
-		String memberName;
-		if (currMember != null) {
-			currMember.addNotification(new ForumNotification(txt));
-			_si.addMember(currMember);
-		} 
-		for (Post currPost : users) {
-			memberName = currPost.getPublisher();
-			if(memberName != threadPublisher){
-				//System.out.println(memberName);
-				currMember = _si.getMember(forumName, memberName);
-				if (currMember != null) {
-					currMember.addNotification(new ForumNotification(txt));
-					_si.addMember(currMember);
-				} 
+		ArrayList<Member> members;
+		if(forum.getPolicy().getFriendsNotiPolicy()==enumNotiFriends.ALLMEMBERS){
+			members = (ArrayList<Member>) _si.getAllForumMembers(forumName, null, null);
+			for (Member currMember : members) {
+				currMember.addNotification(new ForumNotification(txt));
+			}
+		}
+		if(forum.getPolicy().getFriendsNotiPolicy()==enumNotiFriends.PUBLISHERS){
+			members = (ArrayList<Member>) getForumMembersWhoPublishInThisSubForum(forumName, subForumName);
+			for (Member currMember : members) {
+				currMember.addNotification(new ForumNotification(txt));
 			}
 		}
 		return true;
+	}
 
+	private ArrayList<Member> getForumMembersWhoPublishInThisSubForum(
+			String forumName, String subForumName) {
+		ArrayList<Member> members = new ArrayList<Member>();
+		List<ThreadMessage> threadsList = _si.getThreadsList(forumName, subForumName);
+		for (ThreadMessage threadMessage : threadsList) {
+			String memberAsString = threadMessage.getPublisher();
+			Member member = _si.getMember(forumName, memberAsString);
+			members.add(member);
+		}
+		return members;
 	}
 
 	public boolean sendNotifications(SubForum sf) {
 		String txt = "Sub-forum: " + sf.getSubForumName() + " deleted.";
-		String forumName = sf.getForum().getForumName();
+		Forum forum = sf.getForum();
+		String forumName = forum.getForumName();
 		String subForumName = sf.getSubForumName();
-		List<ThreadMessage> threads = _si.getThreadsList(forumName, subForumName);
-		for (ThreadMessage threadMessage : threads) {
-			String memberName = threadMessage.getPublisher();
-			Member currMember = _si.getMember(forumName, memberName);
-			if (currMember != null) {
+		ArrayList<Member> members;
+		if(forum.getPolicy().getFriendsNotiPolicy()==enumNotiFriends.ALLMEMBERS){
+			members = (ArrayList<Member>) _si.getAllForumMembers(forumName, null, null);
+			for (Member currMember : members) {
 				currMember.addNotification(new ForumNotification(txt));
-				_si.addMember(currMember);
 			}
-			ArrayList<Post> users = (ArrayList<Post>) _si.getAllPosts(forumName, subForumName, threadMessage.getId());
-			for (Post currPost : users) {
-				memberName = currPost.getPublisher();
-				currMember = _si.getMember(forumName, memberName);
-				if (currMember != null) {
-					currMember.addNotification(new ForumNotification(txt));
-					_si.addMember(currMember);
-				} 
+		}
+		if(forum.getPolicy().getFriendsNotiPolicy()==enumNotiFriends.PUBLISHERS){
+			members = (ArrayList<Member>) getForumMembersWhoPublishInThisSubForum(forumName, subForumName);
+			for (Member currMember : members) {
+				currMember.addNotification(new ForumNotification(txt));
 			}
-
 		}
 		return true;
 	}
