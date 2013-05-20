@@ -84,5 +84,5 @@ public class Policy implements Serializable{
 	public int getSeniority() {
 		return seniority;
 	}
-
+     
 }

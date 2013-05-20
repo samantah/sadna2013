@@ -26,6 +26,7 @@ public class ForumPage extends javax.swing.JFrame {
      */
     public ForumPage() {
         initComponents();
+        this.jLabelErrorAddSubForum.setVisible(false);
         addNewSubButton.setVisible(false);
         jLabelHeadNewSubForum.setVisible(false);
         jLabelNewSubName.setVisible(false);
@@ -92,6 +93,7 @@ public class ForumPage extends javax.swing.JFrame {
         getNotificationsButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jListOfMembers = new javax.swing.JList();
+        jLabelErrorAddSubForum = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -182,6 +184,9 @@ public class ForumPage extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jListOfMembers);
 
+        jLabelErrorAddSubForum.setForeground(new java.awt.Color(255, 0, 0));
+        jLabelErrorAddSubForum.setText("cannot add sub forum");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -196,8 +201,10 @@ public class ForumPage extends javax.swing.JFrame {
                                 .addComponent(jLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(163, 163, 163))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(addNewSubButton)
-                                .addGap(45, 45, 45))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabelErrorAddSubForum, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(addNewSubButton))
+                                .addContainerGap())))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(layout.createSequentialGroup()
@@ -251,7 +258,9 @@ public class ForumPage extends javax.swing.JFrame {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(addNewSubButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelErrorAddSubForum, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(logInButton)
                     .addComponent(registerButton)
@@ -324,17 +333,16 @@ public class ForumPage extends javax.swing.JFrame {
         Admin admin = (Admin) CurrentStatus.currUser;
         String forumName = CurrentStatus.currForum.getForumName();
         String newSubForumName = jTextFieldNewSubName.getText();
-        List<Moderator> listOfModerator = new ArrayList<>();
         SubForum subForum = new SubForum(CurrentStatus.currForum, newSubForumName);
-        admin.addSubForum(subForum, listOfModerator);
-        for (Member member : listOfMembers) {
-            admin.addModerator(forumName, newSubForumName, member.getUserName());
-            listOfModerator.add(new Moderator(member));
+        boolean addSubForum = admin.addSubForum(subForum, listOfMembers);
+        if (addSubForum) {
+            ForumPage forumPage = new ForumPage();
+            this.setVisible(false);
+            this.dispose();
+            forumPage.setVisible(true);
+        } else {
+            this.jLabelErrorAddSubForum.setVisible(true);
         }
-        ForumPage forumPage = new ForumPage();
-        this.setVisible(false);
-        this.dispose();
-        forumPage.setVisible(true);
 
     }//GEN-LAST:event_addNewSubButtonActionPerformed
 
@@ -358,6 +366,7 @@ public class ForumPage extends javax.swing.JFrame {
     private javax.swing.JButton jButtonToAdminPage;
     private javax.swing.JLabel jLabel;
     private javax.swing.JLabel jLabelEnterModerators;
+    private javax.swing.JLabel jLabelErrorAddSubForum;
     private javax.swing.JLabel jLabelHeadNewSubForum;
     private javax.swing.JLabel jLabelNewSubName;
     private javax.swing.JList jListOfMembers;
@@ -375,6 +384,9 @@ public class ForumPage extends javax.swing.JFrame {
         Admin admin = (Admin) CurrentStatus.currUser;
         listOfMembers = admin.getAllForumMembers();
         for (Member member : listOfMembers) {
+            if (member instanceof Admin) {
+                continue;
+            }
             listModel.addElement(member);
         }
         this.jListOfMembers.setModel(listModel);

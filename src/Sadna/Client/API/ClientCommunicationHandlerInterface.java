@@ -4,9 +4,7 @@
  */
 package Sadna.Client.API;
 
-
 import Sadna.Client.Member;
-import Sadna.Client.Moderator;
 import Sadna.Client.SuperAdmin;
 import Sadna.Client.User;
 import Sadna.Server.ForumNotification;
@@ -15,12 +13,12 @@ import Sadna.db.Policy;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
-
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Vector;
+
+
+
 
 /**
  *
@@ -50,7 +48,7 @@ public interface ClientCommunicationHandlerInterface extends Serializable {
     //tested
     ThreadMessage getThreadMessage(String forumName, String subForumName, int messageID);
     //tested
-    boolean addSubForum(SubForum subForum, List<Moderator> lm, String userName, String password);
+    boolean addSubForum(SubForum subForum, List<Member> lm, String userName, String password);
     //tested
     boolean initiateForum(String forumName, String adminName, String adminPassword, Policy policy, String superAdminName, String superAdminPasswaord);
     //tested

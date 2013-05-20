@@ -1,6 +1,7 @@
 package Sadna.Client;
 
 import Sadna.db.Forum;
+import Sadna.db.Policy;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
@@ -106,6 +107,8 @@ public class Main {
 //		/*----GET-FORUM-LIST---*/
 //		gfltest(c);
 //		
+                /*----GET-FORUM---*/
+                gftest(c);
         //  Sadna.Client.Member u = c.register("forum1", "qwertyui", "1234qwer","dfsdf");
 //        c.initiateForum("myForum", "snirsnir", "snir1234");
 //        Forum forum = new Forum("myForum");
@@ -265,5 +268,20 @@ public class Main {
             System.out.println("zain");
         }
 
+    }
+
+    private static void gftest(ClientConnectionHandler c) {
+        Forum forum = c.getForum("snir");
+        if (forum!=null){
+            System.out.println(forum.getForumName());
+            Policy policy = forum.getPolicy();
+            System.out.println(policy.getAssignModeratorPolicy());
+            System.out.println(policy.getCancelModeratorPolicy());
+            System.out.println(policy.getDeletePolicy());
+            System.out.println(policy.getFriendsNotiPolicy());
+            System.out.println(policy.getImidOrArgeNotiPolicy());
+        }
+        else
+            System.out.println("zain");
     }
 }
