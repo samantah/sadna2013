@@ -4,11 +4,15 @@
  */
 package Sadna.gui;
 
+import Sadna.Client.API.ClientCommunicationHandlerInterface;
+import Sadna.Client.ClientConnectionHandler;
 import Sadna.Client.SuperAdmin;
+import Sadna.Client.User;
 import static Sadna.gui.EnumPages.FORUM;
 import static Sadna.gui.EnumPages.MAIN;
 import static Sadna.gui.EnumPages.SUBFORUM;
 import static Sadna.gui.EnumPages.THREAD;
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 
 /**
@@ -17,12 +21,19 @@ import javax.swing.JFrame;
  */
 public class LogInAsAdminPage extends javax.swing.JFrame {
 
+    String host = "192.168.1.104";
+    int port = 3333;
+
     /**
      * Creates new form LogInPage
      */
     public LogInAsAdminPage() {
         initComponents();
         this.setResizable(false);
+        ClientCommunicationHandlerInterface ch = new ClientConnectionHandler(host, port);
+        if (CurrentStatus.currUser == null) {
+            CurrentStatus.currUser = new User(ch);
+        }
         jLabelInvalidData.setVisible(false);
     }
 
@@ -152,9 +163,12 @@ public class LogInAsAdminPage extends javax.swing.JFrame {
             jTextFieldUserName.setText("");
             jPasswordField1.setText("");
             return;
-        } 
+        }
         CurrentStatus.currUser = login;
-        goBack();
+        MainFrameAsSuperAdmin frame = new MainFrameAsSuperAdmin();
+        this.setVisible(false);
+        this.dispose();
+        frame.setVisible(true);
     }//GEN-LAST:event_jButtonLoginActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonBack;
@@ -167,41 +181,38 @@ public class LogInAsAdminPage extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldUserName;
     // End of variables declaration//GEN-END:variables
 
-    private void goBack() {
-        EnumPages whereToGo = null;
-        JFrame frame = null;
-        for (int i = 0; i < 1; i++) {
-            if (CurrentStatus.currForum == null) {
-                whereToGo = EnumPages.MAIN;
-                break;
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
             }
-            if (CurrentStatus.currSubForum == null) {
-                whereToGo = EnumPages.FORUM;
-                break;
-            }
-            if (CurrentStatus.currThread == null) {
-                whereToGo = EnumPages.SUBFORUM;
-                break;
-            }
-            whereToGo = EnumPages.THREAD;
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        switch (whereToGo) {
-            case MAIN:
-                frame = new MainFrame();
-                break;
-            case FORUM:
-                frame = new ForumPage();
-                break;
-            case SUBFORUM:
-                frame = new SubForumPage();
-                break;
-            case THREAD:
-                frame = new ThreadPage();
-                break;
+        //</editor-fold>
 
-        }
-        this.setVisible(false);
-        this.dispose();
-        frame.setVisible(true);
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new LogInAsAdminPage().setVisible(true);
+            }
+        });
     }
 }

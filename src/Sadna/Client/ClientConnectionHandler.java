@@ -509,8 +509,13 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         stringToServer.print(msgToSend);
         stringToServer.flush();
         try {
-            receivedMsg = stringFromServer.readLine();
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
+            receivedMsg = (String) objectFromServer.readObject();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
         if (receivedMsg.contains("200ok")) {
             deleted = true;
