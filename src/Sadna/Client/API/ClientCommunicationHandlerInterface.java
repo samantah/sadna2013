@@ -113,7 +113,11 @@ public interface ClientCommunicationHandlerInterface extends Serializable {
 
     public List<Member> getAllForumMembers(String forum, String userName,
             String password);
-    public void listenToServer();
-    
-    public void sendListenerIdentifier();
+
+    public boolean listenToServer();
+
+    public boolean sendListenerIdentifier();
+
+    public boolean hasNotifications(String forum, String userName, String password);
+
 }

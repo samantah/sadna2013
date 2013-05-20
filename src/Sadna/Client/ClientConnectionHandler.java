@@ -864,7 +864,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
     }
 
     @Override
-    public void listenToServer() {
+    public boolean listenToServer() {
         String recivedLine = null;
         try {
             recivedLine = this.stringFromServer.readLine();
@@ -872,13 +872,57 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
             System.out.println(ex.getMessage());
             ex.printStackTrace();
         }
-        System.out.println(recivedLine);
+        if (recivedLine == null) {
+            return false;
+        }
+        return true;
+
     }
 
     @Override
-    public void sendListenerIdentifier() {
-        String msg = "LISTENING\0";
+    public boolean sendListenerIdentifier() {
+        String msg = "LISTENING\n\0";
         this.stringToServer.print(msg);
         this.stringToServer.flush();
+        boolean remove = false;
+        try {
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
+            receivedMsg = (String) objectFromServer.readObject();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
+        }
+        if (receivedMsg.contains("200ok")) {
+            remove = true;
+        }
+        return remove;
+    }
+
+    @Override
+    public boolean hasNotifications(String forum, String userName, String password) {
+        msgToSend = "HASNOTIF\n" + "forumName:\n" + forum + "\n"
+                + "userName:\n" + userName + "\n" + "password:\n" + password + "\n";
+        msgToSend += delimiter;
+        stringToServer.print(msgToSend);
+        stringToServer.flush();
+        Object recieved = null;
+        Boolean hasNotifications = null;
+        try {
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
+            recieved = objectFromServer.readObject();
+            if (recieved instanceof String){
+                return false;
+            }
+            hasNotifications = (Boolean) recieved;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
+        }
+        return hasNotifications.booleanValue();
+
     }
 }

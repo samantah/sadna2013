@@ -15,7 +15,7 @@ public class ListenerClass implements Runnable {
     ClientConnectionHandler chForListen;
     ClientConnectionHandler ch;
 
-    public ListenerClass(String host,int port, ClientConnectionHandler ch) {
+    public ListenerClass(String host, int port, ClientConnectionHandler ch) {
         this.ch = ch;
         chForListen = new ClientConnectionHandler(host, port);
     }
@@ -23,8 +23,12 @@ public class ListenerClass implements Runnable {
     @Override
     public void run() {
         chForListen.sendListenerIdentifier();
-        while(true){
-            chForListen.listenToServer();
+        while (true) {
+            boolean listenToServer = chForListen.listenToServer();
+            if (!listenToServer) {
+                continue;
+            }
+            
         }
     }
 }

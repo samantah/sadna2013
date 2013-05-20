@@ -26,13 +26,13 @@ import java.util.Date;
  * a simple implementation of the server protocol interface
  */
 public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage> {
-    
+
     private boolean _shouldClose = false;
     private boolean _connectionTerminated = false;
     private ServerInterface _si;
     private StringMessagesToClient _msgToClient;
     private NotificationsFactory _notificationsFactory;
-    
+
     public RequestHandlerProtocol(ServerInterface _si) {
         this._si = _si;
         this._msgToClient = new StringMessagesToClient();
@@ -92,13 +92,17 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
     public void connectionTerminated() {
         this._connectionTerminated = true;
     }
-    
+
     private Object parseAndHandleRequest(String request) {
         String[] parsedReq = request.split("\n");
         SubForum sf;
         Forum fr;
         ThreadMessage tm;
         Post p;
+        String forumName;
+        String userName;
+        String password;
+        Member m;
         switch (parsedReq[0]) {
             case "HELLO":
                 return "HELLO";
@@ -156,11 +160,17 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
                 sf = _si.getSubForum(parsedReq[2], parsedReq[4]);
                 return handleAddModerator(sf, parsedReq[6], parsedReq[8], parsedReq[10]);
             case "NOTI":
-                String forumName = parsedReq[2];
-                String userName = parsedReq[4];
-                String password = parsedReq[6];
-                Member m = _si.getMember(forumName, userName);
+                forumName = parsedReq[2];
+                userName = parsedReq[4];
+                password = parsedReq[6];
+                m = _si.getMember(forumName, userName);
                 return handleNotification(m, password);
+            case "HASNOTIF":
+                forumName = parsedReq[2];
+                userName = parsedReq[4];
+                password = parsedReq[6];
+                m = _si.getMember(forumName, userName);
+                return handleHasNotification(m, password);
             case "REMMOD":
                 return handleRemoveModerator(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8], parsedReq[10]);
             case "GETCOUNT":
@@ -186,9 +196,9 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
             default:
                 return null;
         }
-        
+
     }
-    
+
     private Object handleLogout(String forumName, String userName) {
         if (_si.logout(forumName, userName)) {
             return _msgToClient.sendOK();
@@ -196,7 +206,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
             return _msgToClient.sendErrorInServer();
         }
     }
-    
+
     private Object handleLoginAsSuperAdmin(String userName, String password) {
         boolean logedIn = _si.loginAsSuperAdmin(userName, password);
         if (logedIn) {
@@ -209,7 +219,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
         }
         return null;
     }
-    
+
     private Object handleGetAllForumMembers(String forumName, String userName,
             String password) {
         Member admin = _si.getMember(forumName, userName);
@@ -221,7 +231,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
         }
         return _si.getAllForumMembers(forumName, userName, password);
     }
-    
+
     private Object handleCommonMembers(String adminName, String password) {
         SuperAdmin superAdmin = _si.getSuperAdmin();
         if (!superAdmin.getPassword().equals(password)) {
@@ -229,7 +239,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
         }
         return _si.getCommonMembers(adminName, password);
     }
-    
+
     private Object handleForumCounter(String superAdminName, String password) {
         SuperAdmin superAdmin = _si.getSuperAdmin();
         if (!superAdmin.getPassword().equals(password)) {
@@ -237,7 +247,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
         }
         return _si.getForumCounter(superAdminName, password);
     }
-    
+
     private Object handleGetUsersPostToUser(String forumName, String adminName, String password) {
         Member admin = _si.getMember(forumName, adminName);
         if (!admin.getPassword().equals(password)) {
@@ -248,7 +258,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
         }
         return _si.getUsersPostToUser(forumName, adminName, password);
     }
-    
+
     private Object handleGetNumberOfUserThreads(String forumName, String userName, String adminName, String password) {
         Member admin = _si.getMember(forumName, adminName);
         if (!admin.getPassword().equals(password)) {
@@ -259,7 +269,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
         }
         return _si.getNumberOfUserThreads(forumName, userName, adminName, password);
     }
-    
+
     private Object handleThreadCounter(String forumName, String userName, String password) {
         Member admin = _si.getMember(forumName, userName);
         if (!admin.getPassword().equals(password)) {
@@ -270,7 +280,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
         }
         return _si.getNumberOfThreadsInForum(forumName, userName, password);
     }
-    
+
     private Object handleRemoveModerator(String forumName, String subForumName,
             String moderatorName, String userName, String password) {
         Member admin = _si.getMember(forumName, userName);
@@ -292,7 +302,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
                 m = (Moderator) mList.get(i);
                 break;
             }
-            
+
         }
         if (m == null) {
             return _msgToClient.sendErrorInServer();
@@ -303,7 +313,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
             return _msgToClient.sendErrorInServer();
         }
     }
-    
+
     private Object handleNotification(Member m, String password) {
         if (m.getPassword().equals(password)) {
             String forumName = m.getForum();
@@ -321,7 +331,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
             return _msgToClient.sendErrorNoAuthorized();
         }
     }
-    
+
     public Object handleRegister(String forumName, String userName, String password,
             String email) {
         boolean isAdded = _si.register(forumName, userName, password, email);
@@ -331,7 +341,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
             return _msgToClient.sendErrorInServer();
         }
     }
-    
+
     public Object handleLogin(String forumName, String userName, String password) {
         boolean logedIn = _si.login(forumName, userName, password);
         if (logedIn) {
@@ -348,13 +358,13 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
         }
         return null;
     }
-    
+
     public Object handleInitiateForum(String forumName, String adminName,
             String adminPassword, String imidiOrAgrePolicy, String notiFriendsPolicy,
             String deletePolicy, String assignModerPolicy, String seniority, String minPublish,
             String cancelModerPolicy, String superAdminUserName, String superAdminPassword) {
         boolean isAdded = false;
-        
+
         isAdded = _si.initiateForum(adminName, adminPassword, forumName, imidiOrAgrePolicy, notiFriendsPolicy,
                 deletePolicy, assignModerPolicy, seniority, minPublish, cancelModerPolicy, superAdminUserName,
                 superAdminPassword);
@@ -368,7 +378,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
             //System.out.println("Sent ErrorInServer");
         }
     }
-    
+
     public Object handleAddSubForum(SubForum subForum, List<Member> members, String username, String password) {
         boolean subForumIsAdded = false;
         subForumIsAdded = _si.addSubForum(subForum, members, username, password);
@@ -378,7 +388,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
             return _msgToClient.sendErrorInServer();
         }
     }
-    
+
     public Object handlePublishThread(String forumName, String subForumName,
             String posterName, String threadTitle, String threadContent, String password) {
         boolean succeeded = false;
@@ -393,7 +403,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
             return _msgToClient.sendErrorInServer();
         }
     }
-    
+
     public Object handleDeletePost(Post p, String requester, String password) {
         String publisher = p.getPublisher();
         Forum forum = p.getThread().getSubForum().getForum();
@@ -429,7 +439,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
         }
         return _msgToClient.sendErrorNoAuthorized();
     }
-    
+
     public Object handlePostComment(Post post, String userName, String password) {
         boolean succeeded = false;
         Object result = null;
@@ -442,38 +452,38 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
         _notificationsFactory.sendNotifications(post);
         return result;
     }
-    
+
     public Object handleGetForumsList() {
         return _si.getForumsList();
     }
-    
+
     private Object handleGetAllPosts(String forumName, String subForumName, int threadId) {
         return _si.getAllPosts(forumName, subForumName, threadId);
-        
+
     }
-    
+
     public Object handleGetForum(String forumName) {
         return _si.getForum(forumName);
     }
-    
+
     public Object handleGetSubForumsList(String forumName) {
         return _si.getSubForumsList(forumName);
     }
-    
+
     public Object handleGetSubForum(String forum, String subForumName) {
         return _si.getSubForum(forum, subForumName);
     }
-    
+
     public Object handleGetThreadsList(String forumName,
             String subForumName) {
         return _si.getThreadsList(forumName, subForumName);
     }
-    
+
     public Object handleGetThreadMessage(String forumName, String subForumName,
             int messageID) {
         return _si.getThreadMessage(forumName, subForumName, messageID);
     }
-    
+
     public Object handleDeleteThread(ThreadMessage tm, String requester, String password) {
         String publisher = tm.getPublisher();
         Forum forum = tm.getSubForum().getForum();
@@ -484,7 +494,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
             String publisherPassword = member.getPassword();
             if (requester.equals(publisherName) && password.equals(publisherPassword)) {
                 return deleteThreadAndSendOk(tm, requester, password);
-                
+
             }
         }
         if (forum.getPolicy().getDeletePolicy() == enumDelete.EXTENDED) {
@@ -510,19 +520,19 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
         }
         return _msgToClient.sendErrorNoAuthorized();
     }
-    
+
     private Object deletePostAndSendOk(Post p, String userName, String password) {
         _notificationsFactory.sendNotifications(p);
         _si.deleteComment(p, userName, password);
         return _msgToClient.sendOK();
     }
-    
+
     private Object deleteThreadAndSendOk(ThreadMessage tm, String userName, String password) {
         _notificationsFactory.sendNotifications(tm);
         _si.deleteThread(tm, userName, password);
         return _msgToClient.sendOK();
     }
-    
+
     private Object handleDeleteSubForum(SubForum sf, String requester, String password) {
         Admin admin = sf.getForum().getAdmin();
         boolean equals = admin.getUserName().equals(requester) && admin.getPassword().equals(password);
@@ -533,7 +543,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
         }
         return _msgToClient.sendErrorNoAuthorized();
     }
-    
+
     private Object handleAddModerator(SubForum sf, String moderatorToAdd,
             String userName, String password) {
         String forumName = sf.getForum().getForumName();
@@ -547,7 +557,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
         if (member == null) {
             return _msgToClient.sendNotFound();
         }
-        
+
         if (forum.getPolicy().getAssignModeratorPolicy() == enumAssignModerator.MIN_PUBLISH) {
             System.out.println("in min publish");
             int numberOfUserThreads = _si.getNumberOfUserThreads(forumName, userName, null, null);
@@ -564,7 +574,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
                 return _msgToClient.sendErrorNoAuthorized();//consider change to someting more inducative
             }
         }
-        
+
         List<Member> moderators = _si.getModerators(forumName, sf.getSubForumName());
         List<String> moderetorsAsString = new ArrayList<String>();
         for (Iterator<Member> it = moderators.iterator(); it.hasNext();) {
@@ -581,7 +591,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
         }
         return null;
     }
-    
+
     private Object handleDeleteForum(Forum fr, String userName, String password) {
         SuperAdmin superAdmin = _si.getSuperAdmin();
         if (superAdmin == null || !superAdmin.getPassword().equals(password)) {
@@ -590,8 +600,21 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
             return _msgToClient.deleteForum(_si.deleteForum(fr.getForumName(), userName, password));
         }
     }
-    
+
     private int calcNumOfDaysSinceJoining(long dateOfJoining) {
         return (int) ((dateOfJoining - new Date().getTime()) / (1000 * 60 * 60 * 24));
+    }
+
+    private Object handleHasNotification(Member m, String password) {
+        if (m.getPassword().equals(password)) {
+            boolean ret = false;
+            List<ForumNotification> notifications = m.getNotifications();
+            if (!notifications.isEmpty()) {
+                ret = true;
+            }
+            return new Boolean(ret);
+        } else {
+            return _msgToClient.sendErrorNoAuthorized();
+        }
     }
 }
