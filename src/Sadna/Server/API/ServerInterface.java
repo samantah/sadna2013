@@ -13,6 +13,8 @@ import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -100,5 +102,6 @@ public interface ServerInterface {
 			String forumName, String ioap, String nfp, String dp, String amp, String s,
 			String mp, String cmp, String superAdminUserName,
 			String superAdminPassword);
+
 
 }

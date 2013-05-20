@@ -18,6 +18,7 @@ import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -475,4 +476,5 @@ public class ServerToDataBaseHandler implements ServerInterface {
         }
         return isAdded;
     }
+
 }
