@@ -13,11 +13,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.io.*;
 import java.net.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-
-
 
 public class ClientConnectionHandler implements ClientCommunicationHandlerInterface {
 
@@ -45,7 +44,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
             stringToServer.print("HELLO\n" + delimiter);
             stringToServer.flush();
             InputStream inputStream = clientSocket.getInputStream();
-//            stringFromServer = new BufferedReader(new InputStreamReader(inputStream));
+            stringFromServer = new BufferedReader(new InputStreamReader(inputStream));
             objectFromServer = new ObjectInputStream(inputStream);
             objectFromServer.readObject();
         } catch (Exception e) {
@@ -436,13 +435,13 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         msgToSend = "ADDF\n" + "forumName:\n" + forumName + "\n"
                 + "adminName:\n" + adminName + "\n" + "adminPassword:\n" + AdminPassword + "\n"
                 + "policy:\n"
-                + policy.getImidOrArgeNotiPolicy()+ "\n"
-                + policy.getFriendsNotiPolicy()+ "\n"
-                + policy.getDeletePolicy()+ "\n"
-                + policy.getAssignModeratorPolicy()+ "\n"
-                + policy.getSeniority()+ "\n"
-        		+ policy.getMinPublish()+ "\n"
-                + policy.getCancelModeratorPolicy()+ "\n"
+                + policy.getImidOrArgeNotiPolicy() + "\n"
+                + policy.getFriendsNotiPolicy() + "\n"
+                + policy.getDeletePolicy() + "\n"
+                + policy.getAssignModeratorPolicy() + "\n"
+                + policy.getSeniority() + "\n"
+                + policy.getMinPublish() + "\n"
+                + policy.getCancelModeratorPolicy() + "\n"
                 + "superAdminName:\n" + superAdminName + "\n"
                 + "superAdminPasswaord:\n" + superAdminPasswaord + "\n";
         msgToSend += delimiter;
@@ -862,5 +861,24 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
             System.out.println(ex.getMessage());
         }
         return map;
+    }
+
+    @Override
+    public void listenToServer() {
+        String recivedLine = null;
+        try {
+            recivedLine = this.stringFromServer.readLine();
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+            ex.printStackTrace();
+        }
+        System.out.println(recivedLine);
+    }
+
+    @Override
+    public void sendListenerIdentifier() {
+        String msg = "LISTENING\0";
+        this.stringToServer.print(msg);
+        this.stringToServer.flush();
     }
 }
