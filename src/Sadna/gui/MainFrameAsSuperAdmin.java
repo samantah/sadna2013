@@ -495,6 +495,8 @@ public class MainFrameAsSuperAdmin extends javax.swing.JFrame {
         this.jTextFieldNewAdminUser.setText("");
         this.jTextFieldNewAdminPassword.setText("");
         this.jTextFieldNewForumName.setText("");
+        this.jTextNumberOfWeeks.setText("");
+        this.jTextFieldNumberOfMsgs.setText("");
         UpdateListOfForums();
         String numberOfForums = this.jLabelNumberOfForums.getText();
         String substring = numberOfForums.substring(0, 19);
@@ -575,11 +577,11 @@ public class MainFrameAsSuperAdmin extends javax.swing.JFrame {
             return false;
         }
         
-        if (selectedAddModText.equals("publis enough messages") || 
+        if (selectedAddModText.equals("publis enough messages") &&
                 this.jTextFieldNumberOfMsgs.getText().isEmpty()){
             return false;
         }
-        if (selectedAddModText.equals("enough time in forum") || 
+        if (selectedAddModText.equals("enough time in forum") &&
                 this.jTextNumberOfWeeks.getText().isEmpty()){
             return false;
         }

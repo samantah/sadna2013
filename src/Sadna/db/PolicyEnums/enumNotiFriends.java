@@ -1,5 +1,7 @@
 package Sadna.db.PolicyEnums;
 
-public enum enumNotiFriends {
+import java.io.Serializable;
+
+public enum enumNotiFriends implements Serializable{
 	ALLMEMBERS, PUBLISHERS;
 }

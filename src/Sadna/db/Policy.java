@@ -5,8 +5,9 @@ import Sadna.db.PolicyEnums.enumCancelModerator;
 import Sadna.db.PolicyEnums.enumDelete;
 import Sadna.db.PolicyEnums.enumNotiFriends;
 import Sadna.db.PolicyEnums.enumNotiImidiOrAgre;
+import java.io.Serializable;
 
-public class Policy {
+public class Policy implements Serializable{
 	private enumNotiImidiOrAgre imidOrArgeNotiPolicy;
 	private enumNotiFriends friendsNotiPolicy;
 	private	enumDelete deletePolicy;

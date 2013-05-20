@@ -1,5 +1,7 @@
 package Sadna.db.PolicyEnums;
 
-public enum enumAssignModerator {
+import java.io.Serializable;
+
+public enum enumAssignModerator implements Serializable{
 	NO_RESTRICTION, MIN_PUBLISH, SENIORITY;
 }
