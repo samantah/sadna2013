@@ -1,5 +1,7 @@
 package Sadna.db.PolicyEnums;
 
-public enum enumCancelModerator {
+import java.io.Serializable;
+
+public enum enumCancelModerator implements Serializable{
 	NO_RESTRICTION, RESTRICTED;
 }

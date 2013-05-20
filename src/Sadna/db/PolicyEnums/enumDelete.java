@@ -1,5 +1,7 @@
 package Sadna.db.PolicyEnums;
 
-public enum enumDelete {
+import java.io.Serializable;
+
+public enum enumDelete implements Serializable{
 	LIMITED, EXTENDED;
 }

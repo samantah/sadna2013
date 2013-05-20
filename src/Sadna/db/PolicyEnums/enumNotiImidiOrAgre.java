@@ -1,5 +1,7 @@
 package Sadna.db.PolicyEnums;
 
-public enum enumNotiImidiOrAgre {
+import java.io.Serializable;
+
+public enum enumNotiImidiOrAgre implements Serializable{
 	IMIDIATE, AGGREGATE;
 }
