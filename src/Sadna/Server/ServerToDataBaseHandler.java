@@ -405,11 +405,11 @@ public class ServerToDataBaseHandler implements ServerInterface {
 		if (isForumNameUnique(forumName) && 
 				isSuperAdmin(superAdminUserName, superAdminPassword)) {
 			//System.out.println("is unique forum");
-			enumNotiImidiOrAgre imidOrArgeNotiPolicy;
-			enumNotiFriends friendsNotiPolicy;
-			enumDelete deletePolicy;
-			enumAssignModerator assignModeratorPolicy;
-			enumCancelModerator cancelModeratorPolicy;
+			enumNotiImidiOrAgre imidOrArgeNotiPolicy = null;
+			enumNotiFriends friendsNotiPolicy = null;
+			enumDelete deletePolicy = null;
+			enumAssignModerator assignModeratorPolicy = null;
+			enumCancelModerator cancelModeratorPolicy = null;
 			int seniority = Integer.parseInt(s);
 			int minPublish = Integer.parseInt(mp);
 			switch(ioap){

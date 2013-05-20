@@ -11,6 +11,11 @@ import Sadna.Client.Member;
 import Sadna.Client.Moderator;
 import Sadna.Client.SuperAdmin;
 import Sadna.db.API.DBInterface;
+import Sadna.db.PolicyEnums.enumAssignModerator;
+import Sadna.db.PolicyEnums.enumCancelModerator;
+import Sadna.db.PolicyEnums.enumDelete;
+import Sadna.db.PolicyEnums.enumNotiFriends;
+import Sadna.db.PolicyEnums.enumNotiImidiOrAgre;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -836,7 +841,7 @@ public class DataBase implements DBInterface {
 
         DataBase db = new DataBase();
         db.deleteFolder(db.dataBaseFolder);
-        Forum forum = new Forum("forum1");
+        Forum forum = new Forum("forum1", new Policy(enumNotiImidiOrAgre.IMIDIATE, enumNotiFriends.ALLMEMBERS, enumDelete.LIMITED, enumAssignModerator.NO_RESTRICTION, enumCancelModerator.NO_RESTRICTION, 1, 1));
         SubForum subForum = new SubForum(forum, "subForum1");
         SubForum subForum2 = new SubForum(forum, "subForum2");
         ThreadMessage threadMessage = new ThreadMessage(subForum, "NA", "hi11", "publisher");
