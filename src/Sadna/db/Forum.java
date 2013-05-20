@@ -19,10 +19,12 @@ public class Forum implements Serializable {
     private static final long serialVersionUID = -7660231455619569811L;
     private Admin admin;
     private String forumName;
+    private Policy policy;
 
-    public Forum(Admin admin, String forumName) {
+    public Forum(Admin admin, String forumName, Policy policy) {
         this.forumName = forumName;
         this.admin = admin;
+        this.setPolicy(policy);
     }
 
     public Forum(String forumName) {
@@ -51,4 +53,12 @@ public class Forum implements Serializable {
     public String toString() {
         return forumName;
     }
+
+	public void setPolicy(Policy policy) {
+		this.policy = policy;
+	}
+
+	public Policy getPolicy() {
+		return policy;
+	}
 }
