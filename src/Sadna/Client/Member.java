@@ -113,6 +113,10 @@ public class Member extends User {
         int hash = 3;
         return hash;
     }
+    
+    public boolean hasNotifications(){
+        return this.conHand.hasNotifications(this.forum, this.userName, this.password);
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -128,6 +132,8 @@ public class Member extends User {
         }
         return true;
     }
+    
+    
     
     
 }
