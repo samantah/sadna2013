@@ -19,9 +19,8 @@ import Sadna.db.ThreadMessage;
 import Sadna.db.PolicyEnums.enumAssignModerator;
 import Sadna.db.PolicyEnums.enumCancelModerator;
 import Sadna.db.PolicyEnums.enumDelete;
-import Sadna.db.PolicyEnums.enumNotiFriends;
-import Sadna.db.PolicyEnums.enumNotiImidiOrAgre;
 import Sadna.Server.Tokenizer.StringMessage;
+import java.util.Date;
 
 /**
  * a simple implementation of the server protocol interface
@@ -114,9 +113,9 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
             case "GETSFL":
                 return handleGetSubForumsList(parsedReq[2]);
             case "GETTL":
-                return handleadsList(parsedReq[2], parsedReq[4]);
+                return handleGetThreadsList(parsedReq[2], parsedReq[4]);
             case "GETTM":
-                return handleadMessage(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]));
+                return handleGetThreadMessage(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]));
             case "GETFL":
                 return handleGetForumsList();
             case "GETF":
@@ -133,11 +132,11 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
                 return handleAddSubForum(subF, moderators, parsedReq[i], parsedReq[i + 2]);
             case "ADDF":
                 return handleInitiateForum(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8], parsedReq[9],
-                		parsedReq[10], parsedReq[11], parsedReq[12], parsedReq[13], parsedReq[14], parsedReq[16], parsedReq[18]);
+                        parsedReq[10], parsedReq[11], parsedReq[12], parsedReq[13], parsedReq[14], parsedReq[16], parsedReq[18]);
             case "GETAP":
                 return handleGetAllPosts(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]));
             case "POST":
-                tm = _si.adMessage(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]));
+                tm = _si.getThreadMessage(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]));
                 p = new Post(tm, parsedReq[10], parsedReq[12], parsedReq[8]);
                 return handlePostComment(p, parsedReq[8], parsedReq[14]);
             case "THREAD":
@@ -146,7 +145,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
                 p = _si.getPost(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]), Integer.parseInt(parsedReq[8]));
                 return handleDeletePost(p, parsedReq[10], parsedReq[12]);
             case "DELTHRD":
-                tm = _si.adMessage(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]));
+                tm = _si.getThreadMessage(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]));
                 return handleDeleteThread(tm, parsedReq[8], parsedReq[10]);
             case "DELSF":
                 sf = _si.getSubForum(parsedReq[2], parsedReq[4]);
@@ -273,8 +272,10 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
         return _si.getNumberOfThreadsInForum(forumName, userName, password);
     }
 
-    private Object handleRemoveModerator(String forumName, String subForumName, String moderatorName, String userName, String password) {
+    private Object handleRemoveModerator(String forumName, String subForumName, 
+            String moderatorName, String userName, String password) {
         Member admin = _si.getMember(forumName, userName);
+        Forum forum = _si.getForum(forumName);
         if (!admin.getPassword().equals(password)) {
             return _msgToClient.sendErrorNoAuthorized();
         }
@@ -282,7 +283,8 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
             return _msgToClient.sendErrorNoAuthorized();
         }
         List<Member> mList = _si.getModerators(forumName, subForumName);
-        if (mList.size() == 1) {
+        if (mList.size() <= 1
+                && forum.getPolicy().getCancelModeratorPolicy()==enumCancelModerator.RESTRICTED) {
             return _msgToClient.sendIsTheOnlyModeratorInTheSubForum();
         }
         Moderator m = null;
@@ -350,10 +352,10 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
             String deletePolicy, String assignModerPolicy, String seniority, String minPublish,
             String cancelModerPolicy, String superAdminUserName, String superAdminPassword) {
         boolean isAdded = false;
-        
+
         isAdded = _si.initiateForum(adminName, adminPassword, forumName, imidiOrAgrePolicy, notiFriendsPolicy,
-        		deletePolicy, assignModerPolicy, seniority, minPublish, cancelModerPolicy, superAdminUserName,
-        		superAdminPassword);
+                deletePolicy, assignModerPolicy, seniority, minPublish, cancelModerPolicy, superAdminUserName,
+                superAdminPassword);
         if (isAdded) {
             //System.out.println("isAdded");
             return _msgToClient.sendOK();
@@ -392,7 +394,8 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 
     public Object handleDeletePost(Post p, String requester, String password) {
         String publisher = p.getPublisher();
-        String forumName = p.ad().getSubForum().getForum().getForumName();
+        Forum forum = p.getThread().getSubForum().getForum();
+        String forumName = forum.getForumName();
         Member member = _si.getMember(forumName, publisher);
         if (member != null) {
             String publisherName = member.getUserName();
@@ -401,15 +404,17 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
                 return deletePostAndSendOk(p, requester, password);
             }
         }
-        SubForum subForum = p.ad().getSubForum();
-        String subForumName = subForum.getSubForumName();
-        List<Member> moderators = _si.getModerators(forumName, subForumName);
-        for (Iterator<Member> it = moderators.iterator(); it.hasNext();) {
-            Member currModerator = it.next();
-            String moderatorName = currModerator.getUserName();
-            String moderatorPassword = currModerator.getPassword();
-            if (requester.equals(moderatorName) && password.equals(moderatorPassword)) {
-                return deletePostAndSendOk(p, moderatorName, moderatorPassword);
+        if (forum.getPolicy().getDeletePolicy() == enumDelete.EXTENDED) {
+            SubForum subForum = p.getThread().getSubForum();
+            String subForumName = subForum.getSubForumName();
+            List<Member> moderators = _si.getModerators(forumName, subForumName);
+            for (Iterator<Member> it = moderators.iterator(); it.hasNext();) {
+                Member currModerator = it.next();
+                String moderatorName = currModerator.getUserName();
+                String moderatorPassword = currModerator.getPassword();
+                if (requester.equals(moderatorName) && password.equals(moderatorPassword)) {
+                    return deletePostAndSendOk(p, moderatorName, moderatorPassword);
+                }
             }
         }
         Admin admin = _si.getForum(forumName).getAdmin();
@@ -457,19 +462,20 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
         return _si.getSubForum(forum, subForumName);
     }
 
-    public Object handleadsList(String forumName,
+    public Object handleGetThreadsList(String forumName,
             String subForumName) {
-        return _si.adsList(forumName, subForumName);
+        return _si.getThreadsList(forumName, subForumName);
     }
 
-    public Object handleadMessage(String forumName, String subForumName,
+    public Object handleGetThreadMessage(String forumName, String subForumName,
             int messageID) {
-        return _si.adMessage(forumName, subForumName, messageID);
+        return _si.getThreadMessage(forumName, subForumName, messageID);
     }
 
     public Object handleDeleteThread(ThreadMessage tm, String requester, String password) {
         String publisher = tm.getPublisher();
-        String forumName = tm.getSubForum().getForum().getForumName();
+        Forum forum = tm.getSubForum().getForum();
+        String forumName = forum.getForumName();
         Member member = _si.getMember(forumName, publisher);
         if (member != null) {
             String publisherName = member.getUserName();
@@ -479,15 +485,17 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 
             }
         }
-        SubForum subForum = tm.getSubForum();
-        String subForumName = subForum.getSubForumName();
-        List<Member> moderators = _si.getModerators(forumName, subForumName);
-        for (Iterator<Member> it = moderators.iterator(); it.hasNext();) {
-            Member currModerator = it.next();
-            String moderatorName = currModerator.getUserName();
-            String moderatorPassword = currModerator.getPassword();
-            if (requester.equals(moderatorName) && password.equals(moderatorPassword)) {
-                return deleteThreadAndSendOk(tm, moderatorName, moderatorPassword);
+        if (forum.getPolicy().getDeletePolicy() == enumDelete.EXTENDED) {
+            SubForum subForum = tm.getSubForum();
+            String subForumName = subForum.getSubForumName();
+            List<Member> moderators = _si.getModerators(forumName, subForumName);
+            for (Iterator<Member> it = moderators.iterator(); it.hasNext();) {
+                Member currModerator = it.next();
+                String moderatorName = currModerator.getUserName();
+                String moderatorPassword = currModerator.getPassword();
+                if (requester.equals(moderatorName) && password.equals(moderatorPassword)) {
+                    return deleteThreadAndSendOk(tm, moderatorName, moderatorPassword);
+                }
             }
         }
         Admin admin = _si.getForum(forumName).getAdmin();
@@ -537,6 +545,23 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
         if (member == null) {
             return _msgToClient.sendNotFound();
         }
+        
+        if (forum.getPolicy().getAssignModeratorPolicy()==enumAssignModerator.MIN_PUBLISH){
+            int numberOfUserThreads = _si.getNumberOfUserThreads(forumName, userName, null, null);
+            int minPublish = forum.getPolicy().getMinPublish();
+            if (numberOfUserThreads<minPublish){
+                return _msgToClient.sendErrorNoAuthorized();//consider change to someting more inducative
+            }
+        }
+        if (forum.getPolicy().getAssignModeratorPolicy()==enumAssignModerator.SENIORITY){
+            long dateOfJoining = member.getDateOfJoining();
+            int seniorityAsDays = calcNumOfDaysSinceJoining(dateOfJoining);
+            int seniority = forum.getPolicy().getSeniority();
+            if (seniorityAsDays<seniority){
+                return _msgToClient.sendErrorNoAuthorized();//consider change to someting more inducative
+            }
+        }
+        
         List<Member> moderators = _si.getModerators(forumName, sf.getSubForumName());
         List<String> moderetorsAsString = new ArrayList<String>();
         for (Iterator<Member> it = moderators.iterator(); it.hasNext();) {
@@ -561,5 +586,9 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
         } else {
             return _msgToClient.deleteForum(_si.deleteForum(fr.getForumName(), userName, password));
         }
+    }
+
+    private int calcNumOfDaysSinceJoining(long dateOfJoining) {
+        return (int)((dateOfJoining - new Date().getTime())/(1000*60*60*24));
     }
 }
