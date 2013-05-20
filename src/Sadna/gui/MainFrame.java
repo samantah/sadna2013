@@ -25,7 +25,10 @@ public class MainFrame extends javax.swing.JFrame {
     public MainFrame() {
         initComponents();
         this.setResizable(false);
-        ClientCommunicationHandlerInterface ch = new ClientConnectionHandler(host, port);
+        ClientConnectionHandler ch = new ClientConnectionHandler(host, port);
+        ListenerClass listenerClass = new ListenerClass(host, port, ch);
+        Thread thread = new Thread(listenerClass);
+        thread.start();
         DefaultListModel listOfForums;
         if (CurrentStatus.currUser == null) {
             CurrentStatus.currUser = new User(ch);
