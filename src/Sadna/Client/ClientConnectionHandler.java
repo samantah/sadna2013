@@ -14,6 +14,8 @@ import Sadna.db.Message;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -85,7 +87,8 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         msgToSend = "LOGIN\n" + "forumName:\n" + forumName + "\n"
                 + "userName:\n" + userName + "\n" + "password:\n" + password + "\n";
         msgToSend += delimiter;
-        stringToServer.println(msgToSend);
+        stringToServer.print(msgToSend);
+        stringToServer.flush();
         try {
             objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
             receivedMsg = (String) objectFromServer.readObject();
@@ -112,10 +115,16 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         SuperAdmin loggedInSuperAdmin = null;
         msgToSend = "LOGINS\n" + "userName:\n" + userName + "\n" + "password:\n" + password + "\n";
         msgToSend += delimiter;
-        stringToServer.println(msgToSend);
+        stringToServer.print(msgToSend);
+        stringToServer.flush();
         try {
-            receivedMsg = stringFromServer.readLine();
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
+            receivedMsg = (String) objectFromServer.readObject();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
         if (receivedMsg.contains("200ok")) {
             loggedInSuperAdmin = new SuperAdmin(userName, password, null, this);
@@ -131,10 +140,16 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
             msgToSend = "REGISTER\n" + "forumName:\n" + forumName + "\n" + "userName:\n" + userName + "\n"
                     + "password:\n" + password + "\n" + "email:\n" + email + "\n";
             msgToSend += delimiter;
-            stringToServer.println(msgToSend);
+            stringToServer.print(msgToSend);
+            stringToServer.flush();
             try {
-                receivedMsg = stringFromServer.readLine();
+                objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
+                receivedMsg = (String) objectFromServer.readObject();
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException ex) {
+                ex.printStackTrace();
+                System.out.println(ex.getMessage());
             }
             if (receivedMsg.contains("200ok")) {
                 loggedInMember = new Member(userName, password, null, forumName, this);
@@ -175,14 +190,16 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         msgToSend = "GETSF\n" + "forumName:\n" + forum + "\n"
                 + "subForumName:\n" + subForumName + "\n";
         msgToSend += delimiter;
-        stringToServer.println(msgToSend);
+        stringToServer.print(msgToSend);
+        stringToServer.flush();
         try {
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
             returnedSF = (SubForum) objectFromServer.readObject();
-            if (returnedSF == null) {
-                System.out.println("111");
-            }
         } catch (IOException e) {
-        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
         return returnedSF;
     }
@@ -192,11 +209,16 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         List<SubForum> returnedList = new ArrayList<SubForum>();
         msgToSend = "GETSFL\n" + "forumName:\n" + forumName + "\n";
         msgToSend += delimiter;
-        stringToServer.println(msgToSend);
+        stringToServer.print(msgToSend);
+        stringToServer.flush();
         try {
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
             returnedList = (List<SubForum>) objectFromServer.readObject();
-        } catch (ClassNotFoundException e) {
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
         return returnedList;
     }
@@ -208,11 +230,16 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         ThreadMessage tmp = null;
         msgToSend = "GETTL\n" + "forumName:\n" + forumName + "\n" + "subForumName:\n" + subForumName + "\n";
         msgToSend += delimiter;
-        stringToServer.println(msgToSend);
+        stringToServer.print(msgToSend);
+        stringToServer.flush();
         try {
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
             returnedList = (List<ThreadMessage>) objectFromServer.readObject();
-        } catch (ClassNotFoundException e) {
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
         return returnedList;
     }
@@ -224,11 +251,16 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         msgToSend = "GETTM\n" + "forumName:\n" + forumName + "\n"
                 + "subForumName:\n" + subForumName + "\n" + "treadMessageID:\n" + msgID + "\n";
         msgToSend += delimiter;
-        stringToServer.println(msgToSend);
+        stringToServer.print(msgToSend);
+        stringToServer.flush();
         try {
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
             returnedTM = (ThreadMessage) objectFromServer.readObject();
         } catch (IOException e) {
-        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
         return returnedTM;
     }
@@ -252,10 +284,16 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
                     + "posterName:\n" + posterName + "\n" + "postTitle:\n" + title + "\n"
                     + "postContent:\n" + content + "\n" + "password:\n" + password + "\n";
             msgToSend += delimiter;
-            stringToServer.println(msgToSend);
+            stringToServer.print(msgToSend);
+            stringToServer.flush();
             try {
-                receivedMsg = stringFromServer.readLine();
+                objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
+                receivedMsg = (String) objectFromServer.readObject();
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException ex) {
+                ex.printStackTrace();
+                System.out.println(ex.getMessage());
             }
             if (receivedMsg.contains("200ok")) {
                 isPosted = true;
@@ -281,10 +319,16 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
                     + "threadContent:\n" + newThreadContent + "\n"
                     + "requsterPassword:\n" + password + "\n";
             msgToSend += delimiter;
-            stringToServer.println(msgToSend);
+            stringToServer.print(msgToSend);
+            stringToServer.flush();
             try {
-                receivedMsg = stringFromServer.readLine();
+                objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
+                receivedMsg = (String) objectFromServer.readObject();
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException ex) {
+                ex.printStackTrace();
+                System.out.println(ex.getMessage());
             }
             if (receivedMsg.contains("200ok")) {
                 isPublished = true;
@@ -299,10 +343,16 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         msgToSend = "LOGOUT\n" + "forumName:\n" + forumName + "\n"
                 + "userName:\n" + userName + "\n";
         msgToSend += delimiter;
-        stringToServer.println(msgToSend);
+        stringToServer.print(msgToSend);
+        stringToServer.flush();
         try {
-            receivedMsg = stringFromServer.readLine();
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
+            receivedMsg = (String) objectFromServer.readObject();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
         if (receivedMsg.contains("200ok")) {
             loggedOutMember = new User(this);
@@ -315,11 +365,16 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         List<Forum> returnedList = new ArrayList<Forum>();
         msgToSend = "GETFL\n";
         msgToSend += delimiter;
-        stringToServer.println(msgToSend);
+        stringToServer.print(msgToSend);
+        stringToServer.flush();
         try {
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
             returnedList = (List<Forum>) objectFromServer.readObject();
-        } catch (ClassNotFoundException e) {
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
         return returnedList;
     }
@@ -330,11 +385,16 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         Forum returnedSF = null;
         msgToSend = "GETF\n" + "forumName:\n" + forumName + "\n";
         msgToSend += delimiter;
-        stringToServer.println(msgToSend);
+        stringToServer.print(msgToSend);
+        stringToServer.flush();
         try {
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
             returnedSF = (Forum) objectFromServer.readObject();
         } catch (IOException e) {
-        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
         return returnedSF;
     }
@@ -352,10 +412,16 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         }
         msgToSend += "requester:\n" + userName + "\n" + "password:\n" + password + "\n";
         msgToSend += delimiter;
-        stringToServer.println(msgToSend);
+        stringToServer.print(msgToSend);
+        stringToServer.flush();
         try {
-            receivedMsg = stringFromServer.readLine();
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
+            receivedMsg = (String) objectFromServer.readObject();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
         if (receivedMsg.contains("200ok")) {
             added = true;
@@ -372,10 +438,16 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
                 + "superAdminPasswaord:\n" + superAdminPasswaord + "\n";
 
         msgToSend += delimiter;
-        stringToServer.println(msgToSend);
+        stringToServer.print(msgToSend);
+        stringToServer.flush();
         try {
-            receivedMsg = stringFromServer.readLine();
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
+            receivedMsg = (String) objectFromServer.readObject();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
         if (receivedMsg.contains("200ok")) {
             initiated = true;
@@ -398,11 +470,16 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         msgToSend = "GETAP\n" + "forumName:\n" + forumName + "\n"
                 + "SubForumName:\n" + subForumName + "\n" + "TheadID:\n" + threadID + "\n";
         msgToSend += delimiter;
-        stringToServer.println(msgToSend);
+        stringToServer.print(msgToSend);
+        stringToServer.flush();
         try {
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
             allPosts = (List<Post>) objectFromServer.readObject();
         } catch (IOException e) {
-        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
         return allPosts;
     }
@@ -413,7 +490,8 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         msgToSend = "DELF\n" + "forumName:\n" + forumName + "\n" + "userName:\n"
                 + userName + "\n" + "password:\n" + password + "\n";
         msgToSend += delimiter;
-        stringToServer.println(msgToSend);
+        stringToServer.print(msgToSend);
+        stringToServer.flush();
         try {
             receivedMsg = stringFromServer.readLine();
         } catch (IOException e) {
@@ -431,10 +509,16 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         msgToSend = "DELSF\n" + "forumName:\n" + forumName + "\n" + "subForumName:\n" + subForumName + "\n" + "userName:\n"
                 + userName + "\n" + "password:\n" + password + "\n";
         msgToSend += delimiter;
-        stringToServer.println(msgToSend);
+        stringToServer.print(msgToSend);
+        stringToServer.flush();
         try {
-            receivedMsg = stringFromServer.readLine();
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
+            receivedMsg = (String) objectFromServer.readObject();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
         if (receivedMsg.contains("200ok")) {
             deleted = true;
@@ -453,10 +537,16 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         msgToSend = "DELTHRD\n" + "forumName:\n" + forumName + "\n" + "subForumName:\n" + subForumName + "\n"
                 + "threadId:\n" + tmId + "\n" + "userName:\n" + userName + "\n" + "password:\n" + password + "\n";
         msgToSend += delimiter;
-        stringToServer.println(msgToSend);
+        stringToServer.print(msgToSend);
+        stringToServer.flush();
         try {
-            receivedMsg = stringFromServer.readLine();
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
+            receivedMsg = (String) objectFromServer.readObject();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
         if (receivedMsg.contains("200ok")) {
             deleted = true;
@@ -478,10 +568,16 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
                 + "threadId:\n" + tmId + "\n" + "postId:\n" + pId + "\n" + "userName:\n" + userName + "\n"
                 + "password:\n" + password + "\n";
         msgToSend += delimiter;
-        stringToServer.println(msgToSend);
+        stringToServer.print(msgToSend);
+        stringToServer.flush();
         try {
-            receivedMsg = stringFromServer.readLine();
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
+            receivedMsg = (String) objectFromServer.readObject();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
         if (receivedMsg.contains("200ok")) {
             deleted = true;
@@ -503,10 +599,16 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
                 + "subForumName:\n" + subForumName + "\n" + "posterName:\n" + posterName + "\n" + "threadTitle:\n" + title + "\n"
                 + "threadContent:\n" + content + "\n" + "editorName:\n" + editorName + "\n" + "editorPassword:\n" + editorPassword + "\n";
         msgToSend += delimiter;
-        stringToServer.println(msgToSend);
+        stringToServer.print(msgToSend);
+        stringToServer.flush();
         try {
-            receivedMsg = stringFromServer.readLine();
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
+            receivedMsg = (String) objectFromServer.readObject();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
         if (receivedMsg.contains("200ok")) {
             edited = true;
@@ -532,10 +634,16 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
                 + "postContent:\n" + content + "\n" + "editorName:\n" + editorName + "\n"
                 + "editorPassword:\n" + editorPassword + "\n";
         msgToSend += delimiter;
-        stringToServer.println(msgToSend);
+        stringToServer.print(msgToSend);
+        stringToServer.flush();
         try {
-            receivedMsg = stringFromServer.readLine();
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
+            receivedMsg = (String) objectFromServer.readObject();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
         if (receivedMsg.contains("200ok")) {
             edited = true;
@@ -551,10 +659,16 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
                 + "newModerator:\n" + newModerator + "\n"
                 + "userName:\n" + userName + "\n" + "password:\n" + password + "\n";
         msgToSend += delimiter;
-        stringToServer.println(msgToSend);
+        stringToServer.print(msgToSend);
+        stringToServer.flush();
         try {
-            receivedMsg = stringFromServer.readLine();
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
+            receivedMsg = (String) objectFromServer.readObject();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
         if (receivedMsg != null && receivedMsg.contains("200ok")) {
             added = true;
@@ -568,11 +682,16 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         msgToSend = "NOTI\n" + "forumName:\n" + forumName + "\n"
                 + "userName:\n" + userName + "\n" + "password:\n" + password + "\n";
         msgToSend += delimiter;
-        stringToServer.println(msgToSend);
+        stringToServer.print(msgToSend);
+        stringToServer.flush();
         try {
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
             notifications = (List<ForumNotification>) objectFromServer.readObject();
         } catch (IOException e) {
-        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
         return notifications;
     }
@@ -584,11 +703,16 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         msgToSend = "REMMOD\n" + "forumName:\n" + forumName + "\n" + "subForumName:\n" + subForum + "\n"
                 + "moderatorName:\n" + moderatorName + "\n" + "userName:\n" + userName + "\n" + "password:\n" + password + "\n";
         msgToSend += delimiter;
-        stringToServer.println(msgToSend);
+        stringToServer.print(msgToSend);
+        stringToServer.flush();
         try {
-            receivedMsg = stringFromServer.readLine();
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
+            receivedMsg = (String) objectFromServer.readObject();
         } catch (IOException e) {
-            System.out.println("ConnectionHandler(removeModerator) " + e);
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
         if (receivedMsg.contains("200ok")) {
             remove = true;
@@ -602,11 +726,16 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         msgToSend = "GETCOUNT\n" + "forumName:\n" + forumName + "\n" + "userName:\n" + userName + "\n"
                 + "password:\n" + password + "\n";
         msgToSend += delimiter;
-        stringToServer.println(msgToSend);
+        stringToServer.print(msgToSend);
+        stringToServer.flush();
         try {
-            receivedMsg = stringFromServer.readLine();
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
+            receivedMsg = (String) objectFromServer.readObject();
         } catch (IOException e) {
-            System.out.println("ConnectionHandler(getThreadCounter) " + e);
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
         counter = Integer.parseInt(receivedMsg);
         return counter;
@@ -620,11 +749,16 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
                 + "userName:\n" + userName + "\n" + "requester:\n" + requester + "\n"
                 + "passwordRequester:\n" + password + "\n";
         msgToSend += delimiter;
-        stringToServer.println(msgToSend);
+        stringToServer.print(msgToSend);
+        stringToServer.flush();
         try {
-            receivedMsg = stringFromServer.readLine();
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
+            receivedMsg = (String) objectFromServer.readObject();
         } catch (IOException e) {
-            System.out.println("ConnectionHandler(getNumOfUserThread) " + e);
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
         counter = Integer.parseInt(receivedMsg);
         return counter;
@@ -636,11 +770,16 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         msgToSend = "GETNF\n" + "\n" + "userName:\n" + userName + "\n"
                 + "password:\n" + password + "\n";
         msgToSend += delimiter;
-        stringToServer.println(msgToSend);
+        stringToServer.print(msgToSend);
+        stringToServer.flush();
         try {
-            receivedMsg = stringFromServer.readLine();
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
+            receivedMsg = (String) objectFromServer.readObject();
         } catch (IOException e) {
-            System.out.println("ConnectionHandler(getNumOfForums) " + e);
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
         counter = Integer.parseInt(receivedMsg);
         return counter;
@@ -656,14 +795,16 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         msgToSend = "GETCOM\n" + "userName:\n"
                 + superAdminName + "\n" + "password:\n" + password + "\n";
         msgToSend += delimiter;
-        stringToServer.println(msgToSend);
+        stringToServer.print(msgToSend);
+        stringToServer.flush();
         try {
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
             map = (List<String>) objectFromServer.readObject();
         } catch (IOException e) {
-            System.out.println("ConnectionHandler(getNumMembersInEachForum) " + e);
-        } catch (ClassNotFoundException e) {
-            System.out.println("ConnectionHandler(getNumMembersInEachForum) "
-                    + "error in objectFromServer " + e);
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
         return map;
     }
@@ -675,14 +816,16 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         msgToSend = "GETAM\n" + "forum:\n"
                 + forum + "\n" + "userName:\n" + userName + "\n" + "password:\n" + password + "\n";
         msgToSend += delimiter;
-        stringToServer.println(msgToSend);
+        stringToServer.print(msgToSend);
+        stringToServer.flush();
         try {
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
             members = (List<Member>) objectFromServer.readObject();
         } catch (IOException e) {
-            System.out.println("ConnectionHandler(getNumMembersInEachForum) " + e);
-        } catch (ClassNotFoundException e) {
-            System.out.println("ConnectionHandler(getNumMembersInEachForum) "
-                    + "error in objectFromServer " + e);
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
         return members;
     }
@@ -694,13 +837,16 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         msgToSend = "GETUPU\n" + "forumName:\n" + forumName + "\n" + "userName:\n"
                 + userName + "\n" + "password:\n" + password + "\n";
         msgToSend += delimiter;
-        stringToServer.println(msgToSend);
+        stringToServer.print(msgToSend);
+        stringToServer.flush();
         try {
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
             map = (HashMap<String, List<String>>) objectFromServer.readObject();
         } catch (IOException e) {
-            System.out.println("ConnectionHandler(getUsersPostToUser) " + e);
-        } catch (ClassNotFoundException e) {
-            System.out.println("ConnectionHandler(getUsersPostToUser) error in objectFromServer " + e);
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
         return map;
     }
