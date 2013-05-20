@@ -114,9 +114,9 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
             case "GETSFL":
                 return handleGetSubForumsList(parsedReq[2]);
             case "GETTL":
-                return handleGetThreadsList(parsedReq[2], parsedReq[4]);
+                return handleadsList(parsedReq[2], parsedReq[4]);
             case "GETTM":
-                return handleGetThreadMessage(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]));
+                return handleadMessage(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]));
             case "GETFL":
                 return handleGetForumsList();
             case "GETF":
@@ -137,7 +137,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
             case "GETAP":
                 return handleGetAllPosts(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]));
             case "POST":
-                tm = _si.getThreadMessage(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]));
+                tm = _si.adMessage(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]));
                 p = new Post(tm, parsedReq[10], parsedReq[12], parsedReq[8]);
                 return handlePostComment(p, parsedReq[8], parsedReq[14]);
             case "THREAD":
@@ -146,7 +146,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
                 p = _si.getPost(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]), Integer.parseInt(parsedReq[8]));
                 return handleDeletePost(p, parsedReq[10], parsedReq[12]);
             case "DELTHRD":
-                tm = _si.getThreadMessage(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]));
+                tm = _si.adMessage(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]));
                 return handleDeleteThread(tm, parsedReq[8], parsedReq[10]);
             case "DELSF":
                 sf = _si.getSubForum(parsedReq[2], parsedReq[4]);
@@ -392,7 +392,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 
     public Object handleDeletePost(Post p, String requester, String password) {
         String publisher = p.getPublisher();
-        String forumName = p.getThread().getSubForum().getForum().getForumName();
+        String forumName = p.ad().getSubForum().getForum().getForumName();
         Member member = _si.getMember(forumName, publisher);
         if (member != null) {
             String publisherName = member.getUserName();
@@ -401,7 +401,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
                 return deletePostAndSendOk(p, requester, password);
             }
         }
-        SubForum subForum = p.getThread().getSubForum();
+        SubForum subForum = p.ad().getSubForum();
         String subForumName = subForum.getSubForumName();
         List<Member> moderators = _si.getModerators(forumName, subForumName);
         for (Iterator<Member> it = moderators.iterator(); it.hasNext();) {
@@ -457,14 +457,14 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
         return _si.getSubForum(forum, subForumName);
     }
 
-    public Object handleGetThreadsList(String forumName,
+    public Object handleadsList(String forumName,
             String subForumName) {
-        return _si.getThreadsList(forumName, subForumName);
+        return _si.adsList(forumName, subForumName);
     }
 
-    public Object handleGetThreadMessage(String forumName, String subForumName,
+    public Object handleadMessage(String forumName, String subForumName,
             int messageID) {
-        return _si.getThreadMessage(forumName, subForumName, messageID);
+        return _si.adMessage(forumName, subForumName, messageID);
     }
 
     public Object handleDeleteThread(ThreadMessage tm, String requester, String password) {
