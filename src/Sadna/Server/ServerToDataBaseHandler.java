@@ -19,6 +19,8 @@ import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -41,7 +43,11 @@ public class ServerToDataBaseHandler implements ServerInterface {
 			//System.out.println("is unique forum");
 			if (isUserNameUnique(forumName, userName)) {
 				//System.out.println("is unique username");
-				isAdded = _db.addMember(new Member(userName, password, email, forumName, null));
+				Member toAdd = new Member(userName, password, email, forumName, null);
+				Date now = new Date();
+				long nowAsLong = now.getTime();
+				toAdd.setDateOfJoining(nowAsLong);
+				isAdded = _db.addMember(toAdd);
 			}
 		}
 		return isAdded;

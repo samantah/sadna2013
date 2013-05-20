@@ -9,6 +9,7 @@ import Sadna.Server.ForumNotification;
 import Sadna.db.Post;
 import Sadna.db.ThreadMessage;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -25,6 +26,7 @@ public class Member extends User {
     protected String email;
     protected String forum;
     protected List<ForumNotification> notifications;
+    protected long dateOfJoining;
 
     public Member(String userName, String password, String email, String forum, ClientCommunicationHandlerInterface ch) {
         super(ch);
@@ -35,6 +37,13 @@ public class Member extends User {
         this.notifications = new ArrayList<ForumNotification>();
     }
 
+    public long getDateOfJoining(){
+    	return dateOfJoining;
+    }
+    
+    public void setDateOfJoining(long time){
+    	dateOfJoining = time;
+    }
     
     public List<ForumNotification> getNotificationsFromServer(){
         return this.conHand.getNotification(this.forum, this.userName, this.password);
