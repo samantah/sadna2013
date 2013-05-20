@@ -11,6 +11,7 @@ import Sadna.Client.SuperAdmin;
 import Sadna.Client.User;
 import Sadna.Server.ForumNotification;
 import Sadna.db.Forum;
+import Sadna.db.Policy;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
@@ -51,7 +52,7 @@ public interface ClientCommunicationHandlerInterface extends Serializable {
     //tested
     boolean addSubForum(SubForum subForum, List<Moderator> lm, String userName, String password);
     //tested
-    boolean initiateForum(String forumName, String adminName, String adminPassword, String superAdminName, String superAdminPasswaord);
+    boolean initiateForum(String forumName, String adminName, String adminPassword, Policy policy, String superAdminName, String superAdminPasswaord);
     //tested
     List<Post> getAllPosts(ThreadMessage tm);
     //sami
