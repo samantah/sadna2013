@@ -27,9 +27,10 @@ public class Forum implements Serializable {
         this.setPolicy(policy);
     }
 
-    public Forum(String forumName) {
+    public Forum(String forumName, Policy policy) {
         this.forumName = forumName;
         this.admin = null;
+        this.setPolicy(policy);
     }
 
     public Admin getAdmin() {

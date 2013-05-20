@@ -13,6 +13,11 @@ import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
+import Sadna.db.PolicyEnums.enumAssignModerator;
+import Sadna.db.PolicyEnums.enumCancelModerator;
+import Sadna.db.PolicyEnums.enumDelete;
+import Sadna.db.PolicyEnums.enumNotiFriends;
+import Sadna.db.PolicyEnums.enumNotiImidiOrAgre;
 
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -28,8 +33,6 @@ public interface ServerInterface {
     boolean register(String forumName, String userName, String password, String email);
 
     boolean login(String forumName, String userName, String password);
-
-    boolean initiateForum(String adminUserName, String adminPassword, String forumName, String superAdminUserName, String superAdminPassword);
 
     boolean deleteForum(String forumName, String userName, String password);
 
@@ -100,5 +103,10 @@ public interface ServerInterface {
 
 	//mod or admin or publisher (String userName, String password)
 	boolean editPost(Post p, String userName, String password);
+
+	boolean initiateForum(String adminName, String adminPassword,
+			String forumName, String ioap, String nfp, String dp, String amp, String s,
+			String mp, String cmp, String superAdminUserName,
+			String superAdminPassword);
 
 }

@@ -12,14 +12,20 @@ public class Policy {
 	private	enumDelete deletePolicy;
 	private enumAssignModerator assignModeratorPolicy;
 	private enumCancelModerator cancelModeratorPolicy;
+	private int seniority;
+	private int minPublish;
+
 
 	public Policy(enumNotiImidiOrAgre imidOrArgeNotiPolicy, enumNotiFriends friendsNotiPolicy,
-			enumDelete deletePolicy, enumAssignModerator assignModeratorPolicy, enumCancelModerator cancelModeratorPolicy){
+			enumDelete deletePolicy, enumAssignModerator assignModeratorPolicy, enumCancelModerator cancelModeratorPolicy,
+			int seniority, int minPublish){
 		this.setImidOrArgeNotiPolicy(imidOrArgeNotiPolicy);
 		this.setFriendsNotiPolicy(friendsNotiPolicy);
 		this.setDeletePolicy(deletePolicy);
 		this.setAssignModeratorPolicy(assignModeratorPolicy);
 		this.setCancelModeratorPolicy(cancelModeratorPolicy);
+		this.setSeniority(seniority);
+		this.setMinPublish(minPublish);
 	}
 
 	public void setCancelModeratorPolicy(enumCancelModerator cancelModeratorPolicy) {
@@ -61,5 +67,21 @@ public class Policy {
 	public enumNotiImidiOrAgre getImidOrArgeNotiPolicy() {
 		return imidOrArgeNotiPolicy;
 	}
-	
+
+	public void setMinPublish(int minPublish) {
+		this.minPublish = minPublish;
+	}
+
+	public int getMinPublish() {
+		return minPublish;
+	}
+
+	public void setSeniority(int seniority) {
+		this.seniority = seniority;
+	}
+
+	public int getSeniority() {
+		return seniority;
+	}
+
 }

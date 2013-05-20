@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Vector;
 
 import Sadna.Client.API.ClientCommunicationHandlerInterface;
+import Sadna.db.Policy;
 
 /**
  *
@@ -25,8 +26,8 @@ public class SuperAdmin extends Admin {
         super(userName, password, email, null, ch);
     }
 
-    public boolean initiateForum(String forumName, String adminName, String adminPassword) {
-        return conHand.initiateForum(forumName, adminName, adminPassword, this.userName, this.password);
+    public boolean initiateForum(String forumName, String adminName, String adminPassword, Policy policy) {
+        return conHand.initiateForum(forumName, adminName, adminPassword, policy, this.userName, this.password);
     }
 
 	public int getForumCounter() {

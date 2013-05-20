@@ -16,6 +16,11 @@ import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
+import Sadna.db.PolicyEnums.enumAssignModerator;
+import Sadna.db.PolicyEnums.enumCancelModerator;
+import Sadna.db.PolicyEnums.enumDelete;
+import Sadna.db.PolicyEnums.enumNotiFriends;
+import Sadna.db.PolicyEnums.enumNotiImidiOrAgre;
 import Sadna.Server.Tokenizer.StringMessage;
 
 /**
@@ -127,7 +132,8 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
                 SubForum subF = new SubForum(foru, parsedReq[4]);
                 return handleAddSubForum(subF, moderators, parsedReq[i], parsedReq[i + 2]);
             case "ADDF":
-                return handleInitiateForum(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8], parsedReq[10]);
+                return handleInitiateForum(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8], parsedReq[9],
+                		parsedReq[10], parsedReq[11], parsedReq[12], parsedReq[13], parsedReq[14], parsedReq[16], parsedReq[18]);
             case "GETAP":
                 return handleGetAllPosts(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]));
             case "POST":
@@ -340,9 +346,14 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
     }
 
     public Object handleInitiateForum(String forumName, String adminName,
-            String adminPassword, String superAdminUserName, String superAdminPassword) {
+            String adminPassword, String imidiOrAgrePolicy, String notiFriendsPolicy,
+            String deletePolicy, String assignModerPolicy, String seniority, String minPublish,
+            String cancelModerPolicy, String superAdminUserName, String superAdminPassword) {
         boolean isAdded = false;
-        isAdded = _si.initiateForum(adminName, adminPassword, forumName, superAdminUserName, superAdminPassword);
+        
+        isAdded = _si.initiateForum(adminName, adminPassword, forumName, imidiOrAgrePolicy, notiFriendsPolicy,
+        		deletePolicy, assignModerPolicy, seniority, minPublish, cancelModerPolicy, superAdminUserName,
+        		superAdminPassword);
         if (isAdded) {
             //System.out.println("isAdded");
             return _msgToClient.sendOK();

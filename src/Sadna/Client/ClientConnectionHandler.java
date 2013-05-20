@@ -11,13 +11,22 @@ import Sadna.Client.API.ClientCommunicationHandlerInterface;
 import Sadna.Server.ForumNotification;
 import Sadna.db.Forum;
 import Sadna.db.Message;
+import Sadna.db.Policy;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
+import Sadna.db.PolicyEnums.enumAssignModerator;
+import Sadna.db.PolicyEnums.enumCancelModerator;
+import Sadna.db.PolicyEnums.enumDelete;
+import Sadna.db.PolicyEnums.enumNotiFriends;
+import Sadna.db.PolicyEnums.enumNotiImidiOrAgre;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import sun.text.normalizer.CharTrie.FriendAgent;
 
 public class ClientConnectionHandler implements ClientCommunicationHandlerInterface {
 
@@ -430,13 +439,20 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
     }
 
     @Override
-    public boolean initiateForum(String forumName, String adminName, String AdminPassword, String superAdminName, String superAdminPasswaord) {
+    public boolean initiateForum(String forumName, String adminName, String AdminPassword, Policy policy, String superAdminName, String superAdminPasswaord) {
         boolean initiated = false;
         msgToSend = "ADDF\n" + "forumName:\n" + forumName + "\n"
                 + "adminName:\n" + adminName + "\n" + "adminPassword:\n" + AdminPassword + "\n"
+                + "policy:\n"
+                + policy.getImidOrArgeNotiPolicy()+ "\n"
+                + policy.getFriendsNotiPolicy()+ "\n"
+                + policy.getDeletePolicy()+ "\n"
+                + policy.getAssignModeratorPolicy()+ "\n"
+                + policy.getSeniority()+ "\n"
+        		+ policy.getMinPublish()+ "\n"
+                + policy.getCancelModeratorPolicy()+ "\n"
                 + "superAdminName:\n" + superAdminName + "\n"
                 + "superAdminPasswaord:\n" + superAdminPasswaord + "\n";
-
         msgToSend += delimiter;
         stringToServer.print(msgToSend);
         stringToServer.flush();

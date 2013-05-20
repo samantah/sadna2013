@@ -8,7 +8,13 @@ import Sadna.Client.API.ClientCommunicationHandlerInterface;
 import Sadna.Server.API.ConnectionHandlerServerInterface;
 import Sadna.Server.API.ServerInterface;
 import Sadna.db.API.DBInterface;
+import Sadna.db.PolicyEnums.enumAssignModerator;
+import Sadna.db.PolicyEnums.enumCancelModerator;
+import Sadna.db.PolicyEnums.enumDelete;
+import Sadna.db.PolicyEnums.enumNotiFriends;
+import Sadna.db.PolicyEnums.enumNotiImidiOrAgre;
 import Sadna.db.Forum;
+import Sadna.db.Policy;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
@@ -96,31 +102,6 @@ public class ServerToDataBaseHandler implements ServerInterface {
      return succeeded;
      }
 	 */
-	@Override
-	public boolean initiateForum(String adminUserName, String adminPassword,
-			String forumName, String superAdminUserName,
-			String superAdminPassword) {
-		boolean isAdded = false;
-		Admin admin = null;
-		if (isForumNameUnique(forumName) && 
-				isSuperAdmin(superAdminUserName, superAdminPassword)) {
-			//System.out.println("is unique forum");
-			Forum forumToAdd = new Forum(forumName);
-			admin = new Admin(adminUserName, adminPassword, "", forumName, null);
-			forumToAdd.setAdmin(admin);
-			boolean addedForum = _db.addForum(forumToAdd);
-			if (addedForum) {
-				System.out.println("After adding forum in database");
-			}
-			boolean addedAdmin = _db.addMember(admin);
-			if (addedAdmin) {
-				System.out.println("After adding admin in database");
-			}
-
-			isAdded = (addedAdmin && addedForum);
-		}
-		return isAdded;
-	}
 
 	private boolean isSuperAdmin(String superAdminUserName,
 			String superAdminPassword) {
@@ -412,6 +393,76 @@ public class ServerToDataBaseHandler implements ServerInterface {
 	public boolean editPost(Post p, String userName, String password) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public boolean initiateForum(String adminName, String adminPassword,
+			String forumName, String ioap, String nfp, String dp, String amp,
+			String s, String mp, String cmp, String superAdminUserName,
+			String superAdminPassword) {
+		boolean isAdded = false;
+		Admin admin = null;
+		if (isForumNameUnique(forumName) && 
+				isSuperAdmin(superAdminUserName, superAdminPassword)) {
+			//System.out.println("is unique forum");
+			enumNotiImidiOrAgre imidOrArgeNotiPolicy;
+			enumNotiFriends friendsNotiPolicy;
+			enumDelete deletePolicy;
+			enumAssignModerator assignModeratorPolicy;
+			enumCancelModerator cancelModeratorPolicy;
+			int seniority = Integer.parseInt(s);
+			int minPublish = Integer.parseInt(mp);
+			switch(ioap){
+				case("IMIDIATE"):
+					imidOrArgeNotiPolicy = enumNotiImidiOrAgre.IMIDIATE;
+				case("AGGREGATE"):
+					imidOrArgeNotiPolicy = enumNotiImidiOrAgre.AGGREGATE;
+			}
+			switch(nfp){
+			case("ALLMEMBERS"):
+				friendsNotiPolicy = enumNotiFriends.ALLMEMBERS;
+			case("PUBLISHERS"):
+				friendsNotiPolicy = enumNotiFriends.PUBLISHERS;
+			}
+			
+			switch(dp){
+			case("LIMITED"):
+				deletePolicy = enumDelete.LIMITED;
+			case("EXTENDED"):
+				deletePolicy = enumDelete.EXTENDED;
+			}
+			switch(amp){
+			case("NO_RESTRICTION"):
+				assignModeratorPolicy = enumAssignModerator.NO_RESTRICTION;
+			case("MIN_PUBLISH"):
+				assignModeratorPolicy = enumAssignModerator.MIN_PUBLISH;
+			case("SENIORITY"):
+				assignModeratorPolicy = enumAssignModerator.SENIORITY;
+			}
+			switch(cmp){
+			case("NO_RESTRICTION"):
+				cancelModeratorPolicy = enumCancelModerator.NO_RESTRICTION;
+			case("RESTRICTED"):
+				cancelModeratorPolicy = enumCancelModerator.RESTRICTED;
+			}
+			
+			Policy policy = new Policy(imidOrArgeNotiPolicy, friendsNotiPolicy, deletePolicy,
+					assignModeratorPolicy, cancelModeratorPolicy, seniority, minPublish);
+			Forum forumToAdd = new Forum(forumName, policy);
+			admin = new Admin(adminName, adminPassword, "", forumName, null);
+			forumToAdd.setAdmin(admin);
+			boolean addedForum = _db.addForum(forumToAdd);
+			if (addedForum) {
+				System.out.println("After adding forum in database");
+			}
+			boolean addedAdmin = _db.addMember(admin);
+			if (addedAdmin) {
+				System.out.println("After adding admin in database");
+			}
+
+			isAdded = (addedAdmin && addedForum);
+		}
+		return isAdded;
 	}
 
 
