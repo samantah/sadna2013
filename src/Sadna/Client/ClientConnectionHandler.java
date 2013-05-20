@@ -1,12 +1,5 @@
 package Sadna.Client;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.io.*;
-import java.net.*;
-
-
 import Sadna.Client.API.ClientCommunicationHandlerInterface;
 import Sadna.Server.ForumNotification;
 import Sadna.db.Forum;
@@ -15,18 +8,16 @@ import Sadna.db.Policy;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
-import Sadna.db.PolicyEnums.enumAssignModerator;
-import Sadna.db.PolicyEnums.enumCancelModerator;
-import Sadna.db.PolicyEnums.enumDelete;
-import Sadna.db.PolicyEnums.enumNotiFriends;
-import Sadna.db.PolicyEnums.enumNotiImidiOrAgre;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.io.*;
+import java.net.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import sun.text.normalizer.CharTrie.FriendAgent;
+
+
 
 public class ClientConnectionHandler implements ClientCommunicationHandlerInterface {
 
@@ -401,6 +392,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
             returnedSF = (Forum) objectFromServer.readObject();
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println(e.getMessage());
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             System.out.println(ex.getMessage());
@@ -409,15 +401,15 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
     }
 
     @Override
-    public boolean addSubForum(SubForum subForum, List<Moderator> lm, String userName, String password) {
+    public boolean addSubForum(SubForum subForum, List<Member> lm, String userName, String password) {
         boolean added = false;
         Forum f = subForum.getForum();
         String fName = f.getForumName();
         String sfName = subForum.getSubForumName();
         msgToSend = "ADDSF\n" + "forumName:\n" + fName + "\n"
                 + "subForumName:\n" + sfName + "\n" + "size:\n" + lm.size() + "\n";
-        for (Moderator md : lm) {
-            msgToSend += "moderator:\n" + md.getUserName() + "\n";
+        for (Member m : lm) {
+            msgToSend += "member:\n" + m.getUserName() + "\n";
         }
         msgToSend += "requester:\n" + userName + "\n" + "password:\n" + password + "\n";
         msgToSend += delimiter;
@@ -751,7 +743,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         stringToServer.flush();
         try {
             objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
-            receivedMsg = (String) objectFromServer.readObject();
+            receivedMsg = objectFromServer.readObject() + "";
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException ex) {
@@ -774,7 +766,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         stringToServer.flush();
         try {
             objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
-            receivedMsg = (String) objectFromServer.readObject();
+            receivedMsg = objectFromServer.readObject() + "";
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException ex) {
@@ -795,7 +787,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         stringToServer.flush();
         try {
             objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
-            receivedMsg = (String) objectFromServer.readObject();
+            receivedMsg = objectFromServer.readObject() + "";
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException ex) {

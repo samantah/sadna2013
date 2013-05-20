@@ -178,11 +178,16 @@
                           <Component id="jLabelNewAdminPassword" alignment="3" min="-2" pref="21" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="jScrollPane2" alignment="0" min="-2" pref="141" max="-2" attributes="0"/>
-                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                              <Component id="jTextFieldNewAdminPassword" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
-                              <Component id="jLabelNotiCont" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="jTextFieldNewAdminPassword" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                                  <Component id="jLabelNotiCont" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="jButtonInitiateForum" min="-2" pref="91" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="96" max="-2" attributes="0"/>
@@ -232,24 +237,16 @@
                           <Component id="jTextNumberOfWeeks" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="jButtonInitiateForum" min="-2" pref="91" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="82" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="jRadioButtonContAll" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jRadioButtonContSubForum" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                              <Component id="jLabelDelModerator" min="-2" pref="23" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jRadioButtonDeleteModeratorNoRest" min="-2" pref="23" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jRadioButtonDeleteModeratorRest" min="-2" pref="23" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="74" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
+                      <Component id="jRadioButtonContAll" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jRadioButtonContSubForum" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                      <Component id="jLabelDelModerator" min="-2" pref="23" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jRadioButtonDeleteModeratorNoRest" min="-2" pref="23" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="jRadioButtonDeleteModeratorRest" min="-2" pref="23" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="74" max="-2" attributes="0"/>
                   </Group>
               </Group>
           </Group>

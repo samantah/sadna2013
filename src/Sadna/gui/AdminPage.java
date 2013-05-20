@@ -412,6 +412,9 @@ public class AdminPage extends javax.swing.JFrame {
         Admin admin = (Admin) CurrentStatus.currUser;
         listOfMembers = admin.getAllForumMembers();
         for (Member member : listOfMembers) {
+            if (member instanceof Admin) {
+                continue;
+            }
             listModel.addElement(member);
         }
         this.jListMembers.setModel(listModel);

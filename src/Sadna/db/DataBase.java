@@ -200,15 +200,12 @@ public class DataBase implements DBInterface {
     }
 
     @Override
-    public boolean addSubForum(SubForum subForum, List<Moderator> listOfModerators) {
+    public boolean addSubForum(SubForum subForum, List<Member> listOfModerators) {
         //get the names and IDs of the post
         String forum = subForum.getForum().getForumName();
         String subForumStr = subForum.getSubForumName();
         ObjectOutputStream obj;
         FileOutputStream outputstream;
-
-
-
         try {
             String path = dataBaseFolder + "/" + forum + "/"; //save the path of the post
             new File(path).mkdirs();
@@ -217,10 +214,9 @@ public class DataBase implements DBInterface {
             PrintWriter bw = new PrintWriter(new FileWriter(pathToFolder + "moderators.txt"));
             bw.close();
             String pathToMembers = pathToFolder;
-            for (Moderator m : listOfModerators) {
-                addModerator(m, subForum);
+            for (Member m : listOfModerators) {
+                addModerator(new Moderator(m), subForum);
             }
-
             outputstream = new FileOutputStream(path + subForumStr + ".obj");
             obj = new ObjectOutputStream(outputstream);
             obj.writeObject(subForum);//write the object to the file
@@ -854,11 +850,11 @@ public class DataBase implements DBInterface {
         Member member2 = new Member("m2", "password1", "a", "forum1", null);
         db.addMember(member);
         db.addMember(member2);
-        ArrayList<Moderator> arrayList = new ArrayList<Moderator>();
-        arrayList.add(new Moderator(member));
-        arrayList.add(new Moderator(member2));
+        ArrayList<Member> arrayList = new ArrayList<Member>();
+        arrayList.add(member);
+        arrayList.add(member2);
         db.addSubForum(subForum, arrayList);
-        db.addSubForum(subForum2, new ArrayList<Moderator>());
+        db.addSubForum(subForum2, new ArrayList<Member>());
         db.addThread(threadMessage);
         db.addThread(threadMessage2);
         db.addPost(post);

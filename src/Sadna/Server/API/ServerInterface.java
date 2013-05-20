@@ -13,16 +13,8 @@ import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
-import Sadna.db.PolicyEnums.enumAssignModerator;
-import Sadna.db.PolicyEnums.enumCancelModerator;
-import Sadna.db.PolicyEnums.enumDelete;
-import Sadna.db.PolicyEnums.enumNotiFriends;
-import Sadna.db.PolicyEnums.enumNotiImidiOrAgre;
-
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Vector;
 
 /**
  *
@@ -36,7 +28,7 @@ public interface ServerInterface {
 
     boolean deleteForum(String forumName, String userName, String password);
 
-    boolean addSubForum(SubForum subForum, List<Moderator> moderators, String username, String password);
+    boolean addSubForum(SubForum subForum, List<Member> moderators, String username, String password);
 
     boolean deleteSubForum(SubForum subForum, String userName, String password);
 
