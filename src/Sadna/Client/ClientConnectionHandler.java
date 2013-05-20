@@ -43,7 +43,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
             stringToServer.print("HELLO\n" + delimiter);
             stringToServer.flush();
             InputStream inputStream = clientSocket.getInputStream();
-            stringFromServer = new BufferedReader(new InputStreamReader(inputStream));
+//            stringFromServer = new BufferedReader(new InputStreamReader(inputStream));
             objectFromServer = new ObjectInputStream(inputStream);
             objectFromServer.readObject();
         } catch (Exception e) {
@@ -87,8 +87,10 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         msgToSend += delimiter;
         stringToServer.println(msgToSend);
         try {
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
             receivedMsg = (String) objectFromServer.readObject();
         } catch (IOException e) {
+            e.printStackTrace();
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             System.out.println(ex.getMessage());

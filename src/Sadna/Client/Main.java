@@ -14,7 +14,7 @@ import com.sun.nio.sctp.Notification;
 public class Main {
 
     public static void main(String argv[]) throws Exception {
-        String host = "192.168.0.107";
+        String host = "192.168.1.104";
         int port = 3333;
         ClientConnectionHandler c = new ClientConnectionHandler(host, port);
         //        c.initiateForum("newForum", "chen", "chen1234", "superAdmin", "superAdmin1234");
