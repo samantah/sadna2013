@@ -15,7 +15,7 @@ import Sadna.Client.User;
  */
 public class LogInAsAdminPage extends ForumJFrame {
 
-    String host = "192.168.1.104";
+    String host = "192.168.1.108";
     int port = 3333;
 
     /**
@@ -164,7 +164,7 @@ public class LogInAsAdminPage extends ForumJFrame {
         this.setVisible(false);
         this.dispose();
         frame.setVisible(true);
-        CurrentStatus.currFrame = frame;
+//        CurrentStatus.currFrame = frame;
     }//GEN-LAST:event_jButtonLoginActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonBack;

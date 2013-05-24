@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class MainFrame extends ForumJFrame {
 
-    String host = "10.0.0.10";
+    String host = "192.168.1.108";
 //    String host = "169.254.140.146";
     int port = 3333;
 
@@ -26,7 +26,7 @@ public class MainFrame extends ForumJFrame {
         initComponents();
         this.setResizable(false);
         ClientConnectionHandler ch = new ClientConnectionHandler(host, port);
-        ListenerClass listenerClass = new ListenerClass(host, port, Thread.currentThread());
+        ListenerClass listenerClass = new ListenerClass(host, port, ch);
         Thread thread = new Thread(listenerClass);
         thread.start();
         DefaultListModel listOfForums;

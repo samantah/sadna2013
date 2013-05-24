@@ -267,7 +267,6 @@ public class Reactor<T> implements Runnable {
     public static boolean SocketsListAdd(SocketChannel e) {
         boolean add;
         synchronized (_socketsList) {
-
             add = _socketsList.add(e);
         }
         return add;
