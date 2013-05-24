@@ -203,16 +203,48 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
             case "LOGINS":
                 return handleLoginAsSuperAdmin(parsedReq[2], parsedReq[4]);
             case "EDTTHRD":
-            //return handleEditThread(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8], parsedReq[10], parsedReq[12], parsedReq[14]);
+            	return handleEditThread(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8], parsedReq[10], parsedReq[12], parsedReq[14]);
             case "EDTPST":
-            //return handleEditPost(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8], parsedReq[10], parsedReq[12], parsedReq[14], parsedReq[16]);
+            	return handleEditPost(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8], parsedReq[10], parsedReq[12], parsedReq[14], parsedReq[16]);
             default:
                 return null;
         }
 
     }
 
-    private Object handleLogout(String forumName, String userName) {
+    private Object handleEditPost(String forumName, String subForumName,
+			String TMid, String pid, String title, String content,
+			String editorName, String editorPassword) {
+		Member editor = _si.getMember(subForumName, editorName);
+		if(editor==null || editor.getPassword()!=editorPassword){
+			return _msgToClient.sendErrorNoAuthorized();
+		}
+		Post postToEdit = _si.getPost(forumName, subForumName, Integer.parseInt(TMid), Integer.parseInt(pid));
+		postToEdit.setContent(content);
+		postToEdit.setTitle(title);
+		if(_si.postComment(postToEdit, null, null)){
+			return _msgToClient.sendOK();
+		}
+		return _msgToClient.sendErrorInServer();
+	}
+
+	private Object handleEditThread(String forumName, String subForumName,
+			String tid, String title, String content, String editorName,
+			String editorPassword) {
+		Member editor = _si.getMember(subForumName, editorName);
+		if(editor==null || editor.getPassword()!=editorPassword){
+			return _msgToClient.sendErrorNoAuthorized();
+		}
+		ThreadMessage threadToEdit = _si.getThreadMessage(forumName, subForumName, Integer.parseInt(tid));
+		threadToEdit.setContent(content);
+		threadToEdit.setTitle(title);
+		if(_si.publishThread(threadToEdit, null, null)){
+			return _msgToClient.sendOK();
+		}
+		return _msgToClient.sendErrorInServer();
+	}
+
+	private Object handleLogout(String forumName, String userName) {
         if (_si.logout(forumName, userName)) {
             return _msgToClient.sendOK();
         } else {

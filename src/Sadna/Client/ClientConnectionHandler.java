@@ -598,11 +598,11 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         String subForumName = subForum.getSubForumName();
         Forum forum = subForum.getForum();
         String forumName = forum.getForumName();
-        String posterName = newTM.getPublisher();
+        int tid = newTM.getId();
         String title = newTM.getTitle();
         String content = newTM.getContent();
         msgToSend = "EDTTHRD\n" + "forumName:\n" + forumName + "\n"
-                + "subForumName:\n" + subForumName + "\n" + "posterName:\n" + posterName + "\n" + "threadTitle:\n" + title + "\n"
+                + "subForumName:\n" + subForumName + "\n" + "threadId:\n" + tid + "\n" + "threadTitle:\n" + title + "\n"
                 + "threadContent:\n" + content + "\n" + "editorName:\n" + editorName + "\n" + "editorPassword:\n" + editorPassword + "\n";
         msgToSend += delimiter;
         stringToServer.print(msgToSend);
@@ -626,17 +626,17 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
     public boolean editPost(Post newP, String editorName, String editorPassword) {
         boolean edited = false;
         ThreadMessage newTM = newP.getThread();
-        int newTMid = newTM.getId();
+        int TMid = newTM.getId();
+        int pID = newP.getId();
         SubForum subForum = newTM.getSubForum();
         String subForumName = subForum.getSubForumName();
         Forum forum = subForum.getForum();
         String forumName = forum.getForumName();
-        String posterName = newP.getPublisher();
         String title = newP.getTitle();
         String content = newP.getContent();
         msgToSend = "EDTPST\n" + "forumName:\n" + forumName + "\n"
-                + "subForumName:\n" + subForumName + "\n" + "threadId:\n" + newTMid
-                + "\n" + "posterName:\n" + posterName + "\n" + "postTitle:\n" + title + "\n"
+                + "subForumName:\n" + subForumName + "\n" + "threadId:\n" + TMid + "\n"
+                + "postId:\n" + pID + "\n"+ "postTitle:\n" + title + "\n"
                 + "postContent:\n" + content + "\n" + "editorName:\n" + editorName + "\n"
                 + "editorPassword:\n" + editorPassword + "\n";
         msgToSend += delimiter;
