@@ -8,9 +8,10 @@ import Sadna.Client.Admin;
 import Sadna.Client.Member;
 import Sadna.db.Forum;
 import Sadna.db.SubForum;
+
+import javax.swing.*;
 import java.util.HashMap;
 import java.util.List;
-import javax.swing.DefaultListModel;
 
 /**
  *

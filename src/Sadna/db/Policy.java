@@ -1,10 +1,7 @@
 package Sadna.db;
 
-import Sadna.db.PolicyEnums.enumAssignModerator;
-import Sadna.db.PolicyEnums.enumCancelModerator;
-import Sadna.db.PolicyEnums.enumDelete;
-import Sadna.db.PolicyEnums.enumNotiFriends;
-import Sadna.db.PolicyEnums.enumNotiImidiOrAgre;
+import Sadna.db.PolicyEnums.*;
+
 import java.io.Serializable;
 
 public class Policy implements Serializable{

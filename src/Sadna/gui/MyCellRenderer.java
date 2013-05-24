@@ -4,9 +4,8 @@
  */
 package Sadna.gui;
 
-import java.awt.Component;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JList;
+import javax.swing.*;
+import java.awt.*;
 
 class MyCellRenderer extends DefaultListCellRenderer {
    public static final String HTML_1 = "<html><body style='width: ";

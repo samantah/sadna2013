@@ -6,9 +6,9 @@ package Sadna.gui;
 
 import Sadna.Client.Member;
 import Sadna.Server.ForumNotification;
-import Sadna.db.SubForum;
+
+import javax.swing.*;
 import java.util.List;
-import javax.swing.DefaultListModel;
 
 /**
  *

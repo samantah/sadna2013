@@ -5,14 +5,11 @@
  */
 package Sadna.Client;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Vector;
-
 import Sadna.Client.API.ClientCommunicationHandlerInterface;
 import Sadna.db.SubForum;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class Admin extends Moderator {
 

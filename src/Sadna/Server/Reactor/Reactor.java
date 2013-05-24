@@ -1,35 +1,30 @@
 package Sadna.Server.Reactor;
 
-import Sadna.Server.Tokenizer.FixedSeparatorMessageTokenizer;
-import Sadna.Server.Tokenizer.MessageTokenizer;
-import Sadna.Server.Tokenizer.TokenizerFactory;
-import Sadna.Server.Tokenizer.StringMessage;
-import Sadna.Server.Protocol.ServerProtocolFactory;
 import Sadna.Server.Protocol.AsyncServerProtocol;
 import Sadna.Server.Protocol.RequestHandlerProtocol;
+import Sadna.Server.Protocol.ServerProtocolFactory;
+import Sadna.Server.ServerToDataBaseHandler;
+import Sadna.Server.Tokenizer.FixedSeparatorMessageTokenizer;
+import Sadna.Server.Tokenizer.MessageTokenizer;
+import Sadna.Server.Tokenizer.StringMessage;
+import Sadna.Server.Tokenizer.TokenizerFactory;
+import Sadna.db.DataBase;
+
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.net.InetSocketAddress;
-import java.nio.channels.ClosedChannelException;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
+import java.nio.ByteBuffer;
+import java.nio.channels.*;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
-
-import Sadna.Server.ServerToDataBaseHandler;
-import Sadna.db.DataBase;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
-import java.nio.ByteBuffer;
-import java.nio.channels.SocketChannel;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
 
 /**
  * An implementation of the Reactor pattern.

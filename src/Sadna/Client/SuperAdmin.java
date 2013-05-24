@@ -4,12 +4,10 @@
  */
 package Sadna.Client;
 
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Vector;
-
 import Sadna.Client.API.ClientCommunicationHandlerInterface;
 import Sadna.db.Policy;
+
+import java.util.List;
 
 /**
  *

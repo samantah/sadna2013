@@ -5,6 +5,7 @@
 package Sadna.db;
 
 import Sadna.db.Generators.ThreadIDGenerator;
+
 import java.io.Serializable;
 
 /**

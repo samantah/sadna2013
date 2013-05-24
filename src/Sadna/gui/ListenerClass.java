@@ -5,7 +5,6 @@
 package Sadna.gui;
 
 import Sadna.Client.ClientConnectionHandler;
-import javax.swing.JButton;
 
 /**
  *

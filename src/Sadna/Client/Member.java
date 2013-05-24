@@ -9,11 +9,9 @@ import Sadna.Server.ForumNotification;
 import Sadna.db.Post;
 import Sadna.db.ThreadMessage;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Vector;
 
 public class Member extends User {
 

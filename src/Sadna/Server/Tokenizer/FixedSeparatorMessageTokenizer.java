@@ -3,12 +3,12 @@ package Sadna.Server.Tokenizer;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
-import java.nio.charset.CharacterCodingException;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 import java.util.Vector;
 
 public class FixedSeparatorMessageTokenizer implements MessageTokenizer<StringMessage> {

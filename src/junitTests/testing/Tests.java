@@ -4,27 +4,15 @@
  */
 package testing;
 
-import Sadna.Client.ClientConnectionHandler;
-import Sadna.Client.Member;
-import Sadna.Client.Moderator;
-import Sadna.Client.SuperAdmin;
-import Sadna.Client.User;
-import Sadna.db.DataBase;
-import Sadna.db.Forum;
-import Sadna.db.Post;
-import Sadna.db.SubForum;
-import Sadna.db.ThreadMessage;
-import static UnitTests.connectionHandlerTest.SUPER_ADMIN_NAME;
-import static UnitTests.connectionHandlerTest.SUPER_ADMIN_PASSWORD;
-import java.util.ArrayList;
 import Driver.ClientBridge;
 import Driver.ClientDriver;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import Sadna.Client.*;
+import Sadna.db.*;
+import org.junit.*;
+
+import java.util.ArrayList;
+
 import static org.junit.Assert.*;
-import org.junit.Test;
 
 /**
  *
