@@ -8,11 +8,8 @@ import Sadna.Client.Member;
 import Sadna.Client.SuperAdmin;
 import Sadna.Client.User;
 import Sadna.Server.ForumNotification;
-import Sadna.db.Forum;
-import Sadna.db.Policy;
-import Sadna.db.Post;
-import Sadna.db.SubForum;
-import Sadna.db.ThreadMessage;
+import Sadna.db.*;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;

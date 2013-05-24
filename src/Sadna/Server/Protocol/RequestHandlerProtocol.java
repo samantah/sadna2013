@@ -1,29 +1,28 @@
 package Sadna.Server.Protocol;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import Sadna.Client.Admin;
 import Sadna.Client.Member;
 import Sadna.Client.Moderator;
 import Sadna.Client.SuperAdmin;
+import Sadna.Server.API.ServerInterface;
 import Sadna.Server.ForumNotification;
 import Sadna.Server.NotificationsFactory;
-import Sadna.Server.StringMessagesToClient;
-import Sadna.Server.API.ServerInterface;
 import Sadna.Server.Reactor.Reactor;
-import Sadna.Server.ServerToDataBaseHandler;
+import Sadna.Server.StringMessagesToClient;
+import Sadna.Server.Tokenizer.StringMessage;
 import Sadna.db.Forum;
-import Sadna.db.Post;
-import Sadna.db.SubForum;
-import Sadna.db.ThreadMessage;
 import Sadna.db.PolicyEnums.enumAssignModerator;
 import Sadna.db.PolicyEnums.enumCancelModerator;
 import Sadna.db.PolicyEnums.enumDelete;
-import Sadna.Server.Tokenizer.StringMessage;
+import Sadna.db.Post;
+import Sadna.db.SubForum;
+import Sadna.db.ThreadMessage;
+
 import java.nio.channels.SocketChannel;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * a simple implementation of the server protocol interface
@@ -406,12 +405,15 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
     public Object handlePublishThread(String forumName, String subForumName,
             String posterName, String threadTitle, String threadContent, String password) {
         boolean succeeded = false;
+        ThreadMessage threadM = null;
         SubForum sf = _si.getSubForum(forumName, subForumName);
         if (sf != null && _si.memberExistsInForum(forumName, posterName)) {
-            ThreadMessage threadM = new ThreadMessage(sf, threadTitle, threadContent, posterName);
+            threadM = new ThreadMessage(sf, threadTitle, threadContent, posterName);
             succeeded = _si.publishThread(threadM, posterName, password);
         }
         if (succeeded) {
+            _notificationsFactory.sendNotifications(sf, threadM);
+            Reactor.NotifyAllListeners();
             return _msgToClient.sendOK();
         } else {
             return _msgToClient.sendErrorInServer();
@@ -539,12 +541,14 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
     private Object deletePostAndSendOk(Post p, String userName, String password) {
         _notificationsFactory.sendNotifications(p);
         _si.deleteComment(p, userName, password);
+        Reactor.NotifyAllListeners();
         return _msgToClient.sendOK();
     }
 
     private Object deleteThreadAndSendOk(ThreadMessage tm, String userName, String password) {
         _notificationsFactory.sendNotifications(tm);
         _si.deleteThread(tm, userName, password);
+        Reactor.NotifyAllListeners();
         return _msgToClient.sendOK();
     }
 
@@ -554,6 +558,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
         if (equals) {
             _notificationsFactory.sendNotifications(sf);
             _si.deleteSubForum(sf, requester, password);
+            Reactor.NotifyAllListeners();
             return _msgToClient.sendOK();
         }
         return _msgToClient.sendErrorNoAuthorized();

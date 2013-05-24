@@ -9,9 +9,10 @@ import Sadna.Client.User;
 import Sadna.db.Forum;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
-import java.awt.Color;
+
+import javax.swing.*;
+import java.awt.*;
 import java.util.List;
-import javax.swing.DefaultListModel;
 
 /**
  *

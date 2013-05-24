@@ -9,12 +9,12 @@ import Sadna.Client.Member;
 import Sadna.Client.User;
 import Sadna.db.Forum;
 import Sadna.db.SubForum;
-import java.awt.Color;
+
+import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
 
 /**
  *

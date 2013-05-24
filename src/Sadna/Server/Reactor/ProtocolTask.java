@@ -1,9 +1,9 @@
 package Sadna.Server.Reactor;
 
-import Sadna.Server.Tokenizer.MessageTokenizer;
 import Sadna.Server.Protocol.ServerProtocol;
+import Sadna.Server.Tokenizer.MessageTokenizer;
+
 import java.nio.ByteBuffer;
-import java.nio.charset.CharacterCodingException;
 
 
 /**

@@ -5,8 +5,6 @@
 package Sadna.db;
 
 import Sadna.db.Generators.PostIDGenerator;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *

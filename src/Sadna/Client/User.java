@@ -5,13 +5,13 @@
 package Sadna.Client;
 
 import Sadna.Client.API.ClientCommunicationHandlerInterface;
-import java.io.Serializable;
-import java.util.List;
-
 import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  *

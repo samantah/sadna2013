@@ -1,10 +1,6 @@
 package Sadna.Client;
 
-import Sadna.db.Forum;
-import Sadna.db.Policy;
-import Sadna.db.Post;
-import Sadna.db.SubForum;
-import Sadna.db.ThreadMessage;
+import Sadna.db.*;
 
 import java.util.List;
 

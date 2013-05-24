@@ -5,6 +5,7 @@
 package Sadna.db;
 
 import Sadna.Client.Admin;
+
 import java.io.Serializable;
 
 /**

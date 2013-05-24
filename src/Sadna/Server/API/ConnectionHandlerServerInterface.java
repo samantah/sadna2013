@@ -3,14 +3,12 @@ package Sadna.Server.API;
 import Sadna.Client.Member;
 import Sadna.Server.ForumNotification;
 import Sadna.db.Forum;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Vector;
-
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
+
+import java.util.HashMap;
+import java.util.List;
 
 
 public interface ConnectionHandlerServerInterface{

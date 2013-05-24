@@ -9,16 +9,11 @@ import Sadna.Client.ClientConnectionHandler;
 import Sadna.Client.SuperAdmin;
 import Sadna.db.Forum;
 import Sadna.db.Policy;
-import Sadna.db.PolicyEnums.enumAssignModerator;
-import Sadna.db.PolicyEnums.enumCancelModerator;
-import Sadna.db.PolicyEnums.enumDelete;
-import Sadna.db.PolicyEnums.enumNotiFriends;
-import Sadna.db.PolicyEnums.enumNotiImidiOrAgre;
+import Sadna.db.PolicyEnums.*;
+
+import javax.swing.*;
 import java.util.Enumeration;
 import java.util.List;
-import javax.swing.AbstractButton;
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultListModel;
 
 /**
  *

@@ -3,26 +3,15 @@ package UnitTests;
 /**
  *
  */
+
 import Sadna.Client.*;
-import Sadna.db.DataBase;
-import javax.imageio.spi.RegisterableService;
+import Sadna.db.*;
+import org.junit.*;
 
-import static org.junit.Assert.*;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import Sadna.db.Forum;
-import Sadna.db.Post;
-import Sadna.db.SubForum;
-import Sadna.db.ThreadMessage;
 import java.util.ArrayList;
 import java.util.List;
-import Driver.ClientBridge;
-import Driver.ClientDriver;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+
+import static org.junit.Assert.*;
 
 /**
  * @author snir elkaras
