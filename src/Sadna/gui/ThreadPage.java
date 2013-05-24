@@ -8,6 +8,7 @@ import Sadna.Client.Member;
 import Sadna.Client.User;
 import Sadna.db.Post;
 import Sadna.db.ThreadMessage;
+import java.awt.Color;
 import java.util.List;
 import javax.swing.DefaultListModel;
 
@@ -15,12 +16,13 @@ import javax.swing.DefaultListModel;
  *
  * @author fistuk
  */
-public class ThreadPage extends javax.swing.JFrame {
+public class ThreadPage extends ForumJFrame {
 
     /**
      * Creates new form ThreadPage
      */
     private Post currPost;
+
     public ThreadPage() {
         initComponents();
         this.setResizable(false);
@@ -30,6 +32,11 @@ public class ThreadPage extends javax.swing.JFrame {
         if (CurrentStatus.currUser instanceof Member) {
             logInButton.setVisible(false);
             registerButton.setVisible(false);
+            Member m = (Member) CurrentStatus.currUser;
+            boolean hasNotifications = m.hasNotifications();
+            if (hasNotifications) {
+                this.getNotificationsButton.setBackground(Color.RED);
+            }
         } else {
             getNotificationsButton.setVisible(false);
             jButtonSignout.setVisible(false);
@@ -74,6 +81,7 @@ public class ThreadPage extends javax.swing.JFrame {
         jButtonEditPost = new javax.swing.JButton();
         jButtonEdit = new javax.swing.JButton();
         getNotificationsButton = new javax.swing.JButton();
+        jButtonNotifyMainThread = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -167,6 +175,13 @@ public class ThreadPage extends javax.swing.JFrame {
             }
         });
 
+        jButtonNotifyMainThread.setText("jButton1");
+        jButtonNotifyMainThread.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonNotifyMainThreadActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -210,11 +225,15 @@ public class ThreadPage extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabelError, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(105, 105, 105))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jButtonNotifyMainThread, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(33, 33, 33)
+                .addComponent(jButtonNotifyMainThread, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabelThreadTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabelThreadContent, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -253,6 +272,7 @@ public class ThreadPage extends javax.swing.JFrame {
         this.setVisible(false);
         this.dispose();
         subForumPage.setVisible(true);
+        CurrentStatus.currFrame = subForumPage;
     }//GEN-LAST:event_jButtonBackActionPerformed
 
     private void logInButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logInButtonActionPerformed
@@ -260,6 +280,7 @@ public class ThreadPage extends javax.swing.JFrame {
         this.setVisible(false);
         this.dispose();
         logInPage.setVisible(true);
+        CurrentStatus.currFrame = logInPage;
     }//GEN-LAST:event_logInButtonActionPerformed
 
     private void registerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerButtonActionPerformed
@@ -267,6 +288,7 @@ public class ThreadPage extends javax.swing.JFrame {
         this.setVisible(false);
         this.dispose();
         registrationPage.setVisible(true);
+        CurrentStatus.currFrame = registrationPage;
     }//GEN-LAST:event_registerButtonActionPerformed
 
     private void jButtonSignoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSignoutActionPerformed
@@ -279,6 +301,7 @@ public class ThreadPage extends javax.swing.JFrame {
         this.setVisible(false);
         this.dispose();
         threadPage.setVisible(true);
+        CurrentStatus.currFrame = threadPage;
     }//GEN-LAST:event_jButtonSignoutActionPerformed
 
     private void jButtonAddPostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddPostActionPerformed
@@ -296,6 +319,7 @@ public class ThreadPage extends javax.swing.JFrame {
         this.setVisible(false);
         this.dispose();
         threadPage.setVisible(true);
+        CurrentStatus.currFrame = threadPage;
     }//GEN-LAST:event_jButtonAddPostActionPerformed
 
     private void jButtonDeletePostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeletePostActionPerformed
@@ -312,13 +336,15 @@ public class ThreadPage extends javax.swing.JFrame {
             this.setVisible(false);
             this.dispose();
             threadPage.setVisible(true);
+            CurrentStatus.currFrame = threadPage;
         }
     }//GEN-LAST:event_jButtonDeletePostActionPerformed
 
     private void jButtonEditPostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditPostActionPerformed
         Post selectedPost = (Post) this.jListPosts.getSelectedValue();
-        if (selectedPost==null)
+        if (selectedPost == null) {
             return;
+        }
         String title = selectedPost.getTitle();
         String content = selectedPost.getContent();
         this.jTextFieldAddTitle.setText(title);
@@ -335,7 +361,7 @@ public class ThreadPage extends javax.swing.JFrame {
         currPost.setContent(content);
         currPost.setTitle(title);
         boolean editPost = member.editPost(currPost);
-        if (editPost){
+        if (editPost) {
             updateListOfPosts();
             this.jTextFieldAddContent.setText("");
             this.jTextFieldAddTitle.setText("");
@@ -347,8 +373,13 @@ public class ThreadPage extends javax.swing.JFrame {
     private void getNotificationsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getNotificationsButtonActionPerformed
         NotificationsPage notificationsPage = new NotificationsPage();
         notificationsPage.setVisible(true);
+        this.getNotificationsButton.setBackground(new Color(214, 217, 223));
+
     }//GEN-LAST:event_getNotificationsButtonActionPerformed
 
+    private void jButtonNotifyMainThreadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNotifyMainThreadActionPerformed
+        askForNotification();
+    }//GEN-LAST:event_jButtonNotifyMainThreadActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton getNotificationsButton;
     private javax.swing.JButton jButtonAddPost;
@@ -356,6 +387,7 @@ public class ThreadPage extends javax.swing.JFrame {
     private javax.swing.JButton jButtonDeletePost;
     private javax.swing.JButton jButtonEdit;
     private javax.swing.JButton jButtonEditPost;
+    private javax.swing.JButton jButtonNotifyMainThread;
     private javax.swing.JButton jButtonSignout;
     private javax.swing.JLabel jLabelError;
     private javax.swing.JLabel jLabelErrorCannotDelete;
@@ -382,5 +414,22 @@ public class ThreadPage extends javax.swing.JFrame {
             listModel.addElement(p);
         }
         jListPosts.setModel(listModel);
+    }
+
+    @Override
+    public void askForNotification() {
+        if (!(CurrentStatus.currUser instanceof Member)) {
+            return;
+        }
+        Member m = (Member) CurrentStatus.currUser;
+        boolean hasNotifications = m.hasNotifications();
+        if (hasNotifications) {
+            this.getNotificationsButton.setBackground(Color.RED);
+        }
+    }
+
+    @Override
+    public void makeAnEvent() {
+        this.jButtonNotifyMainThread.doClick();
     }
 }

@@ -12,6 +12,8 @@ import Sadna.Server.ForumNotification;
 import Sadna.Server.NotificationsFactory;
 import Sadna.Server.StringMessagesToClient;
 import Sadna.Server.API.ServerInterface;
+import Sadna.Server.Reactor.Reactor;
+import Sadna.Server.ServerToDataBaseHandler;
 import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
@@ -20,6 +22,7 @@ import Sadna.db.PolicyEnums.enumAssignModerator;
 import Sadna.db.PolicyEnums.enumCancelModerator;
 import Sadna.db.PolicyEnums.enumDelete;
 import Sadna.Server.Tokenizer.StringMessage;
+import java.nio.channels.SocketChannel;
 import java.util.Date;
 
 /**
@@ -32,11 +35,20 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
     private ServerInterface _si;
     private StringMessagesToClient _msgToClient;
     private NotificationsFactory _notificationsFactory;
+    private SocketChannel _socketChannel;
 
     public RequestHandlerProtocol(ServerInterface _si) {
         this._si = _si;
         this._msgToClient = new StringMessagesToClient();
         this._notificationsFactory = new NotificationsFactory(this._si);
+    }
+
+    public RequestHandlerProtocol(ServerInterface _si, SocketChannel sc) {
+        this._si = _si;
+        this._msgToClient = new StringMessagesToClient();
+        this._notificationsFactory = new NotificationsFactory(this._si);
+        this._socketChannel = sc;
+
     }
 
     /**
@@ -106,6 +118,8 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
         switch (parsedReq[0]) {
             case "HELLO":
                 return "HELLO";
+            case "LISTENING":
+                return handleListening();
             case "LOGIN":
                 return handleLogin(parsedReq[2], parsedReq[4], parsedReq[6]);
             case "REGISTER":
@@ -450,6 +464,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
             result = _msgToClient.sendErrorInServer();
         }
         _notificationsFactory.sendNotifications(post);
+        Reactor.NotifyAllListeners();
         return result;
     }
 
@@ -616,5 +631,13 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
         } else {
             return _msgToClient.sendErrorNoAuthorized();
         }
+    }
+
+    private Object handleListening() {
+        boolean SocketsListAdd = Reactor.SocketsListAdd(_socketChannel);
+        if (SocketsListAdd) {
+            return _msgToClient.sendOK();
+        }
+        return _msgToClient.sendErrorInServer();
     }
 }

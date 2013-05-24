@@ -8,18 +8,12 @@ import Sadna.Client.API.ClientCommunicationHandlerInterface;
 import Sadna.Client.ClientConnectionHandler;
 import Sadna.Client.SuperAdmin;
 import Sadna.Client.User;
-import static Sadna.gui.EnumPages.FORUM;
-import static Sadna.gui.EnumPages.MAIN;
-import static Sadna.gui.EnumPages.SUBFORUM;
-import static Sadna.gui.EnumPages.THREAD;
-import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
 
 /**
  *
  * @author fistuk
  */
-public class LogInAsAdminPage extends javax.swing.JFrame {
+public class LogInAsAdminPage extends ForumJFrame {
 
     String host = "192.168.1.104";
     int port = 3333;
@@ -152,6 +146,7 @@ public class LogInAsAdminPage extends javax.swing.JFrame {
         this.setVisible(false);
         this.dispose();
         mainFrame.setVisible(true);
+        CurrentStatus.currFrame = mainFrame;
     }//GEN-LAST:event_jButtonBackActionPerformed
 
     private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLoginActionPerformed
@@ -169,6 +164,7 @@ public class LogInAsAdminPage extends javax.swing.JFrame {
         this.setVisible(false);
         this.dispose();
         frame.setVisible(true);
+        CurrentStatus.currFrame = frame;
     }//GEN-LAST:event_jButtonLoginActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonBack;

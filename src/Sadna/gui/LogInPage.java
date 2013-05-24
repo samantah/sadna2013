@@ -13,7 +13,7 @@ import javax.swing.JFrame;
  *
  * @author fistuk
  */
-public class LogInPage extends javax.swing.JFrame {
+public class LogInPage extends ForumJFrame {
 
     /**
      * Creates new form LogInPage
@@ -166,7 +166,7 @@ public class LogInPage extends javax.swing.JFrame {
 
     private void goBack() {
         EnumPages whereToGo = null;
-        JFrame frame = null;
+        ForumJFrame frame = null;
         for (int i = 0; i < 1; i++) {
             if (CurrentStatus.currForum == null) {
                 whereToGo = EnumPages.MAIN;
@@ -200,5 +200,6 @@ public class LogInPage extends javax.swing.JFrame {
         this.setVisible(false);
         this.dispose();
         frame.setVisible(true);
+        CurrentStatus.currFrame = frame;
     }
 }

@@ -18,14 +18,13 @@ import java.util.Enumeration;
 import java.util.List;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
 import javax.swing.DefaultListModel;
 
 /**
  *
  * @author fistuk
  */
-public class MainFrameAsSuperAdmin extends javax.swing.JFrame {
+public class MainFrameAsSuperAdmin extends ForumJFrame {
 
     String host = "192.168.1.104";
     int port = 3333;

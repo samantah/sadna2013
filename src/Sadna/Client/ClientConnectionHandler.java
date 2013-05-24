@@ -13,8 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.io.*;
 import java.net.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -865,17 +863,20 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 
     @Override
     public boolean listenToServer() {
-        String recivedLine = null;
+        boolean remove = false;
         try {
-            recivedLine = this.stringFromServer.readLine();
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
+            objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
+            receivedMsg = (String) objectFromServer.readObject();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
-        if (recivedLine == null) {
-            return false;
+        if (receivedMsg.contains("200ok")) {
+            remove = true;
         }
-        return true;
+        return remove;
 
     }
 
@@ -912,11 +913,12 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         try {
             objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
             recieved = objectFromServer.readObject();
-            if (recieved instanceof String){
+            if (recieved instanceof String) {
                 return false;
             }
             hasNotifications = (Boolean) recieved;
         } catch (IOException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
