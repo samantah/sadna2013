@@ -22,8 +22,14 @@ import java.util.logging.Logger;
 
 import Sadna.Server.ServerToDataBaseHandler;
 import Sadna.db.DataBase;
-
-
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
+import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
 
 /**
  * An implementation of the Reactor pattern.
@@ -37,6 +43,7 @@ public class Reactor<T> implements Runnable {
     private final TokenizerFactory<T> _tokenizerFactory;
     private volatile boolean _shouldRun = true;
     private ReactorData<T> _data;
+    private static final List<SocketChannel> _socketsList = new ArrayList<>();
 
     /**
      * Creates a new Reactor
@@ -86,7 +93,7 @@ public class Reactor<T> implements Runnable {
      */
     public void run() {
         // Create & start the ThreadPool
-        
+
         ExecutorService executor = Executors.newFixedThreadPool(_poolSize);
         Selector selector = null;
         ServerSocketChannel ssChannel = null;
@@ -212,7 +219,7 @@ public class Reactor<T> implements Runnable {
 //            Reactor<StringMessage> reactor = startEchoServer(port, poolSize);
             Reactor<StringMessage> reactor = startRequestHandlerServer(port, poolSize);
 
-            
+
             Thread thread = new Thread(reactor);
             thread.start();
             logger.info("Reactor is ready on port " + reactor.getPort());
@@ -222,11 +229,15 @@ public class Reactor<T> implements Runnable {
         }
     }
 
-    
     public static Reactor<StringMessage> startRequestHandlerServer(int port, int poolSize) {
         ServerProtocolFactory<StringMessage> protocolMaker = new ServerProtocolFactory<StringMessage>() {
             public AsyncServerProtocol<StringMessage> create() {
                 return new RequestHandlerProtocol(new ServerToDataBaseHandler(new DataBase()));
+            }
+
+            @Override
+            public AsyncServerProtocol<StringMessage> create(SocketChannel sc) {
+                return new RequestHandlerProtocol(new ServerToDataBaseHandler(new DataBase()), sc);
             }
         };
 
@@ -242,4 +253,57 @@ public class Reactor<T> implements Runnable {
         return reactor;
     }
 
+    public static int SocketsListSize() {
+        int size;
+        synchronized (_socketsList) {
+            size = _socketsList.size();
+        }
+        return size;
+    }
+
+    public static Iterator<SocketChannel> SocketsListIterator() {
+        Iterator<SocketChannel> iterator;
+        synchronized (_socketsList) {
+            iterator = _socketsList.iterator();
+        }
+        return iterator;
+    }
+
+    public static boolean SocketsListAdd(SocketChannel e) {
+        boolean add;
+        synchronized (_socketsList) {
+
+            add = _socketsList.add(e);
+        }
+        return add;
+    }
+
+    public static boolean SocketsListRemove(SocketChannel o) {
+        boolean remove;
+        synchronized (_socketsList) {
+            remove = _socketsList.remove(o);
+        }
+        return remove;
+    }
+
+    public static void NotifyAllListeners() {
+        Iterator<SocketChannel> SocketsListIterator = SocketsListIterator();
+        ByteArrayOutputStream b = null;
+        PrintWriter pw = null;
+        String msg = "200ok";
+        ByteBuffer bb;
+        while (SocketsListIterator.hasNext()) {
+            SocketChannel socketChannel = SocketsListIterator.next();
+            try {
+                b = new ByteArrayOutputStream();
+                ObjectOutputStream o = new ObjectOutputStream(b);
+                o.writeObject(msg);
+                bb = ByteBuffer.wrap(b.toByteArray());
+                socketChannel.write(bb);
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+                ex.printStackTrace();
+            }
+        }
+    }
 }

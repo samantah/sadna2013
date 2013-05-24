@@ -14,7 +14,7 @@ import javax.swing.DefaultListModel;
  *
  * @author fistuk
  */
-public class NotificationsPage extends javax.swing.JFrame {
+public class NotificationsPage extends ForumJFrame {
 
     /**
      * Creates new form NotificationsPage

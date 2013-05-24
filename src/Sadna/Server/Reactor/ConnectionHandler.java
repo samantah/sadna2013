@@ -36,7 +36,7 @@ public class ConnectionHandler<T> {
     private ConnectionHandler(SocketChannel sChannel, ReactorData<T> data, SelectionKey key) {
         _sChannel = sChannel;
         _data = data;
-        _protocol = _data.getProtocolMaker().create();
+        _protocol = _data.getProtocolMaker().create(_sChannel);
         _tokenizer = _data.getTokenizerMaker().create();
         _skey = key;
     }
@@ -102,6 +102,7 @@ public class ConnectionHandler<T> {
         if (numBytesRead == -1) {
             // No more bytes can be read from the channel
             logger.info("client on " + address + " has disconnected");
+            Reactor.SocketsListRemove(_sChannel);
             closeConnection();
             // tell the protocol that the connection terminated.
             _protocol.connectionTerminated();

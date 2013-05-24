@@ -6,11 +6,9 @@ package Sadna.db.API;
 
 import Sadna.Client.API.ClientCommunicationHandlerInterface;
 import Sadna.Client.Admin;
-import Sadna.Client.ClientConnectionHandler;
 import Sadna.Client.Member;
 import Sadna.Client.Moderator;
 import Sadna.Client.SuperAdmin;
-import Sadna.Server.API.ConnectionHandlerServerInterface;
 import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;

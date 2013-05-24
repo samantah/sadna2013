@@ -10,6 +10,7 @@ import Sadna.Client.Member;
 import Sadna.Client.SuperAdmin;
 import Sadna.Client.User;
 import Sadna.db.Forum;
+import java.awt.Color;
 import java.util.List;
 import javax.swing.DefaultListModel;
 
@@ -17,16 +18,17 @@ import javax.swing.DefaultListModel;
  *
  * @author fistuk
  */
-public class MainFrame extends javax.swing.JFrame {
+public class MainFrame extends ForumJFrame {
 
-    String host = "192.168.1.104";
+    String host = "10.0.0.10";
+//    String host = "169.254.140.146";
     int port = 3333;
 
     public MainFrame() {
         initComponents();
         this.setResizable(false);
         ClientConnectionHandler ch = new ClientConnectionHandler(host, port);
-        ListenerClass listenerClass = new ListenerClass(host, port, ch);
+        ListenerClass listenerClass = new ListenerClass(host, port, Thread.currentThread());
         Thread thread = new Thread(listenerClass);
         thread.start();
         DefaultListModel listOfForums;
@@ -34,6 +36,8 @@ public class MainFrame extends javax.swing.JFrame {
             CurrentStatus.currUser = new User(ch);
         }
         List<Forum> viewForums = UpdateListOfForums();
+        CurrentStatus.currFrame = this;
+        CurrentStatus.defaultColor = this.enterForumButton.getBackground();
     }
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -112,6 +116,7 @@ public class MainFrame extends javax.swing.JFrame {
         this.setVisible(false);
         this.dispose();
         forumPage.setVisible(true);
+        CurrentStatus.currFrame = forumPage;
     }//GEN-LAST:event_enterForumButtonActionPerformed
 
     private void clickHandler(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_clickHandler

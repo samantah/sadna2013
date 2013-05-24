@@ -6,20 +6,21 @@ package Sadna.gui;
 
 import Sadna.Client.Admin;
 import Sadna.Client.Member;
-import Sadna.Client.Moderator;
 import Sadna.Client.User;
 import Sadna.db.Forum;
 import Sadna.db.SubForum;
-import java.util.ArrayList;
+import java.awt.Color;
 import java.util.List;
-import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 
 /**
  *
  * @author fistuk
  */
-public class ForumPage extends javax.swing.JFrame {
+public class ForumPage extends ForumJFrame {
 
     /**
      * Creates new form ForumPage
@@ -27,6 +28,7 @@ public class ForumPage extends javax.swing.JFrame {
     public ForumPage() {
         initComponents();
         this.jLabelErrorAddSubForum.setVisible(false);
+        this.jButtonNotifyMainThread.setVisible(false);
         addNewSubButton.setVisible(false);
         jLabelHeadNewSubForum.setVisible(false);
         jLabelNewSubName.setVisible(false);
@@ -49,6 +51,11 @@ public class ForumPage extends javax.swing.JFrame {
         }
         if (CurrentStatus.currUser instanceof Member) {
             this.getNotificationsButton.setVisible(true);
+            Member m = (Member) CurrentStatus.currUser;
+            boolean hasNotifications = m.hasNotifications();
+            if (hasNotifications) {
+                this.getNotificationsButton.setBackground(Color.RED);
+            }
             logInButton.setVisible(false);
             registerButton.setVisible(false);
         } else {
@@ -94,6 +101,7 @@ public class ForumPage extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jListOfMembers = new javax.swing.JList();
         jLabelErrorAddSubForum = new javax.swing.JLabel();
+        jButtonNotifyMainThread = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -187,6 +195,13 @@ public class ForumPage extends javax.swing.JFrame {
         jLabelErrorAddSubForum.setForeground(new java.awt.Color(255, 0, 0));
         jLabelErrorAddSubForum.setText("cannot add sub forum");
 
+        jButtonNotifyMainThread.setText("jButton1");
+        jButtonNotifyMainThread.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonNotifyMainThreadActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -235,11 +250,15 @@ public class ForumPage extends javax.swing.JFrame {
                                     .addComponent(jLabelEnterModerators, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jScrollPane1))
                                 .addGap(26, 26, 26))))))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jButtonNotifyMainThread, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(23, 23, 23)
+                .addComponent(jButtonNotifyMainThread, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonToAdminPage, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -279,6 +298,7 @@ public class ForumPage extends javax.swing.JFrame {
         this.setVisible(false);
         this.dispose();
         logInPage.setVisible(true);
+        CurrentStatus.currFrame = logInPage;
     }//GEN-LAST:event_logInButtonActionPerformed
 
     private void enterSubForumButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enterSubForumButtonActionPerformed
@@ -293,6 +313,7 @@ public class ForumPage extends javax.swing.JFrame {
         this.setVisible(false);
         this.dispose();
         subForumPage.setVisible(true);
+        CurrentStatus.currFrame = subForumPage;
     }//GEN-LAST:event_enterSubForumButtonActionPerformed
 
     private void jButtonBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBackActionPerformed
@@ -307,6 +328,7 @@ public class ForumPage extends javax.swing.JFrame {
         this.setVisible(false);
         this.dispose();
         mainFrame.setVisible(true);
+        CurrentStatus.currFrame = mainFrame;
     }//GEN-LAST:event_jButtonBackActionPerformed
 
     private void registerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerButtonActionPerformed
@@ -314,6 +336,7 @@ public class ForumPage extends javax.swing.JFrame {
         this.setVisible(false);
         this.dispose();
         registrationPage.setVisible(true);
+        CurrentStatus.currFrame = registrationPage;
     }//GEN-LAST:event_registerButtonActionPerformed
 
     private void jButtonSignoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSignoutActionPerformed
@@ -326,6 +349,7 @@ public class ForumPage extends javax.swing.JFrame {
         this.setVisible(false);
         this.dispose();
         forumPage.setVisible(true);
+        CurrentStatus.currFrame = forumPage;
     }//GEN-LAST:event_jButtonSignoutActionPerformed
 
     private void addNewSubButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNewSubButtonActionPerformed
@@ -340,6 +364,7 @@ public class ForumPage extends javax.swing.JFrame {
             this.setVisible(false);
             this.dispose();
             forumPage.setVisible(true);
+            CurrentStatus.currFrame = forumPage;
         } else {
             this.jLabelErrorAddSubForum.setVisible(true);
         }
@@ -351,17 +376,25 @@ public class ForumPage extends javax.swing.JFrame {
         this.setVisible(false);
         this.dispose();
         adminPage.setVisible(true);
+        CurrentStatus.currFrame = adminPage;
     }//GEN-LAST:event_jButtonToAdminPageActionPerformed
 
     private void getNotificationsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getNotificationsButtonActionPerformed
         NotificationsPage notificationsPage = new NotificationsPage();
         notificationsPage.setVisible(true);
+        this.getNotificationsButton.setBackground(CurrentStatus.defaultColor);
     }//GEN-LAST:event_getNotificationsButtonActionPerformed
+
+    private void jButtonNotifyMainThreadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNotifyMainThreadActionPerformed
+        askForNotification();
+    }//GEN-LAST:event_jButtonNotifyMainThreadActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addNewSubButton;
     private javax.swing.JButton enterSubForumButton;
     private javax.swing.JButton getNotificationsButton;
     private javax.swing.JButton jButtonBack;
+    private javax.swing.JButton jButtonNotifyMainThread;
     private javax.swing.JButton jButtonSignout;
     private javax.swing.JButton jButtonToAdminPage;
     private javax.swing.JLabel jLabel;
@@ -391,4 +424,29 @@ public class ForumPage extends javax.swing.JFrame {
         }
         this.jListOfMembers.setModel(listModel);
     }
+
+    @Override
+    public void askForNotification() {
+        if (!(CurrentStatus.currUser instanceof Member)) {
+            return;
+        }
+        Member m = (Member) CurrentStatus.currUser;
+        boolean hasNotifications = m.hasNotifications();
+        if (hasNotifications) {
+            this.getNotificationsButton.setBackground(Color.RED);
+        }
+    }
+
+    @Override
+    public void makeAnEvent() {
+        this.jButtonNotifyMainThread.doClick();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ForumPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    
+    
 }
