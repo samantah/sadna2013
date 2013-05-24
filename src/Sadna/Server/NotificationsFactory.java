@@ -30,13 +30,16 @@ public class NotificationsFactory {
 			members = (ArrayList<Member>) _si.getAllForumMembers(forumName, null, null);
 			for (Member currMember : members) {
 				currMember.addNotification(new ForumNotification(txt));
+                _si.addMember(currMember);
 			}
 		}
 		if(forum.getPolicy().getFriendsNotiPolicy()==enumNotiFriends.PUBLISHERS){
 			members = (ArrayList<Member>) getForumMembersWhoPublishInThisSubForum(forumName, subForumName);
 			for (Member currMember : members) {
 				currMember.addNotification(new ForumNotification(txt));
-			}
+                _si.addMember(currMember);
+
+            }
 		}
 		return true;
 	}
@@ -53,7 +56,9 @@ public class NotificationsFactory {
 			members = (ArrayList<Member>) _si.getAllForumMembers(forumName, null, null);
 			for (Member currMember : members) {
                 if(!(post.getPublisher().equals(currMember.getUserName()))){
-				currMember.addNotification(new ForumNotification(txt));
+				    currMember.addNotification(new ForumNotification(txt));
+                    _si.addMember(currMember);
+
                 }
 			}
 		}
@@ -62,6 +67,8 @@ public class NotificationsFactory {
 			for (Member currMember : members) {
                 if(!(post.getPublisher().equals(currMember.getUserName()))){
                     currMember.addNotification(new ForumNotification(txt));
+                    _si.addMember(currMember);
+
                 }
 			}
 		}
@@ -91,13 +98,17 @@ public class NotificationsFactory {
 			members = (ArrayList<Member>) _si.getAllForumMembers(forumName, null, null);
 			for (Member currMember : members) {
 				currMember.addNotification(new ForumNotification(txt));
-			}
+                _si.addMember(currMember);
+
+            }
 		}
 		if(forum.getPolicy().getFriendsNotiPolicy()==enumNotiFriends.PUBLISHERS){
 			members = (ArrayList<Member>) getForumMembersWhoPublishInThisSubForum(forumName, subForumName);
 			for (Member currMember : members) {
 				currMember.addNotification(new ForumNotification(txt));
-			}
+                _si.addMember(currMember);
+
+            }
 		}
 		return true;
 	}
@@ -113,7 +124,9 @@ public class NotificationsFactory {
             members = (ArrayList<Member>) _si.getAllForumMembers(forumName, null, null);
             for (Member currMember : members) {
                 if(!publisherName.equals(currMember.getUserName())){
-                currMember.addNotification(new ForumNotification(txt));
+                     currMember.addNotification(new ForumNotification(txt));
+                     _si.addMember(currMember);
+
                 }
             }
         }
@@ -122,6 +135,8 @@ public class NotificationsFactory {
             for (Member currMember : members) {
                 if(!publisherName.equals(currMember.getUserName())){
                     currMember.addNotification(new ForumNotification(txt));
+                    _si.addMember(currMember);
+
                 }
             }
         }
