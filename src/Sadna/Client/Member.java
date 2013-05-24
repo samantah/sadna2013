@@ -43,7 +43,7 @@ public class Member extends User {
     	dateOfJoining = time;
     }
     
-    public List<ForumNotification> getNotificationsFromServer(){
+    public synchronized List<ForumNotification> getNotificationsFromServer(){
         return this.conHand.getNotification(this.forum, this.userName, this.password);
     }
     public List<ForumNotification> getNotifications() {
@@ -54,11 +54,11 @@ public class Member extends User {
         this.notifications.clear();
     }
     
-    public boolean postComment(Post post) {
+    public synchronized boolean postComment(Post post) {
         return conHand.postComment(post, this.password);
     }
 
-    public boolean publishThread(ThreadMessage newThread) {
+    public synchronized boolean publishThread(ThreadMessage newThread) {
         return conHand.publishThread(newThread, this.password);
     }
 
@@ -78,7 +78,7 @@ public class Member extends User {
         return forum;
     }
     
-    public User logout(String forum) {
+    public synchronized User logout(String forum) {
         return this.conHand.logout(forum, this.userName);
     }
     //Server Use Only 
@@ -86,19 +86,19 @@ public class Member extends User {
         this.notifications.add(forumNotification);
     }
 
-    public boolean deleteThread(ThreadMessage tm) {
+    public synchronized boolean deleteThread(ThreadMessage tm) {
         return this.conHand.deleteThreadMessage(tm, this.userName, this.password);
     }
 
-    public boolean deletePost(Post p) {
+    public synchronized boolean deletePost(Post p) {
         return this.conHand.deletePost(p, this.userName, this.password);
     }
     
-    public boolean editPost(Post newP){
+    public synchronized boolean editPost(Post newP){
     	return conHand.editPost(newP, this.userName, this.password);
     }
     
-    public boolean editThread(ThreadMessage newTM){
+    public synchronized boolean editThread(ThreadMessage newTM){
     	return conHand.editThread(newTM, this.userName, this.password);
     }
     @Override
@@ -112,7 +112,7 @@ public class Member extends User {
         return hash;
     }
     
-    public boolean hasNotifications(){
+    public synchronized boolean hasNotifications(){
         return this.conHand.hasNotifications(this.forum, this.userName, this.password);
     }
 

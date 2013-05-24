@@ -29,43 +29,43 @@ public class User implements Serializable {
         this.conHand = ch;
     }
 
-    public Member login(String forum, String userName, String password) {
+    public synchronized Member login(String forum, String userName, String password) {
         return conHand.login(forum, userName, password);
     }
     
-    public SuperAdmin loginAsSuperAdmin(String userName, String password) {
+    public synchronized SuperAdmin loginAsSuperAdmin(String userName, String password) {
         return conHand.loginAsSuperAdmin(userName, password);
     }
 
-    public List<SubForum> viewSubForums(String forum) {
+    public synchronized List<SubForum> viewSubForums(String forum) {
         return conHand.getSubForumsList(forum);
     }
 
-    public List<ThreadMessage> viewThreadMessages(String forum, String subForumName) {
+    public synchronized List<ThreadMessage> viewThreadMessages(String forum, String subForumName) {
         return conHand.getThreadsList(forum, subForumName);
     }
 
-    public Member register(String forumName, String userName, String password, String email) {
+    public synchronized Member register(String forumName, String userName, String password, String email) {
         return conHand.register(forumName, userName, password, email);
     }
 
-    public Forum getForum(String forumName) {
+    public synchronized Forum getForum(String forumName) {
         return conHand.getForum(forumName);
     }
 
-    public SubForum getSubForum(String forumName, String subForumName) {
+    public synchronized SubForum getSubForum(String forumName, String subForumName) {
         return conHand.getSubForum(forumName, subForumName);
     }
 
-    public ThreadMessage getThread(String forumName, String subForumname, int messageID) {
+    public synchronized ThreadMessage getThread(String forumName, String subForumname, int messageID) {
         return conHand.getThreadMessage(forumName, subForumname, messageID);
     }
 
-    public List<Forum> viewForums() {
+    public synchronized List<Forum> viewForums() {
         return conHand.getForumsList();
     }
 
-    public List<Post> getAllPosts(ThreadMessage tm) {
+    public synchronized List<Post> getAllPosts(ThreadMessage tm) {
         return conHand.getAllPosts(tm);
     }
 

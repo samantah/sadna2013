@@ -1,4 +1,4 @@
-package Driver;
+package junitTests.Driver;
 
 import Sadna.Client.API.ClientCommunicationHandlerInterface;
 import Sadna.Client.ClientConnectionHandler;
@@ -6,6 +6,12 @@ import Sadna.Client.Member;
 import Sadna.Client.Moderator;
 import Sadna.Client.User;
 import Sadna.db.Forum;
+import Sadna.db.Policy;
+import Sadna.db.PolicyEnums.enumAssignModerator;
+import Sadna.db.PolicyEnums.enumCancelModerator;
+import Sadna.db.PolicyEnums.enumDelete;
+import Sadna.db.PolicyEnums.enumNotiFriends;
+import Sadna.db.PolicyEnums.enumNotiImidiOrAgre;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
@@ -26,7 +32,7 @@ public class ClientRealBridgeImpl implements ClientBridge {
     }
 
     public boolean addSubForum(SubForum subForum, String user, String pass) {
-        return _clientHandler.addSubForum(subForum, new ArrayList<Moderator>(), user, pass);
+        return _clientHandler.addSubForum(subForum, new ArrayList<Member>(), user, pass);
     }
 
     public Forum getForum(String forumName) {
@@ -56,7 +62,10 @@ public class ClientRealBridgeImpl implements ClientBridge {
     }
 
     public boolean initiateForum(String forumName, String adminName, String adminPassword, String superAdminName, String superAdminPasswaord) {
-        return _clientHandler.initiateForum(forumName, adminName, adminPassword, "SDF", "Sdf");
+        Policy policy = new Policy(enumNotiImidiOrAgre.IMIDIATE,
+                enumNotiFriends.ALLMEMBERS, enumDelete.LIMITED, 
+                enumAssignModerator.NO_RESTRICTION, enumCancelModerator.NO_RESTRICTION, 0, 0);
+        return _clientHandler.initiateForum(forumName, adminName, adminPassword, policy,"superAdmin", "superAdmin1234");
     }
 
     public Member login(String forumName, String userName, String password) {

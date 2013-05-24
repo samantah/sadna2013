@@ -13,15 +13,15 @@ import Sadna.Client.ClientConnectionHandler;
 public class ListenerClass implements Runnable {
 
     ClientConnectionHandler chForListen;
-    private Thread mainThread = null;
+    private ClientConnectionHandler mainCH;
 
     public ListenerClass(String host, int port) {
         chForListen = new ClientConnectionHandler(host, port);
     }
 
-    ListenerClass(String host, int port, Thread currentThread) {
+    ListenerClass(String host, int port, ClientConnectionHandler ch) {
         chForListen = new ClientConnectionHandler(host, port);
-        mainThread = currentThread;
+        mainCH = ch;
     }
 
     @Override
@@ -35,7 +35,8 @@ public class ListenerClass implements Runnable {
             if (!listenToServer) {
                 continue;
             }
-            CurrentStatus.currFrame.makeAnEvent();
+            CurrentStatus.currFrame.askForNotification();
+//            CurrentStatus.currFrame.makeAnEvent();
         }
     }
 }

@@ -2,10 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package testing;
+package junitTests.testing;
 
-import Driver.ClientBridge;
-import Driver.ClientDriver;
+import junitTests.Driver.ClientBridge;
+import junitTests.Driver.ClientDriver;
 import Sadna.Client.*;
 import Sadna.db.*;
 import org.junit.*;
@@ -150,15 +150,15 @@ public class Tests {
         bridge.finishCommunication();
     }
 
-    private static void initiateTestPlatform() {
+    private static void initiateTestPlatform(Policy policy) {
         DataBase db = new DataBase();
         db.initiateDataBase();
         ch = new ClientConnectionHandler("172.16.106.179", 3333);
         User u = new User(ch);
         SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
-//		if(sa == null) System.out.println("nullllllllll");
-//		else System.out.println(sa.getUserName());
-        sa.initiateForum(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
+        //		if(sa == null) System.out.println("nullllllllll");
+        //		else System.out.println(sa.getUserName());
+        sa.initiateForum(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD, policy);
         Forum forum = sa.getForum(FORUM_NAME);
 
         Member m1 = u.register(FORUM_NAME, "laaaaa", "ksjdf66asd", "sdf@adf.com");

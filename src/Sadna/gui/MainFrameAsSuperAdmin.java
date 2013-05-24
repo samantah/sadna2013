@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class MainFrameAsSuperAdmin extends ForumJFrame {
 
-    String host = "192.168.1.104";
+    String host = "192.168.1.108";
     int port = 3333;
 
     public MainFrameAsSuperAdmin() {
@@ -29,11 +29,11 @@ public class MainFrameAsSuperAdmin extends ForumJFrame {
         this.setResizable(false);
         ClientCommunicationHandlerInterface ch = new ClientConnectionHandler(host, port);
         DefaultListModel listOfForums;
-        if (CurrentStatus.currUser == null) {
-
-            CurrentStatus.currUser = new SuperAdmin("superAdmin", "superAdmin1234", "email", ch);
-//            CurrentStatus.currUser = new User(ch);
-        }
+//        if (CurrentStatus.currUser == null) {
+//
+//            CurrentStatus.currUser = new SuperAdmin("superAdmin", "superAdmin1234", "email", ch);
+////            CurrentStatus.currUser = new User(ch);
+//        }
         List<Forum> viewForums = UpdateListOfForums();
 
 
@@ -569,13 +569,13 @@ public class MainFrameAsSuperAdmin extends ForumJFrame {
                 || selectedNotiContText == null || selectedNotiFreqText == null) {
             return false;
         }
-        
-        if (selectedAddModText.equals("publis enough messages") &&
-                this.jTextFieldNumberOfMsgs.getText().isEmpty()){
+
+        if (selectedAddModText.equals("publis enough messages")
+                && this.jTextFieldNumberOfMsgs.getText().isEmpty()) {
             return false;
         }
-        if (selectedAddModText.equals("enough time in forum") &&
-                this.jTextNumberOfWeeks.getText().isEmpty()){
+        if (selectedAddModText.equals("enough time in forum")
+                && this.jTextNumberOfWeeks.getText().isEmpty()) {
             return false;
         }
         return true;
@@ -593,35 +593,4 @@ public class MainFrameAsSuperAdmin extends ForumJFrame {
         return null;
     }
 
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MainFrameAsSuperAdmin().setVisible(true);
-            }
-        });
-    }
 }

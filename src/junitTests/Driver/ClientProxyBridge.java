@@ -1,4 +1,4 @@
-package Driver;
+package junitTests.Driver;
 
 import Sadna.Client.Member;
 import Sadna.Client.User;

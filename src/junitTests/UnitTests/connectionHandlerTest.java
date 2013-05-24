@@ -1,13 +1,11 @@
-package UnitTests;
+package junitTests.UnitTests;
 
 /**
  *
  */
-
 import Sadna.Client.*;
 import Sadna.db.*;
 import org.junit.*;
-
 import java.util.ArrayList;
 import java.util.List;
 

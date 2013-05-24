@@ -24,24 +24,24 @@ public class SuperAdmin extends Admin {
         super(userName, password, email, null, ch);
     }
 
-    public boolean initiateForum(String forumName, String adminName, String adminPassword, Policy policy) {
+    public synchronized boolean initiateForum(String forumName, String adminName, String adminPassword, Policy policy) {
         return conHand.initiateForum(forumName, adminName, adminPassword, policy, this.userName, this.password);
     }
 
-	public int getForumCounter() {
-		int numberOfForums = -1;
-		try {
-			numberOfForums = conHand.getNumOfForums(this.userName, this.password);
-		} catch (Exception e) {
-			System.out.println("SuperAdmin(getForumCounter) " + e);
-		}
-		return numberOfForums;
-	}
+    public synchronized int getForumCounter() {
+        int numberOfForums = -1;
+        try {
+            numberOfForums = conHand.getNumOfForums(this.userName, this.password);
+        } catch (Exception e) {
+            System.out.println("SuperAdmin(getForumCounter) " + e);
+        }
+        return numberOfForums;
+    }
 
     /*
      * MAP(forum name:String, number of members in forum:Integer)
      */
-    public List<String> getCommonMembers() {
+    public synchronized List<String> getCommonMembers() {
         List<String> map = null;
         try {
             map = conHand.getCommonMembers(this.userName, this.password);
@@ -51,11 +51,11 @@ public class SuperAdmin extends Admin {
         return map;
     }
 
-    public List<Member> getAllForumMembers(String forumName) {
+    public synchronized List<Member> getAllForumMembers(String forumName) {
         return conHand.getAllForumMembers(forum, userName, password);
     }
-    
-    public boolean deleteForum(String forumName){
+
+    public synchronized boolean deleteForum(String forumName) {
         return conHand.deleteForum(forumName, this.userName, this.password);
     }
 }

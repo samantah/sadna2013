@@ -32,11 +32,11 @@ public class Admin extends Moderator {
         }
     }
 
-    public boolean addSubForum(SubForum subForum, List<Member> m) {
+    public synchronized boolean addSubForum(SubForum subForum, List<Member> m) {
         return conHand.addSubForum(subForum, m, this.userName, this.password);
     }
 
-    public void deleteSubForum(String forumName, String subForumName) {
+    public synchronized void deleteSubForum(String forumName, String subForumName) {
         try {
             conHand.deleteSubForum(forumName, subForumName, this.userName, this.password);
         } catch (Exception e) {
@@ -47,7 +47,7 @@ public class Admin extends Moderator {
     /*
      *  ?s c m?
      */
-    public boolean addModerator(String forumName, String subForumName, String newModerator) {
+    public synchronized boolean addModerator(String forumName, String subForumName, String newModerator) {
         try {
             return conHand.addModerator(forumName, subForumName, newModerator, this.userName, this.password);
         } catch (Exception e) {
@@ -64,7 +64,7 @@ public class Admin extends Moderator {
      *	 Add to clientAPI removeModerator(String userName);
      *   Add to servertAPI removeModerator
      */
-    public boolean removeModerator(String forumName,String subForumName, String moderatorName) {
+    public synchronized boolean removeModerator(String forumName,String subForumName, String moderatorName) {
         try {
             return conHand.removeModerator(forumName,subForumName, moderatorName, this.userName, this.password);
         } catch (Exception e) {
@@ -73,7 +73,7 @@ public class Admin extends Moderator {
         return false;
     }
 
-    public int getThreadCounter(String forumName) {
+    public synchronized int getThreadCounter(String forumName) {
         int numberOfThreads = -1;
         try {
             numberOfThreads = conHand.getNumOfThreadsInForum(forumName, this.userName, this.password);
@@ -84,7 +84,7 @@ public class Admin extends Moderator {
         return numberOfThreads;
     }
 
-    public int getNumOfUserThreads(String forumName, String generalUserName) {
+    public synchronized int getNumOfUserThreads(String forumName, String generalUserName) {
         int numberOfThreads = -1;
         try {
             numberOfThreads = conHand.getNumOfUserThreads(forumName, generalUserName, this.userName, this.password);
@@ -97,7 +97,7 @@ public class Admin extends Moderator {
     /*
      * MAP(username:String, users that post:Vector<String>)
      */
-    public HashMap<String, List<String>> getUsersPostToUser(String forumName) {
+    public synchronized HashMap<String, List<String>> getUsersPostToUser(String forumName) {
     	HashMap<String, List<String>> map = null;
         try {
         	map = conHand.getUsersPostToUser(forumName, this.userName, this.password);
@@ -107,7 +107,7 @@ public class Admin extends Moderator {
         return map;
     }
     
-    public List<Member> getAllForumMembers(){
+    public synchronized List<Member> getAllForumMembers(){
 		return conHand.getAllForumMembers(this.forum, this.userName, this.password);
     }
     
