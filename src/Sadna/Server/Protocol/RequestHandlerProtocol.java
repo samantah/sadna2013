@@ -215,7 +215,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
     private Object handleEditPost(String forumName, String subForumName,
 			String TMid, String pid, String title, String content,
 			String editorName, String editorPassword) {
-		Member editor = _si.getMember(subForumName, editorName);
+		Member editor = _si.getMember(forumName, editorName);
 		if(editor==null || editor.getPassword()!=editorPassword){
 			return _msgToClient.sendErrorNoAuthorized();
 		}

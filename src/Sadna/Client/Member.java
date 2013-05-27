@@ -8,7 +8,6 @@ import Sadna.Client.API.ClientCommunicationHandlerInterface;
 import Sadna.Server.ForumNotification;
 import Sadna.db.Post;
 import Sadna.db.ThreadMessage;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
