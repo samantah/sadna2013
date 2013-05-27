@@ -369,6 +369,9 @@ public class ThreadPage extends ForumJFrame {
             this.jButtonEdit.setVisible(false);
             this.jButtonAddPost.setVisible(true);
         }
+        else{
+            this.jLabelError.setVisible(true);
+        }
     }//GEN-LAST:event_jButtonEditActionPerformed
 
     private void getNotificationsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getNotificationsButtonActionPerformed
