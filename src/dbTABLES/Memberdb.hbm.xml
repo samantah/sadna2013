@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated May 29, 2013 2:33:53 AM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="dbTABLES.Memberdb" table="memberdb" catalog="sadna2">
+        <id name="idmember" type="int">
+            <column name="IDmember" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="forumdb" class="dbTABLES.Forumdb" fetch="select">
+            <column name="ForumID" />
+        </many-to-one>
+        <property name="userName" type="string">
+            <column name="UserName" length="45" />
+        </property>
+        <property name="password" type="string">
+            <column name="Password" length="16" />
+        </property>
+        <property name="email" type="string">
+            <column name="Email" length="45" />
+        </property>
+        <property name="roll" type="string">
+            <column name="Roll" length="45" />
+        </property>
+        <property name="dateJoin" type="string">
+            <column name="Date_Join" length="45" />
+        </property>
+        <property name="notification" type="string">
+            <column name="Notification" length="45" />
+        </property>
+        <set name="forumdbs" table="forumdb" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="AdminID" />
+            </key>
+            <one-to-many class="dbTABLES.Forumdb" />
+        </set>
+        <set name="postdbs" table="postdb" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PublisherID" />
+            </key>
+            <one-to-many class="dbTABLES.Postdb" />
+        </set>
+        <set name="threaddbs" table="threaddb" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PublisherID" />
+            </key>
+            <one-to-many class="dbTABLES.Threaddb" />
+        </set>
+        <set name="subforumdbs" table="moderatorsdb" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="IDmoderator" not-null="true" />
+            </key>
+            <many-to-many entity-name="dbTABLES.Subforumdb">
+                <column name="IDsubforum" not-null="true" />
+            </many-to-many>
+        </set>
+    </class>
+</hibernate-mapping>

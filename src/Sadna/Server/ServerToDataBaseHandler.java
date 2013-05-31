@@ -9,17 +9,17 @@ import Sadna.Server.API.ServerInterface;
 import Sadna.db.API.DBInterface;
 import Sadna.db.*;
 import Sadna.db.PolicyEnums.*;
-
+import  dbTABLES.*;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 public class ServerToDataBaseHandler implements ServerInterface {
 
-    private DBInterface _db;
+    private IMplInterface _db;
 
-    // removeModerator()
-    public ServerToDataBaseHandler(DBInterface db) {
+    public ServerToDataBaseHandler(IMplInterface db) {
         _db = db;
     }
 
@@ -30,7 +30,8 @@ public class ServerToDataBaseHandler implements ServerInterface {
             //System.out.println("is unique forum");
             if (isUserNameUnique(forumName, userName)) {
                 //System.out.println("is unique username");
-                Member toAdd = new Member(userName, password, email, forumName, null);
+            	Memberdb bla = new Memberdb(4, _db.getForum(forumName), userName, password, email, roll, null, notification, new HashSet<Forumdb>(), new HashSet<Postdb>(), new HashSet<Threaddb>(), new HashSet<Subforumdb>()); 
+                Memberdb toAdd = new Memberdb(userName, password, email, forumName, null);
                 Date now = new Date();
                 long nowAsLong = now.getTime();
                 toAdd.setDateOfJoining(nowAsLong);

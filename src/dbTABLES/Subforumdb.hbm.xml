@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated May 29, 2013 2:33:53 AM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="dbTABLES.Subforumdb" table="subforumdb" catalog="sadna2">
+        <id name="idsubforum" type="java.lang.Integer">
+            <column name="IDsubforum" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="forumdb" class="dbTABLES.Forumdb" fetch="select">
+            <column name="ForumID" />
+        </many-to-one>
+        <property name="subForumName" type="string">
+            <column name="SubForumName" length="45" />
+        </property>
+        <set name="memberdbs" table="moderatorsdb" inverse="false" lazy="true" fetch="select">
+            <key>
+                <column name="IDsubforum" not-null="true" />
+            </key>
+            <many-to-many entity-name="dbTABLES.Memberdb">
+                <column name="IDmoderator" not-null="true" />
+            </many-to-many>
+        </set>
+        <set name="threaddbs" table="threaddb" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="SubForumID" />
+            </key>
+            <one-to-many class="dbTABLES.Threaddb" />
+        </set>
+    </class>
+</hibernate-mapping>
