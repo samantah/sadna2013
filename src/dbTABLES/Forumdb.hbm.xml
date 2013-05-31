@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated May 29, 2013 2:33:53 AM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="dbTABLES.Forumdb" table="forumdb" catalog="sadna2">
+        <id name="idforum" type="java.lang.Integer">
+            <column name="IDforum" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="memberdb" class="dbTABLES.Memberdb" fetch="select">
+            <column name="AdminID" />
+        </many-to-one>
+        <property name="forumName" type="string">
+            <column name="ForumName" length="45" />
+        </property>
+        <property name="enumNotiImidiOrAgre" type="string">
+            <column name="EnumNotiImidiOrAgre" length="9" />
+        </property>
+        <property name="enumNotiFriends" type="string">
+            <column name="EnumNotiFriends" length="11" />
+        </property>
+        <property name="enumDelete" type="string">
+            <column name="EnumDelete" length="8" />
+        </property>
+        <property name="enumAssignModerator" type="string">
+            <column name="EnumAssignModerator" length="15" />
+        </property>
+        <property name="enumCancelModerator" type="string">
+            <column name="EnumCancelModerator" length="15" />
+        </property>
+        <property name="seniority" type="java.lang.Integer">
+            <column name="Seniority" />
+        </property>
+        <property name="minPublish" type="java.lang.Integer">
+            <column name="MinPublish" />
+        </property>
+        <set name="memberdbs" table="memberdb" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ForumID" />
+            </key>
+            <one-to-many class="dbTABLES.Memberdb" />
+        </set>
+        <set name="subforumdbs" table="subforumdb" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ForumID" />
+            </key>
+            <one-to-many class="dbTABLES.Subforumdb" />
+        </set>
+    </class>
+</hibernate-mapping>
