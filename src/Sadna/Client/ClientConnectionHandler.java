@@ -571,7 +571,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
         String forumName = forum.getForumName();
         int tmId = tm.getId();
         msgToSend = "DELPST\n" + "forumName:\n" + forumName + "\n" + "subForumName:\n" + subForumName + "\n"
-                + "threadId:\n" + tmId + "\n" + "postId:\n" + pId + "\n" + "userName:\n" + userName + "\n"
+                + "threadId:\n" + tmId + "\n" + "postId:\n" + pId + "\n" + "editor:\n" + userName + "\n"
                 + "password:\n" + password + "\n";
         msgToSend += delimiter;
         stringToServer.print(msgToSend);
