@@ -598,6 +598,37 @@ public class IMpl implements IMplInterface {
 		}
 		return bool;
 	}
+	
+	public boolean updateMember(Memberdb member){
+		boolean bool = true;
+		try{
+			Transaction tx = session.beginTransaction();
+			session.saveOrUpdate(member);
+			tx.commit();
+		}
+		catch(Exception e){
+			System.out.println("DBmySqlImpl(updateMmeber) " + e);
+			bool = false;
+		}
+		return bool;
+	}
+	
+	
+	public boolean updateForum(Forumdb forum){
+		boolean bool = true;
+		try{
+			Transaction tx = session.beginTransaction();
+			session.saveOrUpdate(forum);
+			tx.commit();
+		}
+		catch(Exception e){
+			System.out.println("DBmySqlImpl(updateForum) " + e);
+			bool = false;
+		}
+		return bool;
+	}
+	
+	
 
 
 	/* (non-Javadoc)

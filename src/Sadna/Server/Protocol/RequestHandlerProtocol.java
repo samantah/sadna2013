@@ -2,6 +2,7 @@ package Sadna.Server.Protocol;
 
 
 import Sadna.Server.API.ServerInterface;
+import Sadna.Server.Encryptor;
 import Sadna.Server.ForumNotification;
 import Sadna.Server.NotificationsFactory;
 import Sadna.Server.Reactor.Reactor;
@@ -36,13 +37,12 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	private StringMessagesToClient _msgToClient;
 	private NotificationsFactory _notificationsFactory;
 	private SocketChannel _socketChannel;
-	private BasicPasswordEncryptor _encryptor;
+	
 
 	public RequestHandlerProtocol(ServerInterface _si) {
 		this._si = _si;
 		this._msgToClient = new StringMessagesToClient();
 		this._notificationsFactory = new NotificationsFactory(this._si);
-		this._encryptor = new BasicPasswordEncryptor();
 	}
 
 	public RequestHandlerProtocol(ServerInterface _si, SocketChannel sc) {
@@ -50,7 +50,6 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		this._msgToClient = new StringMessagesToClient();
 		this._notificationsFactory = new NotificationsFactory(this._si);
 		this._socketChannel = sc;
-		this._encryptor = new BasicPasswordEncryptor();
 
 	}
 
@@ -228,7 +227,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		if(postToEdit.getMemberdb().getUserName().equals(editorName) || editor.getRoll().equals("Moderator") || editor.getRoll().equals("Admin")){
 			postToEdit.setContent(content);
 			postToEdit.setTitle(title);
-			if(_si.postComment(postToEdit, null, null, this._encryptor)){
+			if(_si.postComment(postToEdit, null, null)){
 				return _msgToClient.sendOK();
 			}
 			return _msgToClient.sendErrorNoAuthorized();
@@ -271,7 +270,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	}
 
 	private Object handleLoginAsSuperAdmin(String userName, String password) {
-		boolean logedIn = _si.loginAsSuperAdmin(userName, password, this._encryptor);
+		boolean logedIn = _si.loginAsSuperAdmin(userName, password);
 		if (logedIn) {
 			Memberdb member = _si.getSuperAdmin();
 			if (member != null && member.getRoll().equals("SuperAdmin")) {
@@ -398,7 +397,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	//with encryption of the user password
 	public Object handleRegister(String forumName, String userName, String password,
 			String email) {
-		String encryptedPassword = this._encryptor.encryptPassword(password);
+		String encryptedPassword = Encryptor.encrypt(password);
 		boolean isAdded = _si.register(forumName, userName, encryptedPassword, email);
 		if (isAdded) {
 			return _msgToClient.sendOK();
@@ -437,7 +436,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 
 		isAdded = _si.initiateForum(adminName, adminPassword, forumName, imidiOrAgrePolicy, notiFriendsPolicy,
 				deletePolicy, assignModerPolicy, seniority, minPublish, cancelModerPolicy, superAdminUserName,
-				superAdminPassword, this._encryptor);
+				superAdminPassword);
 		if (isAdded) {
 			//System.out.println("isAdded");
 			return _msgToClient.sendOK();
@@ -451,7 +450,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 
 	public Object handleAddSubForum(Subforumdb subForum, List<Memberdb> members, String username, String password) {
 		boolean subForumIsAdded = false;
-		subForumIsAdded = _si.addSubForum(subForum, members, username, password, this._encryptor);
+		subForumIsAdded = _si.addSubForum(subForum, members, username, password);
 		if (subForumIsAdded) {
 			return _msgToClient.sendOK();
 		} else {
@@ -522,7 +521,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	public Object handlePostComment(Postdb post, String userName, String password) {
 		boolean succeeded = false;
 		Object result = null;
-		succeeded = _si.postComment(post, userName, password, this._encryptor);
+		succeeded = _si.postComment(post, userName, password);
 		if (succeeded) {
 			result = _msgToClient.sendOK();
 		} else {
@@ -726,7 +725,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	}
 
 	private boolean checkPassword(String password, String encrypted){
-		if (this._encryptor.checkPassword(password, encrypted)) {
+		if (Encryptor.checkPassword(password, encrypted)) {
 			return true;
 		}
 		return false;

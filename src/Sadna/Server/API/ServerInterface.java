@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-import org.jasypt.util.password.BasicPasswordEncryptor;
 
 import dbTABLES.*;
 /**
@@ -28,7 +27,7 @@ public interface ServerInterface {
 
     boolean deleteForum(String forumName, String userName, String password);
 
-    boolean addSubForum(Subforumdb subForum, List<Memberdb> moderators, String username, String password, BasicPasswordEncryptor pe);
+    boolean addSubForum(Subforumdb subForum, List<Memberdb> moderators, String username, String password);
 
     boolean deleteSubForum(Subforumdb subForum, String userName, String password);
 
@@ -38,7 +37,7 @@ public interface ServerInterface {
     
     boolean deleteModerator(Memberdb moderator, String subForumName, String modName, String userName, String password);
 
-    boolean postComment(Postdb comment, String username, String password, BasicPasswordEncryptor pe);
+    boolean postComment(Postdb comment, String username, String password);
 
     boolean deleteComment(Postdb comment, String userName, String password);
 
@@ -88,7 +87,7 @@ public interface ServerInterface {
 
 	List<Memberdb> getAllForumMembers(String forumName, String userName, String password);
 
-	boolean loginAsSuperAdmin(String userName, String password, BasicPasswordEncryptor _encryptor);    
+	boolean loginAsSuperAdmin(String userName, String password);    
 	
 	//mod or admin or publisher (String userName, String password)
 	boolean editThread(Threaddb tm, String userName, String password);
@@ -99,7 +98,7 @@ public interface ServerInterface {
 	boolean initiateForum(String adminName, String adminPassword,
 			String forumName, String ioap, String nfp, String dp, String amp,
 			String s, String mp, String cmp, String superAdminUserName,
-			String superAdminPassword, BasicPasswordEncryptor pe);
+			String superAdminPassword);
 
 	
 

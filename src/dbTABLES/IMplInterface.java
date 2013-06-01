@@ -75,7 +75,6 @@ public interface IMplInterface {
 
 	boolean deleteModerator(Memberdb moderatorm, String subForum);
 
-	boolean updateSubForum(Subforumdb subForum);
 
 	boolean deletePost(Postdb post);
 
@@ -114,6 +113,10 @@ public interface IMplInterface {
     
     ??????????????????????????????
     */
+	boolean updateSubForum(Subforumdb subForum);
+
+	boolean updateForum(Forumdb forum);
 	
+	boolean updateMember(Memberdb member);
 
 }
