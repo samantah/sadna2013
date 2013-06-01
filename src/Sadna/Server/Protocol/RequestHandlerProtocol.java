@@ -1,6 +1,7 @@
 package Sadna.Server.Protocol;
 
 
+import Sadna.Client.Member;
 import Sadna.Server.API.ServerInterface;
 import Sadna.Server.Encryptor;
 import Sadna.Server.ForumNotification;
@@ -8,6 +9,10 @@ import Sadna.Server.NotificationsFactory;
 import Sadna.Server.Reactor.Reactor;
 import Sadna.Server.StringMessagesToClient;
 import Sadna.Server.Tokenizer.StringMessage;
+import Sadna.db.Forum;
+import Sadna.db.Post;
+import Sadna.db.SubForum;
+import Sadna.db.ThreadMessage;
 import Sadna.db.PolicyEnums.enumAssignModerator;
 import Sadna.db.PolicyEnums.enumCancelModerator;
 import Sadna.db.PolicyEnums.enumDelete;
@@ -15,10 +20,17 @@ import Sadna.db.PolicyEnums.enumDelete;
 
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
+
 import dbTABLES.*;
 
 /**
@@ -291,7 +303,12 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		if (!(admin.getRoll().equals("Admin"))) {
 			return _msgToClient.sendErrorNoAuthorized();
 		}
-		return _si.getAllForumMembers(forumName, userName, password);
+		List<Memberdb> members = _si.getAllForumMembers(forumName, userName, password);
+		List<Member> ans = new ArrayList<Member>();
+		for (Memberdb memberdb : members) {
+			ans.add(memberdb.convertToMember());
+		}
+		return ans;
 	}
 
 	private Object handleCommonMembers(String adminName, String password) {
@@ -318,7 +335,17 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		if (!(admin.getRoll().equals("Admin"))) {
 			return _msgToClient.sendErrorNoAuthorized();
 		}
-		return _si.getUsersPostToUser(forumName, adminName, password);
+		HashMap<String,List<String>> ans = new HashMap<String,List<String>>();
+		HashMap<String,Set<String>> users = _si.getUsersPostToUser(forumName, adminName, password);
+		Iterator it = users.entrySet().iterator();
+	    while (it.hasNext()) {
+	        Map.Entry pairs = (Map.Entry)it.next();
+	        List<String> tmp = new ArrayList<String>();
+	        tmp.addAll((Set<String>) pairs.getValue());
+	        ans.put((String) pairs.getKey(),tmp);
+	        it.remove(); // avoids a ConcurrentModificationException
+	    }
+		return ans;
 	}
 
 	private Object handleGetNumberOfUserThreads(String forumName, String userName, String adminName, String password) {
@@ -538,34 +565,53 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	}
 
 	public Object handleGetForumsList() {
-		return _si.getForumsList();
+		List<Forumdb> forums = _si.getForumsList();
+		List<Forum> ans = new ArrayList<Forum>();
+		for (Forumdb forum : forums) {
+			ans.add(forum.convertToForum());
+		}
+		return ans;
 	}
 
-	private Object handleGetAllPosts(String forumName, String subForumName, int threadId) {
-		return _si.getAllPosts(forumName, subForumName, threadId);
-
+	private Object handleGetAllPosts(String forumName, String subForumName, int threadId) { 
+		List<Postdb> posts = _si.getAllPosts(forumName, subForumName, threadId);
+		List<Post> ans = new ArrayList<Post>();
+		for (Postdb post : posts) {
+			ans.add(post.convertToPost());
+		}
+		return ans;
 	}
-
+	
 	public Object handleGetForum(String forumName) {
-		return _si.getForum(forumName);
+		return _si.getForum(forumName).convertToForum();
 	}
 
 	public Object handleGetSubForumsList(String forumName) {
-		return _si.getSubForumsList(forumName);
+		List<SubForum> ans = new ArrayList<SubForum>();
+		List<Subforumdb> subForums = _si.getSubForumsList(forumName);
+		for (Subforumdb subforumdb : subForums) {
+			ans.add(subforumdb.convertToSubForum());
+		}		
+		return ans;
 	}
 
 	public Object handleGetSubForum(String forum, String subForumName) {
-		return _si.getSubForum(forum, subForumName);
+		return _si.getSubForum(forum, subForumName).convertToSubForum();
 	}
 
 	public Object handleGetThreadsList(String forumName,
 			String subForumName) {
-		return _si.getThreadsList(forumName, subForumName);
+		List<ThreadMessage> ans = new ArrayList<ThreadMessage>();
+		List<Threaddb> threads = _si.getThreadsList(forumName, subForumName);
+		for (Threaddb threaddb : threads) {
+			ans.add(threaddb.convertToThread());
+		}
+		return ans;
 	}
 
 	public Object handleGetThreadMessage(String forumName, String subForumName,
 			int messageID) {
-		return _si.getThreadMessage(forumName, subForumName, messageID);
+		return _si.getThreadMessage(forumName, subForumName, messageID).convertToThread();
 	}
 
 	public Object handleDeleteThread(Threaddb tm, String requester, String password) {

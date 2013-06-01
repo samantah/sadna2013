@@ -5,6 +5,7 @@ package dbTABLES;
 import java.util.HashSet;
 import java.util.Set;
 
+import Sadna.Client.Member;
 import Sadna.Server.ForumNotification;
 
 /**
@@ -68,6 +69,9 @@ public class Memberdb implements java.io.Serializable {
 		this.forumdbs.add(this.forumdb);
 	}
 
+	public Member convertToMember(){
+		return new Member(userName, password, email, forumdb.getForumName(), null);
+	}
 
 	public int getIdmember() {
 		return this.idmember;

@@ -5,7 +5,8 @@ import Sadna.Server.ForumNotification;
 import java.util.HashMap;
 import java.util.List;
 
-import dbTABLES.*;
+import Sadna.db.*;
+import Sadna.Client.*;
 
 
 public interface ConnectionHandlerServerInterface{
@@ -16,23 +17,23 @@ public interface ConnectionHandlerServerInterface{
 
 	public void sendErrorInServer();
 
-	public void sendSubForumsList(List<Subforumdb> subForumsList);
+	public void sendSubForumsList(List<SubForum> subForumsList);
 
-	public void sendSubForum(Subforumdb subForum);
+	public void sendSubForum(SubForum subForum);
 
-	public void sendThreadsList(List<Threaddb> threadsList);
+	public void sendThreadsList(List<ThreadMessage> threadsList);
 
-	public void sendThreadMeassage(Threaddb threadMessage);
+	public void sendThreadMeassage(ThreadMessage threadMessage);
 
-	public void sendForumsList(List<Forumdb> forumsList);
+	public void sendForumsList(List<Forum> forumsList);
 
-	public void sendForum(Forumdb forum);
+	public void sendForum(Forum forum);
 
 	public String receiveRequestFromClient();
 
 	public void closeSocket();
 
-	public void sendAllPosts(List<Postdb> allPosts);
+	public void sendAllPosts(List<Post> allPosts);
 
 	public void sendErrorNoAuthorized();
 
@@ -54,7 +55,7 @@ public interface ConnectionHandlerServerInterface{
 
 	public void sendAdminOK();
 
-	public void sendAllMembers(List<Memberdb> allMembers);
+	public void sendAllMembers(List<Member> allMembers);
 
 	public void sendSuperAdminOK();
 	
