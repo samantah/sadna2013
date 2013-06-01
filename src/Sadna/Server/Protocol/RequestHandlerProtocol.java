@@ -228,6 +228,8 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			postToEdit.setContent(content);
 			postToEdit.setTitle(title);
 			if(_si.postComment(postToEdit, null, null)){
+				_notificationsFactory.sendNotifications(postToEdit);
+				Reactor.NotifyAllListeners();
 				return _msgToClient.sendOK();
 			}
 			return _msgToClient.sendErrorNoAuthorized();
@@ -250,6 +252,8 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			threadToEdit.setContent(content);
 			threadToEdit.setTitle(title);
 			if(_si.publishThread(threadToEdit, null, null)){
+				_notificationsFactory.sendNotifications(threadToEdit);
+				Reactor.NotifyAllListeners();
 				return _msgToClient.sendOK();
 			}
 			return _msgToClient.sendErrorNoAuthorized();
@@ -521,6 +525,8 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	public Object handlePostComment(Postdb post, String userName, String password) {
 		boolean succeeded = false;
 		Object result = null;
+		String publisherPassword = post.getMemberdb().getPassword();
+		if(checkPassword(password, publisherPassword)){
 		succeeded = _si.postComment(post, userName, password);
 		if (succeeded) {
 			result = _msgToClient.sendOK();
@@ -529,6 +535,10 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		}
 		_notificationsFactory.sendNotifications(post);
 		Reactor.NotifyAllListeners();
+		}
+		else{
+			result = _msgToClient.sendErrorNoAuthorized();
+		}
 		return result;
 	}
 
