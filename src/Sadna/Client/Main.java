@@ -8,12 +8,12 @@ import java.util.List;
 public class Main {
 
     public static void main(String argv[]) throws Exception {
-        String host = "192.168.1.102";
+        String host = "192.168.1.109";
         int port = 3333;
         ClientConnectionHandler c = new ClientConnectionHandler(host, port);
-        c.login("forum1", "snirsnir", "snir1234");
+        //c.register("forum1", "snirsnir", "snir1234", "email@gmail.com");
         
-        //        c.initiateForum("newForum", "chen", "chen1234", "superAdmin", "superAdmin1234");
+                c.initiateForum("newForum", "chen", "chen1234", "superAdmin", "superAdmin1234");
         //        SuperAdmin sa = new SuperAdmin("superAdmin", "superAdmin1234", "", c);
         //        sa.initiateForum("newForum", "aviel", "aviel1234");
         //        c.initiateForum("newForum", "chen", "chen1234");

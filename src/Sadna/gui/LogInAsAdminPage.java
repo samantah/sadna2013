@@ -15,7 +15,7 @@ import Sadna.Client.User;
  */
 public class LogInAsAdminPage extends ForumJFrame {
 
-    String host = "192.168.1.108";
+    String host = "192.168.1.109";
     int port = 3333;
 
     /**
