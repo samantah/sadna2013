@@ -1,28 +1,29 @@
 package Sadna.Server.Protocol;
 
-import Sadna.Client.Admin;
-import Sadna.Client.Member;
-import Sadna.Client.Moderator;
-import Sadna.Client.SuperAdmin;
+
 import Sadna.Server.API.ServerInterface;
 import Sadna.Server.ForumNotification;
 import Sadna.Server.NotificationsFactory;
 import Sadna.Server.Reactor.Reactor;
 import Sadna.Server.StringMessagesToClient;
 import Sadna.Server.Tokenizer.StringMessage;
-import Sadna.db.Forum;
 import Sadna.db.PolicyEnums.enumAssignModerator;
 import Sadna.db.PolicyEnums.enumCancelModerator;
 import Sadna.db.PolicyEnums.enumDelete;
-import Sadna.db.Post;
-import Sadna.db.SubForum;
-import Sadna.db.ThreadMessage;
+
 
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
-//import java.util.Date;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
+import java.util.Set;
+
+import org.jasypt.util.password.BasicPasswordEncryptor;
+
+import dbTABLES.*;
 
 /**
  * a simple implementation of the server protocol interface
@@ -35,11 +36,13 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	private StringMessagesToClient _msgToClient;
 	private NotificationsFactory _notificationsFactory;
 	private SocketChannel _socketChannel;
+	private BasicPasswordEncryptor _encryptor;
 
 	public RequestHandlerProtocol(ServerInterface _si) {
 		this._si = _si;
 		this._msgToClient = new StringMessagesToClient();
 		this._notificationsFactory = new NotificationsFactory(this._si);
+		this._encryptor = new BasicPasswordEncryptor();
 	}
 
 	public RequestHandlerProtocol(ServerInterface _si, SocketChannel sc) {
@@ -47,6 +50,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		this._msgToClient = new StringMessagesToClient();
 		this._notificationsFactory = new NotificationsFactory(this._si);
 		this._socketChannel = sc;
+		this._encryptor = new BasicPasswordEncryptor();
 
 	}
 
@@ -106,14 +110,14 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 
 	private Object parseAndHandleRequest(String request) {
 		String[] parsedReq = request.split("\n");
-		SubForum sf;
-		Forum fr;
-		ThreadMessage tm;
-		Post p;
+		Subforumdb sf;
+		Forumdb fr;
+		Threaddb tm;
+		Postdb p;
 		String forumName;
 		String userName;
 		String password;
-		Member m;
+		Memberdb m;
 		switch (parsedReq[0]) {
 		case "HELLO":
 			return "HELLO";
@@ -136,15 +140,15 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		case "GETF":
 			return handleGetForum(parsedReq[2]);
 		case "ADDSF":
-			List<Member> members = new ArrayList<Member>();
+			List<Memberdb> members = new ArrayList<Memberdb>();
 			int i;
 			for (i = 8; i < 8 + 2 * (Integer.parseInt(parsedReq[6])); i = i + 2) {
 				System.out.println("inside list of members");
-				Member member = _si.getMember(parsedReq[2], parsedReq[i]);
+				Memberdb member = _si.getMember(parsedReq[2], parsedReq[i]);
 				members.add(member);
 			}
-			Forum forum = _si.getForum(parsedReq[2]);
-			SubForum subF = new SubForum(forum, parsedReq[4]);
+			Forumdb forum = _si.getForum(parsedReq[2]);
+			Subforumdb subF = new Subforumdb(forum, parsedReq[4], new HashSet<Memberdb>(), new HashSet<Threaddb>());
 			return handleAddSubForum(subF, members, parsedReq[i], parsedReq[i + 2]);
 		case "ADDF":
 			return handleInitiateForum(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8], parsedReq[9],
@@ -153,7 +157,8 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			return handleGetAllPosts(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]));
 		case "POST":
 			tm = _si.getThreadMessage(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]));
-			p = new Post(tm, parsedReq[10], parsedReq[12], parsedReq[8]);
+			Memberdb publisher = _si.getMember(parsedReq[2], parsedReq[8]);
+			p = new Postdb(0, tm, publisher, parsedReq[10], parsedReq[12]);
 			return handlePostComment(p, parsedReq[8], parsedReq[14]);
 		case "THREAD":
 			return handlePublishThread(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8], parsedReq[10], parsedReq[12]);
@@ -215,44 +220,47 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	private Object handleEditPost(String forumName, String subForumName,
 			String TMid, String pid, String title, String content,
 			String editorName, String editorPassword) {
-		Member editor = _si.getMember(forumName, editorName);
-		if(editor==null || editor.getPassword()!=editorPassword){
+		Memberdb editor = _si.getMember(forumName, editorName);
+		if(editor==null || !(checkPassword(editor.getPassword(),editorPassword))){
 			return _msgToClient.sendErrorNoAuthorized();
 		}
-		Post postToEdit = _si.getPost(forumName, subForumName, Integer.parseInt(TMid), Integer.parseInt(pid));
-		if(postToEdit.getPublisher()==editorName || editor instanceof Moderator || editor instanceof Admin){
+		Postdb postToEdit = _si.getPost(forumName, subForumName, Integer.parseInt(TMid), Integer.parseInt(pid));
+		if(postToEdit.getMemberdb().getUserName().equals(editorName) || editor.getRoll().equals("Moderator") || editor.getRoll().equals("Admin")){
 			postToEdit.setContent(content);
 			postToEdit.setTitle(title);
-			if(_si.postComment(postToEdit, null, null)){
+			if(_si.postComment(postToEdit, null, null, this._encryptor)){
 				return _msgToClient.sendOK();
 			}
-			return _msgToClient.sendErrorInServer();
+			return _msgToClient.sendErrorNoAuthorized();
 		}
 		else{
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 	}
 
+
 	private Object handleEditThread(String forumName, String subForumName,
 			String tid, String title, String content, String editorName,
 			String editorPassword) {
-		Member editor = _si.getMember(forumName, editorName);
-		if(editor==null || editor.getPassword()!=editorPassword){
+		Memberdb editor = _si.getMember(subForumName, editorName);
+		if(editor==null || !(checkPassword(editor.getPassword(),editorPassword))){
 			return _msgToClient.sendErrorNoAuthorized();
 		}
-		ThreadMessage threadToEdit = _si.getThreadMessage(forumName, subForumName, Integer.parseInt(tid));
-		if(threadToEdit.getPublisher()==editorName || editor instanceof Moderator || editor instanceof Admin){  
+		Threaddb threadToEdit = _si.getThreadMessage(forumName, subForumName, Integer.parseInt(tid));
+		if(threadToEdit.getMemberdb().getUserName().equals(editorName) || editor.getRoll().equals("Moderator") || editor.getRoll().equals("Admin")){
 			threadToEdit.setContent(content);
 			threadToEdit.setTitle(title);
 			if(_si.publishThread(threadToEdit, null, null)){
 				return _msgToClient.sendOK();
 			}
-			return _msgToClient.sendErrorInServer();
+			return _msgToClient.sendErrorNoAuthorized();
 		}
 		else{
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 	}
+
+
 
 	private Object handleLogout(String forumName, String userName) {
 		if (_si.logout(forumName, userName)) {
@@ -263,10 +271,10 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	}
 
 	private Object handleLoginAsSuperAdmin(String userName, String password) {
-		boolean logedIn = _si.loginAsSuperAdmin(userName, password);
+		boolean logedIn = _si.loginAsSuperAdmin(userName, password, this._encryptor);
 		if (logedIn) {
-			Member member = _si.getSuperAdmin();
-			if (member != null && member instanceof SuperAdmin) {
+			Memberdb member = _si.getSuperAdmin();
+			if (member != null && member.getRoll().equals("SuperAdmin")) {
 				return _msgToClient.sendSuperAdminOK();
 			}
 		} else {
@@ -277,60 +285,61 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 
 	private Object handleGetAllForumMembers(String forumName, String userName,
 			String password) {
-		Member admin = _si.getMember(forumName, userName);
-		if (admin != null && !admin.getPassword().equals(password)) {
+		Memberdb admin = _si.getMember(forumName, userName);
+
+		if (admin != null && !(checkPassword(admin.getPassword(), password))) {
 			return _msgToClient.sendErrorNoAuthorized();
 		}
-		if (!(admin instanceof Admin)) {
+		if (!(admin.getRoll().equals("Admin"))) {
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 		return _si.getAllForumMembers(forumName, userName, password);
 	}
 
 	private Object handleCommonMembers(String adminName, String password) {
-		SuperAdmin superAdmin = _si.getSuperAdmin();
-		if (!superAdmin.getPassword().equals(password)) {
+		Memberdb superAdmin = _si.getSuperAdmin();
+		if (!(checkPassword(superAdmin.getPassword(), password))) {
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 		return _si.getCommonMembers(adminName, password);
 	}
 
 	private Object handleForumCounter(String superAdminName, String password) {
-		SuperAdmin superAdmin = _si.getSuperAdmin();
-		if (!superAdmin.getPassword().equals(password)) {
+		Memberdb superAdmin = _si.getSuperAdmin();
+		if (!(checkPassword(superAdmin.getPassword(), password))) {
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 		return _si.getForumCounter(superAdminName, password);
 	}
 
 	private Object handleGetUsersPostToUser(String forumName, String adminName, String password) {
-		Member admin = _si.getMember(forumName, adminName);
-		if (!admin.getPassword().equals(password)) {
+		Memberdb admin = _si.getMember(forumName, adminName);
+		if (!(checkPassword(admin.getPassword(), password))) {
 			return _msgToClient.sendErrorNoAuthorized();
 		}
-		if (!(admin instanceof Admin)) {
+		if (!(admin.getRoll().equals("Admin"))) {
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 		return _si.getUsersPostToUser(forumName, adminName, password);
 	}
 
 	private Object handleGetNumberOfUserThreads(String forumName, String userName, String adminName, String password) {
-		Member admin = _si.getMember(forumName, adminName);
-		if (!admin.getPassword().equals(password)) {
+		Memberdb admin = _si.getMember(forumName, adminName);
+		if (!(checkPassword(admin.getPassword(), password))) {
 			return _msgToClient.sendErrorNoAuthorized();
 		}
-		if (!(admin instanceof Admin)) {
+		if (!(admin.getRoll().equals("Admin"))) {
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 		return _si.getNumberOfUserThreads(forumName, userName, adminName, password);
 	}
 
 	private Object handleThreadCounter(String forumName, String userName, String password) {
-		Member admin = _si.getMember(forumName, userName);
-		if (!admin.getPassword().equals(password)) {
+		Memberdb admin = _si.getMember(forumName, userName);
+		if (!(checkPassword(admin.getPassword(), password))) {
 			return _msgToClient.sendErrorNoAuthorized();
 		}
-		if (!(admin instanceof Admin)) {
+		if (!(admin.getRoll().equals("Admin"))) {
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 		return _si.getNumberOfThreadsInForum(forumName, userName, password);
@@ -338,23 +347,23 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 
 	private Object handleRemoveModerator(String forumName, String subForumName,
 			String moderatorName, String userName, String password) {
-		Member admin = _si.getMember(forumName, userName);
-		Forum forum = _si.getForum(forumName);
-		if (!admin.getPassword().equals(password)) {
+		Memberdb admin = _si.getMember(forumName, userName);
+		Forumdb forum = _si.getForum(forumName);
+		if (!(checkPassword(admin.getPassword(), password))) {
 			return _msgToClient.sendErrorNoAuthorized();
 		}
-		if (!(admin instanceof Admin)) {
+		if (!(admin.getRoll().equals("Admin"))) {
 			return _msgToClient.sendErrorNoAuthorized();
 		}
-		List<Member> mList = _si.getModerators(forumName, subForumName);
+		List<Memberdb> mList = _si.getModerators(forumName, subForumName);
 		if (mList.size() <= 1
-				&& forum.getPolicy().getCancelModeratorPolicy() == enumCancelModerator.RESTRICTED) {
+				&& forum.getEnumCancelModerator().equals(enumCancelModerator.RESTRICTED)) {
 			return _msgToClient.sendIsTheOnlyModeratorInTheSubForum();
 		}
-		Moderator m = null;
+		Memberdb m = null;
 		for (int i = 0; i < mList.size(); i++) {
 			if (mList.get(i).getUserName().equals(moderatorName)) {
-				m = (Moderator) mList.get(i);
+				m = mList.get(i);
 				break;
 			}
 
@@ -369,9 +378,9 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		}
 	}
 
-	private Object handleNotification(Member m, String password) {
-		if (m.getPassword().equals(password)) {
-			String forumName = m.getForum();
+	private Object handleNotification(Memberdb m, String password) {
+		if (checkPassword(m.getPassword(), password)) {
+			String forumName = m.getForumdb().getForumName();
 			String userName = m.getUserName();
 			List<ForumNotification> notifications = _si.getNotifications(forumName, userName, password);
 			List<ForumNotification> res = new ArrayList<ForumNotification>();
@@ -379,17 +388,18 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 				ForumNotification forumNotification = (ForumNotification) iterator.next();
 				res.add(forumNotification);
 			}
-			m.clearNotifications();
+			m.setNotification(""); // clear the notifications list
 			_si.addMember(m);
 			return res;
 		} else {
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 	}
-
+	//with encryption of the user password
 	public Object handleRegister(String forumName, String userName, String password,
 			String email) {
-		boolean isAdded = _si.register(forumName, userName, password, email);
+		String encryptedPassword = this._encryptor.encryptPassword(password);
+		boolean isAdded = _si.register(forumName, userName, encryptedPassword, email);
 		if (isAdded) {
 			return _msgToClient.sendOK();
 		} else {
@@ -398,17 +408,22 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	}
 
 	public Object handleLogin(String forumName, String userName, String password) {
-		boolean logedIn = _si.login(forumName, userName, password);
-		if (logedIn) {
-			Member member = _si.getMember(forumName, userName);
-			if (member instanceof Admin) {
-				return _msgToClient.sendAdminOK();
-			} else if (member instanceof Moderator) {
-				return _msgToClient.sendModeratorOK();
-			} else if (member instanceof Member) {
-				return _msgToClient.sendOK();
+		Memberdb member = _si.getMember(forumName, userName);
+		if((checkPassword(member.getPassword(), password))){
+			boolean logedIn = _si.login(forumName, userName, password);
+			if (logedIn) {
+				if (member.getRoll().equals("Admin")) {
+					return _msgToClient.sendAdminOK();
+				} else if (member.getRoll().equals("Moderator")) {
+					return _msgToClient.sendModeratorOK();
+				} else if (member.getRoll().equals("Member")) {
+					return _msgToClient.sendOK();
+				}
+			} else {
+				return _msgToClient.sendNotFound();
 			}
-		} else {
+		}
+		else {
 			return _msgToClient.sendNotFound();
 		}
 		return null;
@@ -422,7 +437,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 
 		isAdded = _si.initiateForum(adminName, adminPassword, forumName, imidiOrAgrePolicy, notiFriendsPolicy,
 				deletePolicy, assignModerPolicy, seniority, minPublish, cancelModerPolicy, superAdminUserName,
-				superAdminPassword);
+				superAdminPassword, this._encryptor);
 		if (isAdded) {
 			//System.out.println("isAdded");
 			return _msgToClient.sendOK();
@@ -434,9 +449,9 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		}
 	}
 
-	public Object handleAddSubForum(SubForum subForum, List<Member> members, String username, String password) {
+	public Object handleAddSubForum(Subforumdb subForum, List<Memberdb> members, String username, String password) {
 		boolean subForumIsAdded = false;
-		subForumIsAdded = _si.addSubForum(subForum, members, username, password);
+		subForumIsAdded = _si.addSubForum(subForum, members, username, password, this._encryptor);
 		if (subForumIsAdded) {
 			return _msgToClient.sendOK();
 		} else {
@@ -446,62 +461,68 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 
 	public Object handlePublishThread(String forumName, String subForumName,
 			String posterName, String threadTitle, String threadContent, String password) {
-		boolean succeeded = false;
-		ThreadMessage threadM = null;
-		SubForum sf = _si.getSubForum(forumName, subForumName);
-		if (sf != null && _si.memberExistsInForum(forumName, posterName)) {
-			threadM = new ThreadMessage(sf, threadTitle, threadContent, posterName);
-			succeeded = _si.publishThread(threadM, posterName, password);
+		if(checkPassword(password, _si.getMember(forumName, posterName).getPassword())){
+			boolean succeeded = false;
+			Threaddb threadM = null;
+			Subforumdb sf = _si.getSubForum(forumName, subForumName);
+			if (sf != null && _si.memberExistsInForum(forumName, posterName)) {
+				Memberdb publisher = _si.getMember(subForumName, posterName);
+				threadM = new Threaddb( -1, sf, publisher, threadTitle, threadContent, new HashSet<Postdb>());
+				succeeded = _si.publishThread(threadM, posterName, password);
+			}
+			if (succeeded) {
+				_notificationsFactory.sendNotifications(sf, threadM);
+				Reactor.NotifyAllListeners();
+				return _msgToClient.sendOK();
+			} else {
+				return _msgToClient.sendErrorInServer();
+			}
 		}
-		if (succeeded) {
-			_notificationsFactory.sendNotifications(sf, threadM);
-			Reactor.NotifyAllListeners();
-			return _msgToClient.sendOK();
-		} else {
-			return _msgToClient.sendErrorInServer();
+		else{
+			return _msgToClient.sendErrorNoAuthorized();
 		}
 	}
 
-	public Object handleDeletePost(Post p, String requester, String password) {
-		String publisher = p.getPublisher();
-		Forum forum = p.getThread().getSubForum().getForum();
+	public Object handleDeletePost(Postdb p, String requester, String password) {
+		String publisher = p.getMemberdb().getUserName();
+		Forumdb forum = p.getThreaddb().getSubforumdb().getForumdb();
 		String forumName = forum.getForumName();
-		Member member = _si.getMember(forumName, publisher);
+		Memberdb member = _si.getMember(forumName, publisher);
 		if (member != null) {
 			String publisherName = member.getUserName();
 			String publisherPassword = member.getPassword();
-			if (requester.equals(publisherName) && password.equals(publisherPassword)) {
+			if (requester.equals(publisherName) && checkPassword(password, publisherPassword)) {
 				return deletePostAndSendOk(p, requester, password);
 			}
 		}
-		if (forum.getPolicy().getDeletePolicy() == enumDelete.EXTENDED) {
-			SubForum subForum = p.getThread().getSubForum();
+		if (forum.getEnumDelete().equals(enumDelete.EXTENDED)) {
+			Subforumdb subForum = p.getThreaddb().getSubforumdb();
 			String subForumName = subForum.getSubForumName();
-			List<Member> moderators = _si.getModerators(forumName, subForumName);
-			for (Iterator<Member> it = moderators.iterator(); it.hasNext();) {
-				Member currModerator = it.next();
+			List<Memberdb> moderators = _si.getModerators(forumName, subForumName);
+			for (Iterator<Memberdb> it = moderators.iterator(); it.hasNext();) {
+				Memberdb currModerator = it.next();
 				String moderatorName = currModerator.getUserName();
 				String moderatorPassword = currModerator.getPassword();
-				if (requester.equals(moderatorName) && password.equals(moderatorPassword)) {
+				if (requester.equals(moderatorName) && checkPassword(password, moderatorPassword)) {
 					return deletePostAndSendOk(p, moderatorName, moderatorPassword);
 				}
 			}
 		}
-		Admin admin = _si.getForum(forumName).getAdmin();
+		Memberdb admin = _si.getForum(forumName).getMemberdb();
 		if (admin != null) {
 			String adminName = admin.getUserName();
 			String adminPassword = admin.getPassword();
-			if (requester.equals(adminName) && password.equals(adminPassword)) {
+			if (requester.equals(adminName) && checkPassword(password, adminPassword)) {
 				return deletePostAndSendOk(p, adminName, adminPassword);
 			}
 		}
 		return _msgToClient.sendErrorNoAuthorized();
 	}
 
-	public Object handlePostComment(Post post, String userName, String password) {
+	public Object handlePostComment(Postdb post, String userName, String password) {
 		boolean succeeded = false;
 		Object result = null;
-		succeeded = _si.postComment(post, userName, password);
+		succeeded = _si.postComment(post, userName, password, this._encryptor);
 		if (succeeded) {
 			result = _msgToClient.sendOK();
 		} else {
@@ -543,60 +564,60 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		return _si.getThreadMessage(forumName, subForumName, messageID);
 	}
 
-	public Object handleDeleteThread(ThreadMessage tm, String requester, String password) {
-		String publisher = tm.getPublisher();
-		Forum forum = tm.getSubForum().getForum();
+	public Object handleDeleteThread(Threaddb tm, String requester, String password) {
+		String publisher = tm.getMemberdb().getUserName();
+		Forumdb forum = tm.getSubforumdb().getForumdb();
 		String forumName = forum.getForumName();
-		Member member = _si.getMember(forumName, publisher);
+		Memberdb member = _si.getMember(forumName, publisher);
 		if (member != null) {
 			String publisherName = member.getUserName();
 			String publisherPassword = member.getPassword();
-			if (requester.equals(publisherName) && password.equals(publisherPassword)) {
+			if (requester.equals(publisherName) && checkPassword(password, publisherPassword)) {
 				return deleteThreadAndSendOk(tm, requester, password);
 
 			}
 		}
-		if (forum.getPolicy().getDeletePolicy() == enumDelete.EXTENDED) {
-			SubForum subForum = tm.getSubForum();
+		if (forum.getEnumDelete().equals(enumDelete.EXTENDED)) {
+			Subforumdb subForum = tm.getSubforumdb();
 			String subForumName = subForum.getSubForumName();
-			List<Member> moderators = _si.getModerators(forumName, subForumName);
-			for (Iterator<Member> it = moderators.iterator(); it.hasNext();) {
-				Member currModerator = it.next();
+			List<Memberdb> moderators = _si.getModerators(forumName, subForumName);
+			for (Iterator<Memberdb> it = moderators.iterator(); it.hasNext();) {
+				Memberdb currModerator = it.next();
 				String moderatorName = currModerator.getUserName();
 				String moderatorPassword = currModerator.getPassword();
-				if (requester.equals(moderatorName) && password.equals(moderatorPassword)) {
+				if (requester.equals(moderatorName) && checkPassword(password, moderatorPassword)) {
 					return deleteThreadAndSendOk(tm, moderatorName, moderatorPassword);
 				}
 			}
 		}
-		Admin admin = _si.getForum(forumName).getAdmin();
+		Memberdb admin = _si.getForum(forumName).getMemberdb();
 		if (admin != null) {
 			String adminName = admin.getUserName();
 			String adminPassword = admin.getPassword();
-			if (requester.equals(adminName) && password.equals(adminPassword)) {
+			if (requester.equals(adminName) && checkPassword(password, adminPassword)) {
 				return deleteThreadAndSendOk(tm, adminName, adminPassword);
 			}
 		}
 		return _msgToClient.sendErrorNoAuthorized();
 	}
 
-	private Object deletePostAndSendOk(Post p, String userName, String password) {
+	private Object deletePostAndSendOk(Postdb p, String userName, String password) {
 		_notificationsFactory.sendNotifications(p);
 		_si.deleteComment(p, userName, password);
 		Reactor.NotifyAllListeners();
 		return _msgToClient.sendOK();
 	}
 
-	private Object deleteThreadAndSendOk(ThreadMessage tm, String userName, String password) {
+	private Object deleteThreadAndSendOk(Threaddb tm, String userName, String password) {
 		_notificationsFactory.sendNotifications(tm);
 		_si.deleteThread(tm, userName, password);
 		Reactor.NotifyAllListeners();
 		return _msgToClient.sendOK();
 	}
 
-	private Object handleDeleteSubForum(SubForum sf, String requester, String password) {
-		Admin admin = sf.getForum().getAdmin();
-		boolean equals = admin.getUserName().equals(requester) && admin.getPassword().equals(password);
+	private Object handleDeleteSubForum(Subforumdb sf, String requester, String password) {
+		Memberdb admin = sf.getForumdb().getMemberdb();
+		boolean equals = admin.getUserName().equals(requester) && checkPassword(password, admin.getPassword());
 		if (equals) {
 			_notificationsFactory.sendNotifications(sf);
 			_si.deleteSubForum(sf, requester, password);
@@ -606,56 +627,57 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		return _msgToClient.sendErrorNoAuthorized();
 	}
 
-	private Object handleAddModerator(SubForum sf, String moderatorToAdd,
+	private Object handleAddModerator(Subforumdb sf, String moderatorToAdd,
 			String userName, String password) {
-		String forumName = sf.getForum().getForumName();
-		Forum forum = _si.getForum(forumName);
-		Admin admin = forum.getAdmin();
+		String forumName = sf.getForumdb().getForumName();
+		Forumdb forum = _si.getForum(forumName);
+		Memberdb admin = forum.getMemberdb();
 		if (admin == null || !admin.getUserName().equals(userName)
-				|| !admin.getPassword().equals(password)) {
+				|| !checkPassword(password, admin.getPassword())) {
 			return _msgToClient.sendErrorNoAuthorized();
 		}
-		Member member = _si.getMember(forumName, moderatorToAdd);
+		Memberdb member = _si.getMember(forumName, moderatorToAdd);
 		if (member == null) {
 			return _msgToClient.sendNotFound();
 		}
 
-		if (forum.getPolicy().getAssignModeratorPolicy() == enumAssignModerator.MIN_PUBLISH) {
+		if (forum.getEnumAssignModerator().equals(enumAssignModerator.MIN_PUBLISH)) {
+			System.out.println("in min publish");
 			int numberOfUserThreads = _si.getNumberOfUserThreads(forumName, userName, null, null);
-			int minPublish = forum.getPolicy().getMinPublish();
+			int minPublish = forum.getMinPublish();
 			if (numberOfUserThreads < minPublish) {
 				return _msgToClient.sendErrorNoAuthorized();//consider change to someting more inducative
 			}
 		}
-		if (forum.getPolicy().getAssignModeratorPolicy() == enumAssignModerator.SENIORITY) {
-			long dateOfJoining = member.getDateOfJoining();
+		if (forum.getEnumAssignModerator().equals(enumAssignModerator.SENIORITY)) {
+			long dateOfJoining = Long.parseLong(member.getDateJoin());
 			int seniorityAsDays = calcNumOfDaysSinceJoining(dateOfJoining);
-			int seniority = forum.getPolicy().getSeniority();
+			int seniority = forum.getSeniority();
 			if (seniorityAsDays < seniority) {
 				return _msgToClient.sendErrorNoAuthorized();//consider change to someting more inducative
 			}
 		}
 
-		List<Member> moderators = _si.getModerators(forumName, sf.getSubForumName());
+		List<Memberdb> moderators = _si.getModerators(forumName, sf.getSubForumName());
 		List<String> moderetorsAsString = new ArrayList<String>();
-		for (Iterator<Member> it = moderators.iterator(); it.hasNext();) {
-			Member currMember = it.next();
+		for (Iterator<Memberdb> it = moderators.iterator(); it.hasNext();) {
+			Memberdb currMember = it.next();
 			moderetorsAsString.add(currMember.getUserName());
 		}
 		if (moderetorsAsString.contains(moderatorToAdd)) {
 			return _msgToClient.sendOK();
 		}
-		Moderator moderator = new Moderator(member);
-		boolean addModerator = _si.addModerator(moderator, sf, moderator.getUserName(), moderator.getPassword());
+		member.setRoll("Moderator");
+		boolean addModerator = _si.addModerator(member, sf, member.getUserName(), member.getPassword());
 		if (addModerator) {
 			return _msgToClient.sendOK();
 		}
 		return null;
 	}
 
-	private Object handleDeleteForum(Forum fr, String userName, String password) {
-		SuperAdmin superAdmin = _si.getSuperAdmin();
-		if (superAdmin == null || !superAdmin.getPassword().equals(password)) {
+	private Object handleDeleteForum(Forumdb fr, String userName, String password) {
+		Memberdb superAdmin = _si.getSuperAdmin();
+		if (superAdmin == null || !checkPassword(password, superAdmin.getPassword())) {
 			return _msgToClient.sendErrorNoAuthorized();
 		} else {
 			return _msgToClient.deleteForum(_si.deleteForum(fr.getForumName(), userName, password));
@@ -666,10 +688,10 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		return (int) ((dateOfJoining - new Date().getTime()) / (1000 * 60 * 60 * 24));
 	}
 
-	private Object handleHasNotification(Member m, String password) {
-		if (m.getPassword().equals(password)) {
+	private Object handleHasNotification(Memberdb m, String password) {
+		if (checkPassword(password, m.getPassword())) {
 			boolean ret = false;
-			List<ForumNotification> notifications = m.getNotifications();
+			List<ForumNotification> notifications = parseNotifications(m.getNotification());
 			if (!notifications.isEmpty()) {
 				ret = true;
 			}
@@ -679,11 +701,34 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		}
 	}
 
+	private List<ForumNotification> parseNotifications(String notification) {
+		List<ForumNotification> notifications = new ArrayList<ForumNotification>();
+		Scanner scanner = new Scanner(notification);
+		scanner.useDelimiter("\0");
+		String txt;
+		String date;
+		while (scanner.hasNext()) {
+			txt = scanner.next();
+			date = scanner.next();
+			notifications.add(new ForumNotification(txt, date));
+		}
+		scanner.close();
+		return notifications;
+	}
+
+
 	private Object handleListening() {
 		boolean SocketsListAdd = Reactor.SocketsListAdd(_socketChannel);
 		if (SocketsListAdd) {
 			return _msgToClient.sendOK();
 		}
 		return _msgToClient.sendErrorInServer();
+	}
+
+	private boolean checkPassword(String password, String encrypted){
+		if (this._encryptor.checkPassword(password, encrypted)) {
+			return true;
+		}
+		return false;
 	}
 }
