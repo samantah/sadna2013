@@ -19,11 +19,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Scanner;
-import java.util.Set;
-
-import org.jasypt.util.password.BasicPasswordEncryptor;
-
 import dbTABLES.*;
 
 /**
@@ -227,8 +222,8 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		if(postToEdit.getMemberdb().getUserName().equals(editorName) || editor.getRoll().equals("Moderator") || editor.getRoll().equals("Admin")){
 			postToEdit.setContent(content);
 			postToEdit.setTitle(title);
-			if(_si.postComment(postToEdit, null, null)){
-				_notificationsFactory.sendNotifications(postToEdit);
+			if(_si.editPost(postToEdit)){
+				_notificationsFactory.sendNotifications(postToEdit, "edited");
 				Reactor.NotifyAllListeners();
 				return _msgToClient.sendOK();
 			}
@@ -251,8 +246,8 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		if(threadToEdit.getMemberdb().getUserName().equals(editorName) || editor.getRoll().equals("Moderator") || editor.getRoll().equals("Admin")){
 			threadToEdit.setContent(content);
 			threadToEdit.setTitle(title);
-			if(_si.publishThread(threadToEdit, null, null)){
-				_notificationsFactory.sendNotifications(threadToEdit);
+			if(_si.editThread(threadToEdit)){
+				_notificationsFactory.sendNotifications(threadToEdit, "edited");
 				Reactor.NotifyAllListeners();
 				return _msgToClient.sendOK();
 			}
@@ -392,7 +387,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 				res.add(forumNotification);
 			}
 			m.setNotification(""); // clear the notifications list
-			_si.addMember(m);
+			_si.updateMember(m);
 			return res;
 		} else {
 			return _msgToClient.sendErrorNoAuthorized();
@@ -474,7 +469,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 				succeeded = _si.publishThread(threadM, posterName, password);
 			}
 			if (succeeded) {
-				_notificationsFactory.sendNotifications(sf, threadM);
+				_notificationsFactory.sendNotifications(sf);
 				Reactor.NotifyAllListeners();
 				return _msgToClient.sendOK();
 			} else {
@@ -533,7 +528,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		} else {
 			result = _msgToClient.sendErrorInServer();
 		}
-		_notificationsFactory.sendNotifications(post);
+		_notificationsFactory.sendNotifications(post, "added");
 		Reactor.NotifyAllListeners();
 		}
 		else{
@@ -611,14 +606,14 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	}
 
 	private Object deletePostAndSendOk(Postdb p, String userName, String password) {
-		_notificationsFactory.sendNotifications(p);
+		_notificationsFactory.sendNotifications(p, "deleted");
 		_si.deleteComment(p, userName, password);
 		Reactor.NotifyAllListeners();
 		return _msgToClient.sendOK();
 	}
 
 	private Object deleteThreadAndSendOk(Threaddb tm, String userName, String password) {
-		_notificationsFactory.sendNotifications(tm);
+		_notificationsFactory.sendNotifications(tm, "deleted");
 		_si.deleteThread(tm, userName, password);
 		Reactor.NotifyAllListeners();
 		return _msgToClient.sendOK();
@@ -677,6 +672,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			return _msgToClient.sendOK();
 		}
 		member.setRoll("Moderator");
+		
 		boolean addModerator = _si.addModerator(member, sf, member.getUserName(), member.getPassword());
 		if (addModerator) {
 			return _msgToClient.sendOK();
@@ -700,8 +696,8 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	private Object handleHasNotification(Memberdb m, String password) {
 		if (checkPassword(password, m.getPassword())) {
 			boolean ret = false;
-			List<ForumNotification> notifications = parseNotifications(m.getNotification());
-			if (!notifications.isEmpty()) {
+			String notifications = m.getNotification();
+			if (!(notifications.equals(""))) {
 				ret = true;
 			}
 			return new Boolean(ret);
@@ -710,20 +706,6 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		}
 	}
 
-	private List<ForumNotification> parseNotifications(String notification) {
-		List<ForumNotification> notifications = new ArrayList<ForumNotification>();
-		Scanner scanner = new Scanner(notification);
-		scanner.useDelimiter("\0");
-		String txt;
-		String date;
-		while (scanner.hasNext()) {
-			txt = scanner.next();
-			date = scanner.next();
-			notifications.add(new ForumNotification(txt, date));
-		}
-		scanner.close();
-		return notifications;
-	}
 
 
 	private Object handleListening() {

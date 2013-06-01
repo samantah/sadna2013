@@ -4,10 +4,7 @@
  */
 package Sadna.Server.API;
 
-import Sadna.Client.API.ClientCommunicationHandlerInterface;
-import Sadna.Client.Member;
-import Sadna.Client.Moderator;
-import Sadna.Client.SuperAdmin;
+
 import Sadna.Server.ForumNotification;
 import java.util.HashMap;
 import java.util.List;
@@ -65,7 +62,6 @@ public interface ServerInterface {
 
     boolean addModerator(Memberdb moderator, Subforumdb subForum, String userName, String password);
 
-    boolean setSuperAdmin(ClientCommunicationHandlerInterface ch);
 
     Memberdb getSuperAdmin();
     
@@ -90,17 +86,25 @@ public interface ServerInterface {
 	boolean loginAsSuperAdmin(String userName, String password);    
 	
 	//mod or admin or publisher (String userName, String password)
-	boolean editThread(Threaddb tm, String userName, String password);
+	boolean editThread(Threaddb tm);
 
 	//mod or admin or publisher (String userName, String password)
-	boolean editPost(Postdb p, String userName, String password);
+	boolean editPost(Postdb p);
 
 	boolean initiateForum(String adminName, String adminPassword,
 			String forumName, String ioap, String nfp, String dp, String amp,
 			String s, String mp, String cmp, String superAdminUserName,
 			String superAdminPassword);
-
 	
+	boolean updateSubForum(Subforumdb subForum);
 
+	boolean updateForum(Forumdb forum);
+	
+	boolean updateMember(Memberdb member);
 
+	boolean setSuperAdmin();
+	
+	
+	
 }
+
