@@ -20,7 +20,7 @@ import Sadna.db.ThreadMessage;
 
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
-import java.util.Date;
+//import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -621,7 +621,6 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		}
 
 		if (forum.getPolicy().getAssignModeratorPolicy() == enumAssignModerator.MIN_PUBLISH) {
-			System.out.println("in min publish");
 			int numberOfUserThreads = _si.getNumberOfUserThreads(forumName, userName, null, null);
 			int minPublish = forum.getPolicy().getMinPublish();
 			if (numberOfUserThreads < minPublish) {
