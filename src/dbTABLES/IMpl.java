@@ -5,9 +5,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import javassist.compiler.ast.Member;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -35,7 +32,7 @@ public class IMpl implements IMplInterface {
 	}
 	
 
-	private void config(){
+	private synchronized void config(){
 
 		try
 		{
@@ -55,7 +52,7 @@ public class IMpl implements IMplInterface {
 	}
 
 
-	private void openSession(){	
+	private synchronized void openSession(){	
 		try{	
 			session = sessionFactory.openSession();
 			//	Transaction tx = session.beginTransaction();
@@ -67,7 +64,7 @@ public class IMpl implements IMplInterface {
 	}
 
 
-	private void closeSession(){	
+	private synchronized void closeSession(){	
 		try{
 			session.close();
 		}
@@ -84,7 +81,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#getForum(java.lang.String)
 	 */
 	@Override
-	public Forumdb getForum(String forumName) {
+	public synchronized Forumdb getForum(String forumName) {
 		Forumdb forum = (Forumdb) session.createCriteria(Forumdb.class).
 				add(Restrictions.eq("forumName", forumName)).uniqueResult();	
 		//not good
@@ -96,7 +93,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#getSubForum(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Subforumdb getSubForum(String forumName, String subForumName) {
+	public synchronized Subforumdb getSubForum(String forumName, String subForumName) {
 
 		Subforumdb subForum = (Subforumdb) session.createCriteria(Subforumdb.class).
 				createAlias("forumdb", "alias1").
@@ -110,7 +107,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#getThread(java.lang.String, java.lang.String, int)
 	 */
 	@Override
-	public Threaddb getThread(String forumName, String subForumName,
+	public synchronized Threaddb getThread(String forumName, String subForumName,
 			int threadID) {
 
 		Threaddb thread = (Threaddb) session.createCriteria(Threaddb.class).
@@ -148,7 +145,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#getPost(java.lang.String, java.lang.String, int, int)
 	 */
 	@Override
-	public Postdb getPost(String forumName, String subForumName, int threadID,
+	public synchronized Postdb getPost(String forumName, String subForumName, int threadID,
 			int postID) {
 
 		Postdb post = (Postdb) session.createCriteria(Postdb.class).
@@ -184,7 +181,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#getMember(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Memberdb getMember(String forumName, String userName) {
+	public synchronized Memberdb getMember(String forumName, String userName) {
 
 
 		Memberdb member = (Memberdb) session.createCriteria(Memberdb.class).
@@ -201,7 +198,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#getModerators(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Set<Memberdb> getModerators(String forumName, String subForumName) {
+	public synchronized Set<Memberdb> getModerators(String forumName, String subForumName) {
 		Subforumdb subForum = this.getSubForum(forumName, subForumName);
 		if (subForum==null){
 			return null;
@@ -216,7 +213,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#getSubForumsList(java.lang.String)
 	 */
 	@Override
-	public Set<Subforumdb> getSubForumsList(String forumName) {
+	public synchronized Set<Subforumdb> getSubForumsList(String forumName) {
 		Forumdb forum = this.getForum(forumName);
 		if (forum==null){
 			return null;
@@ -232,7 +229,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#getThreadsList(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Set<Threaddb> getThreadsList(String forumName, String subForumName) {
+	public synchronized Set<Threaddb> getThreadsList(String forumName, String subForumName) {
 		Subforumdb subForum = this.getSubForum(forumName, subForumName);
 		if (subForum==null){
 			return null;
@@ -248,7 +245,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#getPostList(java.lang.String, java.lang.String, int)
 	 */
 	@Override
-	public Set<Postdb> getPostList(String forumName, String subForumName,
+	public synchronized Set<Postdb> getPostList(String forumName, String subForumName,
 			int threadID) {
 		Threaddb thread = this.getThread(forumName, subForumName, threadID);
 		if (thread==null){
@@ -265,7 +262,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#getForumsList()
 	 */
 	@Override
-	public List<Forumdb> getForumsList() {
+	public synchronized List<Forumdb> getForumsList() {
 		List<Forumdb>  forumList =  session.createCriteria(Forumdb.class).list();
 		return forumList;
 	}
@@ -278,7 +275,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#getAllAdmins()
 	 */
 	@Override
-	public List<Memberdb> getAllAdmins() {
+	public synchronized List<Memberdb> getAllAdmins() {
 
 		List<Memberdb> adminList = null;	
 		adminList =	 session.createCriteria(Forumdb.class)
@@ -291,7 +288,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#getNumberOfSubforums(java.lang.String)
 	 */
 	@Override
-	public int getNumberOfSubforums(String forumName) {
+	public synchronized int getNumberOfSubforums(String forumName) {
 		//option1:
 		Set<Subforumdb> subForumSET = getSubForumsList(forumName);
 		if (subForumSET==null){
@@ -312,7 +309,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#getNumberOfThreadsInSubForum(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public int getNumberOfThreadsInSubForum(String forumName,
+	public synchronized int getNumberOfThreadsInSubForum(String forumName,
 			String subForumName) {
 		Set<Threaddb> threadSET = this.getThreadsList(forumName, subForumName);
 		if (threadSET==null){
@@ -327,7 +324,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#getNumberOfThreadsInForum(java.lang.String)
 	 */
 	@Override
-	public int getNumberOfThreadsInForum(String forumName) {
+	public synchronized int getNumberOfThreadsInForum(String forumName) {
 		int p = session.createCriteria(Threaddb.class).
 				createAlias("subforumdb", "alias1").
 				createAlias("subforumdb.forumdb", "alias2").
@@ -342,7 +339,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#addForum(dbTABLES.Forumdb)
 	 */
 	@Override
-	public boolean addForum(Forumdb forum) {
+	public synchronized boolean addForum(Forumdb forum) {
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -367,7 +364,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#addSubForum(dbTABLES.Subforumdb)
 	 */
 	@Override
-	public boolean addSubForum(Subforumdb subForum) {
+	public synchronized boolean addSubForum(Subforumdb subForum) {
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -388,7 +385,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#addSubForum(dbTABLES.Subforumdb, java.util.List)
 	 */
 	@Override
-	public boolean addSubForum(Subforumdb subForum, List<Memberdb> listOfModerators){
+	public synchronized boolean addSubForum(Subforumdb subForum, List<Memberdb> listOfModerators){
 		subForum.getMemberdbs().addAll(listOfModerators);
 		boolean bool = true;
 		try{
@@ -408,7 +405,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#addMember(dbTABLES.Memberdb)
 	 */
 	@Override
-	public boolean addMember(Memberdb member){
+	public synchronized boolean addMember(Memberdb member){
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -427,7 +424,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#addPost(dbTABLES.Postdb)
 	 */
 	@Override
-	public boolean addPost(Postdb post){
+	public synchronized boolean addPost(Postdb post){
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -445,7 +442,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#addThread(dbTABLES.Threaddb)
 	 */
 	@Override
-	public boolean addThread(Threaddb thread){
+	public synchronized boolean addThread(Threaddb thread){
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -465,7 +462,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#deleteForum(dbTABLES.Forumdb)
 	 */
 	@Override
-	public boolean deleteForum(Forumdb forum){
+	public synchronized boolean deleteForum(Forumdb forum){
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -484,7 +481,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#deleteSubForum(dbTABLES.Subforumdb)
 	 */
 	@Override
-	public boolean deleteSubForum(Subforumdb subForum){
+	public synchronized boolean deleteSubForum(Subforumdb subForum){
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -504,7 +501,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#deleteMember(dbTABLES.Memberdb)
 	 */
 	@Override
-	public boolean deleteMember(Memberdb member){
+	public synchronized boolean deleteMember(Memberdb member){
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -526,7 +523,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#deleteModerator(dbTABLES.Memberdb, dbTABLES.Subforumdb)
 	 */
 	@Override
-	public boolean deleteModerator(Memberdb moderatorm, Subforumdb subForum){
+	public synchronized boolean deleteModerator(Memberdb moderatorm, Subforumdb subForum){
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -547,7 +544,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#deleteModerator(dbTABLES.Memberdb, java.lang.String)
 	 */
 	@Override
-	public boolean deleteModerator(Memberdb moderatorm, String subForum){
+	public synchronized boolean deleteModerator(Memberdb moderatorm, String subForum){
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -585,7 +582,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#updateSubForum(dbTABLES.Subforumdb)
 	 */
 	@Override
-	public boolean updateSubForum(Subforumdb subForum){
+	public synchronized boolean updateSubForum(Subforumdb subForum){
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -599,7 +596,7 @@ public class IMpl implements IMplInterface {
 		return bool;
 	}
 	
-	public boolean updateMember(Memberdb member){
+	public synchronized boolean updateMember(Memberdb member){
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -614,7 +611,7 @@ public class IMpl implements IMplInterface {
 	}
 	
 	
-	public boolean updateForum(Forumdb forum){
+	public synchronized boolean updateForum(Forumdb forum){
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -635,7 +632,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#deletePost(dbTABLES.Postdb)
 	 */
 	@Override
-	public boolean deletePost(Postdb post){
+	public synchronized boolean deletePost(Postdb post){
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -654,7 +651,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#deleteThread(dbTABLES.Threaddb)
 	 */
 	@Override
-	public boolean deleteThread(Threaddb thread){
+	public synchronized boolean deleteThread(Threaddb thread){
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -670,7 +667,7 @@ public class IMpl implements IMplInterface {
 
 
 	// could simply return Set<Memberdb> 
-	public List<Memberdb> getAllMembers(String forumName){
+	public synchronized List<Memberdb> getAllMembers(String forumName){
 		Set<Memberdb> memberSET =  this.getForum(forumName).getMemberdbs();
 		return new ArrayList<Memberdb>(memberSET);
 	}
@@ -680,7 +677,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#addModerator(dbTABLES.Memberdb, dbTABLES.Subforumdb)
 	 */
 	@Override
-	public boolean addModerator(Memberdb moderator, Subforumdb subForum){
+	public synchronized boolean addModerator(Memberdb moderator, Subforumdb subForum){
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -699,12 +696,12 @@ public class IMpl implements IMplInterface {
 	// can user member.getThreaddbs().size() whthout calling this method
 	// but this lazy method saves time
 	// @param  forumName - not in use
-	public int getNumberOfUserThreads(String forumName, Memberdb member){ //returns the number of threads that the user write in the specified forum.
+	public synchronized int getNumberOfUserThreads(String forumName, Memberdb member){ //returns the number of threads that the user write in the specified forum.
 		return member.getThreaddbs().size();
 	}
 
 
-	public int getNumberOfForums(){  // super admin method - returns number of forums.
+	public synchronized int getNumberOfForums(){  // super admin method - returns number of forums.
 		return this.getForumsList().size();
 	}
 
@@ -713,7 +710,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#getCommonMembers()
 	 */
 	@Override
-	public Set<String> getCommonMembers(){ // returns list of users names that registered to more than one forum.
+	public synchronized Set<String> getCommonMembers(){ // returns list of users names that registered to more than one forum.
 		ArrayList<String> stringARRAY = null;
 		final Set<String> setToReturn = new HashSet();
 		final Set<String> set1 = new HashSet();
@@ -740,7 +737,7 @@ public class IMpl implements IMplInterface {
 	 * @see dbTABLES.IMplInterface#getUsersPostToUser(java.lang.String)
 	 */
 	@Override
-	public HashMap<String, Set<String>> getUsersPostToUser(String forumName){ //returns for each member in this forum list that his user name in the first index and in the other indices  the users names of the members that post comments for his threads. 
+	public synchronized HashMap<String, Set<String>> getUsersPostToUser(String forumName){ //returns for each member in this forum list that his user name in the first index and in the other indices  the users names of the members that post comments for his threads. 
 
 		HashMap<String, Set<String>> hash = new HashMap<String, Set<String>>();
 		Set<String> stringSET = new HashSet<String>();
@@ -763,12 +760,12 @@ public class IMpl implements IMplInterface {
 
 
 	@Override
-	public boolean setSuperAdmin(Memberdb superAdmin) {
+	public synchronized boolean setSuperAdmin(Memberdb superAdmin) {
 		return this.addMember(superAdmin);
 	}
 
 	@Override
-	public Memberdb getSuperAdmin() {
+	public synchronized Memberdb getSuperAdmin() {
 		Memberdb member = (Memberdb) session.createCriteria(Memberdb.class).
 				add(Restrictions.eq("roll", "SuperAdmin")).
 				uniqueResult();
@@ -776,6 +773,37 @@ public class IMpl implements IMplInterface {
 	}
 
 
+	@Override
+	public synchronized boolean updateThread(Threaddb tm) {
+		boolean bool = true;
+		try{
+			Transaction tx = session.beginTransaction();
+			session.saveOrUpdate(tm);
+			tx.commit();
+		}
+		catch(Exception e){
+			System.out.println("DBmySqlImpl(updateSubForum) " + e);
+			bool = false;
+		}
+		return bool;
+	}		
+
+
+	@Override
+	public synchronized boolean updatePost(Postdb p) {
+		boolean bool = true;
+		try{
+			Transaction tx = session.beginTransaction();
+			session.saveOrUpdate(p);
+			tx.commit();
+		}
+		catch(Exception e){
+			System.out.println("DBmySqlImpl(updateSubForum) " + e);
+			bool = false;
+		}
+		return bool;
+	}
+	
 
 
 	public static void main(String[] args) {
@@ -1141,36 +1169,7 @@ public class IMpl implements IMplInterface {
 	}
 
 
-	@Override
-	public boolean updateThread(Threaddb tm) {
-		boolean bool = true;
-		try{
-			Transaction tx = session.beginTransaction();
-			session.saveOrUpdate(tm);
-			tx.commit();
-		}
-		catch(Exception e){
-			System.out.println("DBmySqlImpl(updateSubForum) " + e);
-			bool = false;
-		}
-		return bool;
-	}		
 
-
-	@Override
-	public boolean updatePost(Postdb p) {
-		boolean bool = true;
-		try{
-			Transaction tx = session.beginTransaction();
-			session.saveOrUpdate(p);
-			tx.commit();
-		}
-		catch(Exception e){
-			System.out.println("DBmySqlImpl(updateSubForum) " + e);
-			bool = false;
-		}
-		return bool;
-	}
 
 
 

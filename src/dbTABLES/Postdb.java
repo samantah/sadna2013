@@ -1,5 +1,7 @@
 package dbTABLES;
 
+import Sadna.db.Post;
+
 // Generated May 29, 2013 2:33:53 AM by Hibernate Tools 3.4.0.CR1
 
 /**
@@ -29,6 +31,10 @@ public class Postdb implements java.io.Serializable {
 		this.content = content;
 	}
 
+	public Post convertToPost(){
+		return new Post(threaddb.convertToThread(), title, content, memberdb.getUserName());
+	}
+	
 	public int getIdpost() {
 		return this.idpost;
 	}
