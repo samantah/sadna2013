@@ -58,4 +58,8 @@ public class SuperAdmin extends Admin {
     public synchronized boolean deleteForum(String forumName) {
         return conHand.deleteForum(forumName, this.userName, this.password);
     }
+    
+    public synchronized boolean clearDataBase(){
+    	return conHand.clearDataBase();
+    }
 }
