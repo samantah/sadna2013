@@ -4,6 +4,7 @@ package UnitTests;
  *
  */
 import Sadna.Client.*;
+import Sadna.Server.ForumNotification;
 import Sadna.db.*;
 import Sadna.db.PolicyEnums.enumAssignModerator;
 import Sadna.db.PolicyEnums.enumCancelModerator;
@@ -13,6 +14,8 @@ import Sadna.db.PolicyEnums.enumNotiImidiOrAgre;
 
 import org.junit.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -76,7 +79,7 @@ public class connectionHandlerTest {
 		Member m1 = u.register(FORUM_NAME, "laaaaa", "ksjdf66asd", "sdf@adf.com");
 		Member m2 = u.register(FORUM_NAME, "baaaaa", "ksjdf66asd", "sdf@adf.com");
 		Member m3 = u.register(FORUM_NAME, "eaaaaa", "ksjdf66asd", "sdf@adf.com");
-		Member m4 = u.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
+//		Member m4 = u.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
 		
 		SubForum subForum = new SubForum(forum, "zubizubi1");
 		SubForum subForum2 = new SubForum(forum, "zubizubi2");
@@ -118,7 +121,7 @@ public class connectionHandlerTest {
 		assertTrue(_user instanceof Member);
 		Member member = (Member) _user;
 		User logout = member.logout(FORUM_NAME);
-		assertFalse(_user instanceof Member);		
+		assertFalse(logout instanceof Member);		
 	}
 	
 	@Test
@@ -308,17 +311,108 @@ public class connectionHandlerTest {
 	@Test
 	public void addModeratorTest(){
 		User u = new User(ch);
-		Member m = u.register(FORUM_NAME, "willbemode", "willbemode12", "willbe@gmail.com");
+		u.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
 		Admin ad = (Admin) u.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
-		assertTrue(ad.addModerator(FORUM_NAME, SUB_FORUM_NAME, m.getUserName()));
+		assertTrue(ad.addModerator(FORUM_NAME, SUB_FORUM_NAME, USER_NAME));
+	}
+	
+	@Test
+	public void editThreadTest(){
+		User u = new User(ch);
+		Member member = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+		SubForum sf = member.getSubForum(FORUM_NAME, SUB_FORUM_NAME);
+		ThreadMessage tm = new ThreadMessage(sf, "new title", "new content", member.getUserName());
+		assertTrue(member.publishThread(tm));
+		tm.setTitle("edited title");
+		assertTrue(member.editThread(tm));
+		ThreadMessage tmEdited = member.getThread(FORUM_NAME, SUB_FORUM_NAME, tm.getId());
+		assertTrue(tmEdited.equals("edited title"));
+	}
+	
+	@Test
+	public void editPostTest(){
+		User u = new User(ch);
+		Member member = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+		List<ThreadMessage> tmList = member.viewThreadMessages(FORUM_NAME, SUB_FORUM_NAME);
+		int id = tmList.get(0).getId();
+		ThreadMessage tm = member.getThread(FORUM_NAME, SUB_FORUM_NAME, id);
+		Post p = new Post(tm, "new title", "new content", member.getUserName());
+		assertTrue(member.postComment(p));
+		p.setTitle("edited title");
+		assertTrue(member.editPost(p));
+		List<Post> postsList = member.getAllPosts(tm);
+		Iterator<Post> iter = postsList.iterator();
+		Post curr = null;
+		while (iter.hasNext()){
+			curr = iter.next();
+			if (curr.getId() == p.getId())
+				break;
+		}
+		if (curr!=null)
+			assertTrue(curr.getTitle().equals("edited title"));
+
+	}
+	
+	@Test
+	public void getNotificationsTest(){
+		User u = new User(ch);
+		Member member = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+		SubForum sf = member.getSubForum(FORUM_NAME, SUB_FORUM_NAME);
+		ThreadMessage tm = new ThreadMessage(sf, "new title", "new content", member.getUserName());
+		assertTrue(member.publishThread(tm));
+		Member member2 = u.register(FORUM_NAME, "chen", "chen1234", "email@mail.com");
+		Post post = new Post(tm, "new post", "new post cont", member2.getUserName());
+		assertTrue(member2.postComment(post));
+		List<ForumNotification> notifs = member.getNotificationsFromServer();	
+		assertNotNull(notifs);
+		assertTrue(notifs.size()>0);
+	}
+	
+	@Test
+	public void removeModeratorTest(){
+		User u = new User(ch);
+		u.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
+		Admin ad = (Admin) u.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
+		assertTrue(ad.addModerator(FORUM_NAME, SUB_FORUM_NAME, USER_NAME));
+		assertTrue(ad.removeModerator(FORUM_NAME, SUB_FORUM_NAME, USER_NAME));
+		assertFalse(ad.removeModerator(FORUM_NAME, SUB_FORUM_NAME, USER_NAME));
+	}
+	
+	@Test
+	public void getNumberOfThreadsForUserInForumTest(){
+		User u = new User(ch);
+		Member member = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+		SubForum sf = member.getSubForum(FORUM_NAME, SUB_FORUM_NAME);
+		ThreadMessage tm = new ThreadMessage(sf, "new title", "new content", member.getUserName());
+		assertTrue(member.publishThread(tm));
+		Admin a = (Admin) u.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
+		int number = a.getNumOfUserThreads(FORUM_NAME, USER_NAME);
+		assertEquals(number, 1);
+	}
+	
+	@Test
+	public void getNumOfForum(){
+		User u = new User(ch);
+		SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
+		assertEquals(sa.getForumCounter(), 1);
+	}
+	
+	@Test
+	public void getCommonMembersTest(){
+		User u = new User(ch);
+		SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
+		Policy policy = new Policy(enumNotiImidiOrAgre.IMIDIATE,
+				enumNotiFriends.PUBLISHERS, enumDelete.EXTENDED,
+				enumAssignModerator.NO_RESTRICTION,
+				enumCancelModerator.NO_RESTRICTION, 0, 0);
+		assertTrue(sa.initiateForum("new_forum1", "new admin", "newAdmin1234", policy));
+		u.register("new_forum1", USER_NAME, USER_PASSWORD, USER_EMAIL);
+		u.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);	
+		List<String> common = sa.getCommonMembers();
+		assertEquals(common.size(), 1);
+		assertTrue(common.get(0).equals(USER_NAME));
 	}
 
-//	@Test
-//	public void removeModeratorTest(){
-//		User u = new User(ch);
-//		Admin ad = (Admin) u.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
-//		assertTrue(ad.removeModerator(FORUM_NAME, SUB_FORUM_NAME, "eaaaaa"));
-//	}
 
 	@Test
 	public void getAllForumMembersTest(){
@@ -326,43 +420,19 @@ public class connectionHandlerTest {
 		Admin ad = (Admin)u.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
 		assertNotNull(ad.getAllForumMembers());
 	}
-
-//	@Test
-//	public void getCommonMembersTest(){
-//		//User u = new User(ch);
-//		SuperAdmin sa = ch.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
-//		assertNotNull(sa.getCommonMembers());
-//	}
-
-//	@Test
-//	public void getForumCounterTest(){
-//		//User u = new User(ch);
-//		SuperAdmin sa = ch.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
-//		assertTrue(sa.getForumCounter()>0);
-//	}
-
-//	@Test
-//	public void deletePostTest(){
-//		//User u = new User(ch);
-//		Member mem = ch.login("forumTest2", "samanta111", "1234567a");
-//		SubForum sf = mem.getSubForum("forumTest2", "subForumTest2");
-//		ThreadMessage t = new ThreadMessage(sf, "title333", "lalala", "samanta111");
-//		mem.publishThread(t);
-//		Post p = new Post(t, "title11", "contenttttttt", "samanta111");
-//		mem.postComment(p);
-//		assertTrue(mem.deletePost(p));
-//	}
-//
-//	@Test
-//	public void deleteThreadMessageTest(){
-//		//User u = new User(ch);
-//		ch.login(FORUM_NAME, "samanta11188", "1234567a");
-//		Member mem = ch.login(FORUM_NAME, "samanta11188", "1234567a");
-//		SubForum sf = ch.getSubForum("forumTest2", "subForumTest2");
-//		List<ThreadMessage> ltm = ch.getThreadsList("forumTest2", "subForumTest2");
-//		assertNotNull(ltm);
-//		assertTrue(ch.deleteThreadMessage(ltm.get(0), "samanta11188", "1234567a"));
-//	}
-
+	
+	@Test
+	public void hasNotificationsTest(){
+		User u = new User(ch);
+		Member member = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+		SubForum sf = member.getSubForum(FORUM_NAME, SUB_FORUM_NAME);
+		ThreadMessage tm = new ThreadMessage(sf, "new title", "new content", member.getUserName());
+		assertTrue(member.publishThread(tm));
+		Member member2 = u.register(FORUM_NAME, "chen", "chen1234", "email@mail.com");
+		Post post = new Post(tm, "new post", "new post cont", member2.getUserName());
+		assertTrue(member2.postComment(post));
+		boolean has = member.hasNotifications();
+		assertTrue(has);
+	}
 
 }
