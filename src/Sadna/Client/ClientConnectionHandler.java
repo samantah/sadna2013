@@ -1312,13 +1312,13 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		try {
 			receivedMsg = (String) objectFromServer.readObject();
 			if (receivedMsg.contains("200ok")) {
-				log = "sendListenerIdentifier";
+				log = superAdminName+" succeeded clear database";
 				reportLogger.log(Level.INFO ,log);
 				cleared = true;
 			}
 			else{
-				log = superAdminName+" succeeded clear database";
-				reportLogger.log(Level.INFO ,log);
+				log = "clearDataBase: fail";
+				reportLogger.log(Level.DEBUG ,log);
 			}
 		} catch (IOException e) {
 			log = "clearDataBase: "+e.getMessage();

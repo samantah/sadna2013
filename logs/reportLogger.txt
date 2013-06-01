@@ -22,3 +22,21 @@
 2013-06-01 21:29:26,192 INFO  Sadna.Client.ClientConnectionHandler  - a "clearDataBase" request has sent
 2013-06-01 21:29:26,218 DEBUG Sadna.Client.ClientConnectionHandler  - clearDataBase: fail
 2013-06-01 21:29:26,225 INFO  Sadna.Client.ClientConnectionHandler  - superAdmin is trying to initiate a new forum forum233...
+2013-06-01 21:35:56,892 INFO  Sadna.Client.ClientConnectionHandler  - start Communication
+2013-06-01 21:35:56,937 INFO  Sadna.Client.ClientConnectionHandler  - superAdmin is trying to login as superAdmin...
+2013-06-01 21:35:57,020 INFO  Sadna.Client.ClientConnectionHandler  - superAdmin is logged in as superAdmin
+2013-06-01 21:35:57,022 INFO  Sadna.Client.ClientConnectionHandler  - a "clearDataBase" request has sent
+2013-06-01 21:35:57,148 ERROR Sadna.Client.ClientConnectionHandler  - clearDataBase: invalid type code: AC
+2013-06-01 21:35:57,156 INFO  Sadna.Client.ClientConnectionHandler  - superAdmin is trying to initiate a new forum forum233...
+2013-06-01 21:35:57,157 ERROR Sadna.Client.ClientConnectionHandler  - initiateForum: invalid stream header: ED000574
+2013-06-01 21:35:57,158 INFO  Sadna.Client.ClientConnectionHandler  - superAdmin succeeded to initiate a new forum forum233
+2013-06-01 21:35:57,160 ERROR Sadna.Client.ClientConnectionHandler  - getForum: invalid stream header: 00053230
+2013-06-01 21:35:57,161 INFO  Sadna.Client.ClientConnectionHandler  - laaaaa is trying to register to forum233
+2013-06-01 21:37:16,015 ERROR Sadna.Client.ClientConnectionHandler  - register: Connection reset
+2013-06-01 21:37:16,016 INFO  Sadna.Client.ClientConnectionHandler  - laaaaa is logged in to forumforum233 after a successful registration
+2013-06-01 21:37:16,016 INFO  Sadna.Client.ClientConnectionHandler  - baaaaa is trying to register to forum233
+2013-06-01 21:37:16,016 ERROR Sadna.Client.ClientConnectionHandler  - register: Connection reset
+2013-06-01 21:37:16,017 INFO  Sadna.Client.ClientConnectionHandler  - baaaaa is logged in to forumforum233 after a successful registration
+2013-06-01 21:37:16,017 INFO  Sadna.Client.ClientConnectionHandler  - eaaaaa is trying to register to forum233
+2013-06-01 21:37:16,017 ERROR Sadna.Client.ClientConnectionHandler  - register: Connection reset
+2013-06-01 21:37:16,018 INFO  Sadna.Client.ClientConnectionHandler  - eaaaaa is logged in to forumforum233 after a successful registration
