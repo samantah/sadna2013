@@ -37,24 +37,14 @@ public class Admin extends Moderator {
     }
 
     public synchronized boolean deleteSubForum(String forumName, String subForumName) {
-        try {
             return conHand.deleteSubForum(forumName, subForumName, this.userName, this.password);
-        } catch (Exception e) {
-            System.out.println("Admin(deleteSubForum) " + e);
-        }
-        return false;
     }
 
     /*
      *  ?s c m?
      */
     public synchronized boolean addModerator(String forumName, String subForumName, String newModerator) {
-        try {
             return conHand.addModerator(forumName, subForumName, newModerator, this.userName, this.password);
-        } catch (Exception e) {
-            System.out.println("Admin(addModerator) " + e);
-        }
-        return false;
     }
 
     /*
