@@ -24,7 +24,7 @@ public class NotificationsFactory {
 		int threadID = tm.getIdthread();
 		String txt = "Thread: " + threadID + " in forum: " + forumName + " sub-forum: " + subForumName + " was " + action + ".";
 		ArrayList<Memberdb> members;
-		if(forum.getEnumNotiFriends().equals(enumNotiFriends.ALLMEMBERS)){
+		if(forum.getEnumNotiFriends().equals("ALLMEMBERS")){
 			members = (ArrayList<Memberdb>) _si.getAllForumMembers(forumName, null, null);
 			for (Memberdb currMember : members) {
                 if(!(post.getMemberdb().getUserName().equals(currMember.getUserName()))){
@@ -34,7 +34,7 @@ public class NotificationsFactory {
                 }
 			}
 		}
-		if(forum.getEnumNotiFriends().equals(enumNotiFriends.PUBLISHERS)){
+		if(forum.getEnumNotiFriends().equals("PUBLISHERS")){
 			members = (ArrayList<Memberdb>) getForumMembersWhoPublishInThisSubForum(forumName, subForumName);
 			for (Memberdb currMember : members) {
                 if(!(post.getMemberdb().getUserName().equals(currMember.getUserName()))){
@@ -66,7 +66,7 @@ public class NotificationsFactory {
 		String forumName = forum.getForumName();
 		String subForumName = sf.getSubForumName();
 		ArrayList<Memberdb> members;
-		if(forum.getEnumNotiFriends().equals(enumNotiFriends.ALLMEMBERS)){
+		if(forum.getEnumNotiFriends().equals("ALLMEMBERS")){
 			members = (ArrayList<Memberdb>) _si.getAllForumMembers(forumName, null, null);
 			for (Memberdb currMember : members) {
 				currMember.addNotification(new ForumNotification(txt));
@@ -74,7 +74,7 @@ public class NotificationsFactory {
 
             }
 		}
-		if(forum.getEnumNotiFriends().equals(enumNotiFriends.PUBLISHERS)){
+		if(forum.getEnumNotiFriends().equals("PUBLISHERS")){
 			members = (ArrayList<Memberdb>) getForumMembersWhoPublishInThisSubForum(forumName, subForumName);
 			for (Memberdb currMember : members) {
 				currMember.addNotification(new ForumNotification(txt));
@@ -94,7 +94,7 @@ public class NotificationsFactory {
         String publisherName = tm.getMemberdb().getUserName();
         ArrayList<Memberdb> members;
         String txt = "Thread: " + tm.getIdthread() + " in forum: " + forumName + " sub-forum: " + subForumName + " was " + action + ".";
-        if(forum.getEnumNotiFriends().equals(enumNotiFriends.ALLMEMBERS)){
+        if(forum.getEnumNotiFriends().equals("ALLMEMBERS")){
             members = (ArrayList<Memberdb>) _si.getAllForumMembers(forumName, null, null);
             for (Memberdb currMember : members) {
                 if(!publisherName.equals(currMember.getUserName())){
@@ -104,7 +104,7 @@ public class NotificationsFactory {
                 }
             }
         }
-        if(forum.getEnumNotiFriends().equals(enumNotiFriends.PUBLISHERS)){
+        if(forum.getEnumNotiFriends().equals("PUBLISHERS")){
             members = (ArrayList<Memberdb>) getForumMembersWhoPublishInThisSubForum(forumName, subForumName);
             for (Memberdb currMember : members) {
                 if(!publisherName.equals(currMember.getUserName())){
