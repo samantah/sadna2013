@@ -601,7 +601,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		+ "superAdminName:\n" + superAdminName + "\n"
 		+ "superAdminPasswaord:\n" + superAdminPasswaord + "\n";
 		msgToSend += delimiter;
-		log = ""+ adminName+ " is trying to initiate a new forum "+forumName+"...";
+		log = ""+ superAdminName+ " is trying to initiate a new forum "+forumName+"...";
 		reportLogger.log(Level.INFO ,log);
 		stringToServer.print(msgToSend);
 		stringToServer.flush();
@@ -616,7 +616,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 			reportLogger.log(Level.ERROR, log);
 		}
 		if (receivedMsg.contains("200ok")) {
-			log = ""+ adminName+ " succeeded to initiate a new forum "+forumName;
+			log = ""+ superAdminName+ " succeeded to initiate a new forum "+forumName;
 			reportLogger.log(Level.INFO ,log);
 			initiated = true;
 		}
