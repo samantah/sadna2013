@@ -123,4 +123,10 @@ public interface IMplInterface {
 
 	boolean updatePost(Postdb p);
 
+	void openSession();
+
+	void closeSession();
+
+	boolean clearDB();
+
 }

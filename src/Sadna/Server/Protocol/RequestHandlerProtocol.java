@@ -217,17 +217,32 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			return handleEditThread(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8], parsedReq[10], parsedReq[12], parsedReq[14]);
 		case "EDTPST":
 			return handleEditPost(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8], parsedReq[10], parsedReq[12], parsedReq[14], parsedReq[16]);
+		case "CLRDB":
+			return handleClearDB(parsedReq[2], parsedReq[4]);
 		default:
 			return null;
 		}
 
 	}
 
+	private Object handleClearDB(String superAdminUserName, String plainPassword) {
+		Memberdb superAdmin = this._si.getSuperAdmin();
+		if(!checkPassword(plainPassword, superAdmin.getPassword())){
+			return _msgToClient.sendErrorNoAuthorized();
+		}
+		else{
+			if(this._si.clearDB())
+				return _msgToClient.sendOK();
+			return _msgToClient.sendErrorInServer();
+		}
+		
+	}
+
 	private Object handleEditPost(String forumName, String subForumName,
 			String TMid, String pid, String title, String content,
 			String editorName, String editorPassword) {
 		Memberdb editor = _si.getMember(forumName, editorName);
-		if(editor==null || !(checkPassword(editor.getPassword(),editorPassword))){
+		if(editor==null || !(checkPassword(editorPassword, editor.getPassword()))){
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 		Postdb postToEdit = _si.getPost(forumName, subForumName, Integer.parseInt(TMid), Integer.parseInt(pid));
@@ -251,7 +266,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			String tid, String title, String content, String editorName,
 			String editorPassword) {
 		Memberdb editor = _si.getMember(subForumName, editorName);
-		if(editor==null || !(checkPassword(editor.getPassword(),editorPassword))){
+		if(editor==null || !(checkPassword(editorPassword, editor.getPassword()))){
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 		Threaddb threadToEdit = _si.getThreadMessage(forumName, subForumName, Integer.parseInt(tid));
@@ -297,7 +312,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			String password) {
 		Memberdb admin = _si.getMember(forumName, userName);
 
-		if (admin != null && !(checkPassword(admin.getPassword(), password))) {
+		if (admin != null && !(checkPassword(password, admin.getPassword()))) {
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 		if (!(admin.getRoll().equals("Admin"))) {
@@ -313,7 +328,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 
 	private Object handleCommonMembers(String adminName, String password) {
 		Memberdb superAdmin = _si.getSuperAdmin();
-		if (!(checkPassword(superAdmin.getPassword(), password))) {
+		if (!(checkPassword(password, superAdmin.getPassword()))) {
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 		return _si.getCommonMembers(adminName, password);
@@ -321,7 +336,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 
 	private Object handleForumCounter(String superAdminName, String password) {
 		Memberdb superAdmin = _si.getSuperAdmin();
-		if (!(checkPassword(superAdmin.getPassword(), password))) {
+		if (!(checkPassword(password, superAdmin.getPassword()))) {
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 		return _si.getForumCounter(superAdminName, password);
@@ -329,7 +344,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 
 	private Object handleGetUsersPostToUser(String forumName, String adminName, String password) {
 		Memberdb admin = _si.getMember(forumName, adminName);
-		if (!(checkPassword(admin.getPassword(), password))) {
+		if (!(checkPassword(password, admin.getPassword()))) {
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 		if (!(admin.getRoll().equals("Admin"))) {
@@ -350,7 +365,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 
 	private Object handleGetNumberOfUserThreads(String forumName, String userName, String adminName, String password) {
 		Memberdb admin = _si.getMember(forumName, adminName);
-		if (!(checkPassword(admin.getPassword(), password))) {
+		if (!(checkPassword(password, admin.getPassword()))) {
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 		if (!(admin.getRoll().equals("Admin"))) {
@@ -361,7 +376,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 
 	private Object handleThreadCounter(String forumName, String userName, String password) {
 		Memberdb admin = _si.getMember(forumName, userName);
-		if (!(checkPassword(admin.getPassword(), password))) {
+		if (!(checkPassword(password, admin.getPassword()))) {
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 		if (!(admin.getRoll().equals("Admin"))) {
@@ -374,7 +389,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			String moderatorName, String userName, String password) {
 		Memberdb admin = _si.getMember(forumName, userName);
 		Forumdb forum = _si.getForum(forumName);
-		if (!(checkPassword(admin.getPassword(), password))) {
+		if (!(checkPassword(password, admin.getPassword()))) {
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 		if (!(admin.getRoll().equals("Admin"))) {
@@ -404,7 +419,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	}
 
 	private Object handleNotification(Memberdb m, String password) {
-		if (checkPassword(m.getPassword(), password)) {
+		if (checkPassword(password, m.getPassword())) {
 			String forumName = m.getForumdb().getForumName();
 			String userName = m.getUserName();
 			List<ForumNotification> notifications = _si.getNotifications(forumName, userName, password);
@@ -434,7 +449,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 
 	public Object handleLogin(String forumName, String userName, String password) {
 		Memberdb member = _si.getMember(forumName, userName);
-		if((checkPassword(member.getPassword(), password))){
+		if((checkPassword(password, member.getPassword()))){
 			boolean logedIn = _si.login(forumName, userName, password);
 			if (logedIn) {
 				if (member.getRoll().equals("Admin")) {
