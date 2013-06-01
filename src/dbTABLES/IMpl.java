@@ -83,10 +83,12 @@ public class IMpl implements IMplInterface {
 	 */
 	@Override
 	public synchronized Forumdb getForum(String forumName) {
+		openSession();
 		Forumdb forum = (Forumdb) session.createCriteria(Forumdb.class).
 				add(Restrictions.eq("forumName", forumName)).uniqueResult();	
 		//not good
 		//Forumdb forum2 = (Forumdb)session.get(Forumdb.class, forumName);
+		closeSession();
 		return forum;
 	}
 
@@ -95,11 +97,12 @@ public class IMpl implements IMplInterface {
 	 */
 	@Override
 	public synchronized Subforumdb getSubForum(String forumName, String subForumName) {
-
+		openSession();
 		Subforumdb subForum = (Subforumdb) session.createCriteria(Subforumdb.class).
 				createAlias("forumdb", "alias1").
 				add(Restrictions.eq("subForumName", subForumName)).
 				add(Restrictions.eq("alias1.forumName", forumName)).uniqueResult();
+		closeSession();
 		return subForum;
 	}
 
@@ -110,7 +113,7 @@ public class IMpl implements IMplInterface {
 	@Override
 	public synchronized Threaddb getThread(String forumName, String subForumName,
 			int threadID) {
-
+		openSession();
 		Threaddb thread = (Threaddb) session.createCriteria(Threaddb.class).
 				createAlias("subforumdb", "alias1").
 				createAlias("subforumdb.forumdb", "alias2").
@@ -136,7 +139,7 @@ public class IMpl implements IMplInterface {
 		Set<Threaddb> threadSet =  subForum.getThreaddbs();
 		Threaddb thread = new ArrayList<Threaddb>(threadSet).get(threadID-1);
 		 */
-
+		closeSession();
 		return thread;
 	}
 
@@ -148,7 +151,7 @@ public class IMpl implements IMplInterface {
 	@Override
 	public synchronized Postdb getPost(String forumName, String subForumName, int threadID,
 			int postID) {
-
+		openSession();
 		Postdb post = (Postdb) session.createCriteria(Postdb.class).
 				createAlias("threaddb", "alias").
 				createAlias("threaddb.subforumdb", "alias1").
@@ -171,7 +174,7 @@ public class IMpl implements IMplInterface {
 		 */
 
 
-
+closeSession();
 		return post;
 	}
 
@@ -184,12 +187,12 @@ public class IMpl implements IMplInterface {
 	@Override
 	public synchronized Memberdb getMember(String forumName, String userName) {
 
-
+		openSession();
 		Memberdb member = (Memberdb) session.createCriteria(Memberdb.class).
 				createAlias("forumdb", "alias1").
 				add(Restrictions.eq("userName", userName)).
 				add(Restrictions.eq("alias1.forumName", forumName)).uniqueResult();
-
+closeSession();
 		return member;
 	}
 
@@ -200,12 +203,14 @@ public class IMpl implements IMplInterface {
 	 */
 	@Override
 	public synchronized Set<Memberdb> getModerators(String forumName, String subForumName) {
+		openSession();
 		Subforumdb subForum = this.getSubForum(forumName, subForumName);
 		if (subForum==null){
 			return null;
 		}
 		Set<Memberdb> membersSet = null;
 		membersSet = subForum.getMemberdbs();
+		closeSession();
 		return membersSet;
 	}
 
@@ -215,12 +220,14 @@ public class IMpl implements IMplInterface {
 	 */
 	@Override
 	public synchronized Set<Subforumdb> getSubForumsList(String forumName) {
+		openSession();
 		Forumdb forum = this.getForum(forumName);
 		if (forum==null){
 			return null;
 		}
 		Set<Subforumdb> subForumsSet = null;
 		subForumsSet = forum.getSubforumdbs();
+		closeSession();
 		return subForumsSet;
 	}
 
@@ -231,12 +238,14 @@ public class IMpl implements IMplInterface {
 	 */
 	@Override
 	public synchronized Set<Threaddb> getThreadsList(String forumName, String subForumName) {
+		openSession();
 		Subforumdb subForum = this.getSubForum(forumName, subForumName);
 		if (subForum==null){
 			return null;
 		}
 		Set<Threaddb> threadsSet = null;
 		threadsSet = subForum.getThreaddbs();
+		closeSession();
 		return threadsSet;
 	}
 
@@ -248,12 +257,14 @@ public class IMpl implements IMplInterface {
 	@Override
 	public synchronized Set<Postdb> getPostList(String forumName, String subForumName,
 			int threadID) {
+		openSession();
 		Threaddb thread = this.getThread(forumName, subForumName, threadID);
 		if (thread==null){
 			return null;
 		}
 		Set<Postdb> postsSet = null;
 		postsSet = thread.getPostdbs();
+		closeSession();
 		return postsSet;
 	}
 
@@ -264,7 +275,9 @@ public class IMpl implements IMplInterface {
 	 */
 	@Override
 	public synchronized List<Forumdb> getForumsList() {
+		openSession();
 		List<Forumdb>  forumList =  session.createCriteria(Forumdb.class).list();
+		closeSession();
 		return forumList;
 	}
 
@@ -277,10 +290,11 @@ public class IMpl implements IMplInterface {
 	 */
 	@Override
 	public synchronized List<Memberdb> getAllAdmins() {
-
+		openSession();
 		List<Memberdb> adminList = null;	
 		adminList =	 session.createCriteria(Forumdb.class)
 				.setProjection(Projections.property("memberdb")).list();
+		closeSession();
 		return adminList;
 	}
 
@@ -291,10 +305,12 @@ public class IMpl implements IMplInterface {
 	@Override
 	public synchronized int getNumberOfSubforums(String forumName) {
 		//option1:
+		openSession();
 		Set<Subforumdb> subForumSET = getSubForumsList(forumName);
 		if (subForumSET==null){
 			return 0;
 		}
+		closeSession();
 		return subForumSET.size();
 
 		//option2:
@@ -312,10 +328,12 @@ public class IMpl implements IMplInterface {
 	@Override
 	public synchronized int getNumberOfThreadsInSubForum(String forumName,
 			String subForumName) {
+		openSession();
 		Set<Threaddb> threadSET = this.getThreadsList(forumName, subForumName);
 		if (threadSET==null){
 			return 0;
 		}
+		closeSession();
 		return threadSET.size();
 	}
 
@@ -326,11 +344,13 @@ public class IMpl implements IMplInterface {
 	 */
 	@Override
 	public synchronized int getNumberOfThreadsInForum(String forumName) {
+		openSession();
 		int p = session.createCriteria(Threaddb.class).
 				createAlias("subforumdb", "alias1").
 				createAlias("subforumdb.forumdb", "alias2").
 				add(Restrictions.eq("alias2.forumName", forumName)).
 				list().size();
+		closeSession();
 		return p;
 	}
 
@@ -341,6 +361,7 @@ public class IMpl implements IMplInterface {
 	 */
 	@Override
 	public synchronized boolean addForum(Forumdb forum) {
+		openSession();
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -351,6 +372,7 @@ public class IMpl implements IMplInterface {
 			System.out.println("DBmySqlImpl(addForum) " + e);
 			bool = false;
 		}
+		closeSession();
 		return bool;
 	}
 
@@ -366,6 +388,7 @@ public class IMpl implements IMplInterface {
 	 */
 	@Override
 	public synchronized boolean addSubForum(Subforumdb subForum) {
+		openSession();
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -376,6 +399,7 @@ public class IMpl implements IMplInterface {
 			System.out.println("DBmySqlImpl(addSubForum) " + e);
 			bool = false;
 		}
+		closeSession();
 		return bool;
 	}
 
@@ -387,6 +411,7 @@ public class IMpl implements IMplInterface {
 	 */
 	@Override
 	public synchronized boolean addSubForum(Subforumdb subForum, List<Memberdb> listOfModerators){
+		openSession();
 		subForum.getMemberdbs().addAll(listOfModerators);
 		boolean bool = true;
 		try{
@@ -398,6 +423,7 @@ public class IMpl implements IMplInterface {
 			System.out.println("DBmySqlImpl(addSubForum) " + e);
 			bool = false;
 		}
+		closeSession();
 		return bool;
 	}
 
@@ -407,6 +433,7 @@ public class IMpl implements IMplInterface {
 	 */
 	@Override
 	public synchronized boolean addMember(Memberdb member){
+		openSession();
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -417,6 +444,7 @@ public class IMpl implements IMplInterface {
 			System.out.println("DBmySqlImpl(addMember) " + e);
 			bool = false;
 		}
+		closeSession();
 		return bool;
 	}
 
@@ -426,6 +454,7 @@ public class IMpl implements IMplInterface {
 	 */
 	@Override
 	public synchronized boolean addPost(Postdb post){
+		openSession();
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -436,6 +465,7 @@ public class IMpl implements IMplInterface {
 			System.out.println("DBmySqlImpl(addPost) " + e);
 			bool = false;
 		}
+		closeSession();
 		return bool;
 	}
 
@@ -444,6 +474,7 @@ public class IMpl implements IMplInterface {
 	 */
 	@Override
 	public synchronized boolean addThread(Threaddb thread){
+		openSession();
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -454,6 +485,7 @@ public class IMpl implements IMplInterface {
 			System.out.println("DBmySqlImpl(addThread) " + e);
 			bool = false;
 		}
+		closeSession();
 		return bool;
 	}
 
@@ -464,6 +496,7 @@ public class IMpl implements IMplInterface {
 	 */
 	@Override
 	public synchronized boolean deleteForum(Forumdb forum){
+		openSession();
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -474,6 +507,7 @@ public class IMpl implements IMplInterface {
 			System.out.println("DBmySqlImpl(deleteForum) " + e);
 			bool = false;
 		}
+		closeSession();
 		return bool;
 	}
 
@@ -483,6 +517,7 @@ public class IMpl implements IMplInterface {
 	 */
 	@Override
 	public synchronized boolean deleteSubForum(Subforumdb subForum){
+		openSession();
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -493,6 +528,7 @@ public class IMpl implements IMplInterface {
 			System.out.println("DBmySqlImpl(deleteSubForum) " + e);
 			bool = false;
 		}
+		closeSession();
 		return bool;
 	}
 
@@ -503,6 +539,7 @@ public class IMpl implements IMplInterface {
 	 */
 	@Override
 	public synchronized boolean deleteMember(Memberdb member){
+		openSession();
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -513,6 +550,7 @@ public class IMpl implements IMplInterface {
 			System.out.println("DBmySqlImpl(deleteMember) " + e);
 			bool = false;
 		}
+		closeSession();
 		return bool;
 	}
 
@@ -525,6 +563,7 @@ public class IMpl implements IMplInterface {
 	 */
 	@Override
 	public synchronized boolean deleteModerator(Memberdb moderatorm, Subforumdb subForum){
+		openSession();
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -536,6 +575,7 @@ public class IMpl implements IMplInterface {
 			System.out.println("DBmySqlImpl(deleteModerator) " + e);
 			bool = false;
 		}
+		closeSession();
 		return bool;
 	}
 
@@ -546,6 +586,7 @@ public class IMpl implements IMplInterface {
 	 */
 	@Override
 	public synchronized boolean deleteModerator(Memberdb moderatorm, String subForum){
+		openSession();
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -574,6 +615,7 @@ public class IMpl implements IMplInterface {
 			System.out.println("DBmySqlImpl(deleteModerator) " + e);
 			bool = false;
 		}
+		closeSession();
 		return bool;
 	}
 
@@ -584,6 +626,7 @@ public class IMpl implements IMplInterface {
 	 */
 	@Override
 	public synchronized boolean updateSubForum(Subforumdb subForum){
+		openSession();
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -594,10 +637,12 @@ public class IMpl implements IMplInterface {
 			System.out.println("DBmySqlImpl(updateSubForum) " + e);
 			bool = false;
 		}
+		closeSession();
 		return bool;
 	}
 	
 	public synchronized boolean updateMember(Memberdb member){
+		openSession();
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -608,11 +653,13 @@ public class IMpl implements IMplInterface {
 			System.out.println("DBmySqlImpl(updateMmeber) " + e);
 			bool = false;
 		}
+		closeSession();
 		return bool;
 	}
 	
 	
 	public synchronized boolean updateForum(Forumdb forum){
+		openSession();
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -623,6 +670,7 @@ public class IMpl implements IMplInterface {
 			System.out.println("DBmySqlImpl(updateForum) " + e);
 			bool = false;
 		}
+		closeSession();
 		return bool;
 	}
 	
@@ -634,6 +682,7 @@ public class IMpl implements IMplInterface {
 	 */
 	@Override
 	public synchronized boolean deletePost(Postdb post){
+		openSession();
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -644,6 +693,7 @@ public class IMpl implements IMplInterface {
 			System.out.println("DBmySqlImpl(deletePost) " + e);
 			bool = false;
 		}
+		closeSession();
 		return bool;
 	}
 
@@ -653,6 +703,7 @@ public class IMpl implements IMplInterface {
 	 */
 	@Override
 	public synchronized boolean deleteThread(Threaddb thread){
+		openSession();
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -663,6 +714,7 @@ public class IMpl implements IMplInterface {
 			System.out.println("DBmySqlImpl(deleteThread) " + e);
 			bool = false;
 		}
+		closeSession();
 		return bool;
 	}
 
@@ -679,6 +731,7 @@ public class IMpl implements IMplInterface {
 	 */
 	@Override
 	public synchronized boolean addModerator(Memberdb moderator, Subforumdb subForum){
+		openSession();
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -690,6 +743,7 @@ public class IMpl implements IMplInterface {
 			System.out.println("DBmySqlImpl(addModerator) " + e);
 			bool = false;
 		}
+		closeSession();
 		return bool;
 	}
 
@@ -712,6 +766,7 @@ public class IMpl implements IMplInterface {
 	 */
 	@Override
 	public synchronized Set<String> getCommonMembers(){ // returns list of users names that registered to more than one forum.
+		openSession();
 		ArrayList<String> stringARRAY = null;
 		final Set<String> setToReturn = new HashSet();
 		final Set<String> set1 = new HashSet();
@@ -729,6 +784,7 @@ public class IMpl implements IMplInterface {
 		catch(Exception e){
 			System.out.println("DBmySqlImpl(getCommonMembers) " + e);
 		}
+		closeSession();
 		return setToReturn;
 	}
 
@@ -767,15 +823,18 @@ public class IMpl implements IMplInterface {
 
 	@Override
 	public synchronized Memberdb getSuperAdmin() {
+		openSession();
 		Memberdb member = (Memberdb) session.createCriteria(Memberdb.class).
 				add(Restrictions.eq("roll", "SuperAdmin")).
 				uniqueResult();
+		closeSession();
 		return member;
 	}
 
 
 	@Override
 	public synchronized boolean updateThread(Threaddb tm) {
+		openSession();
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -786,12 +845,14 @@ public class IMpl implements IMplInterface {
 			System.out.println("DBmySqlImpl(updateSubForum) " + e);
 			bool = false;
 		}
+		closeSession();
 		return bool;
 	}		
 
 
 	@Override
 	public synchronized boolean updatePost(Postdb p) {
+		openSession();
 		boolean bool = true;
 		try{
 			Transaction tx = session.beginTransaction();
@@ -802,6 +863,7 @@ public class IMpl implements IMplInterface {
 			System.out.println("DBmySqlImpl(updateSubForum) " + e);
 			bool = false;
 		}
+		closeSession();
 		return bool;
 	}
 	
