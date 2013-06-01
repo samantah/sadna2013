@@ -80,21 +80,25 @@ public class connectionHandlerTest {
 		Member m2 = u.register(FORUM_NAME, "baaaaa", "ksjdf66asd", "sdf@adf.com");
 		Member m3 = u.register(FORUM_NAME, "eaaaaa", "ksjdf66asd", "sdf@adf.com");
 //		Member m4 = u.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
+		Admin admin = (Admin) u.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
 		
 		SubForum subForum = new SubForum(forum, "zubizubi1");
 		SubForum subForum2 = new SubForum(forum, "zubizubi2");
 		ArrayList<Member> al = new ArrayList<Member>();
 		al.add(m1);
-		sa.addSubForum(subForum2, al);
+		admin.addSubForum(subForum2, al);
 		ArrayList<Member> al2 = new ArrayList<Member>();
 		al2.add(m2);
 		al2.add(m3);
-		sa.addSubForum(subForum, al2);
+		admin.addSubForum(subForum, al2);
 		ThreadMessage threadMessage = new ThreadMessage(subForum, "zzzz", "hi11", "laaaaa");
 		ThreadMessage threadMessage2 = new ThreadMessage(subForum, "ccccc", "hi2aaa2", "eaaaaa");
 		
 		m1.publishThread(threadMessage);
 		m2.publishThread(threadMessage2);
+		List<ThreadMessage> threadMessages = m1.viewThreadMessages(FORUM_NAME, SUB_FORUM_NAME);
+		threadMessage = threadMessages.get(0);
+		threadMessage2 = threadMessages.get(1);
 		
 		Post post = new Post(threadMessage, "uuuuuuu", "hi11post1", "laaaaa");
 		Post post2 = new Post(threadMessage, "iiiiiiii", "hi11post2", "eaaaaa");
@@ -110,14 +114,14 @@ public class connectionHandlerTest {
 	@Test
 	public void logInTest() throws InterruptedException {
 		User u = new User(ch);
-		User _user = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+		User _user = u.login(FORUM_NAME, "laaaaa", "ksjdf66asd");
 		assertTrue(_user instanceof Member);
 	}
 	
 	@Test
 	public void logOutTest() throws InterruptedException {
 		User u = new User(ch);
-		User _user = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+		User _user = u.login(FORUM_NAME, "laaaaa", "ksjdf66asd");
 		assertTrue(_user instanceof Member);
 		Member member = (Member) _user;
 		User logout = member.logout(FORUM_NAME);
@@ -127,7 +131,7 @@ public class connectionHandlerTest {
 	@Test
 	public void postCommentTest() throws InterruptedException {
 		User u = new User(ch);
-		Member member = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+		Member member = u.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
 		List<ThreadMessage> tmList = member.viewThreadMessages(FORUM_NAME, SUB_FORUM_NAME);
 		int id = tmList.get(0).getId();
 		ThreadMessage tm = member.getThread(FORUM_NAME, SUB_FORUM_NAME, id);
@@ -138,7 +142,7 @@ public class connectionHandlerTest {
 	@Test
 	public void publishThreadTest(){
 		User u = new User(ch);
-		Member member = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+		Member member = u.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
 		SubForum sf = member.getSubForum(FORUM_NAME, SUB_FORUM_NAME);
 		ThreadMessage tm = new ThreadMessage(sf, "new title", "new content", member.getUserName());
 		assertTrue(member.publishThread(tm));
@@ -164,7 +168,7 @@ public class connectionHandlerTest {
 	@Test
 	public void getSubForumTest() {
 		User u = new User(ch);
-		Member a = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+		Member a = u.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
 		assertNotNull(a);
 		SubForum sub = a.getSubForum(FORUM_NAME, "abc");
 		assertNull(sub);
@@ -210,7 +214,7 @@ public class connectionHandlerTest {
 		int msgID = threadsList.get(0).getId();
 		ThreadMessage threadMessage = u.getThread(FORUM_NAME, SUB_FORUM_NAME, msgID);
 		assertNotNull(threadMessage);
-		assertTrue(threadMessage.getTitle().equals("zzzz"));
+		assertTrue(threadMessage.getTitle().equals("zzzz")|| threadMessage.getTitle().equals("ccccc"));
 	}
 
 	@Test
@@ -261,7 +265,7 @@ public class connectionHandlerTest {
 	@Test
 	public void deleteSubForumTest(){
 		User u = new User(ch);
-		Admin a = (Admin) u.login(FORUM_NAME, ADMIN_NAME, USER_PASSWORD);
+		Admin a = (Admin) u.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
 		assertTrue(a.deleteSubForum(FORUM_NAME, SUB_FORUM_NAME));
 		assertNull(u.getSubForum(FORUM_NAME, SUB_FORUM_NAME));
 	}
@@ -275,17 +279,25 @@ public class connectionHandlerTest {
 	}
 
 	@Test
-	public void deleteThreadMesageTest(){
+	public void deleteThreadMessageTest(){
 		User u = new User(ch);
 		Admin a = (Admin) u.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
 		List<ThreadMessage> threadsList = u.viewThreadMessages(FORUM_NAME, SUB_FORUM_NAME);
 		ThreadMessage thread1 = threadsList.get(0);
 		assertTrue(a.deleteThread(thread1));
 
-		Member member = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+		Member member = u.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
 		SubForum sf = member.getSubForum(FORUM_NAME, SUB_FORUM_NAME);
 		ThreadMessage tm = new ThreadMessage(sf, "new title", "new content", member.getUserName());
 		assertTrue(member.publishThread(tm));
+		List<ThreadMessage> threads = member.viewThreadMessages(FORUM_NAME, SUB_FORUM_NAME);
+		int threadInt = -1;
+		for (ThreadMessage threadMessage : threads) {
+			if(threadMessage.getTitle().equals("new title")){
+				threadInt = threadMessage.getId();
+			}
+		}
+		tm = member.getThread(FORUM_NAME, SUB_FORUM_NAME, threadInt);
 		assertTrue(member.deleteThread(tm));
 	}
 	
@@ -299,13 +311,20 @@ public class connectionHandlerTest {
 		Post p = postList.get(0);
 		assertTrue(a.deletePost(p));
 
-		Member member = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+		Member member = u.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
 		List<ThreadMessage> tmList = member.viewThreadMessages(FORUM_NAME, SUB_FORUM_NAME);
 		int id = tmList.get(0).getId();
 		ThreadMessage tm = member.getThread(FORUM_NAME, SUB_FORUM_NAME, id);
 		Post p1 = new Post(tm, "new title", "new content", member.getUserName());
 		assertTrue(member.postComment(p1));
-		assertTrue(member.deletePost(p1));
+		List<Post> posts = member.getAllPosts(tm);
+		Post posttodelete = null;
+		for (Post post : posts) {
+			if(post.getContent().equals("new content")){
+				posttodelete = post;
+			}
+		}
+		assertTrue(member.deletePost(posttodelete));
 	}
 	
 	@Test
@@ -319,25 +338,40 @@ public class connectionHandlerTest {
 	@Test
 	public void editThreadTest(){
 		User u = new User(ch);
-		Member member = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+		Member member = u.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
 		SubForum sf = member.getSubForum(FORUM_NAME, SUB_FORUM_NAME);
-		ThreadMessage tm = new ThreadMessage(sf, "new title", "new content", member.getUserName());
+		ThreadMessage tm = new ThreadMessage(sf, "new title1", "new content1", member.getUserName());
 		assertTrue(member.publishThread(tm));
+		List<ThreadMessage> threads = member.viewThreadMessages(FORUM_NAME, SUB_FORUM_NAME);
+		int id = -1;
+		for (ThreadMessage threadMessage : threads) {
+			if(threadMessage.getContent().equals("new content1")){
+				id = threadMessage.getId();
+				break;
+			}
+		}
+		tm = member.getThread(FORUM_NAME, SUB_FORUM_NAME, id);
 		tm.setTitle("edited title");
 		assertTrue(member.editThread(tm));
-		ThreadMessage tmEdited = member.getThread(FORUM_NAME, SUB_FORUM_NAME, tm.getId());
-		assertTrue(tmEdited.equals("edited title"));
+		ThreadMessage tmEdited = member.getThread(FORUM_NAME, SUB_FORUM_NAME, id);
+		assertTrue(tmEdited.getTitle().equals("edited title"));
 	}
 	
 	@Test
 	public void editPostTest(){
 		User u = new User(ch);
-		Member member = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+		Member member = u.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
 		List<ThreadMessage> tmList = member.viewThreadMessages(FORUM_NAME, SUB_FORUM_NAME);
-		int id = tmList.get(0).getId();
-		ThreadMessage tm = member.getThread(FORUM_NAME, SUB_FORUM_NAME, id);
+		ThreadMessage tm = tmList.get(0);
 		Post p = new Post(tm, "new title", "new content", member.getUserName());
 		assertTrue(member.postComment(p));
+		List<Post> posts = member.getAllPosts(tm);
+		for (Post post : posts) {
+			if(post.getContent().equals("new content")){
+				p = post;
+				break;
+			}
+		}
 		p.setTitle("edited title");
 		assertTrue(member.editPost(p));
 		List<Post> postsList = member.getAllPosts(tm);
@@ -356,10 +390,17 @@ public class connectionHandlerTest {
 	@Test
 	public void getNotificationsTest(){
 		User u = new User(ch);
-		Member member = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+		Member member = u.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
 		SubForum sf = member.getSubForum(FORUM_NAME, SUB_FORUM_NAME);
-		ThreadMessage tm = new ThreadMessage(sf, "new title", "new content", member.getUserName());
+		ThreadMessage tm = new ThreadMessage(sf, "new title23", "new content23", member.getUserName());
 		assertTrue(member.publishThread(tm));
+		List<ThreadMessage> threadsssss = member.viewThreadMessages(FORUM_NAME, SUB_FORUM_NAME);
+		for (ThreadMessage threadMessage : threadsssss) {
+			if(threadMessage.getContent().equals("new content23")){
+				tm = threadMessage;
+				break;
+			}
+		}
 		Member member2 = u.register(FORUM_NAME, "chen", "chen1234", "email@mail.com");
 		Post post = new Post(tm, "new post", "new post cont", member2.getUserName());
 		assertTrue(member2.postComment(post));
@@ -381,7 +422,7 @@ public class connectionHandlerTest {
 	@Test
 	public void getNumberOfThreadsForUserInForumTest(){
 		User u = new User(ch);
-		Member member = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+		Member member = u.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
 		SubForum sf = member.getSubForum(FORUM_NAME, SUB_FORUM_NAME);
 		ThreadMessage tm = new ThreadMessage(sf, "new title", "new content", member.getUserName());
 		assertTrue(member.publishThread(tm));
@@ -424,12 +465,19 @@ public class connectionHandlerTest {
 	@Test
 	public void hasNotificationsTest(){
 		User u = new User(ch);
-		Member member = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+		Member member = u.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
 		SubForum sf = member.getSubForum(FORUM_NAME, SUB_FORUM_NAME);
-		ThreadMessage tm = new ThreadMessage(sf, "new title", "new content", member.getUserName());
+		ThreadMessage tm = new ThreadMessage(sf, "new title44", "new content44", member.getUserName());
 		assertTrue(member.publishThread(tm));
+		List<ThreadMessage> threadssss = member.viewThreadMessages(FORUM_NAME, SUB_FORUM_NAME);
+		for (ThreadMessage threadMessage : threadssss) {
+			if(threadMessage.getTitle().equals("new title44")){
+				tm = threadMessage;
+				break;
+			}
+		}
 		Member member2 = u.register(FORUM_NAME, "chen", "chen1234", "email@mail.com");
-		Post post = new Post(tm, "new post", "new post cont", member2.getUserName());
+		Post post = new Post(tm, "new post555", "new post cont555", member2.getUserName());
 		assertTrue(member2.postComment(post));
 		boolean has = member.hasNotifications();
 		assertTrue(has);
