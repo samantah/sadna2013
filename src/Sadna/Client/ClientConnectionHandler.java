@@ -155,7 +155,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 			reportLogger.log(Level.ERROR, log);
 		}
 		if (receivedMsg.contains("200ok")) {
-			log =userName+ " is login as superAdmin\n";
+			log =userName+ " is logged in as superAdmin\n";
 			reportLogger.log(Level.INFO ,log);
 			loggedInSuperAdmin = new SuperAdmin(userName, password, null, this);
 		}
@@ -189,7 +189,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 				reportLogger.log(Level.ERROR, log);
 			}
 			if (receivedMsg.contains("200ok")) {
-				log =userName+ " is login to forum"+ forumName +" after a successful registration\n";
+				log =userName+ " is logged in to forum"+ forumName +" after a successful registration\n";
 				reportLogger.log(Level.INFO ,log);
 				loggedInMember = new Member(userName, password, null, forumName, this);
 			}
@@ -329,7 +329,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		msgToSend = "GETTM\n" + "forumName:\n" + forumName + "\n"
 		+ "subForumName:\n" + subForumName + "\n" + "treadMessageID:\n" + msgID + "\n";
 		msgToSend += delimiter;
-		log = "a \"getThreadsList\" request was sent. forum: "+ forumName+
+		log = "a \"getThreadMessage\" request was sent. forum: "+ forumName+
 		"subForum: "+ subForumName+ "threadID: " + msgID+"\n";
 		reportLogger.log(Level.TRACE ,log);
 		stringToServer.print(msgToSend);
@@ -457,6 +457,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		+ "userName:\n" + userName + "\n";
 		log = ""+ userName+ " is trying to logout from"
 		+ forumName +"...\n";
+		reportLogger.log(Level.INFO ,log);
 		msgToSend += delimiter;
 		stringToServer.print(msgToSend);
 		stringToServer.flush();
@@ -831,6 +832,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		msgToSend += delimiter;
 		log = ""+ editorName+ " is trying to edit the "+ tid+" thread from "+subForumName+
 		", "+forumName+"...\n";
+		reportLogger.log(Level.INFO ,log);
 		stringToServer.print(msgToSend);
 		stringToServer.flush();
 		try {
