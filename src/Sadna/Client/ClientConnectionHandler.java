@@ -140,7 +140,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		SuperAdmin loggedInSuperAdmin = null;
 		msgToSend = "LOGINS\n" + "userName:\n" + userName + "\n" + "password:\n" + password + "\n";
 		msgToSend += delimiter;
-		log =userName+ " is trying to login as superAdmin...\n";
+		log =userName+ " is trying to login as superAdmin...";
 		reportLogger.log(Level.INFO ,log);
 		stringToServer.print(msgToSend);
 		stringToServer.flush();
@@ -155,7 +155,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 			reportLogger.log(Level.ERROR, log);
 		}
 		if (receivedMsg.contains("200ok")) {
-			log =userName+ " is logged in as superAdmin\n";
+			log =userName+ " is logged in as superAdmin";
 			reportLogger.log(Level.INFO ,log);
 			loggedInSuperAdmin = new SuperAdmin(userName, password, null, this);
 		}
@@ -174,7 +174,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 			msgToSend = "REGISTER\n" + "forumName:\n" + forumName + "\n" + "userName:\n" + userName + "\n"
 			+ "password:\n" + password + "\n" + "email:\n" + email + "\n";
 			msgToSend += delimiter;
-			log =userName+ " is trying to register to "+ forumName +"\n";
+			log =userName+ " is trying to register to "+ forumName;
 			reportLogger.log(Level.INFO ,log);
 			stringToServer.print(msgToSend);
 			stringToServer.flush();
@@ -189,7 +189,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 				reportLogger.log(Level.ERROR, log);
 			}
 			if (receivedMsg.contains("200ok")) {
-				log =userName+ " is logged in to forum"+ forumName +" after a successful registration\n";
+				log =userName+ " is logged in to forum"+ forumName +" after a successful registration";
 				reportLogger.log(Level.INFO ,log);
 				loggedInMember = new Member(userName, password, null, forumName, this);
 			}
@@ -233,7 +233,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		msgToSend = "GETSF\n" + "forumName:\n" + forum + "\n"
 		+ "subForumName:\n" + subForumName + "\n";
 		msgToSend += delimiter;
-		log ="a \"getSubForum\" request was sent. forum: "+ forum+ "\n";
+		log ="a \"getSubForum\" request was sent. forum: "+ forum;
 		reportLogger.log(Level.TRACE ,log);
 		stringToServer.print(msgToSend);
 		stringToServer.flush();
@@ -245,7 +245,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 				reportLogger.log(Level.DEBUG, log);
 			}
 			else{
-				log = "a \"getSubForum\" was successfuly answered. forum: "+ forum+ "\n";
+				log = "a \"getSubForum\" was successfuly answered. forum: "+ forum;
 				reportLogger.log(Level.TRACE ,log);
 			}
 		} catch (IOException e) {
@@ -263,7 +263,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		List<SubForum> returnedList = new ArrayList<SubForum>();
 		msgToSend = "GETSFL\n" + "forumName:\n" + forumName + "\n";
 		msgToSend += delimiter;
-		log ="a \"getSubForumsList\" request was sent. forum: "+ forumName+ "\n";
+		log ="a \"getSubForumsList\" request was sent. forum: "+ forumName;
 		reportLogger.log(Level.TRACE ,log);
 		stringToServer.print(msgToSend);
 		stringToServer.flush();
@@ -275,7 +275,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 				reportLogger.log(Level.DEBUG, log);
 			}
 			else{
-				log = "a \"getSubForumsList\" was successfuly answered. forum: "+ forumName+ "\n";
+				log = "a \"getSubForumsList\" was successfuly answered. forum: "+ forumName;
 				reportLogger.log(Level.TRACE ,log);
 			}
 		} catch (IOException e) {
@@ -296,7 +296,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		msgToSend = "GETTL\n" + "forumName:\n" + forumName + "\n" + "subForumName:\n" + subForumName + "\n";
 		msgToSend += delimiter;
 		log = "a \"getThreadsList\" request was sent. forum: "+ forumName+
-		"subForum: "+ subForumName+ "\n";
+		"subForum: "+ subForumName;
 		reportLogger.log(Level.TRACE ,log);
 		stringToServer.print(msgToSend);
 		stringToServer.flush();
@@ -309,7 +309,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 			}
 			else{
 				log = "a \"getThreadsList\" was successfuly answered. forum: "+ forumName+
-				"subForum: "+ subForumName+ "\n";
+				"subForum: "+ subForumName;
 				reportLogger.log(Level.TRACE ,log);
 			}
 		} catch (IOException e) {
@@ -330,7 +330,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		+ "subForumName:\n" + subForumName + "\n" + "treadMessageID:\n" + msgID + "\n";
 		msgToSend += delimiter;
 		log = "a \"getThreadMessage\" request was sent. forum: "+ forumName+
-		"subForum: "+ subForumName+ "threadID: " + msgID+"\n";
+		"subForum: "+ subForumName+ "threadID: " + msgID;
 		reportLogger.log(Level.TRACE ,log);
 		stringToServer.print(msgToSend);
 		stringToServer.flush();
@@ -343,7 +343,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 			}
 			else{
 				log = "a \"getThreadMessage\" was successfuly answered. forum: "+ forumName+
-				"subForum: "+ subForumName+ "threadID: " + msgID+"\n";
+				"subForum: "+ subForumName+ "threadID: " + msgID;
 				reportLogger.log(Level.TRACE ,log);
 			}
 		} catch (IOException e) {
@@ -376,7 +376,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 			+ "postContent:\n" + content + "\n" + "password:\n" + password + "\n";
 			msgToSend += delimiter;
 			log = ""+ posterName+ " is trying to post a comment to "
-			+ fname +" ,"+sfname+" ,"+tmid+"\n";
+			+ fname +" ,"+sfname+" ,"+tmid;
 			reportLogger.log(Level.INFO ,log);
 			stringToServer.print(msgToSend);
 			stringToServer.flush();
@@ -392,7 +392,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 			}
 			if (receivedMsg.contains("200ok")) {
 				log = ""+ posterName+ " has successfully posted a comment to "
-				+ fname +" ,"+sfname+" ,"+tmid+"\n";
+				+ fname +" ,"+sfname+" ,"+tmid;
 				reportLogger.log(Level.INFO ,log);
 				isPosted = true;
 			}
@@ -421,7 +421,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 			+ "threadContent:\n" + newThreadContent + "\n"
 			+ "requsterPassword:\n" + password + "\n";
 			log = ""+ posterName+ " is trying to publish a new thread to "
-			+ fName +" ,"+sfName+"\n";
+			+ fName +" ,"+sfName;
 			reportLogger.log(Level.INFO ,log);
 			msgToSend += delimiter;
 			stringToServer.print(msgToSend);
@@ -438,7 +438,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 			}
 			if (receivedMsg.contains("200ok")) {
 				log = ""+ posterName+ " has successfully publish a new thread to "
-				+ fName +" ,"+sfName+"\n";
+				+ fName +" ,"+sfName;
 				reportLogger.log(Level.INFO ,log);
 				isPublished = true;
 			}
@@ -456,7 +456,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		msgToSend = "LOGOUT\n" + "forumName:\n" + forumName + "\n"
 		+ "userName:\n" + userName + "\n";
 		log = ""+ userName+ " is trying to logout from"
-		+ forumName +"...\n";
+		+ forumName +"...";
 		reportLogger.log(Level.INFO ,log);
 		msgToSend += delimiter;
 		stringToServer.print(msgToSend);
@@ -472,8 +472,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 			reportLogger.log(Level.ERROR, log);
 		}
 		if (receivedMsg.contains("200ok")) {
-			log = ""+ userName+ "logout successfully from"
-			+ forumName +"\n";
+			log = ""+ userName+ "logout successfully from"+ forumName;
 			reportLogger.log(Level.INFO ,log);
 			loggedOutMember = new User(this);
 		}
@@ -489,7 +488,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		List<Forum> returnedList = new ArrayList<Forum>();
 		msgToSend = "GETFL\n";
 		msgToSend += delimiter;
-		log = "a \"getForumsList\" request was sent\n";
+		log = "a \"getForumsList\" request was sent";
 		reportLogger.log(Level.TRACE ,log);
 		stringToServer.print(msgToSend);
 		stringToServer.flush();
@@ -501,7 +500,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 				reportLogger.log(Level.DEBUG, log);
 			}
 			else{
-				log = "a \"getForumsList\" was successfuly answered\n";
+				log = "a \"getForumsList\" was successfuly answered";
 				reportLogger.log(Level.TRACE ,log);
 			}
 		} catch (IOException e) {
@@ -521,7 +520,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		Forum returnedSF = null;
 		msgToSend = "GETF\n" + "forumName:\n" + forumName + "\n";
 		msgToSend += delimiter;
-		log = "a \"getForum\" request was sent. forum: "+forumName+"\n";
+		log = "a \"getForum\" request was sent. forum: "+forumName;
 		reportLogger.log(Level.TRACE ,log);
 		stringToServer.print(msgToSend);
 		stringToServer.flush();
@@ -533,7 +532,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 				reportLogger.log(Level.DEBUG, log);
 			}
 			else{
-				log = "a \"getForum\" was successfuly answered. forum: "+forumName+"\n";
+				log = "a \"getForum\" was successfuly answered. forum: "+forumName;
 				reportLogger.log(Level.TRACE ,log);
 			}
 		} catch (IOException e) {
@@ -560,7 +559,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		}
 		msgToSend += "requester:\n" + userName + "\n" + "password:\n" + password + "\n";
 		msgToSend += delimiter;
-		log = ""+ userName+ " is trying to add a new subForum "+sfName+"to "+fName+".\n";
+		log = ""+ userName+ " is trying to add a new subForum "+sfName+"to "+fName;
 		reportLogger.log(Level.INFO ,log);
 		stringToServer.print(msgToSend);
 		stringToServer.flush();
@@ -575,7 +574,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 			reportLogger.log(Level.ERROR, log);
 		}
 		if (receivedMsg.contains("200ok")) {
-			log = ""+ userName+ " succeeded to add a new subForum "+sfName+"to "+fName+".\n";
+			log = ""+ userName+ " succeeded to add a new subForum "+sfName+"to "+fName;
 			reportLogger.log(Level.INFO ,log);
 			added = true;
 		}
@@ -602,7 +601,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		+ "superAdminName:\n" + superAdminName + "\n"
 		+ "superAdminPasswaord:\n" + superAdminPasswaord + "\n";
 		msgToSend += delimiter;
-		log = ""+ adminName+ " is trying to initiate a new forum "+forumName+"...\n";
+		log = ""+ adminName+ " is trying to initiate a new forum "+forumName+"...";
 		reportLogger.log(Level.INFO ,log);
 		stringToServer.print(msgToSend);
 		stringToServer.flush();
@@ -617,7 +616,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 			reportLogger.log(Level.ERROR, log);
 		}
 		if (receivedMsg.contains("200ok")) {
-			log = ""+ adminName+ " succeeded to initiate a new forum "+forumName+".\n";
+			log = ""+ adminName+ " succeeded to initiate a new forum "+forumName;
 			reportLogger.log(Level.INFO ,log);
 			initiated = true;
 		}
@@ -643,7 +642,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		msgToSend = "GETAP\n" + "forumName:\n" + forumName + "\n"
 		+ "SubForumName:\n" + subForumName + "\n" + "TheadID:\n" + threadID + "\n";
 		msgToSend += delimiter;
-		log = "a \"getAllPosts\" request was sent\n";
+		log = "a \"getAllPosts\" request was sent";
 		reportLogger.log(Level.TRACE ,log);
 		stringToServer.print(msgToSend);
 		stringToServer.flush();
@@ -655,7 +654,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 				reportLogger.log(Level.DEBUG, log);
 			}
 			else{
-				log = "a \"getAllPosts\" was successfuly answered\n";
+				log = "a \"getAllPosts\" was successfuly answered";
 				reportLogger.log(Level.TRACE ,log);
 			}
 		} catch (IOException e) {
@@ -674,7 +673,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		msgToSend = "DELF\n" + "forumName:\n" + forumName + "\n" + "userName:\n"
 		+ userName + "\n" + "password:\n" + password + "\n";
 		msgToSend += delimiter;
-		log = ""+ userName+ " is trying to delete the forum "+forumName+"...\n";
+		log = ""+ userName+ " is trying to delete the forum "+forumName+"...";
 		reportLogger.log(Level.INFO ,log);
 		stringToServer.print(msgToSend);
 		stringToServer.flush();
@@ -689,7 +688,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 			reportLogger.log(Level.ERROR, log);
 		}
 		if (receivedMsg.contains("200ok")) {
-			log = ""+ userName+ " succeeded to delete the forum "+forumName+".\n";
+			log = ""+ userName+ " succeeded to delete the forum "+forumName;
 			reportLogger.log(Level.INFO ,log);
 			deleted = true;
 		}
@@ -708,7 +707,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		+ userName + "\n" + "password:\n" + password + "\n";
 		msgToSend += delimiter;
 		log = ""+ userName+ " is trying to delete the subforum "+subForumName+
-		"from "+forumName+"...\n";
+		"from "+forumName+"...";
 		reportLogger.log(Level.INFO ,log);
 		stringToServer.print(msgToSend);
 		stringToServer.flush();
@@ -724,7 +723,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		}
 		if (receivedMsg.contains("200ok")) {
 			log = ""+ userName+ " succeeded to delete the subforum "+subForumName+
-			"from "+forumName+".\n";
+			"from "+forumName;
 			reportLogger.log(Level.INFO ,log);
 			deleted = true;
 		}
@@ -746,7 +745,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		msgToSend = "DELTHRD\n" + "forumName:\n" + forumName + "\n" + "subForumName:\n" + subForumName + "\n"
 		+ "threadId:\n" + tmId + "\n" + "userName:\n" + userName + "\n" + "password:\n" + password + "\n";
 		log = ""+ userName+ " is trying to delete the "+ tmId+" thread from "+subForumName+
-		", "+forumName+"...\n";
+		", "+forumName+"...";
 		reportLogger.log(Level.INFO ,log);
 		msgToSend += delimiter;
 		stringToServer.print(msgToSend);
@@ -763,7 +762,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		}
 		if (receivedMsg.contains("200ok")) {
 			log = ""+ userName+ " succeed to delete the "+ tmId+" thread from "+subForumName+
-			", "+forumName+".\n";
+			", "+forumName;
 			reportLogger.log(Level.INFO ,log);
 			deleted = true;
 		}
@@ -788,7 +787,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		+ "threadId:\n" + tmId + "\n" + "postId:\n" + pId + "\n" + "editor:\n" + userName + "\n"
 		+ "password:\n" + password + "\n";
 		log = ""+ userName+ " is trying to delete the "+ pId+" post from "+tmId+", "+subForumName+
-		", "+forumName+"...\n";
+		", "+forumName+"...";
 		reportLogger.log(Level.INFO ,log);
 		msgToSend += delimiter;
 		stringToServer.print(msgToSend);
@@ -805,7 +804,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		}
 		if (receivedMsg.contains("200ok")) {
 			log = ""+ userName+ " succeed to delete the "+ pId+" post from "+tmId+", "+subForumName+
-			", "+forumName+".\n";
+			", "+forumName;
 			reportLogger.log(Level.INFO ,log);
 			deleted = true;
 		}
@@ -831,7 +830,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		+ "threadContent:\n" + content + "\n" + "editorName:\n" + editorName + "\n" + "editorPassword:\n" + editorPassword + "\n";
 		msgToSend += delimiter;
 		log = ""+ editorName+ " is trying to edit the "+ tid+" thread from "+subForumName+
-		", "+forumName+"...\n";
+		", "+forumName+"...";
 		reportLogger.log(Level.INFO ,log);
 		stringToServer.print(msgToSend);
 		stringToServer.flush();
@@ -847,7 +846,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		}
 		if (receivedMsg.contains("200ok")) {
 			log = ""+ editorName+ " succeed to delete the "+ tid+" thread from "+subForumName+
-			", "+forumName+".\n";
+			", "+forumName;
 			reportLogger.log(Level.INFO ,log);
 			edited = true;
 		}
@@ -876,7 +875,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		+ "postContent:\n" + content + "\n" + "editorName:\n" + editorName + "\n"
 		+ "editorPassword:\n" + editorPassword + "\n";
 		log = ""+ editorName+ " is trying to edit the "+ pID+" post from "
-		+TMid+", "+subForumName+", "+forumName+"...\n";
+		+TMid+", "+subForumName+", "+forumName+"...";
 		reportLogger.log(Level.INFO ,log);
 		msgToSend += delimiter;
 		stringToServer.print(msgToSend);
@@ -893,7 +892,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		}
 		if (receivedMsg.contains("200ok")) {
 			log = ""+ editorName+ " succeed to edit the "+ pID+" post from "
-			+TMid+", "+subForumName+", "+forumName+".\n";
+			+TMid+", "+subForumName+", "+forumName;
 			reportLogger.log(Level.INFO ,log);
 			edited = true;
 		}
@@ -913,7 +912,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		+ "userName:\n" + userName + "\n" + "password:\n" + password + "\n";
 		msgToSend += delimiter;
 		log = ""+ userName+ " is trying to add"+ newModerator +
-		" as a new moderator to "+subForumName+", "+forumName+"...\n";
+		" as a new moderator to "+subForumName+", "+forumName+"...";
 		reportLogger.log(Level.INFO ,log);
 		stringToServer.print(msgToSend);
 		stringToServer.flush();
@@ -929,7 +928,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		}
 		if (receivedMsg != null && receivedMsg.contains("200ok")) {
 			log = ""+ userName+ " succeed to add"+ newModerator +
-			" as a new moderator to "+subForumName+", "+forumName+"...\n";
+			" as a new moderator to "+subForumName+", "+forumName+"...";
 			reportLogger.log(Level.INFO ,log);
 			added = true;
 		}
@@ -946,7 +945,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		msgToSend = "NOTI\n" + "forumName:\n" + forumName + "\n"
 		+ "userName:\n" + userName + "\n" + "password:\n" + password + "\n";
 		msgToSend += delimiter;
-		log = "a \"getNotification\" request was sent\n";
+		log = "a \"getNotification\" request was sent";
 		reportLogger.log(Level.TRACE ,log);
 		stringToServer.print(msgToSend);
 		stringToServer.flush();
@@ -958,7 +957,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 				reportLogger.log(Level.DEBUG, log);
 			}
 			else{
-				log = "a \"getNotification\" request was successfuly answered\n";
+				log = "a \"getNotification\" request was successfuly answered";
 				reportLogger.log(Level.TRACE ,log);
 			}
 		} catch (IOException e) {
@@ -979,7 +978,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		+ "moderatorName:\n" + moderatorName + "\n" + "userName:\n" + userName + "\n" + "password:\n" + password + "\n";
 		msgToSend += delimiter;
 		log = ""+ userName+ " is trying to remove"+ moderatorName +
-		" as a moderator from "+subForum+", "+forumName+"...\n";
+		" as a moderator from "+subForum+", "+forumName+"...";
 		reportLogger.log(Level.INFO ,log);
 		stringToServer.print(msgToSend);
 		stringToServer.flush();
@@ -995,7 +994,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		}
 		if (receivedMsg.contains("200ok")) {
 			log = ""+ userName+ " succeed to remove"+ moderatorName +
-			" as a moderator from "+subForum+", "+forumName+"...\n";
+			" as a moderator from "+subForum+", "+forumName+"...";
 			reportLogger.log(Level.INFO ,log);
 			remove = true;
 		}
@@ -1011,7 +1010,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		int counter = 0;
 		msgToSend = "GETCOUNT\n" + "forumName:\n" + forumName + "\n" + "userName:\n" + userName + "\n"
 		+ "password:\n" + password + "\n";
-		log = ""+ userName+ " is trying to get the number of threads in forum "+forumName+"...\n";
+		log = ""+ userName+ " is trying to get the number of threads in forum "+forumName+"...";
 		reportLogger.log(Level.INFO ,log);
 		msgToSend += delimiter;
 		stringToServer.print(msgToSend);
@@ -1024,7 +1023,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 				reportLogger.log(Level.DEBUG, log);
 			}
 			else{
-				log = ""+ userName+ " succeed to get the number of threads in forum "+forumName+".\n";
+				log = ""+ userName+ " succeed to get the number of threads in forum "+forumName;
 				reportLogger.log(Level.INFO ,log);
 			}
 		} catch (IOException e) {
@@ -1046,7 +1045,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		+ "userName:\n" + userName + "\n" + "requester:\n" + requester + "\n"
 		+ "passwordRequester:\n" + password + "\n";
 		log = ""+ requester+ " is trying to get the number of threads that"
-		+userName+ " published in "+forumName+"...\n";
+		+userName+ " published in "+forumName+"...";
 		reportLogger.log(Level.INFO ,log);
 		msgToSend += delimiter;
 		stringToServer.print(msgToSend);
@@ -1060,7 +1059,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 			}
 			else{
 				log = ""+ requester+ " succeed to get the number of threads that"
-				+userName+ " published in "+forumName+".\n";
+				+userName+ " published in "+forumName;
 				reportLogger.log(Level.INFO ,log);
 			}
 		} catch (IOException e) {
@@ -1080,7 +1079,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		msgToSend = "GETNF\n" + "\n" + "userName:\n" + userName + "\n"
 		+ "password:\n" + password + "\n";
 		msgToSend += delimiter;
-		log = ""+ userName+ " is trying to get the number of forums...\n";
+		log = ""+ userName+ " is trying to get the number of forums...";
 		reportLogger.log(Level.INFO ,log);
 		stringToServer.print(msgToSend);
 		stringToServer.flush();
@@ -1092,7 +1091,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 				reportLogger.log(Level.DEBUG, log);
 			}
 			else{
-				log = ""+ userName+ " succeed to get the number of forums.\n";
+				log = ""+ userName+ " succeed to get the number of forums";
 				reportLogger.log(Level.INFO ,log);
 			}
 		} catch (IOException e) {
@@ -1117,7 +1116,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		+ superAdminName + "\n" + "password:\n" + password + "\n";
 		msgToSend += delimiter;
 		log = ""+ superAdminName+ " is trying to get the number of user " +
-		"which published in more than one thread...\n";
+		"which published in more than one thread...";
 		reportLogger.log(Level.INFO ,log);
 		stringToServer.print(msgToSend);
 		stringToServer.flush();
@@ -1130,7 +1129,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 			}
 			else{
 				log = ""+ superAdminName+ " succeed to get the number of user " +
-				"which published in more than one thread.\n";
+				"which published in more than one thread";
 				reportLogger.log(Level.INFO ,log);
 			}
 		} catch (IOException e) {
@@ -1150,7 +1149,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		msgToSend = "GETAM\n" + "forum:\n"
 		+ forum + "\n" + "userName:\n" + userName + "\n" + "password:\n" + password + "\n";
 		msgToSend += delimiter;
-		log = ""+ userName+ " is trying to get the number of users in "+forum+"...\n";
+		log = ""+ userName+ " is trying to get the number of users in "+forum+"...";
 		reportLogger.log(Level.INFO ,log);
 		stringToServer.print(msgToSend);
 		stringToServer.flush();
@@ -1162,7 +1161,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 				reportLogger.log(Level.DEBUG, log);
 			}
 			else{
-				log = ""+ userName+ " succeed to get the number of users in "+forum+".\n";
+				log = ""+ userName+ " succeed to get the number of users in "+forum;
 				reportLogger.log(Level.INFO ,log);
 			}
 		} catch (IOException e) {
@@ -1182,7 +1181,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		msgToSend = "GETUPU\n" + "forumName:\n" + forumName + "\n" + "userName:\n"
 		+ userName + "\n" + "password:\n" + password + "\n";
 		log = ""+ userName+ " is trying to get a list of users," +
-		" which replyed to other users in "+forumName+"...\n";
+		" which replyed to other users in "+forumName+"...";
 		reportLogger.log(Level.INFO ,log);
 		msgToSend += delimiter;
 		stringToServer.print(msgToSend);
@@ -1195,8 +1194,8 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 				reportLogger.log(Level.DEBUG, log);
 			}
 			else{
-				log = ""+ userName+ " succeed to get a list of users," +
-				" which replyed to other users in "+forumName+".\n";
+				log = userName+ " succeed to get a list of users," +
+				" which replyed to other users in "+forumName;
 				reportLogger.log(Level.INFO ,log);
 			}
 		} catch (IOException e) {
@@ -1224,7 +1223,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 			reportLogger.log(Level.ERROR, log);
 		}
 		if (receivedMsg.contains("200ok")) {
-			log = "listenToServer\n";
+			log = "listenToServer";
 			reportLogger.log(Level.INFO ,log);
 			remove = true;
 		}
@@ -1253,7 +1252,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 			reportLogger.log(Level.ERROR, log);
 		}
 		if (receivedMsg.contains("200ok")) {
-			log = "sendListenerIdentifier\n";
+			log = "sendListenerIdentifier";
 			reportLogger.log(Level.INFO ,log);
 			remove = true;
 		}
@@ -1269,7 +1268,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		msgToSend = "HASNOTIF\n" + "forumName:\n" + forum + "\n"
 		+ "userName:\n" + userName + "\n" + "password:\n" + password + "\n";
 		msgToSend += delimiter;
-		log = userName+" is ask if there are notifications for him\n";
+		log = userName+" is ask if there are notifications for him";
 		reportLogger.log(Level.TRACE ,log);
 		stringToServer.print(msgToSend);
 		stringToServer.flush();
@@ -1284,7 +1283,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 				return false;
 			}
 			else{
-				log = userName+" got answer if there are notifications for him\n";
+				log = userName+" got answer if there are notifications for him";
 				reportLogger.log(Level.TRACE ,log);
 			}
 			hasNotifications = (Boolean) recieved;
