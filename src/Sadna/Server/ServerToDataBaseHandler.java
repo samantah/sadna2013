@@ -34,11 +34,11 @@ public class ServerToDataBaseHandler implements ServerInterface {
             //System.out.println("is unique forum");
             if (isUserNameUnique(forumName, userName)) {
                 //System.out.println("is unique username");
-                Memberdb toAdd = new Memberdb(); //**************** need to create real member
+            	Forumdb forum = this._db.getForum(forumName);
                 Date now = new Date();
                 long nowAsLong = now.getTime();
                 String nowAsString = String.valueOf(nowAsLong);
-                toAdd.setDateJoin(nowAsString);
+                Memberdb toAdd = new Memberdb(-1, forum, userName, password, email, "Member", nowAsString, "");
                 isAdded = _db.addMember(toAdd);
             }
         }
@@ -103,10 +103,10 @@ public class ServerToDataBaseHandler implements ServerInterface {
      }
      */
     private boolean isSuperAdmin(String superAdminUserName,
-            String superAdminPassword, BasicPasswordEncryptor pe) {
+            String superAdminPassword) {
         Memberdb sa = _db.getSuperAdmin();
         return (sa.getUserName().equals(superAdminUserName)
-                && pe.checkPassword(superAdminPassword,sa.getPassword()));
+                && Encryptor.checkPassword(superAdminPassword,sa.getPassword()));
     }
 
     private boolean isForumNameUnique(String forumName) {
@@ -122,10 +122,10 @@ public class ServerToDataBaseHandler implements ServerInterface {
     }
 
     @Override
-    public boolean addSubForum(Subforumdb subForum, List<Memberdb> members, String userName, String password, BasicPasswordEncryptor pe) {
+    public boolean addSubForum(Subforumdb subForum, List<Memberdb> members, String userName, String password) {
         boolean isAdded = false;
         Memberdb member = _db.getMember(subForum.getForumdb().getForumName(), userName);
-        if (subForum.getForumdb() != null && pe.checkPassword(password, member.getPassword())) {
+        if (subForum.getForumdb() != null && Encryptor.checkPassword(password, member.getPassword())) {
             if (isSubForumNameUnique(subForum.getForumdb().getForumName(),
                     subForum.getSubForumName())) {
                 isAdded = _db.addSubForum(subForum, members);
@@ -152,9 +152,9 @@ public class ServerToDataBaseHandler implements ServerInterface {
         succeeded = _db.addThread(thread);
         return succeeded;
     }
-   //check password******************************************
+
     @Override
-    public boolean postComment(Postdb comment, String username, String password, BasicPasswordEncryptor pe) {
+    public boolean postComment(Postdb comment, String username, String password) {
         boolean posted = false;
         posted = _db.addPost(comment);
         return posted;
@@ -368,10 +368,10 @@ public class ServerToDataBaseHandler implements ServerInterface {
     }
 
     @Override
-    public boolean loginAsSuperAdmin(String userName, String password, BasicPasswordEncryptor pe) {
+    public boolean loginAsSuperAdmin(String userName, String password) {
         boolean succeeded = false;
         Memberdb superAdmin = _db.getSuperAdmin();
-        if (pe.checkPassword(password, superAdmin.getPassword()) && isSuperAdmin(userName, password, pe)) {
+        if (Encryptor.checkPassword(password, superAdmin.getPassword()) && isSuperAdmin(userName, password)) {
             succeeded = true;
         }
         return succeeded;
@@ -380,7 +380,6 @@ public class ServerToDataBaseHandler implements ServerInterface {
 
     @Override
     public boolean logout(String forumName, String userName) {
-    	// TODO Auto-generated method stub
     	return true;
     }
 
@@ -400,11 +399,11 @@ public class ServerToDataBaseHandler implements ServerInterface {
     public boolean initiateForum(String adminName, String adminPassword,
             String forumName, String ioap, String nfp, String dp, String amp,
             String s, String mp, String cmp, String superAdminUserName,
-            String superAdminPassword, BasicPasswordEncryptor pe) {
+            String superAdminPassword) {
         boolean isAdded = false;
         Memberdb admin = null;
         if (isForumNameUnique(forumName)
-                && isSuperAdmin(superAdminUserName, superAdminPassword, pe)) {
+                && isSuperAdmin(superAdminUserName, superAdminPassword)) {
             //System.out.println("is unique forum");
             enumNotiImidiOrAgre imidOrArgeNotiPolicy = null;
             enumNotiFriends friendsNotiPolicy = null;

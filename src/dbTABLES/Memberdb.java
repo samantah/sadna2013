@@ -47,6 +47,21 @@ public class Memberdb implements java.io.Serializable {
 		this.threaddbs = threaddbs;
 		this.subforumdbs = subforumdbs;
 	}
+	
+	public Memberdb(int idmember, Forumdb forumdb, String userName,
+			String password, String email, String roll, String dateJoin,
+			String notification){
+		this.idmember = idmember;
+		this.forumdb = forumdb;
+		this.userName = userName;
+		this.password = password;
+		this.email = email;
+		this.roll = roll;
+		this.dateJoin = dateJoin;
+		this.notification = notification;
+		this.forumdbs.add(this.forumdb);
+	}
+
 
 	public int getIdmember() {
 		return this.idmember;
