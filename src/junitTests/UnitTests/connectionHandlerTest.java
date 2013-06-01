@@ -1,10 +1,16 @@
-package junitTests.UnitTests;
+package UnitTests;
 
 /**
  *
  */
 import Sadna.Client.*;
 import Sadna.db.*;
+import Sadna.db.PolicyEnums.enumAssignModerator;
+import Sadna.db.PolicyEnums.enumCancelModerator;
+import Sadna.db.PolicyEnums.enumDelete;
+import Sadna.db.PolicyEnums.enumNotiFriends;
+import Sadna.db.PolicyEnums.enumNotiImidiOrAgre;
+
 import org.junit.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +66,11 @@ public class connectionHandlerTest {
 		SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
 //		if(sa == null) System.out.println("nullllllllll");
 //		else System.out.println(sa.getUserName());
-		sa.initiateForum(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
+		Policy policy = new Policy(enumNotiImidiOrAgre.IMIDIATE,
+				enumNotiFriends.PUBLISHERS, enumDelete.EXTENDED,
+				enumAssignModerator.NO_RESTRICTION,
+				enumCancelModerator.NO_RESTRICTION, 0, 0);
+		sa.initiateForum(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD, policy);
 		Forum forum = sa.getForum(FORUM_NAME);
 		
 		Member m1 = u.register(FORUM_NAME, "laaaaa", "ksjdf66asd", "sdf@adf.com");
@@ -70,15 +80,12 @@ public class connectionHandlerTest {
 		
 		SubForum subForum = new SubForum(forum, "zubizubi1");
 		SubForum subForum2 = new SubForum(forum, "zubizubi2");
-		Moderator mod1 = new Moderator(m1);
-		Moderator mod2 = new Moderator(m2);
-		Moderator mod3 = new Moderator(m3);
-		ArrayList<Moderator> al = new ArrayList<Moderator>();
-		al.add(mod1);
+		ArrayList<Member> al = new ArrayList<Member>();
+		al.add(m1);
 		sa.addSubForum(subForum2, al);
-		ArrayList<Moderator> al2 = new ArrayList<Moderator>();
-		al2.add(mod2);
-		al2.add(mod3);
+		ArrayList<Member> al2 = new ArrayList<Member>();
+		al2.add(m2);
+		al2.add(m3);
 		sa.addSubForum(subForum, al2);
 		ThreadMessage threadMessage = new ThreadMessage(subForum, "zzzz", "hi11", "laaaaa");
 		ThreadMessage threadMessage2 = new ThreadMessage(subForum, "ccccc", "hi2aaa2", "eaaaaa");
@@ -98,11 +105,40 @@ public class connectionHandlerTest {
 
 
 	@Test
-	public void test_logIn() throws InterruptedException {
+	public void logInTest() throws InterruptedException {
 		User u = new User(ch);
 		User _user = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
 		assertTrue(_user instanceof Member);
-		System.out.println("Finished test_logIn");
+	}
+	
+	@Test
+	public void logOutTest() throws InterruptedException {
+		User u = new User(ch);
+		User _user = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+		assertTrue(_user instanceof Member);
+		Member member = (Member) _user;
+		User logout = member.logout(FORUM_NAME);
+		assertFalse(_user instanceof Member);		
+	}
+	
+	@Test
+	public void postCommentTest() throws InterruptedException {
+		User u = new User(ch);
+		Member member = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+		List<ThreadMessage> tmList = member.viewThreadMessages(FORUM_NAME, SUB_FORUM_NAME);
+		int id = tmList.get(0).getId();
+		ThreadMessage tm = member.getThread(FORUM_NAME, SUB_FORUM_NAME, id);
+		Post p = new Post(tm, "new title", "new content", member.getUserName());
+		assertTrue(member.postComment(p));
+	}
+	
+	@Test
+	public void publishThreadTest(){
+		User u = new User(ch);
+		Member member = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+		SubForum sf = member.getSubForum(FORUM_NAME, SUB_FORUM_NAME);
+		ThreadMessage tm = new ThreadMessage(sf, "new title", "new content", member.getUserName());
+		assertTrue(member.publishThread(tm));
 	}
 
 	@Test
@@ -120,7 +156,58 @@ public class connectionHandlerTest {
 		assertNull(_member5);
 		Member _member6 = u.register(FORUM_NAME, "validUser", "valid1234", USER_EMAIL);
 		assertNotNull(_member6);
-		System.out.println("Finished registerTest");		
+	}
+	
+	@Test
+	public void getSubForumTest() {
+		User u = new User(ch);
+		Member a = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+		assertNotNull(a);
+		SubForum sub = a.getSubForum(FORUM_NAME, "abc");
+		assertNull(sub);
+		sub = a.getSubForum(FORUM_NAME, SUB_FORUM_NAME);
+		assertNotNull(sub);
+		assertTrue(sub.getSubForumName().equals(SUB_FORUM_NAME));
+	}
+	
+	@Test
+	public void getForumTest() {
+		User u = new User(ch);
+		Forum doesntExist = u.getForum("forumThatDoesntExisttttttt");
+		assertNull(doesntExist);
+		Forum f = u.getForum(FORUM_NAME);
+		assertTrue(f.getForumName().equals(FORUM_NAME));
+	}
+	
+	@Test
+	public void getSubForumsListTest(){
+		User u = new User(ch);
+		List<SubForum> sfList = u.viewSubForums(FORUM_NAME);
+		assertNotNull(sfList);
+	}
+	
+	@Test
+	public void getThreadsListTest() {
+		User u = new User(ch);
+		List<ThreadMessage> tmList = u.viewThreadMessages(FORUM_NAME, SUB_FORUM_NAME);
+		assertNotNull(tmList);
+		assertTrue(tmList.size()>0);
+	}
+	
+	@Test
+	public void getForumsListTest(){
+		User u = new User(ch);
+		assertNotNull(u.viewForums());
+	}
+	
+	@Test
+	public void getThreadMessageTest() {
+		User u = new User(ch);
+		List<ThreadMessage> threadsList = u.viewThreadMessages(FORUM_NAME, SUB_FORUM_NAME);
+		int msgID = threadsList.get(0).getId();
+		ThreadMessage threadMessage = u.getThread(FORUM_NAME, SUB_FORUM_NAME, msgID);
+		assertNotNull(threadMessage);
+		assertTrue(threadMessage.getTitle().equals("zzzz"));
 	}
 
 	@Test
@@ -130,108 +217,52 @@ public class connectionHandlerTest {
 		assertNotNull(m);
 		assertTrue(m instanceof Admin);
 		Admin a = (Admin)m;
-		Forum fake = new Forum(a, "not-exist");
+		Forum fake = new Forum("stamForum", null);
 		SubForum illegal = new SubForum(fake, "firstAttemp");
-		ArrayList<Moderator> mods = new ArrayList<Moderator>();
+		ArrayList<Member> mods = new ArrayList<Member>();
 		assertFalse(a.addSubForum(illegal, mods));
-		Forum forum = new Forum(FORUM_NAME);
-		SubForum legal = new SubForum(forum, "succeesfullAttemp");
+		Forum f = a.getForum(FORUM_NAME);
+		SubForum legal = new SubForum(f, "succeesfullAttemp");
 		assertTrue(a.addSubForum(legal, mods));
 	}
-
+	
 	@Test
-	public void getSubForumTest() {
+	public void initiateForumTest(){
 		User u = new User(ch);
-		Member a = u.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
-		assertNotNull(a);
-		Admin ad = (Admin) a;
-		Forum f = a.getForum(FORUM_NAME);
-		SubForum sub = a.getSubForum(FORUM_NAME, SUB_FORUM_NAME);
-		System.out.println("Finished getSubForumTest");		
-
+		SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
+		Policy policy = new Policy(enumNotiImidiOrAgre.IMIDIATE,
+				enumNotiFriends.PUBLISHERS, enumDelete.EXTENDED,
+				enumAssignModerator.NO_RESTRICTION,
+				enumCancelModerator.NO_RESTRICTION, 0, 0);
+		assertTrue(sa.initiateForum("new_forum1", "new admin", "newAdmin1234", policy));
 	}
-
+	
 	@Test
-	public void getThreadMessageTest() {
-		User u = new User(ch);
-		List<ThreadMessage> threadsList = u.viewThreadMessages(FORUM_NAME, SUB_FORUM_NAME);
-		int msgID = threadsList.get(0).getId();
-		ThreadMessage threadMessage = u.getThread(FORUM_NAME, SUB_FORUM_NAME, msgID);
-		assertNotNull(threadMessage);
-		SubForum subForum = threadMessage.getSubForum();
-		assertEquals(subForum.getSubForumName(), SUB_FORUM_NAME);
-	}
-
-	@Test
-	public void postCommentTest() {
+	public void getAllPostsTest(){
 		User u = new User(ch);
 		List<ThreadMessage> threadsList = u.viewThreadMessages(FORUM_NAME, SUB_FORUM_NAME);
 		ThreadMessage thread1 = threadsList.get(0);
-		Member m = u.register(FORUM_NAME, "sami5432", "password7655", "asa@af.sdf");
-		Post post = new Post(thread1, "new", "post", "chen");
-		boolean postComment = m.postComment(post);
-		assertTrue(postComment);
-		List<Post> allPosts = m.getAllPosts(thread1);
-		int size = allPosts.size();
-		assertTrue(size >= 1);
-		}
-
-
-
-
-	@Test
-	public void getForumTest() {
-		User u = new User(ch);
-		Forum f = u.getForum(FORUM_NAME);
-		assertTrue(f.getForumName().equals(FORUM_NAME));
-		Forum doesntExist = u.getForum("forumThatDoesn'tExisttttttt");
-		assertNull(doesntExist);
+		List<Post> postList = u.getAllPosts(thread1);
+		assertNotNull(postList);
+		assertTrue(postList.size()>0);
 	}
-
+	
 	@Test
-	public void getThreadsListTest() {
+	public void deleteForumTest(){
 		User u = new User(ch);
 		SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
-		assertNotNull(sa);
-		assertTrue(sa.initiateForum("forumTest2", "samanta111", "1234567a"));
-		Admin admin = (Admin)u.login("forumTest2", "samanta111", "1234567a");
-		Forum exists = admin.getForum("forumTest2");
-		Member m = u.register("forumTest2", "member123", "lasjflkJDF1", "ASFADF@asd.com");
-		List<Moderator> lm = new ArrayList<Moderator>();
-		Moderator mo = new Moderator(m);
-		lm.add(mo);
-		admin.addSubForum(new SubForum(exists, "subForumTest2"), lm);
-		assertNotNull(m.viewThreadMessages("forumTest2", "subForumTest2"));
-		assertEquals(0, m.viewThreadMessages("forumTest2", "subForumTest2").size());
-		SubForum sf = m.getSubForum("forumTest2", "subForumTest2");
-		ThreadMessage t = new ThreadMessage(sf, "title222", "lalala", "samanta111");
-		m.publishThread(t);
-		assertEquals(1, m.viewThreadMessages("forumTest2", "subForumTest2").size());
+		assertTrue(sa.deleteForum(FORUM_NAME));
+		assertNull(u.getForum(FORUM_NAME));
 	}
-
-
-
+	
 	@Test
-	public void publishThreadTest(){
+	public void deleteSubForumTest(){
 		User u = new User(ch);
-		Member mem = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
-		Forum f = mem.getForum(FORUM_NAME); 
-		List<SubForum> sf = mem.viewSubForums(FORUM_NAME);
-		ThreadMessage tm = new ThreadMessage(sf.get(0), "test", "test", USER_NAME);
-		assertTrue(mem.publishThread(tm));
+		Admin a = (Admin) u.login(FORUM_NAME, ADMIN_NAME, USER_PASSWORD);
+		assertTrue(a.deleteSubForum(FORUM_NAME, SUB_FORUM_NAME));
+		assertNull(u.getSubForum(FORUM_NAME, SUB_FORUM_NAME));
 	}
-
-	@Test
-	public void getSubForumsListTest(){
-		User u = new User(ch);
-		assertNotNull(u.viewSubForums(FORUM_NAME));
-	}
-
-	@Test
-	public void getForumsListTest(){
-		User u = new User(ch);
-		assertNotNull(u.viewForums());
-	}
+	
 
 	@Test
 	public void loginAsSuperAdminTest(){
@@ -241,23 +272,39 @@ public class connectionHandlerTest {
 	}
 
 	@Test
-	public void initiateForumTest(){
+	public void deleteThreadMesageTest(){
 		User u = new User(ch);
-		SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
-		assertTrue(sa.initiateForum("aBrandNewForum!!", "aBrandNewAdmin", "passpasA12"));
-	}
-
-	@Test
-	public void getAllPostsTest(){
-		User u = new User(ch);
+		Admin a = (Admin) u.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
 		List<ThreadMessage> threadsList = u.viewThreadMessages(FORUM_NAME, SUB_FORUM_NAME);
 		ThreadMessage thread1 = threadsList.get(0);
-		Member m = u.register(FORUM_NAME, "eliSDDhana", "ASASD7678", "assd@af.vo");
-		Post post = new Post(thread1, "new", "post", "chen");
-		m.postComment(post);
-		assertNotNull(m.getAllPosts(thread1));
-	}
+		assertTrue(a.deleteThread(thread1));
 
+		Member member = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+		SubForum sf = member.getSubForum(FORUM_NAME, SUB_FORUM_NAME);
+		ThreadMessage tm = new ThreadMessage(sf, "new title", "new content", member.getUserName());
+		assertTrue(member.publishThread(tm));
+		assertTrue(member.deleteThread(tm));
+	}
+	
+	@Test
+	public void deletePostTest(){
+		User u = new User(ch);
+		Admin a = (Admin) u.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
+		List<ThreadMessage> threadsList = u.viewThreadMessages(FORUM_NAME, SUB_FORUM_NAME);
+		ThreadMessage thread1 = threadsList.get(0);
+		List<Post> postList = u.getAllPosts(thread1);
+		Post p = postList.get(0);
+		assertTrue(a.deletePost(p));
+
+		Member member = u.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+		List<ThreadMessage> tmList = member.viewThreadMessages(FORUM_NAME, SUB_FORUM_NAME);
+		int id = tmList.get(0).getId();
+		ThreadMessage tm = member.getThread(FORUM_NAME, SUB_FORUM_NAME, id);
+		Post p1 = new Post(tm, "new title", "new content", member.getUserName());
+		assertTrue(member.postComment(p1));
+		assertTrue(member.deletePost(p1));
+	}
+	
 	@Test
 	public void addModeratorTest(){
 		User u = new User(ch);
@@ -317,10 +364,5 @@ public class connectionHandlerTest {
 //		assertTrue(ch.deleteThreadMessage(ltm.get(0), "samanta11188", "1234567a"));
 //	}
 
-//	@Test
-//	public void logoutTest(){
-//		//User u = new User(ch);
-//		Member mem = ch.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
-//		assertTrue(ch.logout(FORUM_NAME, USER_NAME) instanceof User);
-//	}
+
 }

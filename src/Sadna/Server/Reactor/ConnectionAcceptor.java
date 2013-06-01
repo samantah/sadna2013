@@ -49,12 +49,11 @@ public class ConnectionAcceptor<T> {
 		// If serverSocketChannel is non-blocking, sChannel may be null
 		if (sChannel != null) {
 			SocketAddress address = sChannel.socket().getRemoteSocketAddress();
-
 			System.out.println("Accepting connection from " + address);
 			sChannel.configureBlocking(false);
 			SelectionKey key = sChannel.register(_data.getSelector(), 0);
 
-			ConnectionHandler<T> handler = ConnectionHandler.create(sChannel, _data, key);
+			ConnectionHandler<T> handler = ConnectionHandler.create(sChannel, _data, key, address);
 			handler.switchToReadOnlyMode(); // set the handler to read only mode
 		}
 	}
