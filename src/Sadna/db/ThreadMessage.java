@@ -17,18 +17,18 @@ public class ThreadMessage extends Message {
      */
     private static final long serialVersionUID = 2804071144673510942L;
     private SubForum subForum;
-    private PostIDGenerator postIDGenerator;
 
     public ThreadMessage(SubForum subForum, String title, String content, String publisher) {
         super(title, content, publisher);
         this.subForum = subForum;
-        this.postIDGenerator = new PostIDGenerator();
-        this.id = subForum.getThreadIDGenerator().getID();
+    }
+    
+    public ThreadMessage(int id, SubForum subForum, String title, String content, String publisher) {
+        super(title, content, publisher);
+        this.subForum = subForum;
+        this.id = id;
     }
 
-    public PostIDGenerator getPostIDGenerator() {
-        return postIDGenerator;
-    }
     
     public SubForum getSubForum() {
         return subForum;

@@ -20,16 +20,10 @@ public class SubForum implements Serializable {
     private static final long serialVersionUID = 4538107590374025375L;
     private Forum forum;
     private String subForumName;
-    private ThreadIDGenerator threadIDGenerator;
 
     public SubForum(Forum forum, String subForumName) {
         this.subForumName = subForumName;
         this.forum = forum;
-        this.threadIDGenerator = new ThreadIDGenerator();
-    }
-
-    public ThreadIDGenerator getThreadIDGenerator() {
-        return threadIDGenerator;
     }
 
     public Forum getForum() {

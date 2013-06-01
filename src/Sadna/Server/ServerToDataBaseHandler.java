@@ -12,7 +12,6 @@ import  dbTABLES.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
@@ -37,7 +36,7 @@ public class ServerToDataBaseHandler implements ServerInterface {
                 Date now = new Date();
                 long nowAsLong = now.getTime();
                 String nowAsString = String.valueOf(nowAsLong);
-                Memberdb toAdd = new Memberdb(-1, forum, userName, password, email, "Member", nowAsString, "");
+                Memberdb toAdd = new Memberdb(forum, userName, password, email, "Member", nowAsString, "");
                 isAdded = _db.addMember(toAdd);
             }
         }
@@ -82,7 +81,7 @@ public class ServerToDataBaseHandler implements ServerInterface {
         boolean succeeded = false;
         if (forumExists(forumName)) {
             Memberdb loginner = _db.getMember(forumName, userName);
-            if (loginner != null && loginner.getPassword().equals(password)) {
+            if (loginner != null && Encryptor.checkPassword(password, loginner.getPassword())) {
                 succeeded = true;
             }
         }
@@ -181,9 +180,9 @@ public class ServerToDataBaseHandler implements ServerInterface {
 
     @Override
     public List<Subforumdb> getSubForumsList(String forumName) {
-        HashSet<Subforumdb> subforums = null;
+        Set<Subforumdb> subforums = null;
         if (forumExists(forumName)) {
-            subforums = (HashSet<Subforumdb>) _db.getSubForumsList(forumName);
+            subforums = _db.getSubForumsList(forumName);
         }
         ArrayList<Subforumdb> ans = new ArrayList<>(subforums);
         return ans;
@@ -201,9 +200,9 @@ public class ServerToDataBaseHandler implements ServerInterface {
     @Override
     public List<Threaddb> getThreadsList(String forumName,
             String subForumName) {
-        HashSet<Threaddb> threads = null;
+        Set<Threaddb> threads = null;
         if (subForumExists(forumName, subForumName)) {
-            threads = (HashSet<Threaddb>) _db.getThreadsList(forumName, subForumName);
+            threads = _db.getThreadsList(forumName, subForumName);
         }
         ArrayList<Threaddb> ans = new ArrayList<>(threads);
         return ans;
@@ -317,7 +316,7 @@ public class ServerToDataBaseHandler implements ServerInterface {
 
 	@Override
     public boolean setSuperAdmin() {
-		Memberdb superAdmin = new Memberdb(-1, null, "superAdmin", Encryptor.encrypt("superAdmin1234"), "", "SuperAdmin", null, "");
+		Memberdb superAdmin = new Memberdb(null, "superAdmin", Encryptor.encrypt("superAdmin1234"), "", "SuperAdmin", null, "");
         return _db.setSuperAdmin(superAdmin);
     }
 
@@ -512,5 +511,19 @@ public class ServerToDataBaseHandler implements ServerInterface {
 	@Override
 	public boolean clearDB() {
 		return this._db.clearDB();
+	}
+
+
+	@Override
+	public boolean openSession() {
+		 _db.openSession();
+		 return true;
+	}
+
+
+	@Override
+	public boolean closeSession() {
+		_db.closeSession();
+		return true;
 	}
 }

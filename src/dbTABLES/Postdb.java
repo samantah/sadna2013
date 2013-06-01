@@ -22,9 +22,8 @@ public class Postdb implements java.io.Serializable {
 		this.idpost = idpost;
 	}
 
-	public Postdb(int idpost, Threaddb threaddb, Memberdb memberdb,
+	public Postdb(Threaddb threaddb, Memberdb memberdb,
 			String title, String content) {
-		this.idpost = idpost;
 		this.threaddb = threaddb;
 		this.memberdb = memberdb;
 		this.title = title;
@@ -32,7 +31,7 @@ public class Postdb implements java.io.Serializable {
 	}
 
 	public Post convertToPost(){
-		return new Post(threaddb.convertToThread(), title, content, memberdb.getUserName());
+		return new Post(this.idpost, threaddb.convertToThread(), title, content, memberdb.getUserName());
 	}
 	
 	public int getIdpost() {

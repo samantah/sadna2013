@@ -21,7 +21,12 @@ public class Post extends Message implements Serializable {
     public Post(ThreadMessage thread, String title, String content, String publisher) {
         super(title, content, publisher);
         this.thread = thread;
-        this.id = thread.getPostIDGenerator().getID();
+    }
+    
+    public Post(int id, ThreadMessage thread, String title, String content, String publisher) {
+        super(title, content, publisher);
+        this.thread = thread;
+        this.id = id;
     }
 
     public ThreadMessage getThread() {
