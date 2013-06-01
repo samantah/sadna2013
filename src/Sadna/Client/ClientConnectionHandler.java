@@ -53,7 +53,6 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 			stringFromServer = new BufferedReader(new InputStreamReader(inputStream));
 			objectFromServer = new ObjectInputStream(inputStream);
 			objectFromServer.readObject();
-			//reportLogger = Logger.getLogger(REPORT_LOGGER_NAME);
 
 		} catch (Exception e) {
 			log = "start Communication: "+e.getMessage();
