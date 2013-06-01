@@ -1,4 +1,4 @@
-package UnitTests;
+package junitTests.UnitTests;
 
 /**
  *

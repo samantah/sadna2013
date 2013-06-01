@@ -16,3 +16,9 @@
 2013-06-01 20:38:39,157 INFO  Sadna.Client.ClientConnectionHandler  - superAdmin is trying to get the number of user which published in more than one thread...
 
 2013-06-01 20:38:52,401 ERROR Sadna.Client.ClientConnectionHandler  - getCommonMembers: Connection reset
+2013-06-01 21:29:26,091 INFO  Sadna.Client.ClientConnectionHandler  - start Communication
+2013-06-01 21:29:26,128 INFO  Sadna.Client.ClientConnectionHandler  - superAdmin is trying to login as superAdmin...
+2013-06-01 21:29:26,189 INFO  Sadna.Client.ClientConnectionHandler  - superAdmin is logged in as superAdmin
+2013-06-01 21:29:26,192 INFO  Sadna.Client.ClientConnectionHandler  - a "clearDataBase" request has sent
+2013-06-01 21:29:26,218 DEBUG Sadna.Client.ClientConnectionHandler  - clearDataBase: fail
+2013-06-01 21:29:26,225 INFO  Sadna.Client.ClientConnectionHandler  - superAdmin is trying to initiate a new forum forum233...

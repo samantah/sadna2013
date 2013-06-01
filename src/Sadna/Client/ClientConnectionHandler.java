@@ -1308,21 +1308,18 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		reportLogger.log(Level.INFO ,log);
 		stringToServer.print(msgToSend);
 		stringToServer.flush();
-		Object recieved = null;
-		Boolean cleared = null;
+		boolean cleared = false;
 		try {
-			objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
-			recieved = objectFromServer.readObject();
-			if(recieved==null || recieved instanceof String){
-				log = "clearDataBase: fail";
-				reportLogger.log(Level.DEBUG, log);
-				return false;
+			receivedMsg = (String) objectFromServer.readObject();
+			if (receivedMsg.contains("200ok")) {
+				log = "sendListenerIdentifier";
+				reportLogger.log(Level.INFO ,log);
+				cleared = true;
 			}
 			else{
 				log = superAdminName+" succeeded clear database";
 				reportLogger.log(Level.INFO ,log);
 			}
-			cleared = (Boolean) recieved;
 		} catch (IOException e) {
 			log = "clearDataBase: "+e.getMessage();
 			reportLogger.log(Level.ERROR, log);
@@ -1330,7 +1327,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 			log = "clearDataBase: "+e.getMessage();
 			reportLogger.log(Level.ERROR, log);
 		}
-		return cleared.booleanValue();
+		return cleared;
 	}
 
 }
