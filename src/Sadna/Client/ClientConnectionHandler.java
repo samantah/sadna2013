@@ -1310,7 +1310,9 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		stringToServer.flush();
 		boolean cleared = false;
 		try {
+			objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
 			receivedMsg = (String) objectFromServer.readObject();
+			
 			if (receivedMsg.contains("200ok")) {
 				log = superAdminName+" succeeded clear database";
 				reportLogger.log(Level.INFO ,log);
