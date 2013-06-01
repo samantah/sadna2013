@@ -2,6 +2,7 @@ package Sadna.Server;
 
 import Sadna.Client.API.ClientCommunicationHandlerInterface;
 import Sadna.Server.API.ServerInterface;
+import Sadna.Server.Protocol.RequestHandlerProtocol;
 import Sadna.db.PolicyEnums.enumAssignModerator;
 import Sadna.db.PolicyEnums.enumCancelModerator;
 import Sadna.db.PolicyEnums.enumDelete;
@@ -456,13 +457,16 @@ public class ServerToDataBaseHandler implements ServerInterface {
                     cancelModeratorPolicy = enumCancelModerator.RESTRICTED;
                     break;
             }
-
-            Policy policy = new Policy(imidOrArgeNotiPolicy, friendsNotiPolicy, deletePolicy,
-                    assignModeratorPolicy, cancelModeratorPolicy, seniority, minPublish);
-            Forumdb forumToAdd = new Forumdb(forumName, policy);
-            admin = new Admin(adminName, adminPassword, "", forumName, null);
-            forumToAdd.setAdmin(admin);
-            boolean addedForum = _db.addForum(forumToAdd);
+          
+            
+            Forumdb forumToAdd = new Forumdb(forumName, imidOrArgeNotiPolicy.name(), friendsNotiPolicy.name(), deletePolicy.name(), assignModeratorPolicy.name(), cancelModeratorPolicy.name(), new Integer(seniority), new Integer(minPublish));
+            this._db.addForum(forumToAdd);
+            register(forumName, adminName, Encryptor.encrypt(adminPassword), "");
+            admin = this._db.getMember(forumName, adminName);
+            admin.setRoll("Admin");
+            this._db.updateMember(admin);
+            forumToAdd.setMemberdb(admin);
+            boolean addedForum = this._db.updateForum(forumToAdd);
             if (addedForum) {
                 System.out.println("After adding forum in database");
             }

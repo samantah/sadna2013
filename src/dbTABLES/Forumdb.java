@@ -25,6 +25,20 @@ public class Forumdb implements java.io.Serializable {
 
 	public Forumdb() {
 	}
+	
+	public Forumdb(String forumName,
+			String enumNotiImidiOrAgre, String enumNotiFriends,
+			String enumDelete, String enumAssignModerator,
+			String enumCancelModerator, Integer seniority, Integer minPublish){
+		this.forumName = forumName;
+		this.enumNotiImidiOrAgre = enumNotiImidiOrAgre;
+		this.enumNotiFriends = enumNotiFriends;
+		this.enumDelete = enumDelete;
+		this.enumAssignModerator = enumAssignModerator;
+		this.enumCancelModerator = enumCancelModerator;
+		this.seniority = seniority;
+		this.minPublish = minPublish;
+	}
 
 	public Forumdb(Memberdb memberdb, String forumName,
 			String enumNotiImidiOrAgre, String enumNotiFriends,
