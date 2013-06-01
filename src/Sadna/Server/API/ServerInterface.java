@@ -9,14 +9,13 @@ import Sadna.Client.Member;
 import Sadna.Client.Moderator;
 import Sadna.Client.SuperAdmin;
 import Sadna.Server.ForumNotification;
-import Sadna.db.Forum;
-import Sadna.db.Post;
-import Sadna.db.SubForum;
-import Sadna.db.ThreadMessage;
-
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
+import org.jasypt.util.password.BasicPasswordEncryptor;
+
+import dbTABLES.*;
 /**
  *
  * @author fistuk
@@ -29,49 +28,49 @@ public interface ServerInterface {
 
     boolean deleteForum(String forumName, String userName, String password);
 
-    boolean addSubForum(SubForum subForum, List<Member> moderators, String username, String password);
+    boolean addSubForum(Subforumdb subForum, List<Memberdb> moderators, String username, String password, BasicPasswordEncryptor pe);
 
-    boolean deleteSubForum(SubForum subForum, String userName, String password);
+    boolean deleteSubForum(Subforumdb subForum, String userName, String password);
 
-    boolean publishThread(ThreadMessage thread, String username, String password);
+    boolean publishThread(Threaddb thread, String username, String password);
 
-    boolean deleteThread(ThreadMessage thread, String userName, String password);
+    boolean deleteThread(Threaddb thread, String userName, String password);
     
-    boolean deleteModerator(Moderator moderator, String subForumName, String modName, String userName, String password);
+    boolean deleteModerator(Memberdb moderator, String subForumName, String modName, String userName, String password);
 
-    boolean postComment(Post comment, String username, String password);
+    boolean postComment(Postdb comment, String username, String password, BasicPasswordEncryptor pe);
 
-    boolean deleteComment(Post comment, String userName, String password);
+    boolean deleteComment(Postdb comment, String userName, String password);
 
-    List<Forum> getForumsList();
+    List<Forumdb> getForumsList();
 
-    Forum getForum(String forumName);
+    Forumdb getForum(String forumName);
 
-    List<SubForum> getSubForumsList(String forumName);
+    List<Subforumdb> getSubForumsList(String forumName);
 
-    SubForum getSubForum(String forumName, String subForumName);
+    Subforumdb getSubForum(String forumName, String subForumName);
 
-    List<ThreadMessage> getThreadsList(String forumName, String subForumName);
+    List<Threaddb> getThreadsList(String forumName, String subForumName);
 
-    ThreadMessage getThreadMessage(String forumName, String subForumName, int messageId);
+    Threaddb getThreadMessage(String forumName, String subForumName, int messageId);
 
-    List<Member> getModerators(String forumName, String subForumName);
+    List<Memberdb> getModerators(String forumName, String subForumName);
 
-    List<Post> getAllPosts(String forumName, String subForumName, int threadId);
+    List<Postdb> getAllPosts(String forumName, String subForumName, int threadId);
 
-    Post getPost(String forumName, String subForumName, int threadId, int postId);
+    Postdb getPost(String forumName, String subForumName, int threadId, int postId);
 
     boolean memberExistsInForum(String forumName, String posterName);
 
-    Member getMember(String forumName, String userName);
+    Memberdb getMember(String forumName, String userName);
 
-    boolean addModerator(Moderator moderator, SubForum subForum, String userName, String password);
+    boolean addModerator(Memberdb moderator, Subforumdb subForum, String userName, String password);
 
     boolean setSuperAdmin(ClientCommunicationHandlerInterface ch);
 
-    SuperAdmin getSuperAdmin();
+    Memberdb getSuperAdmin();
     
-    boolean addMember(Member member);
+    boolean addMember(Memberdb member);
  
     boolean logout(String forumName, String userName);
    
@@ -81,26 +80,28 @@ public interface ServerInterface {
 
 	int getNumberOfUserThreads(String forumName, String username, String requesterUsername, String requesterPassword);
 
-	HashMap<String, List<String>> getUsersPostToUser(String forumName, String userName, String password);
+	HashMap<String, Set<String>> getUsersPostToUser(String forumName, String userName, String password);
 
 	int getForumCounter(String userName, String password);
 
 	List<String> getCommonMembers(String userName, String password);
 
-	List<Member> getAllForumMembers(String forumName, String userName, String password);
+	List<Memberdb> getAllForumMembers(String forumName, String userName, String password);
 
-	boolean loginAsSuperAdmin(String userName, String password);    
+	boolean loginAsSuperAdmin(String userName, String password, BasicPasswordEncryptor _encryptor);    
 	
 	//mod or admin or publisher (String userName, String password)
-	boolean editThread(ThreadMessage tm, String userName, String password);
+	boolean editThread(Threaddb tm, String userName, String password);
 
 	//mod or admin or publisher (String userName, String password)
-	boolean editPost(Post p, String userName, String password);
+	boolean editPost(Postdb p, String userName, String password);
 
 	boolean initiateForum(String adminName, String adminPassword,
-			String forumName, String ioap, String nfp, String dp, String amp, String s,
-			String mp, String cmp, String superAdminUserName,
-			String superAdminPassword);
+			String forumName, String ioap, String nfp, String dp, String amp,
+			String s, String mp, String cmp, String superAdminUserName,
+			String superAdminPassword, BasicPasswordEncryptor pe);
+
+	
 
 
 }

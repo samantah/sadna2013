@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.rmi.CORBA.Tie;
+
 public class ForumNotification implements Serializable {
 
     /**
@@ -19,6 +21,11 @@ public class ForumNotification implements Serializable {
         Date now = new Date();
         this.notificationTime = sdfDate.format(now);
         this.text = text;
+    }
+    
+    public ForumNotification(String txt, String date){
+    	this.text = txt;
+    	this.notificationTime = date;
     }
     
     @Override
