@@ -384,14 +384,13 @@ public class ServerToDataBaseHandler implements ServerInterface {
 
     @Override
     public boolean editThread(Threaddb tm) {
-        this._db.updateThread(tm);
-        return false;
+        return this._db.updateThread(tm);
     }
 
     @Override
     public boolean editPost(Postdb p) {
-    	this._db.updatePost(p);
-        return false;
+    	return this._db.updatePost(p);
+        
     }
 
     @Override

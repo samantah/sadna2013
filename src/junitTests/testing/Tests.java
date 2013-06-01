@@ -8,6 +8,12 @@ import Driver.ClientBridge;
 import Driver.ClientDriver;
 import Sadna.Client.*;
 import Sadna.db.*;
+import Sadna.db.PolicyEnums.enumAssignModerator;
+import Sadna.db.PolicyEnums.enumCancelModerator;
+import Sadna.db.PolicyEnums.enumDelete;
+import Sadna.db.PolicyEnums.enumNotiFriends;
+import Sadna.db.PolicyEnums.enumNotiImidiOrAgre;
+
 import org.junit.*;
 
 import java.util.ArrayList;
@@ -42,7 +48,7 @@ public class Tests {
 
 	@BeforeClass
 	public static void setUpClass() {
-		initiateTestPlatform(null);
+		initiateTestPlatform();
 		bridge = ClientDriver.getBridge();
 	}
 
@@ -53,7 +59,7 @@ public class Tests {
 	@Before
 	public void setUp() {
 		bridge = ClientDriver.getBridge();
-		initiateTestPlatform(null);
+		initiateTestPlatform();
 	}
 
 	@After
@@ -197,22 +203,25 @@ public class Tests {
 		assertTrue(adminDelete);
 	}
 	
-	private static void initiateTestPlatform(Policy policy) {
-		DataBase db = new DataBase();
-		db.initiateDataBase();
-		ch = new ClientConnectionHandler(ip, port);
+	private static void initiateTestPlatform() {
+		ch = new ClientConnectionHandler("192.168.1.109", 3333);
 		User u = new User(ch);
 		SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
-		//		if(sa == null) System.out.println("nullllllllll");
-		//		else System.out.println(sa.getUserName());
+		sa.clearDataBase();
+//		if(sa == null) System.out.println("nullllllllll");
+//		else System.out.println(sa.getUserName());
+		Policy policy = new Policy(enumNotiImidiOrAgre.IMIDIATE,
+				enumNotiFriends.PUBLISHERS, enumDelete.EXTENDED,
+				enumAssignModerator.NO_RESTRICTION,
+				enumCancelModerator.NO_RESTRICTION, 0, 0);
 		sa.initiateForum(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD, policy);
 		Forum forum = sa.getForum(FORUM_NAME);
-
+		
 		Member m1 = u.register(FORUM_NAME, "laaaaa", "ksjdf66asd", "sdf@adf.com");
 		Member m2 = u.register(FORUM_NAME, "baaaaa", "ksjdf66asd", "sdf@adf.com");
 		Member m3 = u.register(FORUM_NAME, "eaaaaa", "ksjdf66asd", "sdf@adf.com");
-		Member m4 = u.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
-
+//		Member m4 = u.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
+		
 		SubForum subForum = new SubForum(forum, "zubizubi1");
 		SubForum subForum2 = new SubForum(forum, "zubizubi2");
 		ArrayList<Member> al = new ArrayList<Member>();
@@ -224,14 +233,14 @@ public class Tests {
 		sa.addSubForum(subForum, al2);
 		ThreadMessage threadMessage = new ThreadMessage(subForum, "zzzz", "hi11", "laaaaa");
 		ThreadMessage threadMessage2 = new ThreadMessage(subForum, "ccccc", "hi2aaa2", "eaaaaa");
-
+		
 		m1.publishThread(threadMessage);
 		m2.publishThread(threadMessage2);
-
+		
 		Post post = new Post(threadMessage, "uuuuuuu", "hi11post1", "laaaaa");
 		Post post2 = new Post(threadMessage, "iiiiiiii", "hi11post2", "eaaaaa");
 		Post post3 = new Post(threadMessage2, "wwww", "hii222", "baaaaa");
-
+	
 		m3.postComment(post);
 		m2.postComment(post2);
 		m1.postComment(post3);
