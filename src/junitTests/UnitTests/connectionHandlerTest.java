@@ -62,11 +62,10 @@ public class connectionHandlerTest {
 
 
 	private static void initiateTestPlatform() {
-		DataBase db = new DataBase();
-		db.initiateDataBase();
 		ch = new ClientConnectionHandler("192.168.1.109", 3333);
 		User u = new User(ch);
 		SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
+		sa.clearDataBase();
 //		if(sa == null) System.out.println("nullllllllll");
 //		else System.out.println(sa.getUserName());
 		Policy policy = new Policy(enumNotiImidiOrAgre.IMIDIATE,
