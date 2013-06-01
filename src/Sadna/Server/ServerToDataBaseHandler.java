@@ -1,19 +1,22 @@
 package Sadna.Server;
 
 import Sadna.Client.API.ClientCommunicationHandlerInterface;
-import Sadna.Client.Admin;
-import Sadna.Client.Member;
-import Sadna.Client.Moderator;
-import Sadna.Client.SuperAdmin;
 import Sadna.Server.API.ServerInterface;
-import Sadna.db.API.DBInterface;
-import Sadna.db.*;
-import Sadna.db.PolicyEnums.*;
+import Sadna.db.PolicyEnums.enumAssignModerator;
+import Sadna.db.PolicyEnums.enumCancelModerator;
+import Sadna.db.PolicyEnums.enumDelete;
+import Sadna.db.PolicyEnums.enumNotiFriends;
+import Sadna.db.PolicyEnums.enumNotiImidiOrAgre;
 import  dbTABLES.*;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import org.jasypt.util.password.BasicPasswordEncryptor;
 
 public class ServerToDataBaseHandler implements ServerInterface {
 
@@ -30,11 +33,11 @@ public class ServerToDataBaseHandler implements ServerInterface {
             //System.out.println("is unique forum");
             if (isUserNameUnique(forumName, userName)) {
                 //System.out.println("is unique username");
-            	Memberdb bla = new Memberdb(4, _db.getForum(forumName), userName, password, email, roll, null, notification, new HashSet<Forumdb>(), new HashSet<Postdb>(), new HashSet<Threaddb>(), new HashSet<Subforumdb>()); 
-                Memberdb toAdd = new Memberdb(userName, password, email, forumName, null);
+                Memberdb toAdd = new Memberdb(); //**************** need to create real member
                 Date now = new Date();
                 long nowAsLong = now.getTime();
-                toAdd.setDateOfJoining(nowAsLong);
+                String nowAsString = String.valueOf(nowAsLong);
+                toAdd.setDateJoin(nowAsString);
                 isAdded = _db.addMember(toAdd);
             }
         }
@@ -43,9 +46,9 @@ public class ServerToDataBaseHandler implements ServerInterface {
 
     private boolean isUserNameUnique(String forumName, String userName) {
         boolean isUnique = true;
-        List<Member> members = _db.getAllMembers(forumName);
+        List<Memberdb> members = _db.getAllMembers(forumName);
         if (members != null) {
-            for (Member m : members) {
+            for (Memberdb m : members) {
                 if (m.getUserName().equals(userName)) {
                     isUnique = false;
                     break;
@@ -62,9 +65,9 @@ public class ServerToDataBaseHandler implements ServerInterface {
 
     private boolean userNameExist(String forumName, String userName) {
         boolean exist = false;
-        List<Member> members = _db.getAllMembers(forumName);
+        List<Memberdb> members = _db.getAllMembers(forumName);
         if (members != null) {
-            for (Member m : members) {
+            for (Memberdb m : members) {
                 if (m.getUserName().equals(userName)) {
                     exist = true;
                     break;
@@ -78,7 +81,7 @@ public class ServerToDataBaseHandler implements ServerInterface {
     public boolean login(String forumName, String userName, String password) {
         boolean succeeded = false;
         if (forumExists(forumName)) {
-            Member loginner = _db.getMember(forumName, userName);
+            Memberdb loginner = _db.getMember(forumName, userName);
             if (loginner != null && loginner.getPassword().equals(password)) {
                 succeeded = true;
             }
@@ -99,16 +102,16 @@ public class ServerToDataBaseHandler implements ServerInterface {
      }
      */
     private boolean isSuperAdmin(String superAdminUserName,
-            String superAdminPassword) {
-        SuperAdmin sa = _db.getSuperAdmin();
+            String superAdminPassword, BasicPasswordEncryptor pe) {
+        Memberdb sa = _db.getSuperAdmin();
         return (sa.getUserName().equals(superAdminUserName)
-                && sa.getPassword().equals(superAdminPassword));
+                && pe.checkPassword(superAdminPassword,sa.getPassword()));
     }
 
     private boolean isForumNameUnique(String forumName) {
         boolean isUnique = true;
-        List<Forum> forums = _db.getForumsList();
-        for (Forum f : forums) {
+        List<Forumdb> forums = _db.getForumsList();
+        for (Forumdb f : forums) {
             if (f.getForumName().equals(forumName)) {
                 isUnique = false;
                 break;
@@ -118,12 +121,12 @@ public class ServerToDataBaseHandler implements ServerInterface {
     }
 
     @Override
-    public boolean addSubForum(SubForum subForum, List<Member> members, String username, String password) {
+    public boolean addSubForum(Subforumdb subForum, List<Memberdb> members, String userName, String password, BasicPasswordEncryptor pe) {
         boolean isAdded = false;
-        if (subForum.getForum() != null) {
-            if (isSubForumNameUnique(subForum.getForum().getForumName(),
+        Memberdb member = _db.getMember(subForum.getForumdb().getForumName(), userName);
+        if (subForum.getForumdb() != null && pe.checkPassword(password, member.getPassword())) {
+            if (isSubForumNameUnique(subForum.getForumdb().getForumName(),
                     subForum.getSubForumName())) {
-                // System.out.println("is unique subforum");
                 isAdded = _db.addSubForum(subForum, members);
             }
         }
@@ -132,8 +135,8 @@ public class ServerToDataBaseHandler implements ServerInterface {
 
     private boolean isSubForumNameUnique(String forum, String subForumName) {
         boolean isUnique = true;
-        List<SubForum> subForums = _db.getSubForumsList(forum);
-        for (SubForum s : subForums) {
+        Set<Subforumdb> subForums = _db.getSubForumsList(forum);
+        for (Subforumdb s : subForums) {
             if (s.getSubForumName().equals(subForumName)) {
                 isUnique = false;
                 break;
@@ -143,33 +146,33 @@ public class ServerToDataBaseHandler implements ServerInterface {
     }
 
     @Override
-    public boolean publishThread(ThreadMessage thread, String username, String password) {
+    public boolean publishThread(Threaddb thread, String username, String password) {
         boolean succeeded = false;
         succeeded = _db.addThread(thread);
         return succeeded;
     }
-
+   //check password******************************************
     @Override
-    public boolean postComment(Post comment, String username, String password) {
+    public boolean postComment(Postdb comment, String username, String password, BasicPasswordEncryptor pe) {
         boolean posted = false;
         posted = _db.addPost(comment);
         return posted;
     }
 
     @Override
-    public boolean deleteComment(Post comment, String userName, String password) {
+    public boolean deleteComment(Postdb comment, String userName, String password) {
         boolean deleted = _db.deletePost(comment);
         return deleted;
     }
 
     @Override
-    public List<Forum> getForumsList() {
+    public List<Forumdb> getForumsList() {
         return _db.getForumsList();
     }
 
     @Override
-    public Forum getForum(String forumName) {
-        Forum resForum = null;
+    public Forumdb getForum(String forumName) {
+        Forumdb resForum = null;
         if (forumExists(forumName)) {
             resForum = _db.getForum(forumName);
         }
@@ -177,17 +180,18 @@ public class ServerToDataBaseHandler implements ServerInterface {
     }
 
     @Override
-    public List<SubForum> getSubForumsList(String forumName) {
-        List<SubForum> subforums = null;
+    public List<Subforumdb> getSubForumsList(String forumName) {
+        HashSet<Subforumdb> subforums = null;
         if (forumExists(forumName)) {
-            subforums = _db.getSubForumsList(forumName);
+            subforums = (HashSet<Subforumdb>) _db.getSubForumsList(forumName);
         }
-        return subforums;
+        ArrayList<Subforumdb> ans = new ArrayList<>(subforums);
+        return ans;
     }
 
     @Override
-    public SubForum getSubForum(String forumName, String subForumName) {
-        SubForum subForum = null;
+    public Subforumdb getSubForum(String forumName, String subForumName) {
+        Subforumdb subForum = null;
         if (subForumExists(forumName, subForumName)) {
             subForum = _db.getSubForum(forumName, subForumName);
         }
@@ -195,19 +199,20 @@ public class ServerToDataBaseHandler implements ServerInterface {
     }
 
     @Override
-    public List<ThreadMessage> getThreadsList(String forumName,
+    public List<Threaddb> getThreadsList(String forumName,
             String subForumName) {
-        List<ThreadMessage> threads = null;
+        HashSet<Threaddb> threads = null;
         if (subForumExists(forumName, subForumName)) {
-            threads = _db.getThreadsList(forumName, subForumName);
+            threads = (HashSet<Threaddb>) _db.getThreadsList(forumName, subForumName);
         }
-        return threads;
+        ArrayList<Threaddb> ans = new ArrayList<>(threads);
+        return ans;
     }
 
     @Override
-    public ThreadMessage getThreadMessage(String forumName,
+    public Threaddb getThreadMessage(String forumName,
             String subForumName, int messageId) {
-        ThreadMessage thread = null;
+        Threaddb thread = null;
         if (threadExists(forumName, subForumName, messageId)) {
             thread = _db.getThread(forumName, subForumName, messageId);
         }
@@ -215,8 +220,8 @@ public class ServerToDataBaseHandler implements ServerInterface {
     }
 
     private boolean forumExists(String forumName) {
-        List<Forum> forums = _db.getForumsList();
-        for (Forum forum : forums) {
+        List<Forumdb> forums = _db.getForumsList();
+        for (Forumdb forum : forums) {
             if (forum.getForumName().equals(forumName)) {
                 return true;
             }
@@ -226,9 +231,9 @@ public class ServerToDataBaseHandler implements ServerInterface {
 
     private boolean subForumExists(String forumName, String subForumName) {
         if (forumExists(forumName)) {
-            List<SubForum> subForums = _db.getSubForumsList(forumName);
+            Set<Subforumdb> subForums = _db.getSubForumsList(forumName);
             if (subForums != null) {
-                for (SubForum s : subForums) {
+                for (Subforumdb s : subForums) {
                     if (s.getSubForumName().equals(subForumName)) {
                         return true;
                     }
@@ -241,9 +246,9 @@ public class ServerToDataBaseHandler implements ServerInterface {
     private boolean threadExists(String forumName, String subForumName,
             int messageId) {
         if (subForumExists(forumName, subForumName)) {
-            List<ThreadMessage> threads = _db.getThreadsList(forumName, subForumName);
-            for (ThreadMessage t : threads) {
-                if (t.getId() == messageId) {
+            Set<Threaddb> threads = _db.getThreadsList(forumName, subForumName);
+            for (Threaddb t : threads) {
+                if (t.getIdthread() == messageId) {
                     return true;
                 }
             }
@@ -252,78 +257,81 @@ public class ServerToDataBaseHandler implements ServerInterface {
     }
 
     @Override
-    public List<Member> getModerators(String forumName, String subForumName) {
+    public List<Memberdb> getModerators(String forumName, String subForumName) {
         if (subForumExists(forumName, subForumName)) {
-            //            return null; // change to the line in the bottom
-            return _db.getModerators(forumName, subForumName);
+            ArrayList<Memberdb> ans = new ArrayList<>(_db.getModerators(forumName, subForumName));
+            return ans;
         }
         return null;
     }
 
     @Override
-    public List<Post> getAllPosts(String forumName, String subForumName,
+    public List<Postdb> getAllPosts(String forumName, String subForumName,
             int threadId) {
         if (subForumExists(forumName, subForumName)) {
-            return _db.getPostList(forumName, subForumName, threadId);
+            ArrayList<Postdb> ans = new ArrayList<>(_db.getPostList(forumName, subForumName, threadId));
+
+            return ans;
         }
         return null;
     }
 
     @Override
-    public boolean deleteSubForum(SubForum subForum, String userName, String password) {
+    public boolean deleteSubForum(Subforumdb subForum, String userName, String password) {
         return _db.deleteSubForum(subForum);
     }
 
     @Override
-    public boolean deleteThread(ThreadMessage thread, String userName, String password) {
+    public boolean deleteThread(Threaddb thread, String userName, String password) {
         return _db.deleteThread(thread);
     }
 
     @Override
     public boolean deleteForum(String forumName, String userName, String password) {
-        Forum f = _db.getForum(forumName);
+        Forumdb f = _db.getForum(forumName);
         return _db.deleteForum(f);
     }
 
     @Override
-    public Post getPost(String forumName, String subForumName, int threadId, int postId) {
+    public Postdb getPost(String forumName, String subForumName, int threadId, int postId) {
         return _db.getPost(forumName, subForumName, threadId, postId);
     }
 
     @Override
-    public Member getMember(String forumName, String userName) {
+    public Memberdb getMember(String forumName, String userName) {
         return _db.getMember(forumName, userName);
     }
 
     @Override
-    public boolean addModerator(Moderator moderator, SubForum subForum, String userName, String password) {
+    public boolean addModerator(Memberdb moderator, Subforumdb subForum, String userName, String password) {
         return _db.addModerator(moderator, subForum);
     }
 
     @Override
     public List<ForumNotification> getNotifications(String forumName, String userName, String password) {
-        Member m = _db.getMember(forumName, userName);
-        List<ForumNotification> notifications = m.getNotifications();
+        Memberdb m = _db.getMember(forumName, userName);
+        List<ForumNotification> notifications = convertNotifications(m.getNotification());
         return notifications;
     }
 
-    @Override
+
+	@Override
     public boolean setSuperAdmin(ClientCommunicationHandlerInterface ch) {
         return _db.setSuperAdmin(ch);
     }
 
     @Override
-    public SuperAdmin getSuperAdmin() {
+    public Memberdb getSuperAdmin() {
         return _db.getSuperAdmin();
     }
 
     @Override
-    public boolean addMember(Member member) {
+    public boolean addMember(Memberdb member) {
         return _db.addMember(member);
     }
 
     @Override
-    public boolean deleteModerator(Moderator moderator, String subForumName, String modName, String userName, String password) {
+    public boolean deleteModerator(Memberdb moderator, String subForumName, String modName, String userName, String password) {
         return _db.deleteModerator(moderator, subForumName);
     }
 
@@ -338,7 +346,7 @@ public class ServerToDataBaseHandler implements ServerInterface {
     }
 
     @Override
-    public HashMap<String, List<String>> getUsersPostToUser(String forumName, String userName, String password) {
+    public HashMap<String, Set<String>> getUsersPostToUser(String forumName, String userName, String password) {
         return _db.getUsersPostToUser(forumName);
     }
 
@@ -349,41 +357,40 @@ public class ServerToDataBaseHandler implements ServerInterface {
 
     @Override
     public List<String> getCommonMembers(String userName, String password) {
-        return _db.getCommonMembers();
+        ArrayList<String> ans = new ArrayList<>(_db.getCommonMembers());
+    	return ans;
     }
 
     @Override
-    public List<Member> getAllForumMembers(String forumName, String userName, String password) {
+    public List<Memberdb> getAllForumMembers(String forumName, String userName, String password) {
         return _db.getAllMembers(forumName);
     }
 
     @Override
-    public boolean loginAsSuperAdmin(String userName, String password) {
+    public boolean loginAsSuperAdmin(String userName, String password, BasicPasswordEncryptor pe) {
         boolean succeeded = false;
-        if (isAuperAdmin(userName, password)) {
+        Memberdb superAdmin = _db.getSuperAdmin();
+        if (pe.checkPassword(password, superAdmin.getPassword()) && isSuperAdmin(userName, password, pe)) {
             succeeded = true;
         }
         return succeeded;
     }
 
-    private boolean isAuperAdmin(String userName, String password) {
-        SuperAdmin sa = _db.getSuperAdmin();
-        return (sa.getUserName().equals(userName) && sa.getPassword().equals(password));
-    }
 
     @Override
     public boolean logout(String forumName, String userName) {
-        return true;
+    	// TODO Auto-generated method stub
+    	return true;
     }
 
     @Override
-    public boolean editThread(ThreadMessage tm, String userName, String password) {
+    public boolean editThread(Threaddb tm, String userName, String password) {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public boolean editPost(Post p, String userName, String password) {
+    public boolean editPost(Postdb p, String userName, String password) {
         // TODO Auto-generated method stub
         return false;
     }
@@ -392,11 +399,11 @@ public class ServerToDataBaseHandler implements ServerInterface {
     public boolean initiateForum(String adminName, String adminPassword,
             String forumName, String ioap, String nfp, String dp, String amp,
             String s, String mp, String cmp, String superAdminUserName,
-            String superAdminPassword) {
+            String superAdminPassword, BasicPasswordEncryptor pe) {
         boolean isAdded = false;
-        Admin admin = null;
+        Memberdb admin = null;
         if (isForumNameUnique(forumName)
-                && isSuperAdmin(superAdminUserName, superAdminPassword)) {
+                && isSuperAdmin(superAdminUserName, superAdminPassword, pe)) {
             //System.out.println("is unique forum");
             enumNotiImidiOrAgre imidOrArgeNotiPolicy = null;
             enumNotiFriends friendsNotiPolicy = null;
@@ -452,7 +459,7 @@ public class ServerToDataBaseHandler implements ServerInterface {
 
             Policy policy = new Policy(imidOrArgeNotiPolicy, friendsNotiPolicy, deletePolicy,
                     assignModeratorPolicy, cancelModeratorPolicy, seniority, minPublish);
-            Forum forumToAdd = new Forum(forumName, policy);
+            Forumdb forumToAdd = new Forumdb(forumName, policy);
             admin = new Admin(adminName, adminPassword, "", forumName, null);
             forumToAdd.setAdmin(admin);
             boolean addedForum = _db.addForum(forumToAdd);
@@ -469,4 +476,8 @@ public class ServerToDataBaseHandler implements ServerInterface {
         return isAdded;
     }
 
+    private List<ForumNotification> convertNotifications(String notification) {
+    	// TODO Auto-generated method stub
+    	return null;
+    }
 }
