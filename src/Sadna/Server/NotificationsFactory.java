@@ -14,56 +14,32 @@ public class NotificationsFactory {
 	public NotificationsFactory(ServerInterface si) {
 		_si = si;
 	}
-    //delete thread notification
-	public boolean sendNotifications(Threaddb tm){
-		String subForumName = tm.getSubforumdb().getSubForumName();
-		Forumdb forum = tm.getSubforumdb().getForumdb();
-		int threadID = tm.getIdthread();
-		String forumName = forum.getForumName();
-		String txt = "Thread: " + threadID + " in forum: " + forumName + " sub-forum: " + subForumName + " was deleted.";
-		ArrayList<Memberdb> members;
-		if(forum.getPolicy().getFriendsNotiPolicy()==enumNotiFriends.ALLMEMBERS){
-			members = (ArrayList<Memberdb>) _si.getAllForumMembers(forumName, null, null);
-			for (Memberdb currMember : members) {
-				currMember.addNotification(new ForumNotification(txt));
-                _si.addMember(currMember);
-			}
-		}
-		if(forum.getPolicy().getFriendsNotiPolicy()==enumNotiFriends.PUBLISHERS){
-			members = (ArrayList<Memberdb>) getForumMembersWhoPublishInThisSubForum(forumName, subForumName);
-			for (Memberdb currMember : members) {
-				currMember.addNotification(new ForumNotification(txt));
-                _si.addMember(currMember);
-
-            }
-		}
-		return true;
-	}
+   
     //delete post / post comment notification
-	public boolean sendNotifications(Postdb post) {
-		Threaddb tm= post.getThread();
+	public boolean sendNotifications(Postdb post, String action) {
+		Threaddb tm= post.getThreaddb();
 		String subForumName = tm.getSubforumdb().getSubForumName();
 		Forumdb forum = tm.getSubforumdb().getForumdb();
 		String forumName = forum.getForumName();
 		int threadID = tm.getIdthread();
-		String txt = "Thread: " + threadID + " in forum: " + forumName + " sub-forum: " + subForumName + " was modified.";
+		String txt = "Thread: " + threadID + " in forum: " + forumName + " sub-forum: " + subForumName + " was " + action + ".";
 		ArrayList<Memberdb> members;
-		if(forum.getPolicy().getFriendsNotiPolicy()==enumNotiFriends.ALLMEMBERS){
+		if(forum.getEnumNotiFriends().equals(enumNotiFriends.ALLMEMBERS)){
 			members = (ArrayList<Memberdb>) _si.getAllForumMembers(forumName, null, null);
 			for (Memberdb currMember : members) {
-                if(!(post.getPublisher().equals(currMember.getUserName()))){
+                if(!(post.getMemberdb().getUserName().equals(currMember.getUserName()))){
 				    currMember.addNotification(new ForumNotification(txt));
-                    _si.addMember(currMember);
+                    _si.updateMember(currMember);
 
                 }
 			}
 		}
-		if(forum.getPolicy().getFriendsNotiPolicy()==enumNotiFriends.PUBLISHERS){
+		if(forum.getEnumNotiFriends().equals(enumNotiFriends.PUBLISHERS)){
 			members = (ArrayList<Memberdb>) getForumMembersWhoPublishInThisSubForum(forumName, subForumName);
 			for (Memberdb currMember : members) {
-                if(!(post.getPublisher().equals(currMember.getUserName()))){
+                if(!(post.getMemberdb().getUserName().equals(currMember.getUserName()))){
                     currMember.addNotification(new ForumNotification(txt));
-                    _si.addMember(currMember);
+                    _si.updateMember(currMember);
 
                 }
 			}
@@ -90,48 +66,50 @@ public class NotificationsFactory {
 		String forumName = forum.getForumName();
 		String subForumName = sf.getSubForumName();
 		ArrayList<Memberdb> members;
-		if(forum.getPolicy().getFriendsNotiPolicy()==enumNotiFriends.ALLMEMBERS){
+		if(forum.getEnumNotiFriends().equals(enumNotiFriends.ALLMEMBERS)){
 			members = (ArrayList<Memberdb>) _si.getAllForumMembers(forumName, null, null);
 			for (Memberdb currMember : members) {
 				currMember.addNotification(new ForumNotification(txt));
-                _si.addMember(currMember);
+                _si.updateMember(currMember);
 
             }
 		}
-		if(forum.getPolicy().getFriendsNotiPolicy()==enumNotiFriends.PUBLISHERS){
+		if(forum.getEnumNotiFriends().equals(enumNotiFriends.PUBLISHERS)){
 			members = (ArrayList<Memberdb>) getForumMembersWhoPublishInThisSubForum(forumName, subForumName);
 			for (Memberdb currMember : members) {
 				currMember.addNotification(new ForumNotification(txt));
-                _si.addMember(currMember);
+                _si.updateMember(currMember);
 
             }
 		}
 		return true;
 	}
-    //publish thread notification
-    public boolean sendNotifications(Subforumdb sf, Threaddb tm) {
-        Forumdb forum = sf.getForumdb();
+	
+	
+    public boolean sendNotifications(Threaddb tm, String action) {
+    	Subforumdb subForum = tm.getSubforumdb();
+    	Forumdb forum = subForum.getForumdb();
         String forumName = forum.getForumName();
-        String subForumName = sf.getSubForumName();
+        String subForumName = subForum.getSubForumName();
         String publisherName = tm.getMemberdb().getUserName();
         ArrayList<Memberdb> members;
-        String txt = "Thread: " + tm.getIdthread() + " in forum: " + forumName + " sub-forum: " + subForumName + " was added.";
-        if(forum.getPolicy().getFriendsNotiPolicy()==enumNotiFriends.ALLMEMBERS){
+        String txt = "Thread: " + tm.getIdthread() + " in forum: " + forumName + " sub-forum: " + subForumName + " was " + action + ".";
+        if(forum.getEnumNotiFriends().equals(enumNotiFriends.ALLMEMBERS)){
             members = (ArrayList<Memberdb>) _si.getAllForumMembers(forumName, null, null);
             for (Memberdb currMember : members) {
                 if(!publisherName.equals(currMember.getUserName())){
                      currMember.addNotification(new ForumNotification(txt));
-                     _si.addMember(currMember);
+                     _si.updateMember(currMember);
 
                 }
             }
         }
-        if(forum.getPolicy().getFriendsNotiPolicy()==enumNotiFriends.PUBLISHERS){
+        if(forum.getEnumNotiFriends().equals(enumNotiFriends.PUBLISHERS)){
             members = (ArrayList<Memberdb>) getForumMembersWhoPublishInThisSubForum(forumName, subForumName);
             for (Memberdb currMember : members) {
                 if(!publisherName.equals(currMember.getUserName())){
                     currMember.addNotification(new ForumNotification(txt));
-                    _si.addMember(currMember);
+                    _si.updateMember(currMember);
 
                 }
             }

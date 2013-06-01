@@ -1141,6 +1141,38 @@ public class IMpl implements IMplInterface {
 	}
 
 
+	@Override
+	public boolean updateThread(Threaddb tm) {
+		boolean bool = true;
+		try{
+			Transaction tx = session.beginTransaction();
+			session.saveOrUpdate(tm);
+			tx.commit();
+		}
+		catch(Exception e){
+			System.out.println("DBmySqlImpl(updateSubForum) " + e);
+			bool = false;
+		}
+		return bool;
+	}		
+
+
+	@Override
+	public boolean updatePost(Postdb p) {
+		boolean bool = true;
+		try{
+			Transaction tx = session.beginTransaction();
+			session.saveOrUpdate(p);
+			tx.commit();
+		}
+		catch(Exception e){
+			System.out.println("DBmySqlImpl(updateSubForum) " + e);
+			bool = false;
+		}
+		return bool;
+	}
+
+
 
 
 

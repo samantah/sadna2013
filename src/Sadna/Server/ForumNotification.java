@@ -5,8 +5,6 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.rmi.CORBA.Tie;
-
 public class ForumNotification implements Serializable {
 
     /**
@@ -37,4 +35,8 @@ public class ForumNotification implements Serializable {
     public String getText() {
         return this.text + "TIME: " + this.notificationTime; 
     }
+
+	public String getNotificationTime() {
+		return this.notificationTime;
+	}
 }

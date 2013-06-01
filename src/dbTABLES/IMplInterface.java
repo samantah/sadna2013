@@ -119,4 +119,8 @@ public interface IMplInterface {
 	
 	boolean updateMember(Memberdb member);
 
+	boolean updateThread(Threaddb tm);
+
+	boolean updatePost(Postdb p);
+
 }

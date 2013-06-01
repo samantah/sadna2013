@@ -26,6 +26,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
+import dbTABLES.IMpl;
+import dbTABLES.IMplInterface;
+
 /**
  * An implementation of the Reactor pattern.
  */
@@ -39,7 +42,8 @@ public class Reactor<T> implements Runnable {
     private volatile boolean _shouldRun = true;
     private ReactorData<T> _data;
     private static final List<SocketChannel> _socketsList = new ArrayList<>();
-
+    private static IMplInterface _databaseImpl;
+    
     /**
      * Creates a new Reactor
      *
@@ -54,6 +58,7 @@ public class Reactor<T> implements Runnable {
         _poolSize = poolSize;
         _protocolFactory = protocol;
         _tokenizerFactory = tokenizer;
+        _databaseImpl = new IMpl();
     }
 
     /**
@@ -226,13 +231,14 @@ public class Reactor<T> implements Runnable {
 
     public static Reactor<StringMessage> startRequestHandlerServer(int port, int poolSize) {
         ServerProtocolFactory<StringMessage> protocolMaker = new ServerProtocolFactory<StringMessage>() {
-            public AsyncServerProtocol<StringMessage> create() {
-                return new RequestHandlerProtocol(new ServerToDataBaseHandler(new DataBase()));
+
+			public AsyncServerProtocol<StringMessage> create() {
+                return new RequestHandlerProtocol(new ServerToDataBaseHandler(_databaseImpl));
             }
 
             @Override
             public AsyncServerProtocol<StringMessage> create(SocketChannel sc) {
-                return new RequestHandlerProtocol(new ServerToDataBaseHandler(new DataBase()), sc);
+                return new RequestHandlerProtocol(new ServerToDataBaseHandler(_databaseImpl ), sc);
             }
         };
 

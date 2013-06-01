@@ -1,8 +1,7 @@
 package Sadna.Server;
 
-import Sadna.Client.API.ClientCommunicationHandlerInterface;
+
 import Sadna.Server.API.ServerInterface;
-import Sadna.Server.Protocol.RequestHandlerProtocol;
 import Sadna.db.PolicyEnums.enumAssignModerator;
 import Sadna.db.PolicyEnums.enumCancelModerator;
 import Sadna.db.PolicyEnums.enumDelete;
@@ -15,9 +14,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
-
-import org.jasypt.util.password.BasicPasswordEncryptor;
 
 public class ServerToDataBaseHandler implements ServerInterface {
 
@@ -26,6 +24,7 @@ public class ServerToDataBaseHandler implements ServerInterface {
     public ServerToDataBaseHandler(IMplInterface db) {
         _db = db;
     }
+    
 
     @Override
     public boolean register(String forumName, String userName, String password, String email) {
@@ -311,14 +310,15 @@ public class ServerToDataBaseHandler implements ServerInterface {
     @Override
     public List<ForumNotification> getNotifications(String forumName, String userName, String password) {
         Memberdb m = _db.getMember(forumName, userName);
-        List<ForumNotification> notifications = convertNotifications(m.getNotification());
+        List<ForumNotification> notifications = parseNotifications(m.getNotification());
         return notifications;
     }
 
 
 	@Override
-    public boolean setSuperAdmin(ClientCommunicationHandlerInterface ch) {
-        return _db.setSuperAdmin(ch);
+    public boolean setSuperAdmin() {
+		Memberdb superAdmin = new Memberdb(-1, null, "superAdmin", Encryptor.encrypt("superAdmin1234"), "", "SuperAdmin", null, "");
+        return _db.setSuperAdmin(superAdmin);
     }
 
     @Override
@@ -384,14 +384,14 @@ public class ServerToDataBaseHandler implements ServerInterface {
     }
 
     @Override
-    public boolean editThread(Threaddb tm, String userName, String password) {
-        // TODO Auto-generated method stub
+    public boolean editThread(Threaddb tm) {
+        this._db.updateThread(tm);
         return false;
     }
 
     @Override
-    public boolean editPost(Postdb p, String userName, String password) {
-        // TODO Auto-generated method stub
+    public boolean editPost(Postdb p) {
+    	this._db.updatePost(p);
         return false;
     }
 
@@ -478,9 +478,36 @@ public class ServerToDataBaseHandler implements ServerInterface {
         }
         return isAdded;
     }
+	private List<ForumNotification> parseNotifications(String notification) {
+		List<ForumNotification> notifications = new ArrayList<ForumNotification>();
+		Scanner scanner = new Scanner(notification);
+		scanner.useDelimiter("\0");
+		String txt;
+		String date;
+		while (scanner.hasNext()) {
+			txt = scanner.next();
+			date = scanner.next();
+			notifications.add(new ForumNotification(txt, date));
+		}
+		scanner.close();
+		return notifications;
+	}
 
-    private List<ForumNotification> convertNotifications(String notification) {
-    	// TODO Auto-generated method stub
-    	return null;
-    }
+	@Override
+	public boolean updateSubForum(Subforumdb subForum) {
+		this._db.updateSubForum(subForum);
+		return false;
+	}
+
+	@Override
+	public boolean updateForum(Forumdb forum) {
+		this._db.updateForum(forum);
+		return false;
+	}
+
+	@Override
+	public boolean updateMember(Memberdb member) {
+		this._db.updateMember(member);
+		return false;
+	}
 }
