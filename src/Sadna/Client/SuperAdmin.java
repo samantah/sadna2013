@@ -60,6 +60,6 @@ public class SuperAdmin extends Admin {
     }
     
     public synchronized boolean clearDataBase(){
-    	return conHand.clearDataBase();
+    	return conHand.clearDataBase(this.userName, this.password);
     }
 }

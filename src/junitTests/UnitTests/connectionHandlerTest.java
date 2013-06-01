@@ -54,6 +54,7 @@ public class connectionHandlerTest {
 
 	@Before
 	public void setUp() {
+		initiateTestPlatform();
 	}
 
 	@After
