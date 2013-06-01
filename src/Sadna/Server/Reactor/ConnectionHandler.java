@@ -27,19 +27,22 @@ public class ConnectionHandler<T> {
     protected final SelectionKey _skey;
     private static final Logger logger = Logger.getLogger("edu.spl.reactor");
     private ProtocolTask<T> _task = null;
+	private SocketAddress _address;
 
     /**
      * Creates a new ConnectionHandler object
      *
      * @param sChannel the SocketChannel of the client
      * @param data a reference to a ReactorData object
+     * @param address 
      */
-    private ConnectionHandler(SocketChannel sChannel, ReactorData<T> data, SelectionKey key) {
+    private ConnectionHandler(SocketChannel sChannel, ReactorData<T> data, SelectionKey key, SocketAddress address) {
         _sChannel = sChannel;
         _data = data;
         _protocol = _data.getProtocolMaker().create(_sChannel);
         _tokenizer = _data.getTokenizerMaker().create();
         _skey = key;
+        _address = address;
     }
 
     // make sure 'this' does not escape b4 the object is fully constructed!
@@ -48,8 +51,8 @@ public class ConnectionHandler<T> {
         _task = new ProtocolTask<T>(_protocol, _tokenizer, this);
     }
 
-    public static <T> ConnectionHandler<T> create(SocketChannel sChannel, ReactorData<T> data, SelectionKey key) {
-        ConnectionHandler<T> h = new ConnectionHandler<T>(sChannel, data, key);
+    public static <T> ConnectionHandler<T> create(SocketChannel sChannel, ReactorData<T> data, SelectionKey key, SocketAddress address) {
+        ConnectionHandler<T> h = new ConnectionHandler<T>(sChannel, data, key, address);
         h.initialize();
         return h;
     }
