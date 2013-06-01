@@ -1297,4 +1297,40 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		return hasNotifications.booleanValue();
 
 	}
+
+	@Override
+	public boolean clearDataBase(String superAdminName,
+			String superAdminPassword) {
+		msgToSend = "CLRDB\n" + "superAdminName:\n" + superAdminName + "\n"
+		+ "superAdminPassword:\n" + superAdminPassword + "\n";
+		msgToSend += delimiter;
+		log = "a \"clearDataBase\" request has sent";
+		reportLogger.log(Level.INFO ,log);
+		stringToServer.print(msgToSend);
+		stringToServer.flush();
+		Object recieved = null;
+		Boolean cleared = null;
+		try {
+			objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
+			recieved = objectFromServer.readObject();
+			if(recieved==null || recieved instanceof String){
+				log = "clearDataBase: fail";
+				reportLogger.log(Level.DEBUG, log);
+				return false;
+			}
+			else{
+				log = superAdminName+" succeeded clear database";
+				reportLogger.log(Level.INFO ,log);
+			}
+			cleared = (Boolean) recieved;
+		} catch (IOException e) {
+			log = "clearDataBase: "+e.getMessage();
+			reportLogger.log(Level.ERROR, log);
+		} catch (ClassNotFoundException e) {
+			log = "clearDataBase: "+e.getMessage();
+			reportLogger.log(Level.ERROR, log);
+		}
+		return cleared.booleanValue();
+	}
+
 }
