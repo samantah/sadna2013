@@ -106,6 +106,10 @@ public interface ServerInterface {
 
 	boolean clearDB();
 	
+	boolean openSession();
+	
+	boolean closeSession();
+	
 	
 	
 }

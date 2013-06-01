@@ -26,9 +26,8 @@ public class Threaddb implements java.io.Serializable {
 		this.idthread = idthread;
 	}
 
-	public Threaddb(int idthread, Subforumdb subforumdb, Memberdb memberdb,
+	public Threaddb(Subforumdb subforumdb, Memberdb memberdb,
 			String title, String content, Set<Postdb> postdbs) {
-		this.idthread = idthread;
 		this.subforumdb = subforumdb;
 		this.memberdb = memberdb;
 		this.title = title;
@@ -37,7 +36,7 @@ public class Threaddb implements java.io.Serializable {
 	}
 
 	public ThreadMessage convertToThread(){
-		return new ThreadMessage(subforumdb.convertToSubForum(), title, content, memberdb.getUserName());
+		return new ThreadMessage(this.idthread, subforumdb.convertToSubForum(), title, content, memberdb.getUserName());
 	}
 	
 	
