@@ -8,9 +8,11 @@ import java.util.List;
 public class Main {
 
     public static void main(String argv[]) throws Exception {
-        String host = "192.168.1.104";
+        String host = "192.168.1.102";
         int port = 3333;
         ClientConnectionHandler c = new ClientConnectionHandler(host, port);
+        c.login("forum1", "snirsnir", "snir1234");
+        
         //        c.initiateForum("newForum", "chen", "chen1234", "superAdmin", "superAdmin1234");
         //        SuperAdmin sa = new SuperAdmin("superAdmin", "superAdmin1234", "", c);
         //        sa.initiateForum("newForum", "aviel", "aviel1234");
@@ -104,7 +106,7 @@ public class Main {
 //		gfltest(c);
 //		
                 /*----GET-FORUM---*/
-                gftest(c);
+//                gftest(c);
         //  Sadna.Client.Member u = c.register("forum1", "qwertyui", "1234qwer","dfsdf");
 //        c.initiateForum("myForum", "snirsnir", "snir1234");
 //        Forum forum = new Forum("myForum");
