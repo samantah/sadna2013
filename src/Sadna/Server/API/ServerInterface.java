@@ -103,6 +103,8 @@ public interface ServerInterface {
 	boolean updateMember(Memberdb member);
 
 	boolean setSuperAdmin();
+
+	boolean clearDB();
 	
 	
 	

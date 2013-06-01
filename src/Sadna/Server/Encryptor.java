@@ -4,7 +4,7 @@ import org.jasypt.util.password.BasicPasswordEncryptor;
 
 public class Encryptor {
 
-	private static BasicPasswordEncryptor _encryptor;
+	private static BasicPasswordEncryptor _encryptor = new BasicPasswordEncryptor();
 	
 	public static String encrypt(String plainPassword){
 		return _encryptor.encryptPassword(plainPassword);

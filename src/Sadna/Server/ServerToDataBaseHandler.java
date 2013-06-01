@@ -495,19 +495,22 @@ public class ServerToDataBaseHandler implements ServerInterface {
 
 	@Override
 	public boolean updateSubForum(Subforumdb subForum) {
-		this._db.updateSubForum(subForum);
-		return false;
+		return this._db.updateSubForum(subForum);
 	}
 
 	@Override
 	public boolean updateForum(Forumdb forum) {
-		this._db.updateForum(forum);
-		return false;
+		return this._db.updateForum(forum);
 	}
 
 	@Override
 	public boolean updateMember(Memberdb member) {
-		this._db.updateMember(member);
-		return false;
+		return this._db.updateMember(member);
+	}
+
+
+	@Override
+	public boolean clearDB() {
+		return this._db.clearDB();
 	}
 }

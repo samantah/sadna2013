@@ -51,8 +51,8 @@ public class IMpl implements IMplInterface {
 		}
 	}
 
-
-	private synchronized void openSession(){	
+	@Override
+	public synchronized void openSession(){	
 		try{	
 			session = sessionFactory.openSession();
 			//	Transaction tx = session.beginTransaction();
@@ -63,10 +63,11 @@ public class IMpl implements IMplInterface {
 		}
 	}
 
-
-	private synchronized void closeSession(){	
+	@Override
+	public synchronized void closeSession(){	
 		try{
 			session.close();
+		
 		}
 		catch(Throwable ex)
 		{
@@ -1148,13 +1149,13 @@ public class IMpl implements IMplInterface {
 
 
 		//example32:
-		/*
+		
 		Memberdb superAdmin = new Memberdb();
 		superAdmin.setEmail("emailuser3");
 		superAdmin.setUserName("user3");
 		superAdmin.setRoll("SuperAdmin");
 		System.out.println(impl.setSuperAdmin(superAdmin));
-		 */
+		 
 
 		//example33:
 		//System.out.println(impl.getSuperAdmin().getEmail());
@@ -1166,6 +1167,17 @@ public class IMpl implements IMplInterface {
 		impl.closeSession();
 
 
+	}
+
+
+	@Override
+	public synchronized boolean clearDB() {
+		List<Forumdb> forums = getForumsList();
+		for (Forumdb forumdb : forums) {
+			if(!deleteForum(forumdb))
+				return false;
+		}
+		return true;
 	}
 
 

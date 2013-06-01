@@ -3,6 +3,7 @@ package Sadna.Server.Reactor;
 import Sadna.Server.Protocol.AsyncServerProtocol;
 import Sadna.Server.Protocol.RequestHandlerProtocol;
 import Sadna.Server.Protocol.ServerProtocolFactory;
+import Sadna.Server.Encryptor;
 import Sadna.Server.ServerToDataBaseHandler;
 import Sadna.Server.Tokenizer.FixedSeparatorMessageTokenizer;
 import Sadna.Server.Tokenizer.MessageTokenizer;
@@ -26,8 +27,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
+import dbTABLES.Forumdb;
 import dbTABLES.IMpl;
 import dbTABLES.IMplInterface;
+import dbTABLES.Memberdb;
 
 /**
  * An implementation of the Reactor pattern.
@@ -59,6 +62,16 @@ public class Reactor<T> implements Runnable {
         _protocolFactory = protocol;
         _tokenizerFactory = tokenizer;
         _databaseImpl = new IMpl();
+        _databaseImpl.openSession();
+		Memberdb superAdmin = new Memberdb();
+		superAdmin.setEmail("email");
+		superAdmin.setUserName("superAdmin");
+		System.out.println(Encryptor.encrypt("superAdmin1234"));
+		superAdmin.setPassword(Encryptor.encrypt("superAdmin1234"));
+		superAdmin.setRoll("SuperAdmin");
+		if (_databaseImpl.getSuperAdmin()==null){
+			_databaseImpl.setSuperAdmin(superAdmin);
+		}
     }
 
     /**
