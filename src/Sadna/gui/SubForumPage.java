@@ -7,6 +7,7 @@ package Sadna.gui;
 import Sadna.Client.Member;
 import Sadna.Client.User;
 import Sadna.db.Forum;
+import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 
@@ -19,6 +20,8 @@ import java.util.List;
  * @author fistuk
  */
 public class SubForumPage extends ForumJFrame {
+
+    private ThreadMessage currTM;
 
     /**
      * Creates new form SubForumPage
@@ -43,19 +46,12 @@ public class SubForumPage extends ForumJFrame {
             jTextFieldAddTitle.setVisible(false);
             jButtonPublisThread.setVisible(false);
             this.jButtonDeleteThread.setVisible(false);
+            this.jButtonEditThread.setVisible(false);
+            this.jButtonEdit.setVisible(false);
         }
         String subForumName = CurrentStatus.currSubForum.getSubForumName();
         jLabelTitle.setText("Welcome To The Sub-Forum: " + subForumName);
-        DefaultListModel listModel = new DefaultListModel();
-        Forum f = CurrentStatus.currForum;
-        SubForum sf = CurrentStatus.currSubForum;
-        List<ThreadMessage> listOfThreads;
-        listOfThreads = CurrentStatus.currUser.viewThreadMessages(f.getForumName(),
-                sf.getSubForumName());
-        for (ThreadMessage tm : listOfThreads) {
-            listModel.addElement(tm);
-        }
-        jListThreads.setModel(listModel);
+        updateListOfThreads();
 
     }
 
@@ -84,6 +80,8 @@ public class SubForumPage extends ForumJFrame {
         jLabelErrorCannotDelete = new javax.swing.JLabel();
         getNotificationsButton = new javax.swing.JButton();
         jButtonNotifyMainThread = new javax.swing.JButton();
+        jButtonEdit = new javax.swing.JButton();
+        jButtonEditThread = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -180,6 +178,22 @@ public class SubForumPage extends ForumJFrame {
             }
         });
 
+        jButtonEdit.setText("edit");
+        jButtonEdit.setToolTipText("delete the selected post\nauthorized only by the publisher, \nmoderator or the admin");
+        jButtonEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEditActionPerformed(evt);
+            }
+        });
+
+        jButtonEditThread.setText("edit post");
+        jButtonEditThread.setToolTipText("edit the selected post\nauthorized only by the publisher, \nmoderator or the admin");
+        jButtonEditThread.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEditThreadActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -210,13 +224,19 @@ public class SubForumPage extends ForumJFrame {
                             .addGap(18, 18, 18)
                             .addComponent(jButtonEnterThread))))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextFieldAddTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(46, 46, 46)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabelError)
-                            .addComponent(jButtonPublisThread)))
-                    .addComponent(jTextFieldAddContent, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jTextFieldAddTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(46, 46, 46)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jButtonPublisThread)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(10, 10, 10)
+                                        .addComponent(jButtonEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabelError))))
+                        .addComponent(jTextFieldAddContent, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButtonEditThread))
                 .addGap(30, 30, 30))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jButtonNotifyMainThread, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -239,7 +259,9 @@ public class SubForumPage extends ForumJFrame {
                         .addComponent(jTextFieldAddContent, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabelError)
-                        .addGap(43, 43, 43)
+                        .addGap(9, 9, 9)
+                        .addComponent(jButtonEdit)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButtonPublisThread)
                             .addComponent(jLabelErrorCannotDelete))
@@ -251,7 +273,8 @@ public class SubForumPage extends ForumJFrame {
                     .addComponent(jButtonSignout)
                     .addComponent(jButtonBack)
                     .addComponent(jButtonDeleteThread)
-                    .addComponent(getNotificationsButton))
+                    .addComponent(getNotificationsButton)
+                    .addComponent(jButtonEditThread))
                 .addContainerGap())
         );
 
@@ -362,10 +385,44 @@ public class SubForumPage extends ForumJFrame {
     private void jButtonNotifyMainThreadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNotifyMainThreadActionPerformed
         askForNotification();
     }//GEN-LAST:event_jButtonNotifyMainThreadActionPerformed
+
+    private void jButtonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditActionPerformed
+        String content = this.jTextFieldAddContent.getText();
+        String title = this.jTextFieldAddTitle.getText();
+        Member member = (Member) CurrentStatus.currUser;
+        currTM.setContent(content);
+        currTM.setTitle(title);
+        boolean editThread = member.editThread(currTM);
+        if (editThread) {
+            updateListOfThreads();
+            this.jTextFieldAddContent.setText("");
+            this.jTextFieldAddTitle.setText("");
+            this.jButtonEdit.setVisible(false);
+            this.jButtonEditThread.setVisible(true);
+        } else {
+            this.jLabelError.setVisible(true);
+        }
+    }//GEN-LAST:event_jButtonEditActionPerformed
+
+    private void jButtonEditThreadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditThreadActionPerformed
+        ThreadMessage selectedtm = (ThreadMessage) this.jListThreads.getSelectedValue();
+        if (selectedtm == null) {
+            return;
+        }
+        String title = selectedtm.getTitle();
+        String content = selectedtm.getContent();
+        this.jTextFieldAddTitle.setText(title);
+        this.jTextFieldAddContent.setText(content);
+        this.jButtonEdit.setVisible(true);
+        this.jButtonPublisThread.setVisible(false);
+        this.currTM = selectedtm;
+    }//GEN-LAST:event_jButtonEditThreadActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton getNotificationsButton;
     private javax.swing.JButton jButtonBack;
     private javax.swing.JButton jButtonDeleteThread;
+    private javax.swing.JButton jButtonEdit;
+    private javax.swing.JButton jButtonEditThread;
     private javax.swing.JButton jButtonEnterThread;
     private javax.swing.JButton jButtonNotifyMainThread;
     private javax.swing.JButton jButtonPublisThread;
@@ -396,5 +453,18 @@ public class SubForumPage extends ForumJFrame {
     @Override
     public void makeAnEvent() {
         this.jButtonNotifyMainThread.doClick();
+    }
+
+    private void updateListOfThreads() {
+        DefaultListModel listModel = new DefaultListModel();
+        Forum f = CurrentStatus.currForum;
+        SubForum sf = CurrentStatus.currSubForum;
+        List<ThreadMessage> listOfThreads;
+        listOfThreads = CurrentStatus.currUser.viewThreadMessages(f.getForumName(),
+                sf.getSubForumName());
+        for (ThreadMessage tm : listOfThreads) {
+            listModel.addElement(tm);
+        }
+        jListThreads.setModel(listModel);
     }
 }
