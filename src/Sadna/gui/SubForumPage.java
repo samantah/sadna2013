@@ -402,7 +402,7 @@ public class SubForumPage extends ForumJFrame {
             this.jTextFieldAddTitle.setText("");
             this.jButtonEdit.setVisible(false);
             this.jButtonEditThread.setVisible(true);
-            this.jButtonPublisThread.setVisible(false);
+            this.jButtonPublisThread.setVisible(true);
         } else {
             this.jLabelError.setVisible(true);
         }
