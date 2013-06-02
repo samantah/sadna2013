@@ -55,15 +55,24 @@
                   </Group>
               </Group>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jTextFieldAddTitle" alignment="0" min="-2" pref="194" max="-2" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="jLabelError" min="-2" max="-2" attributes="0"/>
-                          <Component id="jButtonPublisThread" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jTextFieldAddTitle" alignment="0" min="-2" pref="194" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="jButtonPublisThread" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                                      <Component id="jButtonEdit" min="-2" pref="75" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="jLabelError" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
                       </Group>
+                      <Component id="jTextFieldAddContent" alignment="1" min="-2" pref="194" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jTextFieldAddContent" alignment="1" min="-2" pref="194" max="-2" attributes="0"/>
+                  <Component id="jButtonEditThread" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
           </Group>
@@ -91,7 +100,9 @@
                       <Component id="jTextFieldAddContent" min="-2" pref="211" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jLabelError" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
+                      <Component id="jButtonEdit" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jButtonPublisThread" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabelErrorCannotDelete" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -107,6 +118,7 @@
                   <Component id="jButtonBack" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jButtonDeleteThread" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="getNotificationsButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jButtonEditThread" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -242,6 +254,24 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonNotifyMainThreadActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButtonEdit">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="edit"/>
+        <Property name="toolTipText" type="java.lang.String" value="delete the selected post&#xa;authorized only by the publisher, &#xa;moderator or the admin"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonEditActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButtonEditThread">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="edit post"/>
+        <Property name="toolTipText" type="java.lang.String" value="edit the selected post&#xa;authorized only by the publisher, &#xa;moderator or the admin"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonEditThreadActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
