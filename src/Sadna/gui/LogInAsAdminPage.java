@@ -17,6 +17,7 @@ public class LogInAsAdminPage extends ForumJFrame {
 
     String host = "192.168.1.109";
     int port = 3333;
+    private final ClientConnectionHandler ch;
 
     /**
      * Creates new form LogInPage
@@ -24,7 +25,7 @@ public class LogInAsAdminPage extends ForumJFrame {
     public LogInAsAdminPage() {
         initComponents();
         this.setResizable(false);
-        ClientCommunicationHandlerInterface ch = new ClientConnectionHandler(host, port);
+        ch = new ClientConnectionHandler(host, port);
         if (CurrentStatus.currUser == null) {
             CurrentStatus.currUser = new User(ch);
         }

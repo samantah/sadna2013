@@ -27,7 +27,7 @@ public class MainFrameAsSuperAdmin extends ForumJFrame {
     public MainFrameAsSuperAdmin() {
         initComponents();
         this.setResizable(false);
-        ClientCommunicationHandlerInterface ch = new ClientConnectionHandler(host, port);
+//        ClientCommunicationHandlerInterface ch = new ClientConnectionHandler(host, port);
         DefaultListModel listOfForums;
 //        if (CurrentStatus.currUser == null) {
 //
