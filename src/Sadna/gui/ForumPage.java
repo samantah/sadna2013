@@ -28,7 +28,7 @@ public class ForumPage extends ForumJFrame {
     public ForumPage() {
         initComponents();
         this.jLabelErrorAddSubForum.setVisible(false);
-        this.jButtonRefresh.setVisible(false);
+       // this.jButtonRefresh.setVisible(false);
         addNewSubButton.setVisible(false);
         jLabelHeadNewSubForum.setVisible(false);
         jLabelNewSubName.setVisible(false);

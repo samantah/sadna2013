@@ -1,4 +1,4 @@
-package junitTests.UnitTests;
+package UnitTests;
 
 /**
  *
@@ -63,7 +63,7 @@ public class connectionHandlerTest {
 
 
 	private static void initiateTestPlatform() {
-		ch = new ClientConnectionHandler("192.168.1.109", 3333);
+		ch = new ClientConnectionHandler("132.73.199.251", 3333);
 		User u = new User(ch);
 		SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
 		sa.clearDataBase();
