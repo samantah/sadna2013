@@ -403,6 +403,7 @@ public class SubForumPage extends ForumJFrame {
             this.jButtonEdit.setVisible(false);
             this.jButtonEditThread.setVisible(true);
             this.jButtonPublisThread.setVisible(true);
+            this.jLabelError.setVisible(false);
         } else {
             this.jLabelError.setVisible(true);
         }
