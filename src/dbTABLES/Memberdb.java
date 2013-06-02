@@ -36,55 +36,6 @@ public class Memberdb implements java.io.Serializable {
 	public Memberdb(int idmember) {
 		this.idmember = idmember;
 	}
-
-	public Memberdb(int idmember, Forumdb forumdb, String userName,
-			String password, String email, String roll, String dateJoin,
-			String notification, Set<Forumdb> forumdbs, Set<Postdb> postdbs,
-			Set<Threaddb> threaddbs, Set<Subforumdb> subforumdbs) {
-		this.idmember = idmember;
-		this.forumdb = forumdb;
-		this.userName = userName;
-		this.password = password;
-		this.email = email;
-		this.roll = roll;
-		this.dateJoin = dateJoin;
-		this.notification = notification;
-		this.forumdbs = forumdbs;
-		this.postdbs = postdbs;
-		this.threaddbs = threaddbs;
-		this.subforumdbs = subforumdbs;
-	}
-	
-	public Memberdb(Forumdb forumdb, String userName,
-			String password, String email, String roll, String dateJoin,
-			String notification, Set<Forumdb> forumdbs, Set<Postdb> postdbs,
-			Set<Threaddb> threaddbs, Set<Subforumdb> subforumdbs) {
-		this.forumdb = forumdb;
-		this.userName = userName;
-		this.password = password;
-		this.email = email;
-		this.roll = roll;
-		this.dateJoin = dateJoin;
-		this.notification = notification;
-		this.forumdbs = forumdbs;
-		this.postdbs = postdbs;
-		this.threaddbs = threaddbs;
-		this.subforumdbs = subforumdbs;
-	}
-	
-	public Memberdb(int idmember, Forumdb forumdb, String userName,
-			String password, String email, String roll, String dateJoin,
-			String notification){
-		this.idmember = idmember;
-		this.forumdb = forumdb;
-		this.userName = userName;
-		this.password = password;
-		this.email = email;
-		this.roll = roll;
-		this.dateJoin = dateJoin;
-		this.notification = notification;
-		this.forumdbs.add(this.forumdb);
-	}
 	
 	public Memberdb(Forumdb forumdb, String userName,
 			String password, String email, String roll, String dateJoin,
