@@ -24,7 +24,7 @@ public class Memberdb implements java.io.Serializable {
 	private String email;
 	private String roll;
 	private String dateJoin;
-	private String notification;
+	private String notification = "";
 	private Set<Forumdb> forumdbs = new HashSet<Forumdb>(0);
 	private Set<Postdb> postdbs = new HashSet<Postdb>(0);
 	private Set<Threaddb> threaddbs = new HashSet<Threaddb>(0);
