@@ -25,6 +25,7 @@ public class MainFrameAsSuperAdmin extends ForumJFrame {
     int port = 3333;
 
     public MainFrameAsSuperAdmin() {
+    	System.out.println("asdasdasd");
         initComponents();
         this.setResizable(false);
 //        ClientCommunicationHandlerInterface ch = new ClientConnectionHandler(host, port);
