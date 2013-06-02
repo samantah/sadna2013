@@ -28,7 +28,7 @@ public class ForumPage extends ForumJFrame {
     public ForumPage() {
         initComponents();
         this.jLabelErrorAddSubForum.setVisible(false);
-        this.jButtonNotifyMainThread.setVisible(false);
+        this.jButtonRefresh.setVisible(false);
         addNewSubButton.setVisible(false);
         jLabelHeadNewSubForum.setVisible(false);
         jLabelNewSubName.setVisible(false);
@@ -101,7 +101,7 @@ public class ForumPage extends ForumJFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jListOfMembers = new javax.swing.JList();
         jLabelErrorAddSubForum = new javax.swing.JLabel();
-        jButtonNotifyMainThread = new javax.swing.JButton();
+        jButtonRefresh = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -195,10 +195,10 @@ public class ForumPage extends ForumJFrame {
         jLabelErrorAddSubForum.setForeground(new java.awt.Color(255, 0, 0));
         jLabelErrorAddSubForum.setText("cannot add sub forum");
 
-        jButtonNotifyMainThread.setText("jButton1");
-        jButtonNotifyMainThread.addActionListener(new java.awt.event.ActionListener() {
+        jButtonRefresh.setText("refresh page");
+        jButtonRefresh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonNotifyMainThreadActionPerformed(evt);
+                jButtonRefreshActionPerformed(evt);
             }
         });
 
@@ -221,20 +221,22 @@ public class ForumPage extends ForumJFrame {
                                     .addComponent(addNewSubButton))
                                 .addContainerGap())))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButtonBack)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButtonSignout)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(getNotificationsButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(logInButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(registerButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(enterSubForumButton))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jButtonBack)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButtonSignout)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(getNotificationsButton)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(logInButton)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(registerButton)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(enterSubForumButton))
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jButtonRefresh))
                         .addGap(39, 39, 39)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -250,15 +252,12 @@ public class ForumPage extends ForumJFrame {
                                     .addComponent(jLabelEnterModerators, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jScrollPane1))
                                 .addGap(26, 26, 26))))))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jButtonNotifyMainThread, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jButtonNotifyMainThread, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(14, 14, 14)
+                .addComponent(jButtonRefresh)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonToAdminPage, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -385,16 +384,19 @@ public class ForumPage extends ForumJFrame {
         this.getNotificationsButton.setBackground(CurrentStatus.defaultColor);
     }//GEN-LAST:event_getNotificationsButtonActionPerformed
 
-    private void jButtonNotifyMainThreadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNotifyMainThreadActionPerformed
-        askForNotification();
-    }//GEN-LAST:event_jButtonNotifyMainThreadActionPerformed
+    private void jButtonRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRefreshActionPerformed
+        ForumPage forumPage = new ForumPage();
+        this.setVisible(false);
+        this.dispose();
+        forumPage.setVisible(true);
+    }//GEN-LAST:event_jButtonRefreshActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addNewSubButton;
     private javax.swing.JButton enterSubForumButton;
     private javax.swing.JButton getNotificationsButton;
     private javax.swing.JButton jButtonBack;
-    private javax.swing.JButton jButtonNotifyMainThread;
+    private javax.swing.JButton jButtonRefresh;
     private javax.swing.JButton jButtonSignout;
     private javax.swing.JButton jButtonToAdminPage;
     private javax.swing.JLabel jLabel;
@@ -439,7 +441,7 @@ public class ForumPage extends ForumJFrame {
 
     @Override
     public void makeAnEvent() {
-        this.jButtonNotifyMainThread.doClick();
+        this.jButtonRefresh.doClick();
         try {
             Thread.sleep(1000);
         } catch (InterruptedException ex) {
