@@ -41,7 +41,7 @@ public class Tests {
 	public static final String USER_NAME = "sadnaUser";  //valid username
 	public static final String USER_EMAIL = "sadna@bgu.ac.il";
 	public static final String USER_PASSWORD = "abcdefg34";
-	public static final String ip = "192.168.0.1";
+	public static final String ip = "192.168.1.109";
 	public static final int port = 3333;
 
 	private static ClientConnectionHandler ch;
@@ -153,7 +153,7 @@ public class Tests {
 	 */
 	@Test
 	public void test_logOut() {
-		Member mem = bridge.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+		Member mem = bridge.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
 		User _user = mem.logout(FORUM_NAME);
 		assertFalse(_user instanceof Member);
 		bridge.finishCommunication();
@@ -170,7 +170,7 @@ public class Tests {
 	@Test
 	public void PublishThread(){
 		SubForum sb = bridge.getSubForum(FORUM_NAME, SUB_FORUM_NAME);
-		Member m = bridge.login(FORUM_NAME, USER_NAME, USER_PASSWORD);
+		Member m = bridge.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
 		ThreadMessage tm = new ThreadMessage(sb, "title", "content", m.getUserName());
 		boolean publish = bridge.publishThread(tm, "1234");
 		assertFalse(publish);
@@ -180,12 +180,14 @@ public class Tests {
 
 	@Test
 	public void manyUsersTest(){
+		System.out.println("start");
 		ClientConnectionHandler[] array = new ClientConnectionHandler[100];
 
 		long start = System.currentTimeMillis();
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < array.length; i++) {
 			array[i] = new ClientConnectionHandler(ip, port);
 		}
+		System.out.println("connected");
 		for (int i = 0; i < array.length; i++) {
 			ClientConnectionHandler currUser = array[i];
 			currUser.getForumsList();
@@ -196,12 +198,6 @@ public class Tests {
 		assertTrue((end-start<1000*5));
 	}
 
-	@Test
-	public void adminDeleteThread(){
-		ThreadMessage tm = bridge.getThreadMessage(FORUM_NAME, SUB_FORUM_NAME, 0);
-		boolean adminDelete = bridge.deleteThreadMessage(tm, ADMIN_NAME, ADMIN_PASSWORD);
-		assertTrue(adminDelete);
-	}
 	
 	private static void initiateTestPlatform() {
 		ch = new ClientConnectionHandler("192.168.1.109", 3333);
@@ -221,21 +217,25 @@ public class Tests {
 		Member m2 = u.register(FORUM_NAME, "baaaaa", "ksjdf66asd", "sdf@adf.com");
 		Member m3 = u.register(FORUM_NAME, "eaaaaa", "ksjdf66asd", "sdf@adf.com");
 //		Member m4 = u.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
+		Admin admin = (Admin) u.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
 		
 		SubForum subForum = new SubForum(forum, "zubizubi1");
 		SubForum subForum2 = new SubForum(forum, "zubizubi2");
 		ArrayList<Member> al = new ArrayList<Member>();
 		al.add(m1);
-		sa.addSubForum(subForum2, al);
+		admin.addSubForum(subForum2, al);
 		ArrayList<Member> al2 = new ArrayList<Member>();
 		al2.add(m2);
 		al2.add(m3);
-		sa.addSubForum(subForum, al2);
+		admin.addSubForum(subForum, al2);
 		ThreadMessage threadMessage = new ThreadMessage(subForum, "zzzz", "hi11", "laaaaa");
 		ThreadMessage threadMessage2 = new ThreadMessage(subForum, "ccccc", "hi2aaa2", "eaaaaa");
 		
 		m1.publishThread(threadMessage);
 		m2.publishThread(threadMessage2);
+		List<ThreadMessage> threadMessages = m1.viewThreadMessages(FORUM_NAME, SUB_FORUM_NAME);
+		threadMessage = threadMessages.get(0);
+		threadMessage2 = threadMessages.get(1);
 		
 		Post post = new Post(threadMessage, "uuuuuuu", "hi11post1", "laaaaa");
 		Post post2 = new Post(threadMessage, "iiiiiiii", "hi11post2", "eaaaaa");
