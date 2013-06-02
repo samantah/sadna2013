@@ -60,8 +60,8 @@ public class NotificationsFactory {
 	}
 
     //delete sub forum notification
-	public boolean sendNotifications(Subforumdb sf) {
-		String txt = "Sub-forum: " + sf.getSubForumName() + " deleted.";
+	public boolean sendNotifications(Subforumdb sf, String action) {
+		String txt = "Sub-forum: " + sf.getSubForumName() + " was " + action+ ".";
 		Forumdb forum = sf.getForumdb();
 		String forumName = forum.getForumName();
 		String subForumName = sf.getSubForumName();

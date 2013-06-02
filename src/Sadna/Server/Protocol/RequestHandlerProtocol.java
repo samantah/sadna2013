@@ -644,7 +644,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 				succeeded = _si.publishThread(threadM, posterName, password);
 			}
 			if (succeeded) {
-				_notificationsFactory.sendNotifications(sf);
+				_notificationsFactory.sendNotifications(threadM, "added");
 				Reactor.NotifyAllListeners();
 				this._si.closeSession();
 				return _msgToClient.sendOK();
@@ -857,7 +857,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		Memberdb admin = sf.getForumdb().getMemberdb();
 		boolean equals = admin.getUserName().equals(requester) && checkPassword(password, admin.getPassword());
 		if (equals) {
-			_notificationsFactory.sendNotifications(sf);
+			_notificationsFactory.sendNotifications(sf, "deleted");
 			_si.deleteSubForum(sf, requester, password);
 			Reactor.NotifyAllListeners();
 			this._si.closeSession();
