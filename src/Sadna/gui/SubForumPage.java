@@ -80,7 +80,7 @@ public class SubForumPage extends ForumJFrame {
         jButtonDeleteThread = new javax.swing.JButton();
         jLabelErrorCannotDelete = new javax.swing.JLabel();
         getNotificationsButton = new javax.swing.JButton();
-        jButtonNotifyMainThread = new javax.swing.JButton();
+        jButtonRefresh = new javax.swing.JButton();
         jButtonEdit = new javax.swing.JButton();
         jButtonEditThread = new javax.swing.JButton();
 
@@ -172,10 +172,10 @@ public class SubForumPage extends ForumJFrame {
             }
         });
 
-        jButtonNotifyMainThread.setText("jButton1");
-        jButtonNotifyMainThread.addActionListener(new java.awt.event.ActionListener() {
+        jButtonRefresh.setText("refresh page");
+        jButtonRefresh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonNotifyMainThreadActionPerformed(evt);
+                jButtonRefreshActionPerformed(evt);
             }
         });
 
@@ -201,8 +201,8 @@ public class SubForumPage extends ForumJFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabelTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -221,7 +221,7 @@ public class SubForumPage extends ForumJFrame {
                                         .addComponent(jLabelError))))
                             .addComponent(jTextFieldAddContent, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(30, 30, 30))
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabelErrorCannotDelete)
                             .addGroup(layout.createSequentialGroup()
@@ -240,16 +240,16 @@ public class SubForumPage extends ForumJFrame {
                         .addComponent(jButtonEnterThread)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonEditThread)
-                        .addGap(155, 155, 155))))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jButtonNotifyMainThread, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(155, 155, 155))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButtonRefresh)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jButtonNotifyMainThread, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
+                .addComponent(jButtonRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabelTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -385,10 +385,6 @@ public class SubForumPage extends ForumJFrame {
 
     }//GEN-LAST:event_getNotificationsButtonActionPerformed
 
-    private void jButtonNotifyMainThreadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNotifyMainThreadActionPerformed
-        askForNotification();
-    }//GEN-LAST:event_jButtonNotifyMainThreadActionPerformed
-
     private void jButtonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditActionPerformed
         String content = this.jTextFieldAddContent.getText();
         String title = this.jTextFieldAddTitle.getText();
@@ -422,6 +418,14 @@ public class SubForumPage extends ForumJFrame {
         this.jButtonPublisThread.setVisible(false);
         this.currTM = selectedtm;
     }//GEN-LAST:event_jButtonEditThreadActionPerformed
+
+    private void jButtonRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRefreshActionPerformed
+        SubForumPage subForumPage = new SubForumPage();
+        this.setVisible(false);
+        this.dispose();
+        subForumPage.setVisible(true);
+    }//GEN-LAST:event_jButtonRefreshActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton getNotificationsButton;
     private javax.swing.JButton jButtonBack;
@@ -429,8 +433,8 @@ public class SubForumPage extends ForumJFrame {
     private javax.swing.JButton jButtonEdit;
     private javax.swing.JButton jButtonEditThread;
     private javax.swing.JButton jButtonEnterThread;
-    private javax.swing.JButton jButtonNotifyMainThread;
     private javax.swing.JButton jButtonPublisThread;
+    private javax.swing.JButton jButtonRefresh;
     private javax.swing.JButton jButtonSignout;
     private javax.swing.JLabel jLabelError;
     private javax.swing.JLabel jLabelErrorCannotDelete;
@@ -457,7 +461,7 @@ public class SubForumPage extends ForumJFrame {
 
     @Override
     public void makeAnEvent() {
-        this.jButtonNotifyMainThread.doClick();
+        this.jButtonRefresh.doClick();
     }
 
     private void updateListOfThreads() {
