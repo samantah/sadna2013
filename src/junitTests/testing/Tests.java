@@ -41,7 +41,7 @@ public class Tests {
 	public static final String USER_NAME = "sadnaUser";  //valid username
 	public static final String USER_EMAIL = "sadna@bgu.ac.il";
 	public static final String USER_PASSWORD = "abcdefg34";
-	public static final String ip = "192.168.1.109";
+	public static final String ip = "132.73.199.251";
 	public static final int port = 3333;
 
 	private static ClientConnectionHandler ch;
@@ -200,7 +200,7 @@ public class Tests {
 
 	
 	private static void initiateTestPlatform() {
-		ch = new ClientConnectionHandler("192.168.1.109", 3333);
+		ch = new ClientConnectionHandler(ip, 3333);
 		User u = new User(ch);
 		SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
 		sa.clearDataBase();
