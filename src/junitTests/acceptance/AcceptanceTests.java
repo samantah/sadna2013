@@ -1,8 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package testing;
+
+package acceptance;
 
 import Driver.ClientBridge;
 import Driver.ClientDriver;
@@ -25,7 +22,7 @@ import static org.junit.Assert.*;
  *
  * @author fistuk
  */
-public class Tests {
+public class AcceptanceTests {
 
 	private static ClientBridge bridge;
 	//ALL fields need to be valid
@@ -66,6 +63,8 @@ public class Tests {
 	public void tearDown() {
 	}
 
+	/* -------------- Tests ---------------- */
+	
 	@Test
 	public void test_RegisterInvalidPass() {
 		Member _member1 = bridge.register(FORUM_NAME, USER_NAME, "short", USER_EMAIL);
@@ -88,9 +87,7 @@ public class Tests {
 		bridge.finishCommunication();
 	}
 
-	/*
-	 * check logIn
-	 */
+	
 	@Test
 	public void test_logIn() throws InterruptedException {
 		Member _member1 = bridge.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
@@ -102,8 +99,7 @@ public class Tests {
 
 	}
 
-	/*
-	 */
+	
 	@Test
 	public void test_multipleUsersLogin() {
 		char a = 'a';
@@ -121,8 +117,7 @@ public class Tests {
 
 	}
 
-	/*
-	 */
+	
 	@Test
 	public void test_multipleUsersRegister() {
 		char a = 'a';
@@ -135,9 +130,7 @@ public class Tests {
 
 	}
 
-	/*
-     ìëì îùúîù éù ùí äîæää àåúå áàåôï éçéã áôåøåí.
-	 */
+	
 	@Test
 	public void test_sameUserName() {
 		Member _member1 = bridge.register(FORUM_NAME, "oneclient", USER_PASSWORD, USER_EMAIL);
@@ -148,9 +141,7 @@ public class Tests {
 
 	}
 
-	/*
-	 * check logout
-	 */
+
 	@Test
 	public void test_logOut() {
 		Member mem = bridge.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);

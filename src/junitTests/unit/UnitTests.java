@@ -1,4 +1,4 @@
-package UnitTests;
+package unit;
 
 /**
  *
@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
  * @author snir elkaras
  *
  */
-public class connectionHandlerTest {
+public class UnitTests {
 
 	
 	//ALL fields need to be valid
@@ -62,7 +62,7 @@ public class connectionHandlerTest {
 	}
 
 
-	private static void initiateTestPlatform() {
+	public static void initiateTestPlatform() {
 		ch = new ClientConnectionHandler("132.73.199.251", 3333);
 		User u = new User(ch);
 		SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
