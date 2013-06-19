@@ -1,5 +1,6 @@
 package Sadna.Server.Reactor;
 
+import Sadna.Client.ClientConnectionHandler;
 import Sadna.Server.Protocol.AsyncServerProtocol;
 import Sadna.Server.Protocol.RequestHandlerProtocol;
 import Sadna.Server.Protocol.ServerProtocolFactory;
@@ -25,7 +26,10 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.xml.DOMConfigurator;
 
 import dbTABLES.Forumdb;
 import dbTABLES.IMpl;
@@ -37,7 +41,6 @@ import dbTABLES.Memberdb;
  */
 public class Reactor<T> implements Runnable {
 
-    private static final Logger logger = Logger.getLogger("edu.spl.reactor");
     private final int _port;
     private final int _poolSize;
     private final ServerProtocolFactory<T> _protocolFactory;
@@ -46,6 +49,9 @@ public class Reactor<T> implements Runnable {
     private ReactorData<T> _data;
     private static final List<SocketChannel> _socketsList = new ArrayList<>();
     private static IMplInterface _databaseImpl;
+	private static Logger reportLogger;
+
+	
     
     /**
      * Creates a new Reactor
@@ -72,6 +78,7 @@ public class Reactor<T> implements Runnable {
 		if (_databaseImpl.getSuperAdmin()==null){
 			_databaseImpl.setSuperAdmin(superAdmin);
 		}
+		reportLogger = Logger.getLogger(Reactor.class);
     }
 
     /**
@@ -86,7 +93,6 @@ public class Reactor<T> implements Runnable {
             ssChannel.socket().bind(new InetSocketAddress(port));
             return ssChannel;
         } catch (IOException e) {
-            logger.info("Port " + port + " is busy");
             throw e;
         }
     }
@@ -115,7 +121,6 @@ public class Reactor<T> implements Runnable {
             selector = Selector.open();
             ssChannel = createServerSocket(_port);
         } catch (IOException e) {
-            logger.info("cannot create the selector -- server socket is busy?");
             return;
         }
 
@@ -128,7 +133,6 @@ public class Reactor<T> implements Runnable {
         try {
             ssChannel.register(selector, SelectionKey.OP_ACCEPT, connectionAcceptor);
         } catch (ClosedChannelException e) {
-            logger.info("server channel seems to be closed!");
             return;
         }
 
@@ -137,7 +141,6 @@ public class Reactor<T> implements Runnable {
             try {
                 selector.select();
             } catch (IOException e) {
-                logger.info("trouble with selector: " + e.getMessage());
                 continue;
             }
 
@@ -155,26 +158,22 @@ public class Reactor<T> implements Runnable {
 
                 // Check if it's a connection request
                 if (selKey.isValid() && selKey.isAcceptable()) {
-                    logger.info("Accepting a connection");
                     ConnectionAcceptor<T> acceptor = (ConnectionAcceptor<T>) selKey.attachment();
                     try {
                         acceptor.accept();
                     } catch (IOException e) {
-                        logger.info("problem accepting a new connection: "
-                                + e.getMessage());
+                    
                     }
                     continue;
                 }
                 // Check if a message has been sent
                 if (selKey.isValid() && selKey.isReadable()) {
                     ConnectionHandler<T> handler = (ConnectionHandler<T>) selKey.attachment();
-                    logger.info("Channel is ready for reading");
                     handler.read();
                 }
                 // Check if there are messages to send
                 if (selKey.isValid() && selKey.isWritable()) {
                     ConnectionHandler<T> handler = (ConnectionHandler<T>) selKey.attachment();
-                    logger.info("Channel is ready for writing");
                     handler.write();
                 }
             }
@@ -235,7 +234,6 @@ public class Reactor<T> implements Runnable {
 
             Thread thread = new Thread(reactor);
             thread.start();
-            logger.info("Reactor is ready on port " + reactor.getPort());
             thread.join();
         } catch (Exception e) {
             e.printStackTrace();
@@ -318,5 +316,9 @@ public class Reactor<T> implements Runnable {
                 ex.printStackTrace();
             }
         }
+    }
+    
+    public static Logger getLogger(){
+    	return reportLogger;
     }
 }
