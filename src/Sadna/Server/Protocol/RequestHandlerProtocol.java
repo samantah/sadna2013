@@ -958,7 +958,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		}
 		this._si.closeSession();
 		_logMsg = "as a respond to GETAP- sending: requested list from forum "+ forumName+", subForum "+ subForumName+", threadId "+ threadId;
-		_reportLogger.log(Level.INFO ,_logMsg);
+		_reportLogger.log(Level.TRACE ,_logMsg);
 		return ans;
 	}
 
