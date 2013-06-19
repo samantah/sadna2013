@@ -81,7 +81,7 @@ public class Reactor<T> implements Runnable {
 		}
 		reportLogger = Logger.getLogger(Reactor.class);
 		DOMConfigurator.configure(XML_LOGGER_PATH);
-
+		Logger.getLogger("org.hibernate").setLevel(Level.OFF);
     }
 
     /**
