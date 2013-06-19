@@ -47,15 +47,13 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	private SocketChannel _socketChannel;
 	private Logger _reportLogger;
 	private String _logMsg;
-	private static String XML_LOGGER_PATH = "./log4j.xml";
-
+	
 
 	public RequestHandlerProtocol(ServerInterface _si) {
 		this._si = _si;
 		this._msgToClient = new StringMessagesToClient();
 		this._notificationsFactory = new NotificationsFactory(this._si);
 		this._reportLogger = (Logger) Reactor.getLogger();
-		DOMConfigurator.configure(XML_LOGGER_PATH);
 
 
 	}
@@ -66,7 +64,6 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		this._notificationsFactory = new NotificationsFactory(this._si);
 		this._socketChannel = sc;
 		this._reportLogger = (Logger) Reactor.getLogger();
-		DOMConfigurator.configure(XML_LOGGER_PATH);
 	}
 
 	/**
@@ -707,7 +704,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	//with encryption of the user password
 	public Object handleRegister(String forumName, String userName, String password,
 			String email) {
-		_logMsg = "recieved: REGISTER from"+userName + "forum"+ forumName;
+		_logMsg = "recieved: REGISTER from "+userName + " forum "+ forumName;
 		_reportLogger.log(Level.INFO ,_logMsg);
 		this._si.openSession();
 		String encryptedPassword = Encryptor.encrypt(password);

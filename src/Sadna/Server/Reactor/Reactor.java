@@ -50,6 +50,7 @@ public class Reactor<T> implements Runnable {
     private static final List<SocketChannel> _socketsList = new ArrayList<>();
     private static IMplInterface _databaseImpl;
 	private static Logger reportLogger;
+	private static String XML_LOGGER_PATH = "./log4j.xml";
 
 	
     
@@ -79,6 +80,8 @@ public class Reactor<T> implements Runnable {
 			_databaseImpl.setSuperAdmin(superAdmin);
 		}
 		reportLogger = Logger.getLogger(Reactor.class);
+		DOMConfigurator.configure(XML_LOGGER_PATH);
+
     }
 
     /**
