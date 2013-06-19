@@ -13,14 +13,15 @@ import Sadna.db.Forum;
 import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
-import Sadna.db.PolicyEnums.enumAssignModerator;
-import Sadna.db.PolicyEnums.enumCancelModerator;
-import Sadna.db.PolicyEnums.enumDelete;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.xml.DOMConfigurator;
 
 
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,6 +29,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+
 
 import dbTABLES.*;
 
@@ -42,12 +45,19 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	private StringMessagesToClient _msgToClient;
 	private NotificationsFactory _notificationsFactory;
 	private SocketChannel _socketChannel;
-	
+	private Logger _reportLogger;
+	private String _logMsg;
+	private static String XML_LOGGER_PATH = "./log4j.xml";
+
 
 	public RequestHandlerProtocol(ServerInterface _si) {
 		this._si = _si;
 		this._msgToClient = new StringMessagesToClient();
 		this._notificationsFactory = new NotificationsFactory(this._si);
+		this._reportLogger = (Logger) Reactor.getLogger();
+		DOMConfigurator.configure(XML_LOGGER_PATH);
+
+
 	}
 
 	public RequestHandlerProtocol(ServerInterface _si, SocketChannel sc) {
@@ -55,7 +65,8 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		this._msgToClient = new StringMessagesToClient();
 		this._notificationsFactory = new NotificationsFactory(this._si);
 		this._socketChannel = sc;
-
+		this._reportLogger = (Logger) Reactor.getLogger();
+		DOMConfigurator.configure(XML_LOGGER_PATH);
 	}
 
 	/**
@@ -127,7 +138,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		Memberdb m;
 		switch (parsedReq[0]) {
 		case "HELLO":
-			return "HELLO";
+			return handleHello();
 		case "LISTENING":
 			return handleListening();
 		case "LOGIN":
@@ -147,6 +158,8 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		case "GETF":
 			return handleGetForum(parsedReq[2]);
 		case "ADDSF":
+			_logMsg = "recieved: ADDSF";
+			_reportLogger.log(Level.INFO ,_logMsg);
 			List<Memberdb> members = new ArrayList<Memberdb>();
 			int i;
 			for (i = 8; i < 8 + 2 * (Integer.parseInt(parsedReq[6])); i = i + 2) {
@@ -154,6 +167,8 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 				_si.openSession();
 				Memberdb member = _si.getMember(parsedReq[2], parsedReq[i]);
 				if (member==null){
+					_logMsg = "as a respond to ADDSF- sending: null";
+					_reportLogger.log(Level.DEBUG ,_logMsg);
 					return null;
 				}
 				_si.closeSession();
@@ -162,8 +177,11 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			_si.openSession();
 			Forumdb forum = _si.getForum(parsedReq[2]);
 			_si.closeSession();
-			if (forum==null)
+			if (forum==null){
+				_logMsg = "as a respond to ADDSF- sending: "+_msgToClient.sendNotFound();
+				_reportLogger.log(Level.DEBUG ,_logMsg);
 				return _msgToClient.sendNotFound();
+			}
 			Subforumdb subF = new Subforumdb(forum, parsedReq[4], new HashSet<Memberdb>(), new HashSet<Threaddb>());
 			return handleAddSubForum(subF, members, parsedReq[i], parsedReq[i + 2]);
 		case "ADDF":
@@ -172,73 +190,106 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		case "GETAP":
 			return handleGetAllPosts(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]));
 		case "POST":
+			_logMsg = "recieved: POST";
+			_reportLogger.log(Level.INFO ,_logMsg);
 			_si.openSession();
 			tm = _si.getThreadMessage(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]));
 			_si.closeSession();
 			if (tm==null){
+				_logMsg = "as a respond to POST- sending: null";
+				_reportLogger.log(Level.DEBUG ,_logMsg);
 				return null;
 			}
 			_si.openSession();
 			Memberdb publisher = _si.getMember(parsedReq[2], parsedReq[8]);
 			_si.closeSession();
 			p = new Postdb(tm, publisher, parsedReq[10], parsedReq[12]);
-			if (publisher==null)
+			if (publisher==null){
+				_logMsg = "as a respond to POST- sending: null";
+				_reportLogger.log(Level.DEBUG ,_logMsg);
 				return null;
+			}
 			return handlePostComment(p, parsedReq[8], parsedReq[14]);
 		case "THREAD":
 			return handlePublishThread(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8], parsedReq[10], parsedReq[12]);
 		case "DELPST":
+			_logMsg = "recieved: DELPST";
+			_reportLogger.log(Level.INFO ,_logMsg);
 			_si.openSession();
 			p = _si.getPost(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]), Integer.parseInt(parsedReq[8]));
 			if (p==null){
+				_logMsg = "as a respond to DELPST- sending: null";
+				_reportLogger.log(Level.DEBUG ,_logMsg);
 				_si.closeSession();
 				return null;
 			}
 			return handleDeletePost(p, parsedReq[10], parsedReq[12]);
 		case "DELTHRD":
+			_logMsg = "recieved: DELTHRD";
+			_reportLogger.log(Level.INFO ,_logMsg);
 			_si.openSession();
 			tm = _si.getThreadMessage(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]));
 			if (tm==null){
+				_logMsg = "as a respond to DELTHRD- sending: null";
+				_reportLogger.log(Level.DEBUG ,_logMsg);
 				_si.closeSession();
 				return null;
 			}
 			return handleDeleteThread(tm, parsedReq[8], parsedReq[10]);
 		case "DELSF":
+			_logMsg = "recieved: DELSF";
+			_reportLogger.log(Level.INFO ,_logMsg);
 			_si.openSession();
 			sf = _si.getSubForum(parsedReq[2], parsedReq[4]);
 			if (sf==null){
+				_logMsg = "as a respond to DELSF- sending: null";
+				_reportLogger.log(Level.DEBUG ,_logMsg);
 				_si.closeSession();
 				return null;
 			}
 			return handleDeleteSubForum(sf, parsedReq[6], parsedReq[8]);
 		case "DELF":
+			_logMsg = "recieved: DELF";
+			_reportLogger.log(Level.INFO ,_logMsg);
 			_si.openSession();
 			fr = _si.getForum(parsedReq[2]);
 			if (fr==null){
+				_logMsg = "as a respond to DELF- sending: null";
+				_reportLogger.log(Level.DEBUG ,_logMsg);
 				_si.closeSession();
 				return null;
 			}
 			return handleDeleteForum(fr, parsedReq[4], parsedReq[6]);
 		case "ADDMOD":
+			_logMsg = "recieved: ADDMOD";
+			_reportLogger.log(Level.INFO ,_logMsg);
 			_si.openSession();
 			sf = _si.getSubForum(parsedReq[2], parsedReq[4]);
 			if (sf==null){
+				_logMsg = "as a respond to ADDMOD- sending: null";
+				_reportLogger.log(Level.DEBUG ,_logMsg);
 				_si.closeSession();
 				return null;
 			}
 			return handleAddModerator(sf, parsedReq[6], parsedReq[8], parsedReq[10]);
 		case "NOTI":
+			_logMsg = "recieved: NOTI";
+			_reportLogger.log(Level.TRACE ,_logMsg);
 			forumName = parsedReq[2];
 			userName = parsedReq[4];
 			password = parsedReq[6];
 			_si.openSession();
 			m = _si.getMember(forumName, userName);
 			if (m==null){
+				_logMsg = "as a respond to NOTI- sending: null";
+				_reportLogger.log(Level.DEBUG ,_logMsg);
 				_si.closeSession();
 				return null;
 			}
 			return handleNotification(m, password);
 		case "HASNOTIF":
+			_logMsg = "recieved: HASNOTIF";
+			_reportLogger.log(Level.TRACE ,_logMsg);
 			forumName = parsedReq[2];
 			userName = parsedReq[4];
 			password = parsedReq[6];
@@ -276,31 +327,51 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 
 	}
 
+	private Object handleHello() {
+		_logMsg = "recieved: HELLO";
+		_reportLogger.log(Level.TRACE ,_logMsg);
+		_logMsg = "as a respond to HELLO- sending: HELLO";
+		_reportLogger.log(Level.TRACE ,_logMsg);
+		return "HELLO";
+	}
+
 	private Object handleClearDB(String superAdminUserName, String plainPassword) {
+		_logMsg = "recieved: CLRDB";
+		_reportLogger.log(Level.TRACE ,_logMsg);
 		this._si.openSession();
 		Memberdb superAdmin = this._si.getSuperAdmin();
 		if(!checkPassword(plainPassword, superAdmin.getPassword())){
+			_logMsg = "as a respond to CLRDB- sending: "+_msgToClient.sendErrorNoAuthorized();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 		else{
 			if(this._si.clearDB()){
+				_logMsg = "as a respond to CLRDB- sending: "+_msgToClient.sendOK();
+				_reportLogger.log(Level.TRACE ,_logMsg);
 				this._si.closeSession();
 				return _msgToClient.sendOK();
-				
+
 			}
+			_logMsg = "as a respond to CLRDB- sending: "+ _msgToClient.sendErrorInServer();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendErrorInServer();
 		}
-		
+
 	}
 
 	private Object handleEditPost(String forumName, String subForumName,
 			String TMid, String pid, String title, String content,
 			String editorName, String editorPassword) {
+		_logMsg = "recieved: EDTPST";
+		_reportLogger.log(Level.INFO ,_logMsg);
 		this._si.openSession();
 		Memberdb editor = _si.getMember(forumName, editorName);
 		if(editor==null || !(checkPassword(editorPassword, editor.getPassword()))){
+			_logMsg = "as a respond to EDTPST- sending: "+_msgToClient.sendErrorNoAuthorized();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendErrorNoAuthorized();
 		}
@@ -311,13 +382,19 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			if(_si.editPost(postToEdit)){
 				_notificationsFactory.sendNotifications(postToEdit, "edited");
 				Reactor.NotifyAllListeners();
+				_logMsg = "as a respond to EDTPST- sending: "+_msgToClient.sendOK();
+				_reportLogger.log(Level.INFO ,_logMsg);
 				this._si.closeSession();
 				return _msgToClient.sendOK();
 			}
+			_logMsg = "as a respond to EDTPST- sending: "+ _msgToClient.sendErrorInServer();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendErrorInServer();
 		}
 		else{
+			_logMsg = "as a respond to EDTPST- sending: "+ _msgToClient.sendErrorNoAuthorized();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendErrorNoAuthorized();
 		}
@@ -327,10 +404,14 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	private Object handleEditThread(String forumName, String subForumName,
 			String tid, String title, String content, String editorName,
 			String editorPassword) {
+		_logMsg = "recieved: EDTTHRD";
+		_reportLogger.log(Level.INFO ,_logMsg);
 		this._si.openSession();
 
 		Memberdb editor = _si.getMember(forumName, editorName);
 		if(editor==null || !(checkPassword(editorPassword, editor.getPassword()))){
+			_logMsg = "as a respond to EDTTHRD- sending: "+_msgToClient.sendErrorNoAuthorized();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendErrorNoAuthorized();
 		}
@@ -341,13 +422,19 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			if(_si.editThread(threadToEdit)){
 				_notificationsFactory.sendNotifications(threadToEdit, "edited");
 				Reactor.NotifyAllListeners();
+				_logMsg = "as a respond to EDTTHRD- sending: "+_msgToClient.sendOK();
+				_reportLogger.log(Level.INFO ,_logMsg);
 				this._si.closeSession();
 				return _msgToClient.sendOK();
 			}
+			_logMsg = "as a respond to EDTTHRD- sending: "+_msgToClient.sendErrorNoAuthorized();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 		else{
+			_logMsg = "as a respond to EDTTHRD- sending: "+_msgToClient.sendErrorNoAuthorized();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendErrorNoAuthorized();
 		}
@@ -356,45 +443,64 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 
 
 	private Object handleLogout(String forumName, String userName) {
+		_logMsg = "recieved: LOGOUT  userName: "+userName+ " forum: "+ forumName;
+		_reportLogger.log(Level.INFO ,_logMsg);
 		this._si.openSession();
 
 		if (_si.logout(forumName, userName)) {
+			_logMsg = "as a respond to LOGOUT- sending: "+_msgToClient.sendOK();
+			_reportLogger.log(Level.INFO ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendOK();
 		} else {
+			_logMsg = "as a respond to LOGOUT- sending: "+_msgToClient.sendErrorInServer();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendErrorInServer();
 		}
 	}
 
 	private Object handleLoginAsSuperAdmin(String userName, String password) {
+		_logMsg = "recieved: LOGINS";
+		_reportLogger.log(Level.INFO ,_logMsg);
 		this._si.openSession();
-
 		boolean logedIn = _si.loginAsSuperAdmin(userName, password);
 		if (logedIn) {
 			Memberdb member = _si.getSuperAdmin();
 			if (member != null && member.getRoll().equals("SuperAdmin")) {
+				_logMsg = "as a respond to LOGINS- sending: "+_msgToClient.sendSuperAdminOK();
+				_reportLogger.log(Level.INFO ,_logMsg);
 				this._si.closeSession();
 				return _msgToClient.sendSuperAdminOK();
 			}
 		} else {
+			_logMsg = "as a respond to LOGINS- sending: "+ _msgToClient.sendNotFound();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendNotFound();
 		}
+		_logMsg = "as a respond to LOGINS- sending: null";
+		_reportLogger.log(Level.DEBUG ,_logMsg);
 		this._si.closeSession();
 		return null;
 	}
 
 	private Object handleGetAllForumMembers(String forumName, String userName,
 			String password) {
+		_logMsg = "recieved: GETAM";
+		_reportLogger.log(Level.INFO ,_logMsg);
 		this._si.openSession();
 		Memberdb admin = _si.getMember(forumName, userName);
 
 		if (admin != null && !(checkPassword(password, admin.getPassword()))) {
+			_logMsg = "as a respond to GETAM- sending: "+_msgToClient.sendErrorNoAuthorized();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 		if (!(admin.getRoll().equals("Admin"))) {
+			_logMsg = "as a respond to GETAM- sending: "+_msgToClient.sendErrorNoAuthorized();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendErrorNoAuthorized();
 		}
@@ -403,60 +509,85 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		for (Memberdb memberdb : members) {
 			ans.add(memberdb.convertToMember());
 		}
+		_logMsg = "as a respond to GETAM- sending: requested list";
+		_reportLogger.log(Level.INFO ,_logMsg);
 		this._si.closeSession();
 		return ans;
 	}
 
 	private Object handleCommonMembers(String adminName, String password) {
+		_logMsg = "recieved: GETCOM";
+		_reportLogger.log(Level.INFO ,_logMsg);
 		this._si.openSession();
 		Memberdb superAdmin = _si.getSuperAdmin();
 		if (!(checkPassword(password, superAdmin.getPassword()))) {
+			_logMsg = "as a respond to GETCOM- sending: "+_msgToClient.sendErrorNoAuthorized();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 		List<String> ans = _si.getCommonMembers(adminName, password);
+		_logMsg = "as a respond to GETCOM- sending: requested list";
+		_reportLogger.log(Level.INFO ,_logMsg);
 		this._si.closeSession();
 		return ans;
 	}
 
 	private Object handleForumCounter(String superAdminName, String password) {
+		_logMsg = "recieved: GETNF";
+		_reportLogger.log(Level.INFO ,_logMsg);
 		this._si.openSession();
 		Memberdb superAdmin = _si.getSuperAdmin();
 		if (!(checkPassword(password, superAdmin.getPassword()))) {
+			_logMsg = "as a respond to GETNF- sending: "+_msgToClient.sendErrorNoAuthorized();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 		int ans = _si.getForumCounter(superAdminName, password);
+		_logMsg = "as a respond to GETNF- sending: the forum counter is: "+ ans;
+		_reportLogger.log(Level.INFO ,_logMsg);
 		this._si.closeSession();
 		return ans;
 	}
 
 	private Object handleGetUsersPostToUser(String forumName, String adminName, String password) {
+		_logMsg = "recieved: GETUPU";
+		_reportLogger.log(Level.INFO ,_logMsg);
 		this._si.openSession();
 		Memberdb admin = _si.getMember(forumName, adminName);
 		if (!(checkPassword(password, admin.getPassword()))) {
+			_logMsg = "as a respond to GETUPU- sending: "+_msgToClient.sendErrorNoAuthorized();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 		if (!(admin.getRoll().equals("Admin"))) {
+			_logMsg = "as a respond to GETUPU- sending: "+_msgToClient.sendErrorNoAuthorized();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 		HashMap<String,List<String>> ans = new HashMap<String,List<String>>();
 		HashMap<String,Set<String>> users = _si.getUsersPostToUser(forumName, adminName, password);
 		Iterator it = users.entrySet().iterator();
-	    while (it.hasNext()) {
-	        Map.Entry pairs = (Map.Entry)it.next();
-	        List<String> tmp = new ArrayList<String>();
-	        tmp.addAll((Set<String>) pairs.getValue());
-	        ans.put((String) pairs.getKey(),tmp);
-	        it.remove(); // avoids a ConcurrentModificationException
-	    }
-	    this._si.closeSession();
+		while (it.hasNext()) {
+			Map.Entry pairs = (Map.Entry)it.next();
+			List<String> tmp = new ArrayList<String>();
+			tmp.addAll((Set<String>) pairs.getValue());
+			ans.put((String) pairs.getKey(),tmp);
+			it.remove(); // avoids a ConcurrentModificationException
+		}
+		_logMsg = "as a respond to GETUPU- sending: the requested list";
+		_reportLogger.log(Level.INFO ,_logMsg);
+		this._si.closeSession();
 		return ans;
 	}
 
 	private Object handleGetNumberOfUserThreads(String forumName, String userName, String adminName, String password) {
+		_logMsg = "recieved: GETNUT forum"+ forumName+", userName"+userName;
+		_reportLogger.log(Level.INFO ,_logMsg);
+		
 		this._si.openSession();
 		Memberdb admin = _si.getMember(forumName, adminName);
 		if (!(checkPassword(password, admin.getPassword()))) {
@@ -473,37 +604,53 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	}
 
 	private Object handleThreadCounter(String forumName, String userName, String password) {
+		_logMsg = "recieved: GETCOUNT forum"+ forumName;
+		_reportLogger.log(Level.INFO ,_logMsg);
 		this._si.openSession();
 		Memberdb admin = _si.getMember(forumName, userName);
 		if (!(checkPassword(password, admin.getPassword()))) {
+			_logMsg = "as a respond to GETCOUNT- sending: "+_msgToClient.sendErrorNoAuthorized();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 		if (!(admin.getRoll().equals("Admin"))) {
+			_logMsg = "as a respond to GETCOUNT- sending: "+_msgToClient.sendErrorNoAuthorized();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 		int ans = _si.getNumberOfThreadsInForum(forumName, userName, password);
+		_logMsg = "as a respond to GETCOUNT- sending: "+ans;
+		_reportLogger.log(Level.INFO ,_logMsg);
 		this._si.closeSession();
 		return ans;
 	}
 
 	private Object handleRemoveModerator(String forumName, String subForumName,
 			String moderatorName, String userName, String password) {
+		_logMsg = "recieved: REMMOD forum"+ forumName +", subForum " +subForumName+", moderator"+moderatorName;
+		_reportLogger.log(Level.TRACE ,_logMsg);
 		this._si.openSession();
 		Memberdb admin = _si.getMember(forumName, userName);
 		Forumdb forum = _si.getForum(forumName);
 		if (!(checkPassword(password, admin.getPassword()))) {
+			_logMsg = "as a respond to REMMOD- sending: "+_msgToClient.sendErrorNoAuthorized();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 		if (!(admin.getRoll().equals("Admin"))) {
+			_logMsg = "as a respond to REMMOD- sending: "+_msgToClient.sendErrorNoAuthorized();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 		List<Memberdb> mList = _si.getModerators(forumName, subForumName);
 		if (mList.size() <= 1
 				&& forum.getEnumCancelModerator().equals("RESTRICTED")) {
+			_logMsg = "as a respond to REMMOD- sending: "+ _msgToClient.sendIsTheOnlyModeratorInTheSubForum();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendIsTheOnlyModeratorInTheSubForum();
 		}
@@ -516,13 +663,19 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 
 		}
 		if (m == null) {
+			_logMsg = "as a respond to REMMOD- sending: "+ _msgToClient.sendErrorInServer();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendErrorInServer();
 		}
 		if (_si.deleteModerator(m, subForumName, moderatorName, userName, password)) {
+			_logMsg = "as a respond to REMMOD- sending: "+  _msgToClient.sendOK();
+			_reportLogger.log(Level.INFO ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendOK();
 		} else {
+			_logMsg = "as a respond to REMMOD- sending: "+ _msgToClient.sendErrorInServer();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendErrorInServer();
 		}
@@ -540,9 +693,13 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			}
 			m.setNotification(""); // clear the notifications list
 			_si.updateMember(m);
+			_logMsg = "as a respond to NOTI- sending: requested list";
+			_reportLogger.log(Level.TRACE ,_logMsg);
 			this._si.closeSession();
 			return res;
 		} else {
+			_logMsg = "as a respond to NOTI- sending: "+_msgToClient.sendErrorNoAuthorized();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendErrorNoAuthorized();
 		}
@@ -550,22 +707,32 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	//with encryption of the user password
 	public Object handleRegister(String forumName, String userName, String password,
 			String email) {
+		_logMsg = "recieved: REGISTER from"+userName + "forum"+ forumName;
+		_reportLogger.log(Level.INFO ,_logMsg);
 		this._si.openSession();
 		String encryptedPassword = Encryptor.encrypt(password);
 		boolean isAdded = _si.register(forumName, userName, encryptedPassword, email);
 		if (isAdded) {
+			_logMsg = "as a respond to REGISTER- sending: "+_msgToClient.sendOK();
+			_reportLogger.log(Level.INFO ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendOK();
 		} else {
+			_logMsg = "as a respond to REGISTER- sending: "+_msgToClient.sendErrorInServer();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendErrorInServer();
 		}
 	}
 
 	public Object handleLogin(String forumName, String userName, String password) {
+		_logMsg = "recieved: LOGIN from"+userName + "forum"+ forumName;
+		_reportLogger.log(Level.INFO ,_logMsg);
 		this._si.openSession();
 		Memberdb member = _si.getMember(forumName, userName);
 		if (member==null){
+			_logMsg = "as a respond to LOGIN- sending: "+_msgToClient.sendNotFound();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendNotFound();
 		}
@@ -573,24 +740,36 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			boolean logedIn = _si.login(forumName, userName, password);
 			if (logedIn) {
 				if (member.getRoll().equals("Admin")) {
+					_logMsg = "as a respond to LOGIN- sending: "+_msgToClient.sendAdminOK();
+					_reportLogger.log(Level.INFO ,_logMsg);
 					this._si.closeSession();
 					return _msgToClient.sendAdminOK();
 				} else if (member.getRoll().equals("Moderator")) {
+					_logMsg = "as a respond to LOGIN- sending: "+_msgToClient.sendModeratorOK();
+					_reportLogger.log(Level.INFO ,_logMsg);
 					this._si.closeSession();
 					return _msgToClient.sendModeratorOK();
 				} else if (member.getRoll().equals("Member")) {
+					_logMsg = "as a respond to LOGIN- sending: "+_msgToClient.sendOK();
+					_reportLogger.log(Level.INFO ,_logMsg);
 					this._si.closeSession();
 					return _msgToClient.sendOK();
 				}
 			} else {
+				_logMsg = "as a respond to LOGIN- sending: "+_msgToClient.sendNotFound();
+				_reportLogger.log(Level.DEBUG ,_logMsg);
 				this._si.closeSession();
 				return _msgToClient.sendNotFound();
 			}
 		}
 		else {
+			_logMsg = "as a respond to LOGIN- sending: "+_msgToClient.sendNotFound();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendNotFound();
 		}
+		_logMsg = "as a respond to LOGIN- sending: null";
+		_reportLogger.log(Level.DEBUG ,_logMsg);
 		this._si.closeSession();
 		return null;
 	}
@@ -599,6 +778,8 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			String adminPassword, String imidiOrAgrePolicy, String notiFriendsPolicy,
 			String deletePolicy, String assignModerPolicy, String seniority, String minPublish,
 			String cancelModerPolicy, String superAdminUserName, String superAdminPassword) {
+		_logMsg = "recieved: ADDF";
+		_reportLogger.log(Level.INFO ,_logMsg);
 		this._si.openSession();
 		boolean isAdded = false;
 
@@ -607,11 +788,15 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 				superAdminPassword);
 		if (isAdded) {
 			//System.out.println("isAdded");
+			_logMsg = "as a respond to ADDF- sending: "+_msgToClient.sendOK();
+			_reportLogger.log(Level.INFO ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendOK();
 			//System.out.println("Sent ok");
 		} else {
 			//System.out.println("notAdded");
+			_logMsg = "as a respond to ADDF- sending: "+_msgToClient.sendErrorNoAuthorized();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendErrorNoAuthorized();
 			//System.out.println("Sent ErrorInServer");
@@ -623,9 +808,13 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		boolean subForumIsAdded = false;
 		subForumIsAdded = _si.addSubForum(subForum, members, username, password);
 		if (subForumIsAdded) {
+			_logMsg = "as a respond to ADDSF- sending: "+_msgToClient.sendOK();
+			_reportLogger.log(Level.INFO ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendOK();
 		} else {
+			_logMsg = "as a respond to ADDSF- sending: "+_msgToClient.sendErrorInServer();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendErrorInServer();
 		}
@@ -633,6 +822,9 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 
 	public Object handlePublishThread(String forumName, String subForumName,
 			String posterName, String threadTitle, String threadContent, String password) {
+		_logMsg = "recieved: THREAD";
+		_reportLogger.log(Level.INFO ,_logMsg);
+		
 		this._si.openSession();
 		if(checkPassword(password, _si.getMember(forumName, posterName).getPassword())){
 			boolean succeeded = false;
@@ -646,14 +838,20 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			if (succeeded) {
 				_notificationsFactory.sendNotifications(threadM, "added");
 				Reactor.NotifyAllListeners();
+				_logMsg = "as a respond to THREAD- sending: "+_msgToClient.sendOK();
+				_reportLogger.log(Level.INFO ,_logMsg);
 				this._si.closeSession();
 				return _msgToClient.sendOK();
 			} else {
+				_logMsg = "as a respond to THREAD- sending: "+_msgToClient.sendErrorInServer();
+				_reportLogger.log(Level.DEBUG ,_logMsg);
 				this._si.closeSession();
 				return _msgToClient.sendErrorInServer();
 			}
 		}
 		else{
+			_logMsg = "as a respond to THREAD- sending: "+_msgToClient.sendErrorNoAuthorized();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendErrorNoAuthorized();
 		}
@@ -668,6 +866,8 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			String publisherName = member.getUserName();
 			String publisherPassword = member.getPassword();
 			if (requester.equals(publisherName) && checkPassword(password, publisherPassword)) {
+				_logMsg = "as a respond to DELPST- sending: "+_msgToClient.sendOK();
+				_reportLogger.log(Level.INFO ,_logMsg);
 				this._si.closeSession();
 				return deletePostAndSendOk(p, requester, password);
 			}
@@ -681,6 +881,8 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 				String moderatorName = currModerator.getUserName();
 				String moderatorPassword = currModerator.getPassword();
 				if (requester.equals(moderatorName) && checkPassword(password, moderatorPassword)) {
+					_logMsg = "as a respond to DELPST- sending: "+_msgToClient.sendOK();
+					_reportLogger.log(Level.INFO ,_logMsg);
 					this._si.closeSession();
 					return deletePostAndSendOk(p, moderatorName, moderatorPassword);
 				}
@@ -691,10 +893,14 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			String adminName = admin.getUserName();
 			String adminPassword = admin.getPassword();
 			if (requester.equals(adminName) && checkPassword(password, adminPassword)) {
+				_logMsg = "as a respond to DELPST- sending: "+_msgToClient.sendOK();
+				_reportLogger.log(Level.INFO ,_logMsg);
 				this._si.closeSession();
 				return deletePostAndSendOk(p, adminName, adminPassword);
 			}
 		}
+		_logMsg = "as a respond to DELPST- sending: "+_msgToClient.sendErrorNoAuthorized();
+		_reportLogger.log(Level.DEBUG ,_logMsg);
 		this._si.closeSession();
 		return _msgToClient.sendErrorNoAuthorized();
 	}
@@ -702,37 +908,51 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	public Object handlePostComment(Postdb post, String userName, String password) {
 		this._si.openSession();
 		boolean succeeded = false;
-		Object result = null;
+		Object result;
 		String publisherPassword = post.getMemberdb().getPassword();
 		if(checkPassword(password, publisherPassword)){
-		succeeded = _si.postComment(post, userName, password);
-		if (succeeded) {
-			result = _msgToClient.sendOK();
-		} else {
-			result = _msgToClient.sendErrorInServer();
-		}
-		_notificationsFactory.sendNotifications(post, "added");
-		Reactor.NotifyAllListeners();
+			succeeded = _si.postComment(post, userName, password);
+			if (succeeded) {
+				_logMsg = "as a respond to POST- sending: "+_msgToClient.sendOK();
+				_reportLogger.log(Level.INFO ,_logMsg);
+				result = _msgToClient.sendOK();
+			} else {
+				_logMsg = "as a respond to POST- sending: "+_msgToClient.sendErrorInServer();
+				_reportLogger.log(Level.DEBUG ,_logMsg);
+				result = _msgToClient.sendErrorInServer();
+			}
+			_notificationsFactory.sendNotifications(post, "added");
+			Reactor.NotifyAllListeners();
 		}
 		else{
+			_logMsg = "as a respond to POST- sending: "+_msgToClient.sendErrorNoAuthorized();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			result = _msgToClient.sendErrorNoAuthorized();
 		}
+		
 		this._si.closeSession();
 		return result;
 	}
 
 	public Object handleGetForumsList() {
+		_logMsg = "recieved: GETFL";
+		_reportLogger.log(Level.TRACE ,_logMsg);
 		this._si.openSession();
 		List<Forumdb> forums = _si.getForumsList();
 		List<Forum> ans = new ArrayList<Forum>();
 		for (Forumdb forum : forums) {
 			ans.add(forum.convertToForum());
 		}
+		_logMsg = "as a respond to GETFL- sending: requested forum's list";
+		_reportLogger.log(Level.TRACE ,_logMsg);
 		this._si.closeSession();
 		return ans;
 	}
 
-	private Object handleGetAllPosts(String forumName, String subForumName, int threadId) { 
+	private Object handleGetAllPosts(String forumName, String subForumName, int threadId) {
+		_logMsg = "recieved: GETAP from forum "+ forumName+", subForum "+ subForumName+", threadId "+ threadId;
+		_reportLogger.log(Level.TRACE ,_logMsg);
+		
 		this._si.openSession();
 		List<Postdb> posts = _si.getAllPosts(forumName, subForumName, threadId);
 		List<Post> ans = new ArrayList<Post>();
@@ -740,56 +960,84 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			ans.add(post.convertToPost());
 		}
 		this._si.closeSession();
+		_logMsg = "as a respond to GETAP- sending: requested list from forum "+ forumName+", subForum "+ subForumName+", threadId "+ threadId;
+		_reportLogger.log(Level.INFO ,_logMsg);
 		return ans;
 	}
-	
+
 	public Object handleGetForum(String forumName) {
+		_logMsg = "recieved: GETF forum"+ forumName;
+		_reportLogger.log(Level.TRACE ,_logMsg);
 		this._si.openSession();
 		Forumdb forum = _si.getForum(forumName);
 		this._si.closeSession();
-		if (forum==null)
+		if (forum==null){
+			_logMsg = "as a respond to GETF- sending: null";
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			return null;
+		}
+		_logMsg = "as a respond to GETF- sending: requested forum"+ forumName;
+		_reportLogger.log(Level.TRACE ,_logMsg);
 		return forum.convertToForum();
-		
+
 	}
 
 	public Object handleGetSubForumsList(String forumName) {
+		_logMsg = "recieved: GETSFL from forum"+ forumName;
+		_reportLogger.log(Level.TRACE ,_logMsg);
 		this._si.openSession();
 		List<SubForum> ans = new ArrayList<SubForum>();
 		List<Subforumdb> subForums = _si.getSubForumsList(forumName);
 		for (Subforumdb subforumdb : subForums) {
 			ans.add(subforumdb.convertToSubForum());
 		}		
+		_logMsg = "as a respond to GETSFL- sending: requested list from forum"+ forumName;
+		_reportLogger.log(Level.TRACE ,_logMsg);
 		this._si.closeSession();
 		return ans;
 	}
 
 	public Object handleGetSubForum(String forum, String subForumName) {
+		_logMsg = "recieved: GETSF forum"+ forum +", subForum " +subForumName;
+		_reportLogger.log(Level.TRACE ,_logMsg);
 		this._si.openSession();
 		Subforumdb sf = _si.getSubForum(forum, subForumName);
 		this._si.closeSession();
-		if (sf==null)
+		if (sf==null){
+			_logMsg = "as a respond to GETSF- sending: null";
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			return null;
+		}
+		_logMsg = "as a respond to GETSF- sending: forum"+ forum +", subForum " +subForumName;
+		_reportLogger.log(Level.TRACE ,_logMsg);
 		return sf.convertToSubForum();
 	}
 
 	public Object handleGetThreadsList(String forumName,
 			String subForumName) {
+		_logMsg = "recieved: GETTL forum"+ forumName +", subForum " +subForumName;
+		_reportLogger.log(Level.TRACE ,_logMsg);
 		this._si.openSession();
 		List<ThreadMessage> ans = new ArrayList<ThreadMessage>();
 		List<Threaddb> threads = _si.getThreadsList(forumName, subForumName);
 		for (Threaddb threaddb : threads) {
 			ans.add(threaddb.convertToThread());
 		}
+		_logMsg = "as a respond to GETFL- sending: list of threads from forum"+ forumName +", subForum " +subForumName;
+		_reportLogger.log(Level.TRACE ,_logMsg);
 		this._si.closeSession();
 		return ans;
 	}
 
 	public Object handleGetThreadMessage(String forumName, String subForumName,
 			int messageID) {
+		_logMsg = "recieved: GETTM forum"+ forumName +", subForum " +subForumName+", messageID"+messageID;
+		_reportLogger.log(Level.TRACE ,_logMsg);
 		this._si.openSession();
 		Threaddb tm = _si.getThreadMessage(forumName, subForumName, messageID);
 		ThreadMessage ans = tm.convertToThread();
+		_logMsg = "as a respond to GETFL- sending: requested thread from forum"+ forumName +", subForum " +subForumName+", messageID"+messageID;
+		_reportLogger.log(Level.TRACE ,_logMsg);
 		this._si.closeSession();
 		return ans;
 	}
@@ -803,6 +1051,8 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			String publisherName = member.getUserName();
 			String publisherPassword = member.getPassword();
 			if (requester.equals(publisherName) && checkPassword(password, publisherPassword)) {
+				_logMsg = "as a respond to DELTHRD- sending: "+_msgToClient.sendOK();
+				_reportLogger.log(Level.INFO ,_logMsg);
 				this._si.closeSession();
 				return deleteThreadAndSendOk(tm, requester, password);
 
@@ -817,6 +1067,8 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 				String moderatorName = currModerator.getUserName();
 				String moderatorPassword = currModerator.getPassword();
 				if (requester.equals(moderatorName) && checkPassword(password, moderatorPassword)) {
+					_logMsg = "as a respond to DELTHRD- sending: "+_msgToClient.sendOK();
+					_reportLogger.log(Level.INFO ,_logMsg);
 					this._si.closeSession();
 					return deleteThreadAndSendOk(tm, moderatorName, moderatorPassword);
 				}
@@ -827,10 +1079,14 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			String adminName = admin.getUserName();
 			String adminPassword = admin.getPassword();
 			if (requester.equals(adminName) && checkPassword(password, adminPassword)) {
+				_logMsg = "as a respond to DELTHRD- sending: "+_msgToClient.sendOK();
+				_reportLogger.log(Level.INFO ,_logMsg);
 				this._si.closeSession();
 				return deleteThreadAndSendOk(tm, adminName, adminPassword);
 			}
 		}
+		_logMsg = "as a respond to DELTHRD- sending: "+_msgToClient.sendErrorNoAuthorized();
+		_reportLogger.log(Level.DEBUG ,_logMsg);
 		this._si.closeSession();
 		return _msgToClient.sendErrorNoAuthorized();
 	}
@@ -860,9 +1116,13 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			_notificationsFactory.sendNotifications(sf, "deleted");
 			_si.deleteSubForum(sf, requester, password);
 			Reactor.NotifyAllListeners();
+			_logMsg = "as a respond to DELSF- sending: "+_msgToClient.sendOK();
+			_reportLogger.log(Level.INFO ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendOK();
 		}
+		_logMsg = "as a respond to DELSF- sending: "+_msgToClient.sendErrorNoAuthorized();
+		_reportLogger.log(Level.DEBUG ,_logMsg);
 		this._si.closeSession();
 		return _msgToClient.sendErrorNoAuthorized();
 	}
@@ -874,11 +1134,15 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		Memberdb admin = forum.getMemberdb();
 		if (admin == null || !admin.getUserName().equals(userName)
 				|| !checkPassword(password, admin.getPassword())) {
+			_logMsg = "as a respond to ADDMOD- sending: "+_msgToClient.sendErrorNoAuthorized();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 		Memberdb member = _si.getMember(forumName, moderatorToAdd);
 		if (member == null) {
+			_logMsg = "as a respond to ADDMOD- sending: "+_msgToClient.sendNotFound();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendNotFound();
 		}
@@ -888,8 +1152,10 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			int numberOfUserThreads = _si.getNumberOfUserThreads(forumName, userName, null, null);
 			int minPublish = forum.getMinPublish();
 			if (numberOfUserThreads < minPublish) {
+				_logMsg = "as a respond to ADDMOD- sending: "+_msgToClient.sendErrorNoAuthorized();
+				_reportLogger.log(Level.DEBUG ,_logMsg);
 				this._si.closeSession();
-				return _msgToClient.sendErrorNoAuthorized();//consider change to someting more inducative
+				return _msgToClient.sendErrorNoAuthorized();//consider change to something more inductive
 			}
 		}
 		if (forum.getEnumAssignModerator().equals("SENIORITY")) {
@@ -897,8 +1163,10 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			int seniorityAsDays = calcNumOfDaysSinceJoining(dateOfJoining);
 			int seniority = forum.getSeniority();
 			if (seniorityAsDays < seniority) {
+				_logMsg = "as a respond to ADDMOD- sending: "+_msgToClient.sendErrorNoAuthorized();
+				_reportLogger.log(Level.DEBUG ,_logMsg);
 				this._si.closeSession();
-				return _msgToClient.sendErrorNoAuthorized();//consider change to someting more inducative
+				return _msgToClient.sendErrorNoAuthorized();//consider change to something more inductive
 			}
 		}
 
@@ -909,16 +1177,22 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			moderetorsAsString.add(currMember.getUserName());
 		}
 		if (moderetorsAsString.contains(moderatorToAdd)) {
+			_logMsg = "as a respond to ADDMOD- sending: "+_msgToClient.sendOK();
+			_reportLogger.log(Level.INFO ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendOK();
 		}
 		member.setRoll("Moderator");
-		
+
 		boolean addModerator = _si.addModerator(member, sf, member.getUserName(), member.getPassword());
 		if (addModerator) {
+			_logMsg = "as a respond to ADDMOD- sending: "+_msgToClient.sendOK();
+			_reportLogger.log(Level.INFO ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendOK();
 		}
+		_logMsg = "as a respond to ADDMOD- sending: null";
+		_reportLogger.log(Level.DEBUG ,_logMsg);
 		this._si.closeSession();
 		return null;
 	}
@@ -926,12 +1200,25 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	private Object handleDeleteForum(Forumdb fr, String userName, String password) {
 		Memberdb superAdmin = _si.getSuperAdmin();
 		if (superAdmin == null || !checkPassword(password, superAdmin.getPassword())) {
+			_logMsg = "as a respond to DELF- sending: "+_msgToClient.sendErrorNoAuthorized();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
 			return _msgToClient.sendErrorNoAuthorized();
 		} else {
 			boolean ans = _si.deleteForum(fr.getForumName(), userName, password);
+			_logMsg = "as a respond to DELF- sending: "+_msgToClient.sendErrorNoAuthorized();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
-			return _msgToClient.deleteForum(ans);
+			if(ans){
+				_logMsg = "as a respond to DELF- sending: "+_msgToClient.sendOK();
+				_reportLogger.log(Level.INFO ,_logMsg);
+				return _msgToClient.sendOK();
+			}
+			else{
+				_logMsg = "as a respond to DELF- sending: "+ _msgToClient.sendErrorInServer();
+				_reportLogger.log(Level.DEBUG ,_logMsg);
+				return _msgToClient.sendErrorInServer();
+			}
 		}
 	}
 
@@ -946,8 +1233,12 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			if (!(notifications.equals(""))) {
 				ret = true;
 			}
+			_logMsg = "as a respond to HASNOTIF- sending:  "+ret;
+			_reportLogger.log(Level.TRACE ,_logMsg);
 			return new Boolean(ret);
 		} else {
+			_logMsg = "as a respond to HASNOTIF- sending: "+ _msgToClient.sendErrorNoAuthorized();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 	}
@@ -955,10 +1246,16 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 
 
 	private Object handleListening() {
+		_logMsg = "recieved: LISTENING";
+		_reportLogger.log(Level.TRACE ,_logMsg);
 		boolean SocketsListAdd = Reactor.SocketsListAdd(_socketChannel);
 		if (SocketsListAdd) {
+			_logMsg = "as a respond to LISTENING- sending:"+_msgToClient.sendOK();
+			_reportLogger.log(Level.TRACE ,_logMsg);
 			return _msgToClient.sendOK();
 		}
+		_logMsg = "as a respond to LISTENING- sending: "+_msgToClient.sendErrorInServer();
+		_reportLogger.log(Level.DEBUG ,_logMsg);
 		return _msgToClient.sendErrorInServer();
 	}
 
