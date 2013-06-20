@@ -29,13 +29,12 @@ public class Forumdb implements java.io.Serializable {
 	private String enumCancelModerator;
 	private Integer seniority;
 	private Integer minPublish;
-	private String enumMessageContent;
 	private String enumModeratorPermission;
 	private String enumSecurityPolicy;
 	private String forbiddenWords;
 	private Set<Memberdb> memberdbs = new HashSet<Memberdb>(0);
 	private Set<Subforumdb> subforumdbs = new HashSet<Subforumdb>(0);
-
+	private String enumMsgFilter;
 	public Forumdb() {
 	}
 	
@@ -53,10 +52,11 @@ public class Forumdb implements java.io.Serializable {
 		this.enumCancelModerator = enumCancelModerator;
 		this.seniority = seniority;
 		this.minPublish = minPublish;
-		this.setEnumMessageComtent(messageContentPolicy);
+		this.enumMsgFilter = messageContentPolicy;
 		this.setEnumModeratorPermission(moderatorPermissionPolicy);
 		this.setEnumSecurityPolicy(emailPolicy);
 		this.forbiddenWords = forbiddenWords;
+		
 	}
 
 	public Forumdb(Memberdb memberdb, String forumName,
@@ -74,7 +74,7 @@ public class Forumdb implements java.io.Serializable {
 		this.enumCancelModerator = enumCancelModerator;
 		this.seniority = seniority;
 		this.minPublish = minPublish;
-		this.setEnumMessageComtent(messageContentPolicy);
+		this.enumMsgFilter = messageContentPolicy;
 		this.setEnumModeratorPermission(moderatorPermissionPolicy);
 		this.setEnumSecurityPolicy(emailPolicy);
 		this.memberdbs = memberdbs;
@@ -199,13 +199,6 @@ public class Forumdb implements java.io.Serializable {
 		return retVal;
 	}
 
-	public String getEnumMessageComtent() {
-		return enumMessageContent;
-	}
-
-	public void setEnumMessageComtent(String enumMessageComtent) {
-		this.enumMessageContent = enumMessageComtent;
-	}
 
 	public String getEnumModeratorPermission() {
 		return enumModeratorPermission;
@@ -221,6 +214,14 @@ public class Forumdb implements java.io.Serializable {
 
 	public void setEnumSecurityPolicy(String enumSecurityPolicy) {
 		this.enumSecurityPolicy = enumSecurityPolicy;
+	}
+
+	public String getEnumMsgFilter() {
+		return enumMsgFilter;
+	}
+
+	public void setEnumMsgFilter(String enumMsgFilter) {
+		this.enumMsgFilter = enumMsgFilter;
 	}
 
 }

@@ -92,7 +92,7 @@ public class UnitTestsForServer {
 		
 		si.initiateForum(ADMIN_NAME1, ADMIN_PASSWORD1, FORUM_NAME1, enumNotiImidiOrAgre.IMIDIATE.toString(), 
 				enumNotiFriends.PUBLISHERS.toString(), enumDelete.EXTENDED.toString(), 
-				enumAssignModerator.NO_RESTRICTION.toString(), "0", "0", enumCancelModerator.NO_RESTRICTION.toString(), 
+				enumAssignModerator.NO_RESTRICTION.toString(), "0", "1", enumCancelModerator.NO_RESTRICTION.toString(), 
 				enumMessageContent.NOT_FILTERED.toString(),	enumModeratorPermissions.EXTENDED.toString(), enumSecurity.NOT_USED_EMAIL.toString(), 
 				"*", SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
 		Forumdb fdb = si.getForum(FORUM_NAME1);
