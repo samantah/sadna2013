@@ -143,7 +143,7 @@ public class UnitTestsForServer {
 		si.publishThread(threadmsg2, USER3_NAME, USER2_PASSWORD);
 		si.closeSession();
 		si.openSession();
-		List<Threaddb> threadMessages = si.getThreadsList(FORUM_NAME1, SUBFORUM1_NAME);
+		List<Threaddb> threadMessages = si.getThreadsList(FORUM_NAME1, SUBFORUM2_NAME);
 		Threaddb threadMessage1 = threadMessages.get(0);
 		Threaddb threadMessage2 = threadMessages.get(1);
 		
@@ -164,11 +164,19 @@ public class UnitTestsForServer {
 		// invalid email address, should return false
 		assertFalse(si.register(FORUM_NAME1, "stamuser1", "asf$$#@adsf1", "sami.hourgmail.com"));
 		// valid email address, should return false
-		assertFalse(si.register(FORUM_NAME1, "stamuser1", "asf$$#@adsf1", "samihour@gmailcom.js"));
-		assertFalse(si.register(FORUM_NAME1, "stamuser2", "asf$$#@adsf1", "sami234hour@gmail.com"));
-		assertFalse(si.register(FORUM_NAME1, "stamuser3", "asf$$#@adsf1", "444_44g@m.ailcom"));
-		assertFalse(si.register(FORUM_NAME1, "stamuser4", "asf$$#@adsf1", "sami-hour@gm-ail.com"));
-		assertFalse(si.register(FORUM_NAME1, "stamuser5", "asf$$#@adsf1", "sami.hour@gm-ail.com"));
+		assertTrue(si.register(FORUM_NAME1, "stamuser1", "asf$$#@adsf1", "samihour@gmailcom.js"));
+		si.closeSession();
+		si.openSession();
+		assertTrue(si.register(FORUM_NAME1, "stamuser2", "asf$$#@adsf1", "sami234hour@gmail.com"));
+		si.closeSession();
+		si.openSession();
+		assertTrue(si.register(FORUM_NAME1, "stamuser3", "asf$$#@adsf1", "444_44g@m.ailcom"));
+		si.closeSession();
+		si.openSession();
+		assertTrue(si.register(FORUM_NAME1, "stamuser4", "asf$$#@adsf1", "sami-hour@gm-ail.com"));
+		si.closeSession();
+		si.openSession();
+		assertTrue(si.register(FORUM_NAME1, "stamuser5", "asf$$#@adsf1", "sami.hour@gm-ail.com"));
 		si.closeSession();
 	}
 	
@@ -179,17 +187,38 @@ public class UnitTestsForServer {
 				enumNotiFriends.PUBLISHERS.toString(), enumDelete.EXTENDED.toString(), 
 				enumAssignModerator.MIN_PUBLISH.toString(), "0", "1", enumCancelModerator.NO_RESTRICTION.toString(), 
 				"", SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
-	
+		si.closeSession();
+		si.openSession();
 		Forumdb fdb = si.getForum(FORUM_NAME2);
 		Set<Memberdb> members1 = new HashSet<Memberdb>();
+		si.closeSession();
+		si.openSession();
+		si.register(FORUM_NAME2, USER1_NAME, USER1_PASSWORD, USER1_EMAIL);
+		si.closeSession();
+		si.openSession();
+		si.register(FORUM_NAME2, USER2_NAME, USER2_PASSWORD, USER2_EMAIL);
+		si.closeSession();
+		si.openSession();
+		si.register(FORUM_NAME2, USER3_NAME, USER3_PASSWORD, USER3_EMAIL);
+		si.closeSession();
+		si.openSession();
 		Memberdb m1 = si.getMember(FORUM_NAME2, USER1_NAME);
 		members1.add(m1);
+		si.closeSession();
+		si.openSession();
 		Memberdb m2 = si.getMember(FORUM_NAME2, USER2_NAME);
-		members1.add(m1);
+		members1.add(m2);
+		si.closeSession();
+		si.openSession();
 		Memberdb m3 = si.getMember(FORUM_NAME2, USER3_NAME);
-		members1.add(m1);
+		System.out.println("'''''''''''''''''''''''''''''''''''''''''''");
+		System.out.println(m3);
+		members1.add(m3);
+		si.closeSession();
+		si.openSession();
 		Subforumdb subForum2 = new Subforumdb(fdb, SUBFORUM2_NAME,  members1, new HashSet<Threaddb>());
-		assertFalse(si.addSubForum(subForum2, new ArrayList<Memberdb>(members1), ADMIN_NAME1, ADMIN_PASSWORD1));
+		
+		assertFalse(si.addSubForum(subForum2, new ArrayList<Memberdb>(members1), ADMIN_NAME2, ADMIN_PASSWORD2));
 		si.closeSession();
 	}
 	
