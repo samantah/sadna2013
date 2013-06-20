@@ -101,9 +101,9 @@ public class UnitTestsForServer {
 		Memberdb m1 = si.getMember(FORUM_NAME1, USER1_NAME);
 		members1.add(m1);
 		Memberdb m2 = si.getMember(FORUM_NAME1, USER2_NAME);
-		members1.add(m1);
+		members1.add(m2);
 		Memberdb m3 = si.getMember(FORUM_NAME1, USER3_NAME);
-		members1.add(m1);
+		members1.add(m3);
 		Subforumdb subForum2 = new Subforumdb(fdb, SUBFORUM2_NAME,  members1, new HashSet<Threaddb>());
 		si.addSubForum(subForum2, new ArrayList<Memberdb>(members1), ADMIN_NAME1, ADMIN_PASSWORD1);
 		Set<Memberdb> members2 = new HashSet<Memberdb>();
@@ -152,16 +152,16 @@ public class UnitTestsForServer {
 				enumAssignModerator.MIN_PUBLISH.toString(), "0", "1", enumCancelModerator.NO_RESTRICTION.toString(), 
 				SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
 	
-		Forumdb fdb = si.getForum(FORUM_NAME1);
+		Forumdb fdb = si.getForum(FORUM_NAME2);
 		Set<Memberdb> members1 = new HashSet<Memberdb>();
-		Memberdb m1 = si.getMember(FORUM_NAME1, USER1_NAME);
+		Memberdb m1 = si.getMember(FORUM_NAME2, USER1_NAME);
 		members1.add(m1);
-		Memberdb m2 = si.getMember(FORUM_NAME1, USER2_NAME);
+		Memberdb m2 = si.getMember(FORUM_NAME2, USER2_NAME);
 		members1.add(m1);
-		Memberdb m3 = si.getMember(FORUM_NAME1, USER3_NAME);
+		Memberdb m3 = si.getMember(FORUM_NAME2, USER3_NAME);
 		members1.add(m1);
 		Subforumdb subForum2 = new Subforumdb(fdb, SUBFORUM2_NAME,  members1, new HashSet<Threaddb>());
-		si.addSubForum(subForum2, new ArrayList<Memberdb>(members1), ADMIN_NAME1, ADMIN_PASSWORD1);
+		assertFalse(si.addSubForum(subForum2, new ArrayList<Memberdb>(members1), ADMIN_NAME1, ADMIN_PASSWORD1));
 	}
 	
 
