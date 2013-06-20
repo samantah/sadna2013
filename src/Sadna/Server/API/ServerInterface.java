@@ -5,6 +5,7 @@
 package Sadna.Server.API;
 
 
+import Sadna.Client.Moderator;
 import Sadna.Server.ForumNotification;
 import java.util.HashMap;
 import java.util.List;
@@ -53,7 +54,7 @@ public interface ServerInterface {
     List<Memberdb> getModerators(String forumName, String subForumName);
 
     List<Postdb> getAllPosts(String forumName, String subForumName, int threadId);
-
+    
     Postdb getPost(String forumName, String subForumName, int threadId, int postId);
 
     boolean memberExistsInForum(String forumName, String posterName);
@@ -114,6 +115,7 @@ public interface ServerInterface {
 
 	boolean isUniqeEmail(String email, String forumName);
 	
+    List<Memberdb> getAllModeratorsInSubforum(String forumName, String subForumName, String adminUserName, String adminPassword);
 	
 	
 }

@@ -1354,4 +1354,37 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		return cleared;
 	}
 
+	@Override
+	public List<Moderator> getAllModeratorsInSubforum(String forumName,
+			String subForumName, String adminUserName, String adminPassword) {
+		Object moderators = null;
+		msgToSend = "GETALLMOD\n" + "forum:\n"
+		+ forumName + "\n" + "subForum:\n" + subForumName + "adminUserName:\n" + adminUserName + "\n" + "adminPassword:\n" + adminPassword + "\n";
+		msgToSend += delimiter;
+		log =  adminUserName + " is trying to get all moderators in " + forumName + ", " + subForumName +" ...";
+		reportLogger.log(Level.INFO ,log);
+		stringToServer.print(msgToSend);
+		stringToServer.flush();
+		try {
+			objectFromServer = new ObjectInputStream(clientSocket.getInputStream());
+			moderators = objectFromServer.readObject();
+			if(moderators instanceof String && ((String) moderators).contains("401 Unauthorized")){
+				log = "getAllModeratorsInSubforum: fail";
+				reportLogger.log(Level.DEBUG, log);
+				return null;
+			}
+			else{
+				log =  adminUserName + " succeeded to get all moderators in " + forumName + ", " + subForumName;
+				reportLogger.log(Level.INFO ,log);
+			}
+		} catch (IOException e) {
+			log = "getAllModeratorsInSubforum: " + e.getMessage();
+			reportLogger.log(Level.ERROR, log);
+		} catch (ClassNotFoundException e) {
+			log = "getAllModeratorsInSubforum: " + e.getMessage();
+			reportLogger.log(Level.ERROR, log);
+		}
+		return (List<Moderator>) moderators;
+	}
+
 }

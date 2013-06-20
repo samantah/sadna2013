@@ -605,4 +605,11 @@ public class ServerToDataBaseHandler implements ServerInterface {
 		}
 		return true;
 	}
+
+
+	@Override
+	public List<Memberdb> getAllModeratorsInSubforum(String forumName,
+			String subForumName, String adminUserName, String adminPassword) {		
+		return new ArrayList<Memberdb>(getModerators(forumName, subForumName));
+	}
 }

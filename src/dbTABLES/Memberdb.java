@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import Sadna.Client.Member;
+import Sadna.Client.Moderator;
 import Sadna.Server.ForumNotification;
 
 /**
@@ -52,6 +53,10 @@ public class Memberdb implements java.io.Serializable {
 
 	public Member convertToMember(){
 		return new Member(userName, password, email, forumdb.getForumName(), null);
+	}
+	
+	public Moderator convertToModerator(){
+		return new Moderator(userName, password, email, forumdb.getForumName(), null);
 	}
 
 	public int getIdmember() {
