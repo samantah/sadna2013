@@ -819,7 +819,13 @@ public class DataBase implements DBInterface {
 
         DataBase db = new DataBase();
         db.deleteFolder(db.dataBaseFolder);
-        Forum forum = new Forum("forum1", new Policy(enumNotiImidiOrAgre.IMIDIATE, enumNotiFriends.ALLMEMBERS, enumDelete.LIMITED, enumAssignModerator.NO_RESTRICTION, enumCancelModerator.NO_RESTRICTION, 1, 1));
+        Forum forum = new Forum("forum1", new Policy(enumNotiImidiOrAgre.IMIDIATE, 
+        		enumNotiFriends.ALLMEMBERS, enumDelete.LIMITED, 
+        		enumAssignModerator.NO_RESTRICTION, 
+        		enumCancelModerator.NO_RESTRICTION, 
+        		enumMessageContent.NOT_FILTERED,
+				enumModeratorPermissions.EXTENDED, 
+				enumSecurity.NOT_USED_EMAIL, 0, 0));
         SubForum subForum = new SubForum(forum, "subForum1");
         SubForum subForum2 = new SubForum(forum, "subForum2");
         ThreadMessage threadMessage = new ThreadMessage(subForum, "NA", "hi11", "publisher");
