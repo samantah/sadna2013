@@ -11,6 +11,7 @@ import Sadna.db.PolicyEnums.enumNotiImidiOrAgre;
 
 import org.junit.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -485,12 +486,52 @@ public class UnitTestsForClient {
 				enumNotiFriends.PUBLISHERS, enumDelete.LIMITED,
 				enumAssignModerator.MIN_PUBLISH,
 				enumCancelModerator.NO_RESTRICTION, 0, 0);
-		assertTrue(sa.initiateForum(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD, policy));
+		assertTrue(sa.initiateForum("another forum", ADMIN_NAME, ADMIN_PASSWORD, policy));
 		SuperAdmin notSa = u.loginAsSuperAdmin("not_superadmin", "incorrect_pass");
 		assertNull(notSa);
 	}
 	
-	//getNumOfUserThreads(String forumName, String userName, String requesterUserName, String requesterpassword);
+	@Test
+	public void	testGetNumOfUserThreads(){
+		User u = new User(ch);
+		Admin admin = (Admin) u.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
+		assertNotNull(admin);
+		Member mem = u.register(FORUM_NAME, "a user", "asfadsf23", "mail.cc@gmail.com");
+		assertEquals(0, admin.getNumOfUserThreads(FORUM_NAME, mem.getUserName()));
+		SubForum sf = mem.getSubForum(FORUM_NAME, SUB_FORUM_NAME);
+		mem.publishThread(new ThreadMessage(sf, "my thread lalalala", "my content babababa", "a user"));
+		assertEquals(1, admin.getNumOfUserThreads(FORUM_NAME, mem.getUserName()));
+	}
 	
+	@Test
+	public void testGetUsersPostToUser(){
+		User u = new User(ch);
+		Admin admin = (Admin) u.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
+		assertNotNull(admin);
+		Member mem = u.register(FORUM_NAME, "zohar1", "addsfadsf23", "z.cc@gmail.com");
+		HashMap<String, List<String>> usersCommentsPerUser = admin.getUsersPostToUser(FORUM_NAME);
+		assertNotNull(usersCommentsPerUser);
+		List<String> posters = usersCommentsPerUser.get(mem.getUserName());
+		assertEquals(0, posters.size());
+		SubForum sf = mem.getSubForum(FORUM_NAME, SUB_FORUM_NAME);
+		mem.publishThread(new ThreadMessage(sf, "zohar1 thread", "zohar1 content", "zohar1"));
+		
+		Member mem1 = u.register(FORUM_NAME, "memberrrr1", "SDfsd777", "mjj.cc@gmail.com");
+		List<ThreadMessage> tmessages = mem1.viewThreadMessages(FORUM_NAME, SUB_FORUM_NAME);
+		ThreadMessage zoharTm = null;
+		for (ThreadMessage threadMessage : tmessages) {
+			if(threadMessage.getTitle().equals("zohar1 thread")){
+				zoharTm = threadMessage;
+				break;
+			}
+		}
+		assertNotNull(zoharTm);
+		HashMap<String, List<String>> usersCommentsPerUser1 = admin.getUsersPostToUser(FORUM_NAME);
+		assertNotNull(usersCommentsPerUser1);
+		List<String> posters1 = usersCommentsPerUser.get(mem.getUserName());
+		assertEquals(1, posters1.size());
+		String poster = posters.get(0);
+		assertTrue(poster.equals(mem1.getUserName()));
+	}
 
 }
