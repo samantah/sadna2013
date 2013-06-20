@@ -2,6 +2,7 @@
 package Sadna.Client.API;
 
 import Sadna.Client.Member;
+import Sadna.Client.Moderator;
 import Sadna.Client.SuperAdmin;
 import Sadna.Client.User;
 import Sadna.Server.ForumNotification;
@@ -10,6 +11,8 @@ import Sadna.db.*;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
+
+import dbTABLES.Memberdb;
 
 /**
  *
@@ -74,6 +77,9 @@ public interface ClientCommunicationHandlerInterface extends Serializable {
     public int getNumOfForums(String userName, String password);
 
     public List<String> getCommonMembers(String userName, String password);
+    
+    public List<Moderator> getAllModeratorsInSubforum(String forumName, String subForumName, String adminUserName, String adminPassword);
+
 
     public SuperAdmin loginAsSuperAdmin(String userName, String password);
 

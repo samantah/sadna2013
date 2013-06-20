@@ -98,6 +98,10 @@ public class Admin extends Moderator {
         return map;
     }
     
+    public synchronized List<Moderator> getAllModeratorsInSubForum(String forum, String subforum){
+		return conHand.getAllModeratorsInSubforum(forum, subforum, this.userName, this.password);
+    }
+    
     public synchronized List<Member> getAllForumMembers(){
 		return conHand.getAllForumMembers(this.forum, this.userName, this.password);
     }

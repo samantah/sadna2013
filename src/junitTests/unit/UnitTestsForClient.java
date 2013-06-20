@@ -598,11 +598,37 @@ public class UnitTestsForClient {
 		SubForum subForum2 = new SubForum(forum, SUBFORUM2_NAME);
 		Admin admin = (Admin) u.login(FORUM2_NAME, ADMIN_NAME, ADMIN_PASSWORD);
 		assertTrue(admin.addSubForum(subForum2, members1));
-		admin.removeModerator(FORUM2_NAME, SUBFORUM2_NAME, m3.getUserName());
-		si.publishThread(tdb, USER3_NAME, USER3_PASSWORD);
-		members1.clear();
-		members1.add(m3);
-		assertTrue(si.addSubForum(subForum2, new ArrayList<Memberdb>(members1), ADMIN_NAME2, ADMIN_PASSWORD2));
+		assertTrue(admin.removeModerator(FORUM2_NAME, SUBFORUM2_NAME, m3.getUserName()));
+		assertFalse(admin.removeModerator(FORUM2_NAME, SUBFORUM2_NAME, m2.getUserName()));
 	}
 
+	@Test
+	public void testPolicy_DeleteOptionForModerator(){
+		User u = new User(ch);
+		SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
+		Policy policy = new Policy(enumNotiImidiOrAgre.IMIDIATE,
+				enumNotiFriends.PUBLISHERS, enumDelete.LIMITED,
+				enumAssignModerator.NO_RESTRICTION,
+				enumCancelModerator.RESTRICTED, enumMessageContent.NOT_FILTERED,
+				enumModeratorPermissions.EXTENDED, 
+				enumSecurity.NOT_USED_EMAIL, 0, 0);
+		sa.initiateForum(FORUM2_NAME, ADMIN_NAME, ADMIN_PASSWORD, policy, "*");
+		
+		Forum forum = sa.getForum(FORUM2_NAME);
+		List<Member> members1 = new ArrayList<Member>();
+		Member m2 = u.register(FORUM2_NAME, USER2_NAME, USER2_PASSWORD, USER2_EMAIL);
+		members1.add(m2);
+		SubForum subForum = new SubForum(forum, SUBFORUM2_NAME);
+		Admin admin = (Admin) u.login(FORUM2_NAME, ADMIN_NAME, ADMIN_PASSWORD);
+		assertTrue(admin.addSubForum(subForum, members1));
+
+		Member m3 = u.register(FORUM2_NAME, USER3_NAME, USER3_PASSWORD, USER3_EMAIL);
+		
+		ThreadMessage threadMessage = new ThreadMessage(subForum, "title foe delete", "content for delete", USER3_NAME);
+		
+		m3.publishThread(threadMessage);
+		forum = admin.getForum(FORUM2_NAME);
+		assertTrue(admin.removeModerator(FORUM2_NAME, SUBFORUM2_NAME, m3.getUserName()));
+		assertFalse(admin.removeModerator(FORUM2_NAME, SUBFORUM2_NAME, m2.getUserName()));
+	}
 }

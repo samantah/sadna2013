@@ -2,6 +2,7 @@ package Sadna.Server.Protocol;
 
 
 import Sadna.Client.Member;
+import Sadna.Client.Moderator;
 import Sadna.Server.API.ServerInterface;
 import Sadna.Server.Encryptor;
 import Sadna.Server.ForumNotification;
@@ -317,10 +318,42 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			return handleEditPost(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8], parsedReq[10], parsedReq[12], parsedReq[14], parsedReq[16]);
 		case "CLRDB":
 			return handleClearDB(parsedReq[2], parsedReq[4]);
+		case "GETALLMOD":
+			return handleGetAllModerators(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8]);
 		default:
 			return null;
 		}
 
+	}
+
+	private Object handleGetAllModerators(String forumName, String subForumName,
+			String adminUserName, String adminPassword) {
+		_logMsg = "recieved: GETALLMOD";
+		_reportLogger.log(Level.INFO ,_logMsg);
+		this._si.openSession();
+		Memberdb admin = _si.getMember(forumName, adminUserName);
+
+		if (admin != null && !(checkPassword(adminPassword, admin.getPassword()))) {
+			_logMsg = "as a respond to GETALLMOD- sending: "+_msgToClient.sendErrorNoAuthorized();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
+			this._si.closeSession();
+			return _msgToClient.sendErrorNoAuthorized();
+		}
+		if (!(admin.getRoll().equals("Admin"))) {
+			_logMsg = "as a respond to GETALLMOD- sending: "+_msgToClient.sendErrorNoAuthorized();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
+			this._si.closeSession();
+			return _msgToClient.sendErrorNoAuthorized();
+		}
+		List<Memberdb> members = _si.getAllModeratorsInSubforum(forumName, subForumName, adminUserName, adminPassword);
+		List<Moderator> ans = new ArrayList<Moderator>();
+		for (Memberdb memberdb : members) {
+			ans.add(memberdb.convertToModerator());
+		}
+		_logMsg = "as a respond to GETALLMOD- sending: requested list";
+		_reportLogger.log(Level.INFO ,_logMsg);
+		this._si.closeSession();
+		return ans;
 	}
 
 	private Object handleHello() {
