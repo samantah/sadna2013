@@ -2,9 +2,11 @@ package dbTABLES;
 
 // Generated May 29, 2013 2:33:53 AM by Hibernate Tools 3.4.0.CR1
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import Sadna.db.Forum;
 
@@ -28,7 +30,6 @@ public class Forumdb implements java.io.Serializable {
 	private Integer seniority;
 	private Integer minPublish;
 	private String forbiddenWords;
-	private List<String> listOfForbiddenWords;
 	private Set<Memberdb> memberdbs = new HashSet<Memberdb>(0);
 	private Set<Subforumdb> subforumdbs = new HashSet<Subforumdb>(0);
 
@@ -173,6 +174,16 @@ public class Forumdb implements java.io.Serializable {
 
 	public void setForbiddenWords(String forbiddenWords) {
 		this.forbiddenWords = forbiddenWords;
+	}
+	
+	public List<String> forbiddenWordsStringToList(){
+		List retVal = new ArrayList<>();
+		StringTokenizer st = new StringTokenizer(this.forbiddenWords);
+		while (st.hasMoreTokens()){
+			String s = st.nextToken();
+			retVal.add(s);
+		}
+		return retVal;
 	}
 
 }
