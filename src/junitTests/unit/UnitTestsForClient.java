@@ -60,7 +60,7 @@ public class UnitTestsForClient {
 
 
 	public static void initiateTestPlatform() {
-		ch = new ClientConnectionHandler("132.73.198.83", 3333);
+		ch = new ClientConnectionHandler("192.168.0.103", 3333);
 		User u = new User(ch);
 		SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
 		sa.clearDataBase();
@@ -526,11 +526,12 @@ public class UnitTestsForClient {
 			}
 		}
 		assertNotNull(zoharTm);
+		assertTrue(mem1.postComment(new Post(zoharTm, "title for a comment on zohar1", "content memberrr1 comment", mem1.getUserName())));
 		HashMap<String, List<String>> usersCommentsPerUser1 = admin.getUsersPostToUser(FORUM_NAME);
 		assertNotNull(usersCommentsPerUser1);
-		List<String> posters1 = usersCommentsPerUser.get(mem.getUserName());
+		List<String> posters1 = usersCommentsPerUser1.get(mem.getUserName());
 		assertEquals(1, posters1.size());
-		String poster = posters.get(0);
+		String poster = posters1.get(0);
 		assertTrue(poster.equals(mem1.getUserName()));
 	}
 
