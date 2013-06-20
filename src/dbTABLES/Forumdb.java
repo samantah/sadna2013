@@ -39,7 +39,7 @@ public class Forumdb implements java.io.Serializable {
 	public Forumdb(String forumName,
 			String enumNotiImidiOrAgre, String enumNotiFriends,
 			String enumDelete, String enumAssignModerator,
-			String enumCancelModerator, Integer seniority, Integer minPublish){
+			String enumCancelModerator, Integer seniority, Integer minPublish, String forbiddenWords){
 		this.forumName = forumName;
 		this.enumNotiImidiOrAgre = enumNotiImidiOrAgre;
 		this.enumNotiFriends = enumNotiFriends;
@@ -48,6 +48,7 @@ public class Forumdb implements java.io.Serializable {
 		this.enumCancelModerator = enumCancelModerator;
 		this.seniority = seniority;
 		this.minPublish = minPublish;
+		this.forbiddenWords = forbiddenWords;
 	}
 
 	public Forumdb(Memberdb memberdb, String forumName,

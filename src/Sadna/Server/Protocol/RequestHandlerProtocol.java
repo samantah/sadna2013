@@ -183,7 +183,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			return handleAddSubForum(subF, members, parsedReq[i], parsedReq[i + 2]);
 		case "ADDF":
 			return handleInitiateForum(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8], parsedReq[9],
-					parsedReq[10], parsedReq[11], parsedReq[12], parsedReq[13], parsedReq[14], parsedReq[16], parsedReq[18]);
+					parsedReq[10], parsedReq[11], parsedReq[12], parsedReq[13], parsedReq[14],parsedReq[16], parsedReq[18], parsedReq[20]);
 		case "GETAP":
 			return handleGetAllPosts(parsedReq[2], parsedReq[4], Integer.parseInt(parsedReq[6]));
 		case "POST":
@@ -774,15 +774,15 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	public Object handleInitiateForum(String forumName, String adminName,
 			String adminPassword, String imidiOrAgrePolicy, String notiFriendsPolicy,
 			String deletePolicy, String assignModerPolicy, String seniority, String minPublish,
-			String cancelModerPolicy, String superAdminUserName, String superAdminPassword) {
+			String cancelModerPolicy, String superAdminUserName, String superAdminPassword, String forbiddenWords) {
 		_logMsg = "recieved: ADDF";
 		_reportLogger.log(Level.INFO ,_logMsg);
 		this._si.openSession();
 		boolean isAdded = false;
 
 		isAdded = _si.initiateForum(adminName, adminPassword, forumName, imidiOrAgrePolicy, notiFriendsPolicy,
-				deletePolicy, assignModerPolicy, seniority, minPublish, cancelModerPolicy, superAdminUserName,
-				superAdminPassword);
+				deletePolicy, assignModerPolicy, seniority, minPublish, cancelModerPolicy, forbiddenWords, 
+				superAdminUserName,	superAdminPassword);
 		if (isAdded) {
 			//System.out.println("isAdded");
 			_logMsg = "as a respond to ADDF- sending: "+_msgToClient.sendOK();

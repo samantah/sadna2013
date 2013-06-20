@@ -115,7 +115,7 @@ public class ClientRealBridgeImpl implements ClientBridge {
 			String adminPassword, Policy policy, String superAdminName,
 			String superAdminPasswaord) {
 		return _clientHandler.initiateForum(forumName, adminName,
-				adminPassword, policy, superAdminName, superAdminPasswaord);
+				adminPassword, policy,"", superAdminName, superAdminPasswaord);
 	}
 
 	@Override

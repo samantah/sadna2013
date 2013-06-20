@@ -93,7 +93,7 @@ public interface ServerInterface {
 
 	boolean initiateForum(String adminName, String adminPassword,
 			String forumName, String ioap, String nfp, String dp, String amp,
-			String s, String mp, String cmp, String superAdminUserName,
+			String s, String mp, String cmp, String forbiddenWords, String superAdminUserName,
 			String superAdminPassword);
 	
 	boolean updateSubForum(Subforumdb subForum);
