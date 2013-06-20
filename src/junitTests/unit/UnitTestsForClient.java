@@ -68,7 +68,7 @@ public class UnitTestsForClient {
 				enumNotiFriends.PUBLISHERS, enumDelete.EXTENDED,
 				enumAssignModerator.NO_RESTRICTION,
 				enumCancelModerator.NO_RESTRICTION, 0, 0);
-		sa.initiateForum(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD, policy, "");
+		sa.initiateForum(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD, policy, "*");
 		Forum forum = sa.getForum(FORUM_NAME);
 		
 		Member m1 = u.register(FORUM_NAME, "laaaaa", "ksjdf66asd", "sdf@adf.com");
@@ -235,7 +235,7 @@ public class UnitTestsForClient {
 				enumNotiFriends.PUBLISHERS, enumDelete.EXTENDED,
 				enumAssignModerator.NO_RESTRICTION,
 				enumCancelModerator.NO_RESTRICTION, 0, 0);
-		assertTrue(sa.initiateForum("new_forum1", "new admin", "newAdmin1234", policy,""));
+		assertTrue(sa.initiateForum("new_forum1", "new admin", "newAdmin1234", policy,"*"));
 	}
 	
 	@Test
@@ -440,7 +440,7 @@ public class UnitTestsForClient {
 				enumNotiFriends.PUBLISHERS, enumDelete.EXTENDED,
 				enumAssignModerator.NO_RESTRICTION,
 				enumCancelModerator.NO_RESTRICTION, 0, 0);
-		assertTrue(sa.initiateForum("new_forum1", "new admin", "newAdmin1234", policy, ""));
+		assertTrue(sa.initiateForum("new_forum1", "new admin", "newAdmin1234", policy, "*"));
 		u.register("new_forum1", USER_NAME, USER_PASSWORD, USER_EMAIL);
 		u.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);	
 		List<String> common = sa.getCommonMembers();
@@ -486,7 +486,7 @@ public class UnitTestsForClient {
 				enumNotiFriends.PUBLISHERS, enumDelete.LIMITED,
 				enumAssignModerator.MIN_PUBLISH,
 				enumCancelModerator.NO_RESTRICTION, 0, 0);
-		assertTrue(sa.initiateForum("another forum", ADMIN_NAME, ADMIN_PASSWORD, policy, ""));
+		assertTrue(sa.initiateForum("another forum", ADMIN_NAME, ADMIN_PASSWORD, policy, "*"));
 		SuperAdmin notSa = u.loginAsSuperAdmin("not_superadmin", "incorrect_pass");
 		assertNull(notSa);
 	}

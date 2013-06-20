@@ -90,7 +90,7 @@ public class UnitTestsForServer {
 		si.initiateForum(ADMIN_NAME1, ADMIN_PASSWORD1, FORUM_NAME1, enumNotiImidiOrAgre.IMIDIATE.toString(), 
 				enumNotiFriends.PUBLISHERS.toString(), enumDelete.EXTENDED.toString(), 
 				enumAssignModerator.NO_RESTRICTION.toString(), "0", "0", enumCancelModerator.NO_RESTRICTION.toString(), 
-				"", SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
+				"*", SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
 		Forumdb fdb = si.getForum(FORUM_NAME1);
 		si.closeSession();
 		si.openSession();
@@ -186,7 +186,7 @@ public class UnitTestsForServer {
 		si.initiateForum(ADMIN_NAME2, ADMIN_PASSWORD2, FORUM_NAME2, enumNotiImidiOrAgre.IMIDIATE.toString(), 
 				enumNotiFriends.PUBLISHERS.toString(), enumDelete.EXTENDED.toString(), 
 				enumAssignModerator.MIN_PUBLISH.toString(), "0", "1", enumCancelModerator.NO_RESTRICTION.toString(), 
-				"", SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
+				"*", SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
 		si.closeSession();
 		si.openSession();
 		Forumdb fdb = si.getForum(FORUM_NAME2);
