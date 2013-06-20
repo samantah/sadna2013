@@ -135,6 +135,7 @@ public class UnitTestsForServer {
 	
 	@Test
 	public void testEmailValidation(){
+		si.openSession();
 		// invalid email address, should return false
 		assertFalse(si.register(FORUM_NAME1, "stamuser1", "asf$$#@adsf1", "sami.hourgmail.com"));
 		// valid email address, should return false
@@ -143,10 +144,12 @@ public class UnitTestsForServer {
 		assertFalse(si.register(FORUM_NAME1, "stamuser3", "asf$$#@adsf1", "444_44g@m.ailcom"));
 		assertFalse(si.register(FORUM_NAME1, "stamuser4", "asf$$#@adsf1", "sami-hour@gm-ail.com"));
 		assertFalse(si.register(FORUM_NAME1, "stamuser5", "asf$$#@adsf1", "sami.hour@gm-ail.com"));
+		si.closeSession();
 	}
 	
 	@Test
 	public void testPolicy_AssignModerator(){
+		si.openSession();
 		si.initiateForum(ADMIN_NAME2, ADMIN_PASSWORD2, FORUM_NAME2, enumNotiImidiOrAgre.IMIDIATE.toString(), 
 				enumNotiFriends.PUBLISHERS.toString(), enumDelete.EXTENDED.toString(), 
 				enumAssignModerator.MIN_PUBLISH.toString(), "0", "1", enumCancelModerator.NO_RESTRICTION.toString(), 
@@ -162,6 +165,7 @@ public class UnitTestsForServer {
 		members1.add(m1);
 		Subforumdb subForum2 = new Subforumdb(fdb, SUBFORUM2_NAME,  members1, new HashSet<Threaddb>());
 		assertFalse(si.addSubForum(subForum2, new ArrayList<Memberdb>(members1), ADMIN_NAME1, ADMIN_PASSWORD1));
+		si.closeSession();
 	}
 	
 
