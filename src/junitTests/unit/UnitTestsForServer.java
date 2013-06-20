@@ -1,20 +1,22 @@
 package unit;
 
-import static org.junit.Assert.*;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javassist.expr.NewArray;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
 
+import Sadna.Server.ServerToDataBaseHandler;
+import Sadna.Server.API.ServerInterface;
+import Sadna.db.PolicyEnums.enumAssignModerator;
+import Sadna.db.PolicyEnums.enumCancelModerator;
+import Sadna.db.PolicyEnums.enumDelete;
+import Sadna.db.PolicyEnums.enumNotiFriends;
+import Sadna.db.PolicyEnums.enumNotiImidiOrAgre;
 import dbTABLES.Forumdb;
 import dbTABLES.IMpl;
 import dbTABLES.IMplInterface;
@@ -22,24 +24,6 @@ import dbTABLES.Memberdb;
 import dbTABLES.Postdb;
 import dbTABLES.Subforumdb;
 import dbTABLES.Threaddb;
-
-import Sadna.Client.Admin;
-import Sadna.Client.ClientConnectionHandler;
-import Sadna.Client.Member;
-import Sadna.Client.SuperAdmin;
-import Sadna.Client.User;
-import Sadna.Server.ServerToDataBaseHandler;
-import Sadna.Server.API.ServerInterface;
-import Sadna.db.Forum;
-import Sadna.db.Policy;
-import Sadna.db.Post;
-import Sadna.db.SubForum;
-import Sadna.db.ThreadMessage;
-import Sadna.db.PolicyEnums.enumAssignModerator;
-import Sadna.db.PolicyEnums.enumCancelModerator;
-import Sadna.db.PolicyEnums.enumDelete;
-import Sadna.db.PolicyEnums.enumNotiFriends;
-import Sadna.db.PolicyEnums.enumNotiImidiOrAgre;
 
 public class UnitTestsForServer {
 

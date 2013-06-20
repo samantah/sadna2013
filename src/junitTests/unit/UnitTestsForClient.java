@@ -1,8 +1,5 @@
 package unit;
 
-/**
- *
- */
 import Sadna.Client.*;
 import Sadna.Server.ForumNotification;
 import Sadna.db.*;
@@ -14,7 +11,6 @@ import Sadna.db.PolicyEnums.enumNotiImidiOrAgre;
 
 import org.junit.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -63,7 +59,7 @@ public class UnitTestsForClient {
 
 
 	public static void initiateTestPlatform() {
-		ch = new ClientConnectionHandler("132.73.199.251", 3333);
+		ch = new ClientConnectionHandler("132.73.198.83", 3333);
 		User u = new User(ch);
 		SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
 		sa.clearDataBase();
@@ -77,7 +73,6 @@ public class UnitTestsForClient {
 		Member m1 = u.register(FORUM_NAME, "laaaaa", "ksjdf66asd", "sdf@adf.com");
 		Member m2 = u.register(FORUM_NAME, "baaaaa", "ksjdf66asd", "sdf@adf.com");
 		Member m3 = u.register(FORUM_NAME, "eaaaaa", "ksjdf66asd", "sdf@adf.com");
-//		Member m4 = u.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
 		Admin admin = (Admin) u.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
 		
 		SubForum subForum = new SubForum(forum, "zubizubi1");
@@ -430,7 +425,7 @@ public class UnitTestsForClient {
 	}
 	
 	@Test
-	public void getNumOfForum(){
+	public void getNumOfForums(){
 		User u = new User(ch);
 		SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
 		assertEquals(sa.getForumCounter(), 1);
@@ -480,5 +475,22 @@ public class UnitTestsForClient {
 		boolean has = member.hasNotifications();
 		assertTrue(has);
 	}
+	
+	@Test
+	public void	testLoginAsSuperAdmin(){
+		User u = new User(ch);
+		SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
+		assertNotNull(sa);
+		Policy policy = new Policy(enumNotiImidiOrAgre.AGGREGATE,
+				enumNotiFriends.PUBLISHERS, enumDelete.LIMITED,
+				enumAssignModerator.MIN_PUBLISH,
+				enumCancelModerator.NO_RESTRICTION, 0, 0);
+		assertTrue(sa.initiateForum(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD, policy));
+		SuperAdmin notSa = u.loginAsSuperAdmin("not_superadmin", "incorrect_pass");
+		assertNull(notSa);
+	}
+	
+	//getNumOfUserThreads(String forumName, String userName, String requesterUserName, String requesterpassword);
+	
 
 }
