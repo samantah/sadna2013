@@ -427,7 +427,7 @@ public class ServerToDataBaseHandler implements ServerInterface {
 	@Override
 	public boolean initiateForum(String adminName, String adminPassword,
 			String forumName, String ioap, String nfp, String dp, String amp,
-			String s, String mp, String cmp, String superAdminUserName,
+			String s, String mp, String cmp, String forbiddenWords, String superAdminUserName,
 			String superAdminPassword) {
 		boolean isAdded = false;
 		Memberdb admin = null;
@@ -487,9 +487,12 @@ public class ServerToDataBaseHandler implements ServerInterface {
 			}
 
 
-			Forumdb forumToAdd = new Forumdb(forumName, imidOrArgeNotiPolicy.name(), friendsNotiPolicy.name(), deletePolicy.name(), assignModeratorPolicy.name(), cancelModeratorPolicy.name(), new Integer(seniority), new Integer(minPublish));
+			Forumdb forumToAdd = new Forumdb(forumName, imidOrArgeNotiPolicy.name(), 
+					friendsNotiPolicy.name(), deletePolicy.name(), 
+					assignModeratorPolicy.name(), cancelModeratorPolicy.name(),
+					new Integer(seniority), new Integer(minPublish), forbiddenWords);
 			this._db.addForum(forumToAdd);
-			register(forumName, adminName, Encryptor.encrypt(adminPassword), "");
+			register(forumName, adminName, Encryptor.encrypt(adminPassword), "admin@gmail.com");
 			admin = this._db.getMember(forumName, adminName);
 			admin.setRoll("Admin");
 			this._db.updateMember(admin);

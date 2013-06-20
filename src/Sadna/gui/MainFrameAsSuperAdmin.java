@@ -485,7 +485,7 @@ public class MainFrameAsSuperAdmin extends ForumJFrame {
         }
         Policy policy = new Policy(NotiFreqEnum, NotiContEnum, delPostEnum, addModEnum,
                 remModeEnum, timeOfSeniority, numberOfMsgs);
-        admin.initiateForum(forumName, userName, password, policy);
+        admin.initiateForum(forumName, userName, password, policy, "fuck"); //add new button with forbidden words
         this.jTextFieldNewAdminUser.setText("");
         this.jTextFieldNewAdminPassword.setText("");
         this.jTextFieldNewForumName.setText("");

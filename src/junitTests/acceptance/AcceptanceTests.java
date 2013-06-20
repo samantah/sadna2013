@@ -201,7 +201,7 @@ public class AcceptanceTests {
 				enumNotiFriends.PUBLISHERS, enumDelete.EXTENDED,
 				enumAssignModerator.NO_RESTRICTION,
 				enumCancelModerator.NO_RESTRICTION, 0, 0);
-		sa.initiateForum(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD, policy);
+		sa.initiateForum(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD, policy, "");
 		Forum forum = sa.getForum(FORUM_NAME);
 		
 		Member m1 = u.register(FORUM_NAME, "laaaaa", "ksjdf66asd", "sdf@adf.com");

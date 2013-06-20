@@ -84,32 +84,50 @@ public class UnitTestsForServer {
 	public static void initiateTestPlatform() {
 		databaseImpl = new IMpl();
 		si = new ServerToDataBaseHandler(databaseImpl);
+		si.openSession();
 		si.clearDB();
-
+		
 		si.initiateForum(ADMIN_NAME1, ADMIN_PASSWORD1, FORUM_NAME1, enumNotiImidiOrAgre.IMIDIATE.toString(), 
 				enumNotiFriends.PUBLISHERS.toString(), enumDelete.EXTENDED.toString(), 
 				enumAssignModerator.NO_RESTRICTION.toString(), "0", "0", enumCancelModerator.NO_RESTRICTION.toString(), 
-				SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
+				"", SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
 		Forumdb fdb = si.getForum(FORUM_NAME1);
-		
-		si.register(FORUM_NAME1, USER1_NAME, USER1_PASSWORD, USER1_EMAIL);
-		si.register(FORUM_NAME1, USER2_NAME, USER2_PASSWORD, USER2_EMAIL);
-		si.register(FORUM_NAME1, USER3_NAME, USER3_PASSWORD, USER3_EMAIL);
+		si.closeSession();
+		si.openSession();
+		System.out.println(si.register(FORUM_NAME1, USER1_NAME, USER1_PASSWORD, USER1_EMAIL));
+		si.closeSession();
+		si.openSession();
+		System.out.println(si.register(FORUM_NAME1, USER2_NAME, USER2_PASSWORD, USER2_EMAIL));
+		si.closeSession();
+		si.openSession();
+		System.out.println(si.register(FORUM_NAME1, USER3_NAME, USER3_PASSWORD, USER3_EMAIL));
+		si.closeSession();
+		si.openSession();
 		si.login(FORUM_NAME1, ADMIN_NAME1, ADMIN_PASSWORD1);
 		
 		Set<Memberdb> members1 = new HashSet<Memberdb>();
+		si.closeSession();
+		si.openSession();
 		Memberdb m1 = si.getMember(FORUM_NAME1, USER1_NAME);
 		members1.add(m1);
+		si.closeSession();
+		si.openSession();
 		Memberdb m2 = si.getMember(FORUM_NAME1, USER2_NAME);
 		members1.add(m2);
+		si.closeSession();
+		si.openSession();
 		Memberdb m3 = si.getMember(FORUM_NAME1, USER3_NAME);
 		members1.add(m3);
 		Subforumdb subForum2 = new Subforumdb(fdb, SUBFORUM2_NAME,  members1, new HashSet<Threaddb>());
+		si.closeSession();
+		si.openSession();
 		si.addSubForum(subForum2, new ArrayList<Memberdb>(members1), ADMIN_NAME1, ADMIN_PASSWORD1);
 		Set<Memberdb> members2 = new HashSet<Memberdb>();
 		members2.add(m2);
 		members2.add(m3);
 		Subforumdb subForum1 = new Subforumdb(fdb, SUBFORUM1_NAME,  members2, new HashSet<Threaddb>());
+		si.closeSession();
+		si.openSession();
 		si.addSubForum(subForum1, new ArrayList<Memberdb>(members2), ADMIN_NAME1, ADMIN_PASSWORD1);
 
 		Set<Postdb> posts1 = new HashSet<Postdb>(); 
@@ -117,8 +135,14 @@ public class UnitTestsForServer {
 		Threaddb threadmsg1 = new Threaddb(subForum2, m2, "hi11", "hello world..", posts1);
 		Threaddb threadmsg2 = new Threaddb(subForum2, m3, "hi22", "good night", posts2);
 			
+		si.closeSession();
+		si.openSession();
 		si.publishThread(threadmsg1, USER2_NAME, USER1_PASSWORD);
+		si.closeSession();
+		si.openSession();
 		si.publishThread(threadmsg2, USER3_NAME, USER2_PASSWORD);
+		si.closeSession();
+		si.openSession();
 		List<Threaddb> threadMessages = si.getThreadsList(FORUM_NAME1, SUBFORUM1_NAME);
 		Threaddb threadMessage1 = threadMessages.get(0);
 		Threaddb threadMessage2 = threadMessages.get(1);
@@ -130,6 +154,7 @@ public class UnitTestsForServer {
 		si.postComment(post1, USER1_NAME, USER1_PASSWORD);
 		si.postComment(post2, USER2_NAME, USER2_PASSWORD);
 		si.postComment(post3, USER3_NAME, USER3_PASSWORD);
+		si.closeSession();
 		System.out.println("Finished initializing test");
 	}
 	
@@ -153,7 +178,7 @@ public class UnitTestsForServer {
 		si.initiateForum(ADMIN_NAME2, ADMIN_PASSWORD2, FORUM_NAME2, enumNotiImidiOrAgre.IMIDIATE.toString(), 
 				enumNotiFriends.PUBLISHERS.toString(), enumDelete.EXTENDED.toString(), 
 				enumAssignModerator.MIN_PUBLISH.toString(), "0", "1", enumCancelModerator.NO_RESTRICTION.toString(), 
-				SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
+				"", SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
 	
 		Forumdb fdb = si.getForum(FORUM_NAME2);
 		Set<Memberdb> members1 = new HashSet<Memberdb>();
