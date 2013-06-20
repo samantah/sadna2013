@@ -8,8 +8,11 @@ import Sadna.db.*;
 import Sadna.db.PolicyEnums.enumAssignModerator;
 import Sadna.db.PolicyEnums.enumCancelModerator;
 import Sadna.db.PolicyEnums.enumDelete;
+import Sadna.db.PolicyEnums.enumMessageContent;
+import Sadna.db.PolicyEnums.enumModeratorPermissions;
 import Sadna.db.PolicyEnums.enumNotiFriends;
 import Sadna.db.PolicyEnums.enumNotiImidiOrAgre;
+import Sadna.db.PolicyEnums.enumSecurity;
 
 import org.junit.*;
 
@@ -200,7 +203,10 @@ public class AcceptanceTests {
 		Policy policy = new Policy(enumNotiImidiOrAgre.IMIDIATE,
 				enumNotiFriends.PUBLISHERS, enumDelete.EXTENDED,
 				enumAssignModerator.NO_RESTRICTION,
-				enumCancelModerator.NO_RESTRICTION, 0, 0);
+				enumCancelModerator.NO_RESTRICTION,
+				enumMessageContent.NOT_FILTERED,
+				enumModeratorPermissions.EXTENDED, 
+				enumSecurity.NOT_USED_EMAIL, 0, 0);
 		sa.initiateForum(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD, policy, "");
 		Forum forum = sa.getForum(FORUM_NAME);
 		

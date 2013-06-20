@@ -17,8 +17,11 @@ import Sadna.Server.API.ServerInterface;
 import Sadna.db.PolicyEnums.enumAssignModerator;
 import Sadna.db.PolicyEnums.enumCancelModerator;
 import Sadna.db.PolicyEnums.enumDelete;
+import Sadna.db.PolicyEnums.enumMessageContent;
+import Sadna.db.PolicyEnums.enumModeratorPermissions;
 import Sadna.db.PolicyEnums.enumNotiFriends;
 import Sadna.db.PolicyEnums.enumNotiImidiOrAgre;
+import Sadna.db.PolicyEnums.enumSecurity;
 import dbTABLES.Forumdb;
 import dbTABLES.IMpl;
 import dbTABLES.IMplInterface;
@@ -90,6 +93,7 @@ public class UnitTestsForServer {
 		si.initiateForum(ADMIN_NAME1, ADMIN_PASSWORD1, FORUM_NAME1, enumNotiImidiOrAgre.IMIDIATE.toString(), 
 				enumNotiFriends.PUBLISHERS.toString(), enumDelete.EXTENDED.toString(), 
 				enumAssignModerator.NO_RESTRICTION.toString(), "0", "0", enumCancelModerator.NO_RESTRICTION.toString(), 
+				enumMessageContent.NOT_FILTERED.toString(),	enumModeratorPermissions.EXTENDED.toString(), enumSecurity.NOT_USED_EMAIL.toString(), 
 				"*", SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
 		Forumdb fdb = si.getForum(FORUM_NAME1);
 		si.closeSession();
@@ -186,6 +190,7 @@ public class UnitTestsForServer {
 		si.initiateForum(ADMIN_NAME2, ADMIN_PASSWORD2, FORUM_NAME2, enumNotiImidiOrAgre.IMIDIATE.toString(), 
 				enumNotiFriends.PUBLISHERS.toString(), enumDelete.EXTENDED.toString(), 
 				enumAssignModerator.MIN_PUBLISH.toString(), "0", "1", enumCancelModerator.NO_RESTRICTION.toString(), 
+				enumMessageContent.NOT_FILTERED.toString(),	enumModeratorPermissions.EXTENDED.toString(), enumSecurity.NOT_USED_EMAIL.toString(), 
 				"*", SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
 		si.closeSession();
 		si.openSession();
@@ -230,5 +235,5 @@ public class UnitTestsForServer {
 		si.closeSession();
 	}
 	
-
+	
 }

@@ -6,14 +6,25 @@ import Sadna.db.*;
 import Sadna.db.PolicyEnums.enumAssignModerator;
 import Sadna.db.PolicyEnums.enumCancelModerator;
 import Sadna.db.PolicyEnums.enumDelete;
+import Sadna.db.PolicyEnums.enumMessageContent;
+import Sadna.db.PolicyEnums.enumModeratorPermissions;
 import Sadna.db.PolicyEnums.enumNotiFriends;
 import Sadna.db.PolicyEnums.enumNotiImidiOrAgre;
+import Sadna.db.PolicyEnums.enumSecurity;
 
 import org.junit.*;
+
+import dbTABLES.Forumdb;
+import dbTABLES.Memberdb;
+import dbTABLES.Subforumdb;
+import dbTABLES.Threaddb;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -32,12 +43,30 @@ public class UnitTestsForClient {
 	public static final String ADMIN_NAME = "adminsami";
 	public static final String ADMIN_PASSWORD = "adminpass12";
 	
+	public static final String FORUM1_NAME = "forum111"; //valid forum
+	public static final String ADMIN1_NAME = "adminben";
+	public static final String ADMIN1_PASSWORD = "adminpass15";
+	
+	public static final String FORUM2_NAME = "forum444"; //valid forum
+	public static final String ADMIN2_NAME = "adminsnir";
+	public static final String ADMIN2_PASSWORD = "adminpass13";
+	
 	public static final String SUB_FORUM_NAME = "zubizubi1"; //valid sub forum
+	public static final String SUBFORUM2_NAME = "second subforum"; //valid sub forum 2
+	
 	
 	public static final String USER_NAME = "sadnaUser";  //valid username
-	public static final String USER_EMAIL = "sadna@bgu.ac.il";
 	public static final String USER_PASSWORD = "abcdefg34";
+	public static final String USER_EMAIL = "sadna@bgu.ac.il";
 
+	public static final String USER2_NAME = "sofyyyy";  //valid username2
+	public static final String USER2_PASSWORD = "frjdf77asd";
+	public static final String USER2_EMAIL = "sdf2@adf.com";
+	
+	public static final String USER3_NAME = "samisaviv";  //valid username3
+	public static final String USER3_PASSWORD = "ksjdf88asd";
+	public static final String USER3_EMAIL = "sdf3@adf.com";
+	
 	private static ClientConnectionHandler ch;
 
 	@BeforeClass
@@ -67,7 +96,9 @@ public class UnitTestsForClient {
 		Policy policy = new Policy(enumNotiImidiOrAgre.IMIDIATE,
 				enumNotiFriends.PUBLISHERS, enumDelete.EXTENDED,
 				enumAssignModerator.NO_RESTRICTION,
-				enumCancelModerator.NO_RESTRICTION, 0, 0);
+				enumCancelModerator.NO_RESTRICTION, enumMessageContent.NOT_FILTERED,
+				enumModeratorPermissions.EXTENDED, 
+				enumSecurity.NOT_USED_EMAIL, 0, 0);
 		sa.initiateForum(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD, policy, "*");
 		Forum forum = sa.getForum(FORUM_NAME);
 		
@@ -234,7 +265,10 @@ public class UnitTestsForClient {
 		Policy policy = new Policy(enumNotiImidiOrAgre.IMIDIATE,
 				enumNotiFriends.PUBLISHERS, enumDelete.EXTENDED,
 				enumAssignModerator.NO_RESTRICTION,
-				enumCancelModerator.NO_RESTRICTION, 0, 0);
+				enumCancelModerator.NO_RESTRICTION,
+				enumMessageContent.NOT_FILTERED,
+				enumModeratorPermissions.EXTENDED, 
+				enumSecurity.NOT_USED_EMAIL, 0, 0);
 		assertTrue(sa.initiateForum("new_forum1", "new admin", "newAdmin1234", policy,"*"));
 	}
 	
@@ -439,7 +473,10 @@ public class UnitTestsForClient {
 		Policy policy = new Policy(enumNotiImidiOrAgre.IMIDIATE,
 				enumNotiFriends.PUBLISHERS, enumDelete.EXTENDED,
 				enumAssignModerator.NO_RESTRICTION,
-				enumCancelModerator.NO_RESTRICTION, 0, 0);
+				enumCancelModerator.NO_RESTRICTION,
+				enumMessageContent.NOT_FILTERED,
+				enumModeratorPermissions.EXTENDED, 
+				enumSecurity.NOT_USED_EMAIL, 0, 0);
 		assertTrue(sa.initiateForum("new_forum1", "new admin", "newAdmin1234", policy, "*"));
 		u.register("new_forum1", USER_NAME, USER_PASSWORD, USER_EMAIL);
 		u.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);	
@@ -485,7 +522,10 @@ public class UnitTestsForClient {
 		Policy policy = new Policy(enumNotiImidiOrAgre.AGGREGATE,
 				enumNotiFriends.PUBLISHERS, enumDelete.LIMITED,
 				enumAssignModerator.MIN_PUBLISH,
-				enumCancelModerator.NO_RESTRICTION, 0, 0);
+				enumCancelModerator.NO_RESTRICTION,
+				enumMessageContent.NOT_FILTERED,
+				enumModeratorPermissions.EXTENDED, 
+				enumSecurity.NOT_USED_EMAIL, 0, 0);
 		assertTrue(sa.initiateForum("another forum", ADMIN_NAME, ADMIN_PASSWORD, policy, "*"));
 		SuperAdmin notSa = u.loginAsSuperAdmin("not_superadmin", "incorrect_pass");
 		assertNull(notSa);
@@ -533,6 +573,36 @@ public class UnitTestsForClient {
 		assertEquals(1, posters1.size());
 		String poster = posters1.get(0);
 		assertTrue(poster.equals(mem1.getUserName()));
+	}
+	
+	@Test
+	public void testPolicy_CancelModerator(){
+		User u = new User(ch);
+		SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
+		Policy policy = new Policy(enumNotiImidiOrAgre.IMIDIATE,
+				enumNotiFriends.PUBLISHERS, enumDelete.EXTENDED,
+				enumAssignModerator.NO_RESTRICTION,
+				enumCancelModerator.RESTRICTED, enumMessageContent.NOT_FILTERED,
+				enumModeratorPermissions.EXTENDED, 
+				enumSecurity.NOT_USED_EMAIL, 0, 0);
+		sa.initiateForum(FORUM2_NAME, ADMIN_NAME, ADMIN_PASSWORD, policy, "*");
+		
+		Forum forum = sa.getForum(FORUM2_NAME);
+		List<Member> members1 = new ArrayList<Member>();
+		u.register(FORUM2_NAME, USER2_NAME, USER2_PASSWORD, USER2_EMAIL);
+		u.register(FORUM2_NAME, USER3_NAME, USER3_PASSWORD, USER3_EMAIL);
+		Member m2 = u.login(FORUM2_NAME, USER2_NAME, USER2_PASSWORD);
+		members1.add(m2);
+		Member m3 = u.login(FORUM2_NAME, USER3_NAME, USER3_PASSWORD);
+		members1.add(m3);
+		SubForum subForum2 = new SubForum(forum, SUBFORUM2_NAME);
+		Admin admin = (Admin) u.login(FORUM2_NAME, ADMIN_NAME, ADMIN_PASSWORD);
+		assertTrue(admin.addSubForum(subForum2, members1));
+		admin.removeModerator(FORUM2_NAME, SUBFORUM2_NAME, m3.getUserName());
+		si.publishThread(tdb, USER3_NAME, USER3_PASSWORD);
+		members1.clear();
+		members1.add(m3);
+		assertTrue(si.addSubForum(subForum2, new ArrayList<Memberdb>(members1), ADMIN_NAME2, ADMIN_PASSWORD2));
 	}
 
 }
