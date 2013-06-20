@@ -723,7 +723,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	}
 
 	public Object handleLogin(String forumName, String userName, String password) {
-		_logMsg = "recieved: LOGIN from"+userName + "forum"+ forumName;
+		_logMsg = "recieved: LOGIN from "+userName + " forum "+ forumName;
 		_reportLogger.log(Level.INFO ,_logMsg);
 		this._si.openSession();
 		Memberdb member = _si.getMember(forumName, userName);
@@ -800,10 +800,10 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		}
 	}
 
-	public Object handleAddSubForum(Subforumdb subForum, List<Memberdb> members, String username, String password) {
+	public Object handleAddSubForum(Subforumdb subForum, List<Memberdb> moderatorsToAdd, String username, String password) {
 		this._si.openSession();
 		boolean subForumIsAdded = false;
-		subForumIsAdded = _si.addSubForum(subForum, members, username, password);
+		subForumIsAdded = _si.addSubForum(subForum, moderatorsToAdd, username, password);
 		if (subForumIsAdded) {
 			_logMsg = "as a respond to ADDSF- sending: "+_msgToClient.sendOK();
 			_reportLogger.log(Level.INFO ,_logMsg);
@@ -1157,7 +1157,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		}
 		if (forum.getEnumAssignModerator().equals("SENIORITY")) {
 			long dateOfJoining = Long.parseLong(member.getDateJoin());
-			int seniorityAsDays = calcNumOfDaysSinceJoining(dateOfJoining);
+			int seniorityAsDays = _si.calcNumOfDaysSinceJoining(dateOfJoining);
 			int seniority = forum.getSeniority();
 			if (seniorityAsDays < seniority) {
 				_logMsg = "as a respond to ADDMOD- sending: "+_msgToClient.sendErrorNoAuthorized();
@@ -1219,9 +1219,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		}
 	}
 
-	private int calcNumOfDaysSinceJoining(long dateOfJoining) {
-		return (int) ((dateOfJoining - new Date().getTime()) / (1000 * 60 * 60 * 24));
-	}
+	
 
 	private Object handleHasNotification(Memberdb m, String password) {
 		if (checkPassword(password, m.getPassword())) {

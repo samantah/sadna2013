@@ -109,6 +109,8 @@ public interface ServerInterface {
 	boolean openSession();
 	
 	boolean closeSession();
+
+	int calcNumOfDaysSinceJoining(long dateOfJoining);
 	
 	
 	

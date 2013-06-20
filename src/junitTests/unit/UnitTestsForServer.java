@@ -36,9 +36,13 @@ public class UnitTestsForServer {
 	public static final String SUPER_ADMIN_NAME = "superAdmin";
 	public static final String SUPER_ADMIN_PASSWORD = "superAdmin1234";
 
-	public static final String FORUM_NAME = "first_forum"; //valid forum
-	public static final String ADMIN_NAME = "adminben1";
-	public static final String ADMIN_PASSWORD = "admin12345";
+	public static final String FORUM_NAME1 = "first_forum"; //valid forum
+	public static final String ADMIN_NAME1 = "adminben1";
+	public static final String ADMIN_PASSWORD1 = "admin12345";
+
+	public static final String FORUM_NAME2 = "second_forum"; //valid forum
+	public static final String ADMIN_NAME2 = "admin_erez";
+	public static final String ADMIN_PASSWORD2 = "admin0101";
 	
 	public static final String SUBFORUM1_NAME = "first subforum"; //valid sub forum 1
 	public static final String SUBFORUM2_NAME = "second subforum"; //valid sub forum 2
@@ -82,31 +86,31 @@ public class UnitTestsForServer {
 		si = new ServerToDataBaseHandler(databaseImpl);
 		si.clearDB();
 
-		si.initiateForum(ADMIN_NAME, ADMIN_PASSWORD, FORUM_NAME, enumNotiImidiOrAgre.IMIDIATE.toString(), 
+		si.initiateForum(ADMIN_NAME1, ADMIN_PASSWORD1, FORUM_NAME1, enumNotiImidiOrAgre.IMIDIATE.toString(), 
 				enumNotiFriends.PUBLISHERS.toString(), enumDelete.EXTENDED.toString(), 
 				enumAssignModerator.NO_RESTRICTION.toString(), "0", "0", enumCancelModerator.NO_RESTRICTION.toString(), 
 				SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
-		Forumdb fdb = si.getForum(FORUM_NAME);
+		Forumdb fdb = si.getForum(FORUM_NAME1);
 		
-		si.register(FORUM_NAME, USER1_NAME, USER1_PASSWORD, USER1_EMAIL);
-		si.register(FORUM_NAME, USER2_NAME, USER2_PASSWORD, USER2_EMAIL);
-		si.register(FORUM_NAME, USER3_NAME, USER3_PASSWORD, USER3_EMAIL);
-		si.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
+		si.register(FORUM_NAME1, USER1_NAME, USER1_PASSWORD, USER1_EMAIL);
+		si.register(FORUM_NAME1, USER2_NAME, USER2_PASSWORD, USER2_EMAIL);
+		si.register(FORUM_NAME1, USER3_NAME, USER3_PASSWORD, USER3_EMAIL);
+		si.login(FORUM_NAME1, ADMIN_NAME1, ADMIN_PASSWORD1);
 		
 		Set<Memberdb> members1 = new HashSet<Memberdb>();
-		Memberdb m1 = si.getMember(FORUM_NAME, USER1_NAME);
+		Memberdb m1 = si.getMember(FORUM_NAME1, USER1_NAME);
 		members1.add(m1);
-		Memberdb m2 = si.getMember(FORUM_NAME, USER2_NAME);
+		Memberdb m2 = si.getMember(FORUM_NAME1, USER2_NAME);
 		members1.add(m1);
-		Memberdb m3 = si.getMember(FORUM_NAME, USER3_NAME);
+		Memberdb m3 = si.getMember(FORUM_NAME1, USER3_NAME);
 		members1.add(m1);
 		Subforumdb subForum2 = new Subforumdb(fdb, SUBFORUM2_NAME,  members1, new HashSet<Threaddb>());
-		si.addSubForum(subForum2, new ArrayList<Memberdb>(members1), ADMIN_NAME, ADMIN_PASSWORD);
+		si.addSubForum(subForum2, new ArrayList<Memberdb>(members1), ADMIN_NAME1, ADMIN_PASSWORD1);
 		Set<Memberdb> members2 = new HashSet<Memberdb>();
 		members2.add(m2);
 		members2.add(m3);
 		Subforumdb subForum1 = new Subforumdb(fdb, SUBFORUM1_NAME,  members2, new HashSet<Threaddb>());
-		si.addSubForum(subForum1, new ArrayList<Memberdb>(members2), ADMIN_NAME, ADMIN_PASSWORD);
+		si.addSubForum(subForum1, new ArrayList<Memberdb>(members2), ADMIN_NAME1, ADMIN_PASSWORD1);
 
 		Set<Postdb> posts1 = new HashSet<Postdb>(); 
 		Set<Postdb> posts2 = new HashSet<Postdb>(); 
@@ -115,7 +119,7 @@ public class UnitTestsForServer {
 			
 		si.publishThread(threadmsg1, USER2_NAME, USER1_PASSWORD);
 		si.publishThread(threadmsg2, USER3_NAME, USER2_PASSWORD);
-		List<Threaddb> threadMessages = si.getThreadsList(FORUM_NAME, SUBFORUM1_NAME);
+		List<Threaddb> threadMessages = si.getThreadsList(FORUM_NAME1, SUBFORUM1_NAME);
 		Threaddb threadMessage1 = threadMessages.get(0);
 		Threaddb threadMessage2 = threadMessages.get(1);
 		
@@ -132,13 +136,33 @@ public class UnitTestsForServer {
 	@Test
 	public void testEmailValidation(){
 		// invalid email address, should return false
-		assertFalse(si.register(FORUM_NAME, "stamuser1", "asf$$#@adsf1", "sami.hourgmail.com"));
+		assertFalse(si.register(FORUM_NAME1, "stamuser1", "asf$$#@adsf1", "sami.hourgmail.com"));
 		// valid email address, should return false
-		assertFalse(si.register(FORUM_NAME, "stamuser1", "asf$$#@adsf1", "samihour@gmailcom.js"));
-		assertFalse(si.register(FORUM_NAME, "stamuser2", "asf$$#@adsf1", "sami234hour@gmail.com"));
-		assertFalse(si.register(FORUM_NAME, "stamuser3", "asf$$#@adsf1", "444_44g@m.ailcom"));
-		assertFalse(si.register(FORUM_NAME, "stamuser4", "asf$$#@adsf1", "sami-hour@gm-ail.com"));
-		assertFalse(si.register(FORUM_NAME, "stamuser5", "asf$$#@adsf1", "sami.hour@gm-ail.com"));
+		assertFalse(si.register(FORUM_NAME1, "stamuser1", "asf$$#@adsf1", "samihour@gmailcom.js"));
+		assertFalse(si.register(FORUM_NAME1, "stamuser2", "asf$$#@adsf1", "sami234hour@gmail.com"));
+		assertFalse(si.register(FORUM_NAME1, "stamuser3", "asf$$#@adsf1", "444_44g@m.ailcom"));
+		assertFalse(si.register(FORUM_NAME1, "stamuser4", "asf$$#@adsf1", "sami-hour@gm-ail.com"));
+		assertFalse(si.register(FORUM_NAME1, "stamuser5", "asf$$#@adsf1", "sami.hour@gm-ail.com"));
 	}
+	
+	@Test
+	public void testPolicy_AssignModerator(){
+		si.initiateForum(ADMIN_NAME2, ADMIN_PASSWORD2, FORUM_NAME2, enumNotiImidiOrAgre.IMIDIATE.toString(), 
+				enumNotiFriends.PUBLISHERS.toString(), enumDelete.EXTENDED.toString(), 
+				enumAssignModerator.MIN_PUBLISH.toString(), "0", "1", enumCancelModerator.NO_RESTRICTION.toString(), 
+				SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
+	
+		Forumdb fdb = si.getForum(FORUM_NAME1);
+		Set<Memberdb> members1 = new HashSet<Memberdb>();
+		Memberdb m1 = si.getMember(FORUM_NAME1, USER1_NAME);
+		members1.add(m1);
+		Memberdb m2 = si.getMember(FORUM_NAME1, USER2_NAME);
+		members1.add(m1);
+		Memberdb m3 = si.getMember(FORUM_NAME1, USER3_NAME);
+		members1.add(m1);
+		Subforumdb subForum2 = new Subforumdb(fdb, SUBFORUM2_NAME,  members1, new HashSet<Threaddb>());
+		si.addSubForum(subForum2, new ArrayList<Memberdb>(members1), ADMIN_NAME1, ADMIN_PASSWORD1);
+	}
+	
 
 }
