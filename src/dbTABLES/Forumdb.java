@@ -3,6 +3,7 @@ package dbTABLES;
 // Generated May 29, 2013 2:33:53 AM by Hibernate Tools 3.4.0.CR1
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import Sadna.db.Forum;
