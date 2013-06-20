@@ -29,7 +29,7 @@ public class Forumdb implements java.io.Serializable {
 	private String enumCancelModerator;
 	private Integer seniority;
 	private Integer minPublish;
-	private String enumMessageComtent;
+	private String enumMessageContent;
 	private String enumModeratorPermission;
 	private String enumSecurityPolicy;
 	private String forbiddenWords;
@@ -200,11 +200,11 @@ public class Forumdb implements java.io.Serializable {
 	}
 
 	public String getEnumMessageComtent() {
-		return enumMessageComtent;
+		return enumMessageContent;
 	}
 
 	public void setEnumMessageComtent(String enumMessageComtent) {
-		this.enumMessageComtent = enumMessageComtent;
+		this.enumMessageContent = enumMessageComtent;
 	}
 
 	public String getEnumModeratorPermission() {

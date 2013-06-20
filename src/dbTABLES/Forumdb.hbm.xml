@@ -20,6 +20,17 @@
         <property name="enumNotiImidiOrAgre" type="string">
             <column name="EnumNotiImidiOrAgre" length="9" />
         </property>
+        
+        <property name="enumMessageContent" type="string">
+            <column name="EnumMessageContent" length="12" />
+        </property>
+        <property name="enumModeratorPermission" type="string">
+            <column name="EnumModeratorPermission" length="8" />
+        </property>
+        <property name="enumSecurityPolicy" type="string">
+            <column name="EnumSecurityPolicy" length="14" />
+        </property>
+        
         <property name="enumNotiFriends" type="string">
             <column name="EnumNotiFriends" length="11" />
         </property>
