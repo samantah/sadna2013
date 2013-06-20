@@ -41,7 +41,7 @@ public interface ClientCommunicationHandlerInterface extends Serializable {
 
     boolean addSubForum(SubForum subForum, List<Member> lm, String userName, String password);
 
-    boolean initiateForum(String forumName, String adminName, String adminPassword, Policy policy, String superAdminName, String superAdminPasswaord);
+    boolean initiateForum(String forumName, String adminName, String adminPassword, Policy policy, String forbiddenWords, String superAdminName, String superAdminPasswaord);
 
     List<Post> getAllPosts(ThreadMessage tm);
 

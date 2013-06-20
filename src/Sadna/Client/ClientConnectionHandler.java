@@ -596,7 +596,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 	}
 
 	@Override
-	public boolean initiateForum(String forumName, String adminName, String AdminPassword, Policy policy, String superAdminName, String superAdminPasswaord) {
+	public boolean initiateForum(String forumName, String adminName, String AdminPassword, Policy policy, String forbiddenWords, String superAdminName, String superAdminPasswaord) {
 		boolean initiated = false;
 		msgToSend = "ADDF\n" + "forumName:\n" + forumName + "\n"
 		+ "adminName:\n" + adminName + "\n" + "adminPassword:\n" + AdminPassword + "\n"
@@ -608,6 +608,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		+ policy.getSeniority() + "\n"
 		+ policy.getMinPublish() + "\n"
 		+ policy.getCancelModeratorPolicy() + "\n"
+		+ "forbiddenWords:\n" + forbiddenWords + "\n"
 		+ "superAdminName:\n" + superAdminName + "\n"
 		+ "superAdminPasswaord:\n" + superAdminPasswaord + "\n";
 		msgToSend += delimiter;
