@@ -63,7 +63,7 @@ public class RegistrationPage extends ForumJFrame {
         jLabelEmail.setText("Email");
 
         jLabelInvalidData.setForeground(new java.awt.Color(255, 0, 0));
-        jLabelInvalidData.setText("Invalid data - ");
+        jLabelInvalidData.setText("Invalid data");
 
         jButtonBack.setText("back");
         jButtonBack.addActionListener(new java.awt.event.ActionListener() {
