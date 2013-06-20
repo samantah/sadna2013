@@ -27,6 +27,10 @@ import dbTABLES.Postdb;
 import dbTABLES.Subforumdb;
 import dbTABLES.Threaddb;
 
+import org.junit.*;
+import static org.junit.Assert.*;
+
+
 public class UnitTestsForServer {
 
 	public static final String SUPER_ADMIN_NAME = "superAdmin";
@@ -126,8 +130,15 @@ public class UnitTestsForServer {
 	}
 	
 	@Test
-	public void testGetUsersPostToUser(){
-		
+	public void testEmailValidation(){
+		// invalid email address, should return false
+		assertFalse(si.register(FORUM_NAME, "stamuser1", "asf$$#@adsf1", "sami.hourgmail.com"));
+		// valid email address, should return false
+		assertFalse(si.register(FORUM_NAME, "stamuser1", "asf$$#@adsf1", "samihour@gmailcom.js"));
+		assertFalse(si.register(FORUM_NAME, "stamuser2", "asf$$#@adsf1", "sami234hour@gmail.com"));
+		assertFalse(si.register(FORUM_NAME, "stamuser3", "asf$$#@adsf1", "444_44g@m.ailcom"));
+		assertFalse(si.register(FORUM_NAME, "stamuser4", "asf$$#@adsf1", "sami-hour@gm-ail.com"));
+		assertFalse(si.register(FORUM_NAME, "stamuser5", "asf$$#@adsf1", "sami.hour@gm-ail.com"));
 	}
 
 }
