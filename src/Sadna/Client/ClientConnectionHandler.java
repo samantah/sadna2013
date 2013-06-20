@@ -17,6 +17,10 @@ import java.util.regex.Pattern;
 
 public class ClientConnectionHandler implements ClientCommunicationHandlerInterface {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4249952485027273778L;
 	private Socket clientSocket;
 	private PrintWriter stringToServer;
 	private BufferedReader stringFromServer;
