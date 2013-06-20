@@ -405,7 +405,15 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			return _msgToClient.sendErrorNoAuthorized();
 		}
 		Postdb postToEdit = _si.getPost(forumName, subForumName, Integer.parseInt(TMid), Integer.parseInt(pid));
-		if(postToEdit.getMemberdb().getUserName().equals(editorName) || editor.getRoll().equals("Moderator") || editor.getRoll().equals("Admin")){
+		boolean moderatorPermission = false;
+		if(_si.getForum(forumName).getEnumModeratorPermission().equals("EXTENDED")){
+			for (Memberdb member : _si.getModerators(forumName, subForumName)) {
+				if(member.getIdmember()==editor.getIdmember() && member.getPassword().equals(editor.getPassword())){
+					moderatorPermission=true;
+				}
+			}
+		}
+		if(postToEdit.getMemberdb().getUserName().equals(editorName) || moderatorPermission ||editor.getRoll().equals("Admin")){
 			postToEdit.setContent(content);
 			postToEdit.setTitle(title);
 			if(_si.editPost(postToEdit)){
@@ -444,8 +452,16 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			this._si.closeSession();
 			return _msgToClient.sendErrorNoAuthorized();
 		}
+		boolean moderatorPermission = false;
+		if(_si.getForum(forumName).getEnumModeratorPermission().equals("EXTENDED")){
+			for (Memberdb member : _si.getModerators(forumName, subForumName)) {
+				if(member.getIdmember()==editor.getIdmember() && member.getPassword().equals(editor.getPassword())){
+					moderatorPermission=true;
+				}
+			}
+		}
 		Threaddb threadToEdit = _si.getThreadMessage(forumName, subForumName, Integer.parseInt(tid));
-		if(threadToEdit.getMemberdb().getUserName().equals(editorName) || editor.getRoll().equals("Moderator") || editor.getRoll().equals("Admin")){
+		if(threadToEdit.getMemberdb().getUserName().equals(editorName) || moderatorPermission || editor.getRoll().equals("Admin")){
 			threadToEdit.setContent(content);
 			threadToEdit.setTitle(title);
 			if(_si.editThread(threadToEdit)){
