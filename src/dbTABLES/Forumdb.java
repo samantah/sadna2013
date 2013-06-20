@@ -29,6 +29,9 @@ public class Forumdb implements java.io.Serializable {
 	private String enumCancelModerator;
 	private Integer seniority;
 	private Integer minPublish;
+	private String enumMessageComtent;
+	private String enumModeratorPermission;
+	private String enumSecurityPolicy;
 	private String forbiddenWords;
 	private Set<Memberdb> memberdbs = new HashSet<Memberdb>(0);
 	private Set<Subforumdb> subforumdbs = new HashSet<Subforumdb>(0);
@@ -39,7 +42,9 @@ public class Forumdb implements java.io.Serializable {
 	public Forumdb(String forumName,
 			String enumNotiImidiOrAgre, String enumNotiFriends,
 			String enumDelete, String enumAssignModerator,
-			String enumCancelModerator, Integer seniority, Integer minPublish, String forbiddenWords){
+			String enumCancelModerator, Integer seniority, Integer minPublish,
+			String messageContentPolicy, String moderatorPermissionPolicy,
+			String emailPolicy, String forbiddenWords){
 		this.forumName = forumName;
 		this.enumNotiImidiOrAgre = enumNotiImidiOrAgre;
 		this.enumNotiFriends = enumNotiFriends;
@@ -48,6 +53,9 @@ public class Forumdb implements java.io.Serializable {
 		this.enumCancelModerator = enumCancelModerator;
 		this.seniority = seniority;
 		this.minPublish = minPublish;
+		this.setEnumMessageComtent(messageContentPolicy);
+		this.setEnumModeratorPermission(moderatorPermissionPolicy);
+		this.setEnumSecurityPolicy(emailPolicy);
 		this.forbiddenWords = forbiddenWords;
 	}
 
@@ -55,7 +63,8 @@ public class Forumdb implements java.io.Serializable {
 			String enumNotiImidiOrAgre, String enumNotiFriends,
 			String enumDelete, String enumAssignModerator,
 			String enumCancelModerator, Integer seniority, Integer minPublish,
-			Set<Memberdb> memberdbs, Set<Subforumdb> subforumdbs) {
+			String messageContentPolicy, String moderatorPermissionPolicy,
+			String emailPolicy, Set<Memberdb> memberdbs, Set<Subforumdb> subforumdbs) {
 		this.memberdb = memberdb;
 		this.forumName = forumName;
 		this.enumNotiImidiOrAgre = enumNotiImidiOrAgre;
@@ -65,6 +74,9 @@ public class Forumdb implements java.io.Serializable {
 		this.enumCancelModerator = enumCancelModerator;
 		this.seniority = seniority;
 		this.minPublish = minPublish;
+		this.setEnumMessageComtent(messageContentPolicy);
+		this.setEnumModeratorPermission(moderatorPermissionPolicy);
+		this.setEnumSecurityPolicy(emailPolicy);
 		this.memberdbs = memberdbs;
 		this.subforumdbs = subforumdbs;
 	}
@@ -185,6 +197,30 @@ public class Forumdb implements java.io.Serializable {
 			retVal.add(s);
 		}
 		return retVal;
+	}
+
+	public String getEnumMessageComtent() {
+		return enumMessageComtent;
+	}
+
+	public void setEnumMessageComtent(String enumMessageComtent) {
+		this.enumMessageComtent = enumMessageComtent;
+	}
+
+	public String getEnumModeratorPermission() {
+		return enumModeratorPermission;
+	}
+
+	public void setEnumModeratorPermission(String enumModeratorPermission) {
+		this.enumModeratorPermission = enumModeratorPermission;
+	}
+
+	public String getEnumSecurityPolicy() {
+		return enumSecurityPolicy;
+	}
+
+	public void setEnumSecurityPolicy(String enumSecurityPolicy) {
+		this.enumSecurityPolicy = enumSecurityPolicy;
 	}
 
 }
