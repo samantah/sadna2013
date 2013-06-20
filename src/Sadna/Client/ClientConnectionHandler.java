@@ -608,6 +608,9 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 		+ policy.getSeniority() + "\n"
 		+ policy.getMinPublish() + "\n"
 		+ policy.getCancelModeratorPolicy() + "\n"
+		+ policy.getMessageContentPolicy()+ "\n"
+		+ policy.getModeratorPermissionsPolicy()+"\n"
+		+ policy.getEmailPolicy()+"\n"
 		+ "forbiddenWords:\n" + forbiddenWords + "\n"
 		+ "superAdminName:\n" + superAdminName + "\n"
 		+ "superAdminPasswaord:\n" + superAdminPasswaord + "\n";

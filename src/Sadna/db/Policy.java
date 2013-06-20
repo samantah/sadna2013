@@ -10,18 +10,25 @@ public class Policy implements Serializable{
 	private	enumDelete deletePolicy;
 	private enumAssignModerator assignModeratorPolicy;
 	private enumCancelModerator cancelModeratorPolicy;
+	private enumMessageContent messageContentPolicy;	
+	private enumModeratorPermissions moderatorPermissionsPolicy;
+	private enumSecurity emailPolicy;
 	private int seniority;
 	private int minPublish;
 
 
 	public Policy(enumNotiImidiOrAgre imidOrArgeNotiPolicy, enumNotiFriends friendsNotiPolicy,
 			enumDelete deletePolicy, enumAssignModerator assignModeratorPolicy, enumCancelModerator cancelModeratorPolicy,
-			int seniority, int minPublish){
+			enumMessageContent messageContentPolicy, enumModeratorPermissions moderatorPermissionsPolicy,
+			enumSecurity emailPolicy, int seniority, int minPublish){
 		this.setImidOrArgeNotiPolicy(imidOrArgeNotiPolicy);
 		this.setFriendsNotiPolicy(friendsNotiPolicy);
 		this.setDeletePolicy(deletePolicy);
 		this.setAssignModeratorPolicy(assignModeratorPolicy);
 		this.setCancelModeratorPolicy(cancelModeratorPolicy);
+		this.setMessageContentPolicy(messageContentPolicy);
+		this.setModeratorPermissionsPolicy(moderatorPermissionsPolicy);
+		this.setEmailPolicy(emailPolicy);
 		this.setSeniority(seniority);
 		this.setMinPublish(minPublish);
 	}
@@ -80,6 +87,30 @@ public class Policy implements Serializable{
 
 	public int getSeniority() {
 		return seniority;
+	}
+
+	public enumMessageContent getMessageContentPolicy() {
+		return messageContentPolicy;
+	}
+
+	public void setMessageContentPolicy(enumMessageContent messageContentPolicy) {
+		this.messageContentPolicy = messageContentPolicy;
+	}
+
+	public enumModeratorPermissions getModeratorPermissionsPolicy() {
+		return moderatorPermissionsPolicy;
+	}
+
+	public void setModeratorPermissionsPolicy(enumModeratorPermissions moderatorPermissionsPolicy) {
+		this.moderatorPermissionsPolicy = moderatorPermissionsPolicy;
+	}
+
+	public enumSecurity getEmailPolicy() {
+		return emailPolicy;
+	}
+
+	public void setEmailPolicy(enumSecurity emailPolicy) {
+		this.emailPolicy = emailPolicy;
 	}
      
 }
