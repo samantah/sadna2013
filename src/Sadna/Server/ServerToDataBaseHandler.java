@@ -5,8 +5,11 @@ import Sadna.Server.API.ServerInterface;
 import Sadna.db.PolicyEnums.enumAssignModerator;
 import Sadna.db.PolicyEnums.enumCancelModerator;
 import Sadna.db.PolicyEnums.enumDelete;
+import Sadna.db.PolicyEnums.enumMessageContent;
+import Sadna.db.PolicyEnums.enumModeratorPermissions;
 import Sadna.db.PolicyEnums.enumNotiFriends;
 import Sadna.db.PolicyEnums.enumNotiImidiOrAgre;
+import Sadna.db.PolicyEnums.enumSecurity;
 import  dbTABLES.*;
 
 import java.util.ArrayList;
@@ -427,8 +430,8 @@ public class ServerToDataBaseHandler implements ServerInterface {
 	@Override
 	public boolean initiateForum(String adminName, String adminPassword,
 			String forumName, String ioap, String nfp, String dp, String amp,
-			String s, String mp, String cmp, String forbiddenWords, String superAdminUserName,
-			String superAdminPassword) {
+			String s, String mp, String cmp, String mcp, String mpp, String ep,
+			String forbiddenWords, String superAdminUserName, String superAdminPassword) {
 		boolean isAdded = false;
 		Memberdb admin = null;
 		if (isForumNameUnique(forumName)
@@ -441,6 +444,9 @@ public class ServerToDataBaseHandler implements ServerInterface {
 			enumCancelModerator cancelModeratorPolicy = null;
 			int seniority = Integer.parseInt(s);
 			int minPublish = Integer.parseInt(mp);
+			enumMessageContent messageContentPolicy = null;
+			enumSecurity emailPolicy = null;
+			enumModeratorPermissions moderatorPermissionPolicy = null;
 			switch (ioap) {
 			case ("IMIDIATE"):
 				imidOrArgeNotiPolicy = enumNotiImidiOrAgre.IMIDIATE;
@@ -457,7 +463,6 @@ public class ServerToDataBaseHandler implements ServerInterface {
 				friendsNotiPolicy = enumNotiFriends.PUBLISHERS;
 			break;
 			}
-
 			switch (dp) {
 			case ("LIMITED"):
 				deletePolicy = enumDelete.LIMITED;
@@ -485,12 +490,37 @@ public class ServerToDataBaseHandler implements ServerInterface {
 				cancelModeratorPolicy = enumCancelModerator.RESTRICTED;
 			break;
 			}
+			switch (mcp) {
+			case ("FILTERED"):
+				messageContentPolicy = enumMessageContent.FILTERED;
+			break;
+			case ("NOT_FILTERED"):
+				messageContentPolicy = enumMessageContent.NOT_FILTERED;
+			break;
+			}
+			switch (mpp) {
+			case ("LIMITED"):
+				moderatorPermissionPolicy = enumModeratorPermissions.LIMITED;
+			break;
+			case ("EXTENDED"):
+				moderatorPermissionPolicy = enumModeratorPermissions.EXTENDED;
+			break;
+			}
+			switch (ep) {
+			case ("VERIFY_EMAIL"):
+				emailPolicy = enumSecurity.VERIFY_EMAIL;
+			break;
+			case ("NOT_USED_EMAIL"):
+				emailPolicy = enumSecurity.NOT_USED_EMAIL;				
+			break;
+			}
 
 
 			Forumdb forumToAdd = new Forumdb(forumName, imidOrArgeNotiPolicy.name(), 
 					friendsNotiPolicy.name(), deletePolicy.name(), 
 					assignModeratorPolicy.name(), cancelModeratorPolicy.name(),
-					new Integer(seniority), new Integer(minPublish), forbiddenWords);
+					new Integer(seniority), new Integer(minPublish), messageContentPolicy.name(),
+					moderatorPermissionPolicy.name(), emailPolicy.name(), forbiddenWords);
 			this._db.addForum(forumToAdd);
 			register(forumName, adminName, Encryptor.encrypt(adminPassword), "admin@gmail.com");
 			admin = this._db.getMember(forumName, adminName);

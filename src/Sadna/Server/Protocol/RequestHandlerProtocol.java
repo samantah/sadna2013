@@ -783,8 +783,8 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		boolean isAdded = false;
 
 		isAdded = _si.initiateForum(adminName, adminPassword, forumName, imidiOrAgrePolicy, notiFriendsPolicy,
-				deletePolicy, assignModerPolicy, seniority, minPublish, cancelModerPolicy, forbiddenWords, 
-				superAdminUserName,	superAdminPassword);
+				deletePolicy, assignModerPolicy, seniority, minPublish, cancelModerPolicy, MessageContentPolicy,
+				ModeratorPermissionsPolicy, EmailPolicy, forbiddenWords, superAdminUserName, superAdminPassword);
 		if (isAdded) {
 			//System.out.println("isAdded");
 			_logMsg = "as a respond to ADDF- sending: "+_msgToClient.sendOK();
