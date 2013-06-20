@@ -26,6 +26,8 @@ public class Forumdb implements java.io.Serializable {
 	private String enumCancelModerator;
 	private Integer seniority;
 	private Integer minPublish;
+	private String forbiddenWords;
+	private List<String> listOfForbiddenWords;
 	private Set<Memberdb> memberdbs = new HashSet<Memberdb>(0);
 	private Set<Subforumdb> subforumdbs = new HashSet<Subforumdb>(0);
 
@@ -162,6 +164,14 @@ public class Forumdb implements java.io.Serializable {
 
 	public void setSubforumdbs(Set<Subforumdb> subforumdbs) {
 		this.subforumdbs = subforumdbs;
+	}
+
+	public String getForbiddenWords() {
+		return forbiddenWords;
+	}
+
+	public void setForbiddenWords(String forbiddenWords) {
+		this.forbiddenWords = forbiddenWords;
 	}
 
 }

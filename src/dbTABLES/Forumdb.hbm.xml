@@ -14,6 +14,9 @@
         <property name="forumName" type="string">
             <column name="ForumName" length="45" />
         </property>
+        <property name="forbiddenWords" type="string">
+            <column name="ForbiddenWords" length="600" />
+        </property>
         <property name="enumNotiImidiOrAgre" type="string">
             <column name="EnumNotiImidiOrAgre" length="9" />
         </property>
