@@ -24,8 +24,8 @@ public class SuperAdmin extends Admin {
 		super(userName, password, email, null, ch);
 	}
 
-	public synchronized boolean initiateForum(String forumName, String adminName, String adminPassword, Policy policy) {
-		return conHand.initiateForum(forumName, adminName, adminPassword, policy, this.userName, this.password);
+	public synchronized boolean initiateForum(String forumName, String adminName, String adminPassword, Policy policy, String forbiddenWords) {
+		return conHand.initiateForum(forumName, adminName, adminPassword, policy, forbiddenWords, this.userName, this.password);
 	}
 
 	public synchronized int getForumCounter() {
