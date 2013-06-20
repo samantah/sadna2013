@@ -28,17 +28,14 @@ public class ServerToDataBaseHandler implements ServerInterface {
     @Override
     public boolean register(String forumName, String userName, String password, String email) {
         boolean isAdded = false;
-        if (forumExists(forumName)) {
-            //System.out.println("is unique forum");
-            if (isUserNameUnique(forumName, userName)) {
-                //System.out.println("is unique username");
+        
+        if (EmailValidator.isValidEmailAddress(email) && forumExists(forumName) && isUserNameUnique(forumName, userName)) {
             	Forumdb forum = this._db.getForum(forumName);
                 Date now = new Date();
                 long nowAsLong = now.getTime();
                 String nowAsString = String.valueOf(nowAsLong);
                 Memberdb toAdd = new Memberdb(forum, userName, password, email, "Member", nowAsString, "");
                 isAdded = _db.addMember(toAdd);
-            }
         }
         return isAdded;
     }

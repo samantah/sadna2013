@@ -9,7 +9,9 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Test;
 
+import Sadna.Client.User;
 import Sadna.Server.ServerToDataBaseHandler;
 import Sadna.Server.API.ServerInterface;
 import Sadna.db.PolicyEnums.enumAssignModerator;
@@ -121,6 +123,11 @@ public class UnitTestsForServer {
 		si.postComment(post2, USER2_NAME, USER2_PASSWORD);
 		si.postComment(post3, USER3_NAME, USER3_PASSWORD);
 		System.out.println("Finished initializing test");
+	}
+	
+	@Test
+	public void testGetUsersPostToUser(){
+		
 	}
 
 }
