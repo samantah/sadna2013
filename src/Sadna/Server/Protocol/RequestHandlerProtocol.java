@@ -774,7 +774,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	public Object handleInitiateForum(String forumName, String adminName,
 			String adminPassword, String imidiOrAgrePolicy, String notiFriendsPolicy,
 			String deletePolicy, String assignModerPolicy, String seniority, String minPublish,
-			String cancelModerPolicy, String superAdminUserName, String superAdminPassword, String forbiddenWords) {
+			String cancelModerPolicy, String forbiddenWords, String superAdminUserName, String superAdminPassword) {
 		_logMsg = "recieved: ADDF";
 		_reportLogger.log(Level.INFO ,_logMsg);
 		this._si.openSession();
