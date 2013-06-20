@@ -211,14 +211,22 @@ public class UnitTestsForServer {
 		si.closeSession();
 		si.openSession();
 		Memberdb m3 = si.getMember(FORUM_NAME2, USER3_NAME);
-		System.out.println("'''''''''''''''''''''''''''''''''''''''''''");
 		System.out.println(m3);
 		members1.add(m3);
 		si.closeSession();
 		si.openSession();
 		Subforumdb subForum2 = new Subforumdb(fdb, SUBFORUM2_NAME,  members1, new HashSet<Threaddb>());
-		
 		assertFalse(si.addSubForum(subForum2, new ArrayList<Memberdb>(members1), ADMIN_NAME2, ADMIN_PASSWORD2));
+		Set<Postdb> theSet = new HashSet<Postdb>();
+		Threaddb tdb = new Threaddb(subForum2, m3, "title 3 for mem3", "content 3 for mem 3", theSet);
+		si.closeSession();
+		si.openSession();
+		si.publishThread(tdb, USER3_NAME, USER3_PASSWORD);
+		members1.clear();
+		members1.add(m3);
+		si.closeSession();
+		si.openSession();
+		assertTrue(si.addSubForum(subForum2, new ArrayList<Memberdb>(members1), ADMIN_NAME2, ADMIN_PASSWORD2));
 		si.closeSession();
 	}
 	
