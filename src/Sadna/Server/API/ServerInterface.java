@@ -111,6 +111,8 @@ public interface ServerInterface {
 	boolean closeSession();
 
 	int calcNumOfDaysSinceJoining(long dateOfJoining);
+
+	boolean isUniqeEmail(String email, String forumName);
 	
 	
 	

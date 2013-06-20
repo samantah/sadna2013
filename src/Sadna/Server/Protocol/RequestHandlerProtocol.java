@@ -16,13 +16,11 @@ import Sadna.db.ThreadMessage;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.apache.log4j.xml.DOMConfigurator;
 
 
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -47,7 +45,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	private SocketChannel _socketChannel;
 	private Logger _reportLogger;
 	private String _logMsg;
-	
+
 
 	public RequestHandlerProtocol(ServerInterface _si) {
 		this._si = _si;
@@ -585,7 +583,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	private Object handleGetNumberOfUserThreads(String forumName, String userName, String adminName, String password) {
 		_logMsg = "recieved: GETNUT forum"+ forumName+", userName"+userName;
 		_reportLogger.log(Level.INFO ,_logMsg);
-		
+
 		this._si.openSession();
 		Memberdb admin = _si.getMember(forumName, adminName);
 		if (!(checkPassword(password, admin.getPassword()))) {
@@ -708,6 +706,19 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		_logMsg = "recieved: REGISTER from "+userName + " forum "+ forumName;
 		_reportLogger.log(Level.INFO ,_logMsg);
 		this._si.openSession();
+		Forumdb forum = _si.getForum(forumName);
+		if(forum.getEnumSecurityPolicy().equals("NOT_USED_EMAIL")){
+			if(!_si.isUniqeEmail(email, forumName)){
+				_logMsg = "as a respond to REGISTER- sending: "+_msgToClient.sendErrorNoAuthorized();
+				_reportLogger.log(Level.DEBUG ,_logMsg);
+				this._si.closeSession();
+				return _msgToClient.sendErrorNoAuthorized();
+			}
+		}
+		if(forum.getEnumSecurityPolicy().equals("VERIFY_EMAIL")){
+			//to be implemented
+		}
+
 		String encryptedPassword = Encryptor.encrypt(password);
 		boolean isAdded = _si.register(forumName, userName, encryptedPassword, email);
 		if (isAdded) {
@@ -823,7 +834,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			String posterName, String threadTitle, String threadContent, String password) {
 		_logMsg = "recieved: THREAD";
 		_reportLogger.log(Level.INFO ,_logMsg);
-		
+
 		this._si.openSession();
 		if(checkPassword(password, _si.getMember(forumName, posterName).getPassword())){
 			boolean succeeded = false;
@@ -928,7 +939,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			_reportLogger.log(Level.DEBUG ,_logMsg);
 			result = _msgToClient.sendErrorNoAuthorized();
 		}
-		
+
 		this._si.closeSession();
 		return result;
 	}
@@ -951,7 +962,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	private Object handleGetAllPosts(String forumName, String subForumName, int threadId) {
 		_logMsg = "recieved: GETAP from forum "+ forumName+", subForum "+ subForumName+", threadId "+ threadId;
 		_reportLogger.log(Level.TRACE ,_logMsg);
-		
+
 		this._si.openSession();
 		List<Postdb> posts = _si.getAllPosts(forumName, subForumName, threadId);
 		List<Post> ans = new ArrayList<Post>();
@@ -1221,7 +1232,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		}
 	}
 
-	
+
 
 	private Object handleHasNotification(Memberdb m, String password) {
 		if (checkPassword(password, m.getPassword())) {

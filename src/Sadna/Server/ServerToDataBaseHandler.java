@@ -594,4 +594,15 @@ public class ServerToDataBaseHandler implements ServerInterface {
 	public int calcNumOfDaysSinceJoining(long dateOfJoining) {
 		return (int) ((dateOfJoining - new Date().getTime()) / (1000 * 60 * 60 * 24));
 	}
+
+
+	@Override
+	public boolean isUniqeEmail(String email, String forumName) {
+		for (Memberdb member : _db.getAllMembers(forumName)) {
+			if(member.getEmail().equals(email)){
+				return false;
+			}
+		}
+		return true;
+	}
 }
