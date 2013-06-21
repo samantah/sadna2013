@@ -1204,10 +1204,6 @@ public class IMpl implements IMplInterface {
 		//example33:
 		//System.out.println(impl.getSuperAdmin().getEmail());
 
-
-
-
-
 		impl.closeSession();
 
 
@@ -1226,73 +1222,4 @@ public class IMpl implements IMplInterface {
 		return true;
 	}
 
-
-
-
-
-
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
- * 		IMpl impl =  new IMpl();
-		impl.openSession();
-
-		//this.openSession();
-		Forumdb forum = (Forumdb)impl.session.get(Forumdb.class, 1);
-		System.out.println("inside " + forum.getForumName());
-		//this.closeSession();
-		//impl.closeSession();
-
-
-
-
-		//impl.openSession();
-		Transaction tx = impl.session.beginTransaction();
-		Subforumdb subForum = new Subforumdb(5, forum, "shlomi");
-
-		impl.session.save(subForum);
-		tx.commit();
-		impl.closeSession();
- */
-
-/*
- * 
- * 		
-		Forumdb forum = (Forumdb)impl.session.get(Forumdb.class, 1);
-		System.out.println("inside " + forum.getForumName());
-
-		//impl.openSession();
-		Transaction tx = impl.session.beginTransaction();
-		Subforumdb subForum = new Subforumdb(forum, "subforum2", null, null);
-
-		//Subforumdb subForum2 = new Subforumdb();
-		//subForum2.setForumdb(forum);
-		//subForum2.setSubForumName("subforum7");
-
-		impl.session.save(subForum);
-		tx.commit();
-		impl.closeSession();
-
- */
