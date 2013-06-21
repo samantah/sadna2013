@@ -15,6 +15,12 @@ import Sadna.db.Post;
 import Sadna.db.SubForum;
 import Sadna.db.ThreadMessage;
 
+import net.sf.classifier4J.ClassifierException;
+import net.sf.classifier4J.bayesian.WordsDataSourceException;
+import net.sf.classifier4J.vector.HashMapTermVectorStorage;
+import net.sf.classifier4J.vector.TermVectorStorage;
+import net.sf.classifier4J.vector.VectorClassifier;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -397,6 +403,56 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		_logMsg = "recieved: EDTPST";
 		_reportLogger.log(Level.INFO ,_logMsg);
 		this._si.openSession();
+		Forumdb forum = _si.getForum(forumName);
+		List<String> forbiddenWordsAsList = forum.forbiddenWordsStringToList();
+		for (String forbiddenWord : forbiddenWordsAsList) {
+			if (title.contains(forbiddenWord) || content.contains(forbiddenWord)){
+				_logMsg = "as a respond to EDTPST- sending: "+_msgToClient.sendErrorNoAuthorized();
+				_reportLogger.log(Level.DEBUG ,_logMsg);
+				this._si.closeSession();
+				return _msgToClient.sendErrorNoAuthorized();
+			}
+		}
+		TermVectorStorage storage = new HashMapTermVectorStorage();
+		VectorClassifier vc = new VectorClassifier(storage);
+		if (forum.getEnumMsgFilter().equals("FILTERED")){
+			try {
+				StringBuilder sb = new StringBuilder();
+				Subforumdb sf = _si.getSubForum(forumName, subForumName);
+				sb.append(sf.getSubForumName());
+				sb.append(" ");
+				Set<Threaddb> setOfThreads = sf.getThreaddbs();
+				int numberOfMessages = setOfThreads.size();
+				for (Threaddb threaddb : setOfThreads) {
+					List<Postdb> setOfPosts = _si.getAllPosts(forumName, subForumName, 
+							threaddb.getIdthread());
+					for (Postdb postdb : setOfPosts) {
+						sb.append(postdb.getTitle());
+						sb.append(" ");
+						sb.append(postdb.getContent());
+						sb.append(" ");
+						numberOfMessages++;
+					}
+					sb.append(threaddb.getTitle());
+					sb.append(" ");
+					sb.append(threaddb.getContent());
+					sb.append(" ");
+				}
+				
+				setVCCutOff(vc, numberOfMessages);
+				vc.teachMatch(sb.toString());
+				if (!vc.isMatch(title + " " + content)){
+					_logMsg = "as a respond to EDTPST- sending: "+_msgToClient.sendErrorNoAuthorized();
+					_reportLogger.log(Level.DEBUG ,_logMsg);
+					this._si.closeSession();
+					return _msgToClient.sendErrorNoAuthorized();
+				}
+			} catch (ClassifierException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
 		Memberdb editor = _si.getMember(forumName, editorName);
 		if(editor==null || !(checkPassword(editorPassword, editor.getPassword()))){
 			_logMsg = "as a respond to EDTPST- sending: "+_msgToClient.sendErrorNoAuthorized();
@@ -444,7 +500,46 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		_logMsg = "recieved: EDTTHRD";
 		_reportLogger.log(Level.INFO ,_logMsg);
 		this._si.openSession();
+		Forumdb forum = _si.getForum(forumName);
+		List<String> forbiddenWordsAsList = forum.forbiddenWordsStringToList();
+		for (String forbiddenWord : forbiddenWordsAsList) {
+			if (title.contains(forbiddenWord) || content.contains(forbiddenWord)){
+				_logMsg = "as a respond to EDTTHRD- sending: "+_msgToClient.sendErrorNoAuthorized();
+				_reportLogger.log(Level.DEBUG ,_logMsg);
+				this._si.closeSession();
+				return _msgToClient.sendErrorNoAuthorized();
+			}
+		}
+		TermVectorStorage storage = new HashMapTermVectorStorage();
+		VectorClassifier vc = new VectorClassifier(storage);
+		if (forum.getEnumMsgFilter().equals("FILTERED")){
+			try {
+				StringBuilder sb = new StringBuilder();
+				Subforumdb sf = _si.getSubForum(forumName, subForumName);
+				sb.append(sf.getSubForumName());
+				sb.append(" ");
+				Set<Threaddb> setOfThreads = sf.getThreaddbs();
+				int numberOfThreads = setOfThreads.size();
+				for (Threaddb threaddb : setOfThreads) {
+					sb.append(threaddb.getTitle());
+					sb.append(" ");
+					sb.append(threaddb.getContent());
+					sb.append(" ");
+				}
+				setVCCutOff(vc, numberOfThreads);
+				vc.teachMatch(sb.toString());
+				if (!vc.isMatch(title + " " + content)){
+					_logMsg = "as a respond to EDTTHRD- sending: "+_msgToClient.sendErrorNoAuthorized();
+					_reportLogger.log(Level.DEBUG ,_logMsg);
+					this._si.closeSession();
+					return _msgToClient.sendErrorNoAuthorized();
+				}
+			} catch (ClassifierException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
+		}
 		Memberdb editor = _si.getMember(forumName, editorName);
 		if(editor==null || !(checkPassword(editorPassword, editor.getPassword()))){
 			_logMsg = "as a respond to EDTTHRD- sending: "+_msgToClient.sendErrorNoAuthorized();
@@ -865,6 +960,15 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	public Object handleAddSubForum(Subforumdb subForum, List<Memberdb> moderatorsToAdd, String username, String password) {
 		this._si.openSession();
 		boolean subForumIsAdded = false;
+		List<String> forbiddenWordsAsList = subForum.getForumdb().forbiddenWordsStringToList();
+		for (String forbiddenWord : forbiddenWordsAsList) {
+			if (subForum.getSubForumName().contains(forbiddenWord)){
+				_logMsg = "as a respond to ADDSF- sending: "+_msgToClient.sendErrorNoAuthorized();
+				_reportLogger.log(Level.DEBUG ,_logMsg);
+				this._si.closeSession();
+				return _msgToClient.sendErrorNoAuthorized();
+			}
+		}
 		subForumIsAdded = _si.addSubForum(subForum, moderatorsToAdd, username, password);
 		if (subForumIsAdded) {
 			_logMsg = "as a respond to ADDSF- sending: "+_msgToClient.sendOK();
@@ -883,8 +987,47 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			String posterName, String threadTitle, String threadContent, String password) {
 		_logMsg = "recieved: THREAD";
 		_reportLogger.log(Level.INFO ,_logMsg);
-
 		this._si.openSession();
+		Forumdb forum = _si.getForum(forumName);
+		List<String> forbiddenWordsAsList = forum.forbiddenWordsStringToList();
+		for (String forbiddenWord : forbiddenWordsAsList) {
+			if (threadTitle.contains(forbiddenWord) || threadTitle.contains(forbiddenWord)){
+				_logMsg = "as a respond to THREAD- sending: "+_msgToClient.sendErrorNoAuthorized();
+				_reportLogger.log(Level.DEBUG ,_logMsg);
+				this._si.closeSession();
+				return _msgToClient.sendErrorNoAuthorized();
+			}
+		}
+		TermVectorStorage storage = new HashMapTermVectorStorage();
+		VectorClassifier vc = new VectorClassifier(storage);
+		if (forum.getEnumMsgFilter().equals("FILTERED")){
+			try {
+				StringBuilder sb = new StringBuilder();
+				Subforumdb sf = _si.getSubForum(forumName, subForumName);
+				sb.append(sf.getSubForumName());
+				sb.append(" ");
+				Set<Threaddb> setOfThreads = sf.getThreaddbs();
+				int numberOfThreads = setOfThreads.size();
+				for (Threaddb threaddb : setOfThreads) {
+					sb.append(threaddb.getTitle());
+					sb.append(" ");
+					sb.append(threaddb.getContent());
+					sb.append(" ");
+				}
+				setVCCutOff(vc, numberOfThreads);
+				vc.teachMatch(sb.toString());
+				if (!vc.isMatch(threadTitle + " " + threadContent)){
+					_logMsg = "as a respond to THREAD- sending: "+_msgToClient.sendErrorNoAuthorized();
+					_reportLogger.log(Level.DEBUG ,_logMsg);
+					this._si.closeSession();
+					return _msgToClient.sendErrorNoAuthorized();
+				}
+			} catch (ClassifierException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
 		if(checkPassword(password, _si.getMember(forumName, posterName).getPassword())){
 			boolean succeeded = false;
 			Threaddb threadM = null;
@@ -914,6 +1057,17 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			this._si.closeSession();
 			return _msgToClient.sendErrorNoAuthorized();
 		}
+	}
+
+	private void setVCCutOff(VectorClassifier vc, int numberOfMessages) {
+		if (numberOfMessages>=0 && numberOfMessages <= 3)
+			vc.setMatchCutoff(0.1);
+		if (numberOfMessages>3 && numberOfMessages<=10)
+			vc.setMatchCutoff(0.4);
+		if (numberOfMessages>10 && numberOfMessages<50)
+			vc.setMatchCutoff(0.6);
+		if (numberOfMessages>50)
+			vc.setMatchCutoff(0.85);
 	}
 
 	public Object handleDeletePost(Postdb p, String requester, String password) {
@@ -966,6 +1120,58 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 
 	public Object handlePostComment(Postdb post, String userName, String password) {
 		this._si.openSession();
+		
+		Subforumdb sf = post.getThreaddb().getSubforumdb();
+		Forumdb forum= sf.getForumdb();
+		List<String> forbiddenWordsAsList = forum.forbiddenWordsStringToList();
+		for (String forbiddenWord : forbiddenWordsAsList) {
+			if (post.getTitle().contains(forbiddenWord) || post.getContent().contains(forbiddenWord)){
+				_logMsg = "as a respond to POST- sending: "+_msgToClient.sendErrorNoAuthorized();
+				_reportLogger.log(Level.DEBUG ,_logMsg);
+				this._si.closeSession();
+				return _msgToClient.sendErrorNoAuthorized();
+			}
+		}
+		TermVectorStorage storage = new HashMapTermVectorStorage();
+		VectorClassifier vc = new VectorClassifier(storage);
+		if (forum.getEnumMsgFilter().equals("FILTERED")){
+			try {
+				StringBuilder sb = new StringBuilder();
+				sb.append(sf.getSubForumName());
+				sb.append(" ");
+				Set<Threaddb> setOfThreads = sf.getThreaddbs();
+				int numberOfMessages = setOfThreads.size();
+				for (Threaddb threaddb : setOfThreads) {
+					List<Postdb> setOfPosts = _si.getAllPosts(forum.getForumName(),
+							sf.getSubForumName(), threaddb.getIdthread());
+					for (Postdb postdb : setOfPosts) {
+						sb.append(postdb.getTitle());
+						sb.append(" ");
+						sb.append(postdb.getContent());
+						sb.append(" ");
+						numberOfMessages++;
+					}
+					sb.append(threaddb.getTitle());
+					sb.append(" ");
+					sb.append(threaddb.getContent());
+					sb.append(" ");
+				}
+				
+				setVCCutOff(vc, numberOfMessages);
+				vc.teachMatch(sb.toString());
+				if (!vc.isMatch(post.getTitle() + " " + post.getContent())){
+					_logMsg = "as a respond to POST- sending: "+_msgToClient.sendErrorNoAuthorized();
+					_reportLogger.log(Level.DEBUG ,_logMsg);
+					this._si.closeSession();
+					return _msgToClient.sendErrorNoAuthorized();
+				}
+			} catch (ClassifierException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
 		boolean succeeded = false;
 		Object result;
 		String publisherPassword = post.getMemberdb().getPassword();
@@ -1114,7 +1320,6 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 				_reportLogger.log(Level.INFO ,_logMsg);
 				this._si.closeSession();
 				return deleteThreadAndSendOk(tm, requester, password);
-
 			}
 		}
 		if (forum.getEnumDelete().equals("EXTENDED")) {

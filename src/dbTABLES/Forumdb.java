@@ -191,7 +191,7 @@ public class Forumdb implements java.io.Serializable {
 	
 	public List<String> forbiddenWordsStringToList(){
 		List retVal = new ArrayList<>();
-		StringTokenizer st = new StringTokenizer(this.forbiddenWords);
+		StringTokenizer st = new StringTokenizer(this.forbiddenWords, " \n\r");
 		while (st.hasMoreTokens()){
 			String s = st.nextToken();
 			retVal.add(s);
