@@ -1359,7 +1359,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 			String subForumName, String adminUserName, String adminPassword) {
 		Object moderators = null;
 		msgToSend = "GETALLMOD\n" + "forum:\n"
-		+ forumName + "\n" + "subForum:\n" + subForumName + "adminUserName:\n" + adminUserName + "\n" + "adminPassword:\n" + adminPassword + "\n";
+		+ forumName + "\n" + "subForum:\n" + subForumName + "\n" + "adminUserName:\n" + adminUserName + "\n" + "adminPassword:\n" + adminPassword + "\n";
 		msgToSend += delimiter;
 		log =  adminUserName + " is trying to get all moderators in " + forumName + ", " + subForumName +" ...";
 		reportLogger.log(Level.INFO ,log);
