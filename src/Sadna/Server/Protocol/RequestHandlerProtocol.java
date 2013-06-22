@@ -906,7 +906,8 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			if(forum.getEnumSecurityPolicy().equals("VERIFY_EMAIL")){
 				String code = generateCode();
 				boolean succ = false;
-				while (!succ){
+				int numberOfTries = 0;
+				while (!succ || numberOfTries<10){
 					try {
 						succ = _emailSender.sendCode(email, code);
 					} catch (MessagingException e) {
@@ -916,6 +917,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 						//					this._si.closeSession();
 						//					return _msgToClient.sendErrorInServer();
 					}
+					numberOfTries++;
 
 				}
 				Reactor.addUnverifiedMember(new PairUserForum(userName, forumName), new EmailPassCode(email, password, code));
