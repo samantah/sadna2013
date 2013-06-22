@@ -168,7 +168,7 @@ public class Forumdb implements java.io.Serializable {
 		}
 		Policy p = new Policy(imidOrArgeNotiPolicy, friendsNotiPolicy, deletePolicy, assignModeratorPolicy, cancelModeratorPolicy, 
 				messageContentPolicy, moderatorPermissionPolicy, emailPolicy, seniority, minPublish);
-		return new Forum(forumName, p);
+		return new Forum(forumName, p, this.forbiddenWords);
 	}
 	
 	public Integer getIdforum() {

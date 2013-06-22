@@ -21,6 +21,7 @@ public class Forum implements Serializable {
     private Admin admin;
     private String forumName;
     private Policy policy;
+    private String forbiddenWords;
 
     public Forum(Admin admin, String forumName, Policy policy) {
         this.forumName = forumName;
@@ -28,12 +29,22 @@ public class Forum implements Serializable {
         this.setPolicy(policy);
     }
 
-    public Forum(String forumName, Policy policy) {
+    public Forum(String forumName, Policy policy, String forbidden) {
         this.forumName = forumName;
         this.admin = null;
+        this.forbiddenWords = forbidden;
         this.setPolicy(policy);
     }
 
+    public String getForbiddenWords() {
+        return forbiddenWords;
+    }
+
+    public void setForbiddenWords(String forbiddenWords) {
+        this.forbiddenWords = forbiddenWords;
+    }
+
+    
     public Admin getAdmin() {
         return admin;
     }
