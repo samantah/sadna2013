@@ -890,7 +890,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	//with encryption of the user password
 	public Object handleRegister(String forumName, String userName, String password,
 			String email) {
-		_logMsg = "recieved: REGISTER from "+userName + " forum "+ forumName;
+		_logMsg = "recieved: REGISTER from " + userName + " forum "+ forumName;
 		_reportLogger.log(Level.INFO ,_logMsg);
 		this._si.openSession();
 		if(_si.isValidUserData(forumName, userName, email)){
@@ -904,17 +904,22 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 				}
 			}
 			if(forum.getEnumSecurityPolicy().equals("VERIFY_EMAIL")){
-				String code = ((int)Math.random()*1000000)+"";
-				try {
-					_emailSender.sendCode(email, code);
-				} catch (MessagingException e) {
-					_logMsg = "as a respond to REGISTER- sending: "+_msgToClient.sendErrorInServer();
-					_reportLogger.log(Level.DEBUG ,_logMsg);
-					this._si.closeSession();
-					return _msgToClient.sendErrorInServer();
+				String code = ((int)(Math.random()*1000000))+"";
+				boolean succ = false;
+				while (!succ){
+					try {
+						succ = _emailSender.sendCode(email, code);
+					} catch (MessagingException e) {
+						_logMsg = "as a respond to REGISTER- sending: "+_msgToClient.sendErrorInServer();
+						_reportLogger.log(Level.DEBUG ,_logMsg);
+
+						//					this._si.closeSession();
+						//					return _msgToClient.sendErrorInServer();
+					}
+
 				}
 				Reactor.addUnverifiedMember(new PairUserForum(userName, forumName), new EmailPassCode(email, password, code));
-				
+
 				_logMsg = "as a respond to REGISTER- sending: "+_msgToClient.verification();
 				_reportLogger.log(Level.INFO ,_logMsg);
 				this._si.closeSession();
