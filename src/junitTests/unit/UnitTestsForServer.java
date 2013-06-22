@@ -185,7 +185,7 @@ public class UnitTestsForServer {
 	}
 	
 	@Test
-	public void testPolicy_AssignModerator(){
+	public void policyAssignModeratorTest(){
 		si.openSession();
 		si.initiateForum(ADMIN_NAME2, ADMIN_PASSWORD2, FORUM_NAME2, enumNotiImidiOrAgre.IMIDIATE.toString(), 
 				enumNotiFriends.PUBLISHERS.toString(), enumDelete.EXTENDED.toString(), 

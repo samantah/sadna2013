@@ -69,7 +69,7 @@ public class AcceptanceTests {
 	/* -------------- Tests ---------------- */
 	
 	@Test
-	public void test_RegisterInvalidPass() {
+	public void registerInvalidPassTest() {
 		Member _member1 = bridge.register(FORUM_NAME, USER_NAME, "short", USER_EMAIL);
 		assertNull(_member1);
 		Member _member2 = bridge.register(FORUM_NAME, USER_NAME, "goodButNoNum", USER_EMAIL);
@@ -83,7 +83,7 @@ public class AcceptanceTests {
 	}
 
 	@Test
-	public void test_RegisterValidPass() {
+	public void registerValidPassTest() {
 		Member _member1 = bridge.register(FORUM_NAME, "aclient333", "1234567k", USER_EMAIL);
 		System.out.println(_member1);
 		assertNotNull(_member1);
@@ -92,7 +92,7 @@ public class AcceptanceTests {
 
 	
 	@Test
-	public void test_logIn() throws InterruptedException {
+	public void logInTest() throws InterruptedException {
 		Member _member1 = bridge.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
 		User _user = bridge.login(FORUM_NAME, USER_NAME, "abc 123");
 		assertFalse(_user instanceof Member);
@@ -104,7 +104,7 @@ public class AcceptanceTests {
 
 	
 	@Test
-	public void test_multipleUsersLogin() {
+	public void multipleUsersLoginTest() {
 		char a = 'a';
 		for (int i = 0; i < 3; i++) {
 			Member _member = bridge.register(FORUM_NAME, USER_NAME + a, USER_PASSWORD + a, "email");
@@ -122,7 +122,7 @@ public class AcceptanceTests {
 
 	
 	@Test
-	public void test_multipleUsersRegister() {
+	public void multipleUsersRegisterTest() {
 		char a = 'a';
 		for (int i = 0; i < 5; i++) {
 			Member _member = bridge.register(FORUM_NAME, USER_NAME + a, USER_PASSWORD + a, a + USER_EMAIL);
@@ -135,7 +135,7 @@ public class AcceptanceTests {
 
 	
 	@Test
-	public void test_sameUserName() {
+	public void sameUserNameTest() {
 		Member _member1 = bridge.register(FORUM_NAME, "oneclient", USER_PASSWORD, USER_EMAIL);
 		assertNotNull(_member1);
 		Member _member2 = bridge.register(FORUM_NAME, "oneclient", USER_PASSWORD + "a", USER_EMAIL + 'a');
@@ -146,7 +146,7 @@ public class AcceptanceTests {
 
 
 	@Test
-	public void test_logOut() {
+	public void logOutTest() {
 		Member mem = bridge.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
 		User _user = mem.logout(FORUM_NAME);
 		assertFalse(_user instanceof Member);
@@ -155,14 +155,14 @@ public class AcceptanceTests {
 
 
 	@Test
-	public void getListOfForums(){
+	public void getListOfForumsTest(){
 		List<Forum> forumsList = bridge.getForumsList();
 		assertNotNull(forumsList);
 		assertEquals(1, forumsList.size());
 	}
 
 	@Test
-	public void PublishThread(){
+	public void publishThreadTest(){
 		SubForum sb = bridge.getSubForum(FORUM_NAME, SUB_FORUM_NAME);
 		Member m = bridge.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
 		ThreadMessage tm = new ThreadMessage(sb, "title", "content", m.getUserName());
@@ -173,6 +173,7 @@ public class AcceptanceTests {
 	}
 
 	@Test
+	//Stress test
 	public void manyUsersTest(){
 		System.out.println("start");
 		ClientConnectionHandler[] array = new ClientConnectionHandler[100];
