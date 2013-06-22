@@ -112,5 +112,12 @@ public class Policy implements Serializable{
 	public void setEmailPolicy(enumSecurity emailPolicy) {
 		this.emailPolicy = emailPolicy;
 	}
+
+    @Override
+    public String toString() {
+        return "Policy{" + "imidOrArgeNotiPolicy=" + imidOrArgeNotiPolicy + ", friendsNotiPolicy=" + friendsNotiPolicy + ", deletePolicy=" + deletePolicy + "\n assignModeratorPolicy=" + assignModeratorPolicy + ", cancelModeratorPolicy=" + cancelModeratorPolicy + ", messageContentPolicy=" + messageContentPolicy + "\n moderatorPermissionsPolicy=" + moderatorPermissionsPolicy + ", emailPolicy=" + emailPolicy + ", seniority=" + seniority + ", minPublish=" + minPublish + '}';
+    }
+        
+        
      
 }

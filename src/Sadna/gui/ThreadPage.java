@@ -367,13 +367,12 @@ public class ThreadPage extends ForumJFrame {
         currPost.setTitle(title);
         boolean editPost = member.editPost(currPost);
         if (editPost) {
-            updateListOfPosts();
-            this.jTextFieldAddContent.setText("");
-            this.jTextFieldAddTitle.setText("");
-            this.jButtonEdit.setVisible(false);
-            this.jButtonAddPost.setVisible(true);
-        }
-        else{
+            ThreadPage threadPage = new ThreadPage();
+            this.setVisible(false);
+            this.dispose();
+            threadPage.setVisible(true);
+            CurrentStatus.currFrame = threadPage;
+        } else {
             this.jLabelError.setVisible(true);
         }
     }//GEN-LAST:event_jButtonEditActionPerformed
