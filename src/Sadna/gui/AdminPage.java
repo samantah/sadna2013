@@ -35,7 +35,7 @@ public class AdminPage extends ForumJFrame {
         jTextAreaPolicies.setText(policy.toString());
         Forum f = CurrentStatus.currForum;
         String forbiddenWords = f.getForbiddenWords();
-        String replaced = forbiddenWords.replaceAll(" ", "\n");
+        String replaced = forbiddenWords.replaceAll(" ","\n");
         jTextAreaForbiddenWords.setText(replaced);
 
     }

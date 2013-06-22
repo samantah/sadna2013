@@ -21,11 +21,12 @@ public class Forum implements Serializable {
     private Admin admin;
     private String forumName;
     private Policy policy;
-    private String forbiddenWords;
+    private String forbiddenWords = "";
 
-    public Forum(Admin admin, String forumName, Policy policy) {
+    public Forum(Admin admin, String forumName, Policy policy, String forbidden) {
         this.forumName = forumName;
         this.admin = admin;
+        this.forbiddenWords = forbidden;
         this.setPolicy(policy);
     }
 
