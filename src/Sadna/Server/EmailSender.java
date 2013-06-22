@@ -24,7 +24,7 @@ public class EmailSender {
 	}
 	
 	private String messagecode(String code) {
-		return "Hi,\n Your code is: "+code+".\n"+"To continue, please enter it to the verification window.\n\n"+ "Thank's,\n\n ForumZubiZibi crew (:";
+		return "Hi,\nYour code is: "+code+".\nTo continue, please enter it to the verification window.\n\n"+ "Thank's,\n\nForumZubiZibi crew (:";
 	}
 
 	public void send(String sendTo, String title, String content) throws MessagingException{
