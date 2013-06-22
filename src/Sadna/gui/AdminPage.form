@@ -24,64 +24,87 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace min="-2" pref="191" max="-2" attributes="0"/>
-              <Component id="jLabelHead" min="-2" pref="406" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="jLabelSubForumList" max="32767" attributes="0"/>
-                          <Component id="jScrollPane1" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabelMembersList" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="jLabelSubForumList" pref="156" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane1" max="32767" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jScrollPane2" min="-2" pref="146" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" pref="12" max="32767" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" attributes="0">
+                                      <Component id="jLabelMembersList" max="32767" attributes="0"/>
+                                      <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jScrollPane4" min="-2" pref="146" max="-2" attributes="0"/>
+                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                                              <Component id="jLabelNumberOfThreads" min="-2" pref="139" max="-2" attributes="0"/>
+                                          </Group>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
+                                              <Component id="jLabelNumberOfThreadsForMember" min="-2" pref="139" max="-2" attributes="0"/>
+                                          </Group>
+                                          <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                                              <Component id="jButtonNumberOfThreadsForMember" max="32767" attributes="0"/>
+                                              <Component id="jButtonGetNumberOfThreads" min="-2" pref="199" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jLabelModeratorsList" max="32767" attributes="0"/>
+                                      <EmptySpace min="-2" pref="197" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                          </Group>
                           <Group type="102" attributes="0">
-                              <Component id="jScrollPane2" min="-2" pref="146" max="-2" attributes="0"/>
+                              <Component id="jButtonBack" min="-2" pref="63" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jLabelCurrentMessage" min="-2" pref="497" max="-2" attributes="0"/>
+                                  <Group type="102" attributes="0">
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                          <Component id="jButtonRemoveModerator" max="32767" attributes="0"/>
+                                          <Component id="jButtonAddModerator" min="-2" pref="146" max="-2" attributes="0"/>
+                                          <Component id="jButtonDeleteSubForum" alignment="0" max="32767" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace min="-2" pref="111" max="-2" attributes="0"/>
+                                      <Component id="jButtonGetModerators" min="-2" pref="146" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jButtonNumberOfThreadsForMember" max="32767" attributes="0"/>
-                                  <Component id="jButtonGetNumberOfThreads" max="32767" attributes="0"/>
-                              </Group>
+                              <Component id="jScrollPane3" min="-2" pref="155" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
-                              <Component id="jLabelNumberOfThreads" min="-2" pref="139" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
-                              <Component id="jLabelNumberOfThreadsForMember" min="-2" pref="139" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="jButtonListOfMembersForThreads" pref="195" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="118" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="jButtonBack" min="-2" pref="63" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabelCurrentMessage" min="-2" pref="497" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="jButtonRemoveModerator" max="32767" attributes="0"/>
-                              <Component id="jButtonAddModerator" min="-2" pref="146" max="-2" attributes="0"/>
-                              <Component id="jButtonDeleteSubForum" alignment="0" max="32767" attributes="0"/>
-                          </Group>
+                          <Component id="jLabelHead" alignment="0" min="-2" pref="406" max="-2" attributes="0"/>
+                          <Component id="jLabelPolicies" alignment="0" min="-2" pref="728" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="74" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="jScrollPane3" pref="0" max="32767" attributes="0"/>
-                  <Component id="jButtonListOfMembersForThreads" max="32767" attributes="0"/>
-              </Group>
-              <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -90,41 +113,55 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
               <Component id="jLabelHead" min="-2" pref="34" max="-2" attributes="0"/>
-              <EmptySpace pref="36" max="32767" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jLabelPolicies" min="-2" pref="95" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <Component id="jLabelSubForumList" min="-2" pref="21" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" min="-2" pref="188" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="jLabelMembersList" min="-2" pref="21" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane3" min="-2" pref="188" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Component id="jButtonGetNumberOfThreads" min="-2" pref="39" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="jLabelNumberOfThreads" min="-2" pref="39" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
-                                  <Component id="jButtonNumberOfThreadsForMember" min="-2" pref="39" max="-2" attributes="0"/>
-                                  <EmptySpace max="32767" attributes="0"/>
-                                  <Component id="jLabelNumberOfThreadsForMember" min="-2" pref="39" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="jLabelSubForumList" min="-2" pref="21" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="jScrollPane1" min="-2" pref="188" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="jLabelMembersList" alignment="3" min="-2" pref="21" max="-2" attributes="0"/>
+                                  <Component id="jLabelModeratorsList" alignment="3" min="-2" pref="21" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="jScrollPane2" min="-2" pref="188" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jScrollPane3" min="-2" pref="188" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <Component id="jButtonGetNumberOfThreads" min="-2" pref="39" max="-2" attributes="0"/>
+                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                          <Component id="jLabelNumberOfThreads" min="-2" pref="39" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                                          <Component id="jButtonNumberOfThreadsForMember" min="-2" pref="39" max="-2" attributes="0"/>
+                                          <EmptySpace max="32767" attributes="0"/>
+                                          <Component id="jLabelNumberOfThreadsForMember" min="-2" pref="39" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Component id="jScrollPane2" min="-2" pref="188" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="jScrollPane4" min="-2" pref="188" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                       </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jButtonAddModerator" min="-2" pref="37" max="-2" attributes="0"/>
+                          <Component id="jButtonListOfMembersForThreads" min="-2" pref="39" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="jButtonGetModerators" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jButtonAddModerator" min="-2" pref="37" max="-2" attributes="0"/>
-                  <Component id="jButtonListOfMembersForThreads" min="-2" pref="39" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
               <Component id="jButtonRemoveModerator" min="-2" pref="37" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
               <Component id="jButtonDeleteSubForum" min="-2" pref="37" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -290,6 +327,49 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonBackActionPerformed"/>
       </Events>
+    </Component>
+    <Container class="javax.swing.JScrollPane" name="jScrollPane4">
+      <AuxValues>
+        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Component class="javax.swing.JList" name="jListModerators">
+          <Properties>
+            <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
+              <StringArray count="1">
+                <StringItem index="0" value="list of moderators"/>
+              </StringArray>
+            </Property>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Component class="javax.swing.JLabel" name="jLabelModeratorsList">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="14" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="List of moderators"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButtonGetModerators">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="get moderators"/>
+        <Property name="toolTipText" type="java.lang.String" value="shows the number of threads written by the selected member"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonGetModeratorsActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabelPolicies">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="12" style="2"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="list of policies"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

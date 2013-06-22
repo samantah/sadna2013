@@ -393,13 +393,11 @@ public class SubForumPage extends ForumJFrame {
         currTM.setTitle(title);
         boolean editThread = member.editThread(currTM);
         if (editThread) {
-            updateListOfThreads();
-            this.jTextFieldAddContent.setText("");
-            this.jTextFieldAddTitle.setText("");
-            this.jButtonEdit.setVisible(false);
-            this.jButtonEditThread.setVisible(true);
-            this.jButtonPublisThread.setVisible(true);
-            this.jLabelError.setVisible(false);
+            SubForumPage subForumPage = new SubForumPage();
+            this.setVisible(false);
+            this.dispose();
+            subForumPage.setVisible(true);
+            CurrentStatus.currFrame = subForumPage;
         } else {
             this.jLabelError.setVisible(true);
         }
@@ -425,7 +423,6 @@ public class SubForumPage extends ForumJFrame {
         this.dispose();
         subForumPage.setVisible(true);
     }//GEN-LAST:event_jButtonRefreshActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton getNotificationsButton;
     private javax.swing.JButton jButtonBack;
