@@ -20,9 +20,13 @@ public class EmailSender {
 	}
 	
 	public void sendCode(String sendTo, String code) throws MessagingException{
-		send(sendTo, "Welcome To ForumZubiZubi", code);
+		send(sendTo, "Welcome To ForumZubiZubi", messagecode(code));
 	}
 	
+	private String messagecode(String code) {
+		return "Hi,\n Your code is: "+code+".\n"+"To continue, please enter it to the verification window.\n\n"+ "Thank's,\n\n ForumZubiZibi crew (:";
+	}
+
 	public void send(String sendTo, String title, String content) throws MessagingException{
 		String host = "smtp.gmail.com";
 	    String from = emailUsernameCompany;
