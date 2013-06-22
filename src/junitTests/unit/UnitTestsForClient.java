@@ -39,7 +39,7 @@ public class UnitTestsForClient {
 	public static final String SUPER_ADMIN_NAME = "superAdmin";
 	public static final String SUPER_ADMIN_PASSWORD = "superAdmin1234";
 
-	public static final String FORUM_NAME = "forum233"; //valid forum
+	public static final String FORUM_NAME = "forum 233"; //valid forum
 	public static final String ADMIN_NAME = "adminsami";
 	public static final String ADMIN_PASSWORD = "adminpass12";
 
@@ -51,8 +51,8 @@ public class UnitTestsForClient {
 	public static final String ADMIN2_NAME = "adminsnir";
 	public static final String ADMIN2_PASSWORD = "adminpass13";
 
-	public static final String SUBFORUM_Buy_cars = "buy cars"; //valid sub forum
-	public static final String SUBFORUM_Holidays = "holiday options"; //valid sub forum
+	public static final String SUBFORUM_Buy_cars = "cars"; //valid sub forum
+	public static final String SUBFORUM_Holidays = "holiday"; //valid sub forum
 	public static final String SUBFORUM_Food_and_animals = "food and animals"; //valid sub forum 2
 
 
@@ -97,7 +97,7 @@ public class UnitTestsForClient {
 
 
 	public static void initiateTestPlatform() {
-		ch = new ClientConnectionHandler("192.168.0.103", 3333);
+		ch = new ClientConnectionHandler("192.168.1.104", 3333);
 		User u = new User(ch);
 		SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
 		sa.clearDataBase();
@@ -107,7 +107,7 @@ public class UnitTestsForClient {
 				enumCancelModerator.NO_RESTRICTION, enumMessageContent.NOT_FILTERED,
 				enumModeratorPermissions.EXTENDED, 
 				enumSecurity.NOT_USED_EMAIL, 0, 0);
-		sa.initiateForum(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD, policy, "*");
+		sa.initiateForum(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD, policy, "fuck shit");
 		Forum forum = sa.getForum(FORUM_NAME);
 
 		Member m1 = u.register(FORUM_NAME, "samanta h", "ksjdf66asd", "sdf@adf.com");
@@ -513,6 +513,7 @@ public class UnitTestsForClient {
 	public void getAllForumMembersTest(){
 		User u = new User(ch);
 		Admin ad = (Admin)u.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
+		assertNotNull(ad);
 		assertNotNull(ad.getAllForumMembers());
 	}
 
@@ -520,10 +521,15 @@ public class UnitTestsForClient {
 	public void hasNotificationsTest(){
 		User u = new User(ch);
 		Member member = u.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
+		assertNotNull(member);
 		SubForum sf = member.getSubForum(FORUM_NAME, SUBFORUM_Buy_cars);
+		assertNotNull(sf);
 		ThreadMessage tm = new ThreadMessage(sf, "new title44", "new content44", member.getUserName());
+		assertNotNull(tm);
 		assertTrue(member.publishThread(tm));
 		List<ThreadMessage> threadssss = member.viewThreadMessages(FORUM_NAME, SUBFORUM_Buy_cars);
+		assertNotNull(threadssss);
+		assertTrue(threadssss.size() > 0);
 		for (ThreadMessage threadMessage : threadssss) {
 			if(threadMessage.getTitle().equals("new title44")){
 				tm = threadMessage;
@@ -531,6 +537,7 @@ public class UnitTestsForClient {
 			}
 		}
 		Member member2 = u.register(FORUM_NAME, "chen", "chen1234", "emaaail@mail.com");
+		assertNotNull(member2);
 		Post post = new Post(tm, "new post555", "new post cont555", member2.getUserName());
 		assertTrue(member2.postComment(post));
 		boolean has = member.hasNotifications();
@@ -560,9 +567,11 @@ public class UnitTestsForClient {
 		Admin admin = (Admin) u.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
 		assertNotNull(admin);
 		Member mem = u.register(FORUM_NAME, "a user", "asfadsf23", "mailaaa.cc@gmail.com");
+		assertNotNull(mem);
 		assertEquals(0, admin.getNumOfUserThreads(FORUM_NAME, mem.getUserName()));
 		SubForum sf = mem.getSubForum(FORUM_NAME, SUBFORUM_Buy_cars);
-		mem.publishThread(new ThreadMessage(sf, "my thread lalalala", "my content babababa", "a user"));
+		assertNotNull(sf);
+		assertTrue(mem.publishThread(new ThreadMessage(sf, "my thread lalalala", "my content babababa", "a user")));
 		assertEquals(1, admin.getNumOfUserThreads(FORUM_NAME, mem.getUserName()));
 	}
 
@@ -572,15 +581,19 @@ public class UnitTestsForClient {
 		Admin admin = (Admin) u.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
 		assertNotNull(admin);
 		Member mem = u.register(FORUM_NAME, "zohar1", "addsfadsf23", "z.cc@gmail.com");
+		assertNotNull(mem);
 		HashMap<String, List<String>> usersCommentsPerUser = admin.getUsersPostToUser(FORUM_NAME);
 		assertNotNull(usersCommentsPerUser);
 		List<String> posters = usersCommentsPerUser.get(mem.getUserName());
 		assertEquals(0, posters.size());
 		SubForum sf = mem.getSubForum(FORUM_NAME, SUBFORUM_Buy_cars);
-		mem.publishThread(new ThreadMessage(sf, "zohar1 thread", "zohar1 content", "zohar1"));
+		assertNotNull(sf);
+		assertTrue(mem.publishThread(new ThreadMessage(sf, "zohar1 thread", "zohar1 content", "zohar1")));
 
 		Member mem1 = u.register(FORUM_NAME, "memberrrr1", "SDfsd777", "mjj.cc@gmail.com");
+		assertNotNull(mem1);
 		List<ThreadMessage> tmessages = mem1.viewThreadMessages(FORUM_NAME, SUBFORUM_Buy_cars);
+		assertNotNull(tmessages);
 		ThreadMessage zoharTm = null;
 		for (ThreadMessage threadMessage : tmessages) {
 			if(threadMessage.getTitle().equals("zohar1 thread")){
@@ -608,18 +621,23 @@ public class UnitTestsForClient {
 				enumCancelModerator.RESTRICTED, enumMessageContent.NOT_FILTERED,
 				enumModeratorPermissions.EXTENDED, 
 				enumSecurity.NOT_USED_EMAIL, 0, 0);
-		sa.initiateForum(FORUM2_NAME, ADMIN_NAME, ADMIN_PASSWORD, policy, "*");
+		assertTrue(sa.initiateForum(FORUM2_NAME, ADMIN_NAME, ADMIN_PASSWORD, policy, "*"));
 
 		Forum forum = sa.getForum(FORUM2_NAME);
+		assertNotNull(forum);
 		List<Member> members1 = new ArrayList<Member>();
-		u.register(FORUM2_NAME, USER2_NAME, USER2_PASSWORD, USER2_EMAIL);
-		u.register(FORUM2_NAME, USER3_NAME, USER3_PASSWORD, USER3_EMAIL);
-		Member m2 = u.login(FORUM2_NAME, USER2_NAME, USER2_PASSWORD);
+		assertNotNull(members1);
+		Member m2 = u.register(FORUM2_NAME, USER2_NAME, USER2_PASSWORD, USER2_EMAIL);
+		Member m3 = u.register(FORUM2_NAME, USER3_NAME, USER3_PASSWORD, USER3_EMAIL);
+		assertNotNull(m2);
+		assertNotNull(m3);
+		
 		members1.add(m2);
-		Member m3 = u.login(FORUM2_NAME, USER3_NAME, USER3_PASSWORD);
 		members1.add(m3);
 		SubForum subForum2 = new SubForum(forum, SUBFORUM_Food_and_animals);
 		Admin admin = (Admin) u.login(FORUM2_NAME, ADMIN_NAME, ADMIN_PASSWORD);
+		assertNotNull(admin);
+		
 		assertTrue(admin.addSubForum(subForum2, members1));
 		assertTrue(admin.removeModerator(FORUM2_NAME, SUBFORUM_Food_and_animals, m3.getUserName()));
 		assertFalse(admin.removeModerator(FORUM2_NAME, SUBFORUM_Food_and_animals, m2.getUserName()));
@@ -635,26 +653,32 @@ public class UnitTestsForClient {
 				enumCancelModerator.RESTRICTED, enumMessageContent.NOT_FILTERED,
 				enumModeratorPermissions.EXTENDED, 
 				enumSecurity.NOT_USED_EMAIL, 0, 0);
-		sa.initiateForum(FORUM2_NAME, ADMIN2_NAME, ADMIN2_PASSWORD, policy, "*");
+		assertTrue(sa.initiateForum(FORUM2_NAME, ADMIN2_NAME, ADMIN2_PASSWORD, policy, "*"));
 
 		Forum forum = sa.getForum(FORUM2_NAME);
+		assertNotNull(forum);
 		List<Member> members1 = new ArrayList<Member>();
 		Member m2 = u.register(FORUM2_NAME, USER2_NAME, USER2_PASSWORD, USER2_EMAIL);
+		assertNotNull(m2);
 		members1.add(m2);
 		SubForum subForum = new SubForum(forum, SUBFORUM_Food_and_animals);
 		Admin admin = (Admin) u.login(FORUM2_NAME, ADMIN2_NAME, ADMIN2_PASSWORD);
+		assertNotNull(admin);
 		assertTrue(admin.addSubForum(subForum, members1));
 
 		Member m3 = u.register(FORUM2_NAME, USER3_NAME, USER3_PASSWORD, USER3_EMAIL);
-
+		assertNotNull(m3);
 		ThreadMessage threadMessage = new ThreadMessage(subForum, "title for delete test", "content for delete", USER3_NAME);
 
-		m3.publishThread(threadMessage);
+		assertTrue(m3.publishThread(threadMessage));
 		forum = admin.getForum(FORUM2_NAME);
+		assertNotNull(forum);
 		List<Moderator> mods = admin.getAllModeratorsInSubForum(FORUM2_NAME, SUBFORUM_Food_and_animals);
 		assertNotNull(mods);
+		assertTrue(mods.size() > 0);
 		Moderator mod = mods.get(0);
 		List<ThreadMessage> tmessages = m3.viewThreadMessages(FORUM2_NAME, SUBFORUM_Food_and_animals);
+		assertNotNull(tmessages);
 		ThreadMessage m3tm = null;
 		for (ThreadMessage thr : tmessages) {
 			if(thr.getTitle().equals("title for delete test")){
@@ -677,31 +701,35 @@ public class UnitTestsForClient {
 				enumCancelModerator.NO_RESTRICTION, enumMessageContent.NOT_FILTERED,
 				enumModeratorPermissions.EXTENDED, 
 				enumSecurity.NOT_USED_EMAIL, 0, 0);
-		sa.initiateForum(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD, policy, "*");
+		assertTrue(sa.initiateForum(FORUM1_NAME, ADMIN_NAME, ADMIN_PASSWORD, policy, "*"));
 
-		Forum forum = sa.getForum(FORUM2_NAME);
+		Forum forum = sa.getForum(FORUM1_NAME);
+		assertNotNull(forum);
 		List<Member> members1 = new ArrayList<Member>();
-		Member m2 = u.register(FORUM_NAME, USER2_NAME, USER2_PASSWORD, USER2_EMAIL);
+		assertNotNull(members1);
+		Member m2 = u.register(FORUM1_NAME, USER2_NAME, USER2_PASSWORD, USER2_EMAIL);
 		assertNotNull(m2);
 		members1.add(m2);
 		SubForum subForum2 = new SubForum(forum, SUBFORUM_Food_and_animals);
-		Admin admin = (Admin) u.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
+		Admin admin = (Admin) u.login(FORUM1_NAME, ADMIN_NAME, ADMIN_PASSWORD);
+		assertNotNull(admin);
 		assertTrue(admin.addSubForum(subForum2, members1));
 
-		Member m3 = u.register(FORUM_NAME, USER3_NAME, USER3_PASSWORD, USER3_EMAIL);
-		Member m1 = u.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
+		Member m3 = u.register(FORUM1_NAME, USER3_NAME, USER3_PASSWORD, USER3_EMAIL);
+		Member m1 = u.register(FORUM1_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL);
 		assertNotNull(m3);
 		assertNotNull(m1);
 
-
-		SubForum sf = m1.getSubForum(FORUM_NAME, SUBFORUM_Food_and_animals);
+		SubForum sf = m1.getSubForum(FORUM1_NAME, SUBFORUM_Food_and_animals);
+		assertNotNull(sf);
 		ThreadMessage tm = new ThreadMessage(sf, "new ----- title", "new -----aa content", m1.getUserName());
 		assertTrue(m1.publishThread(tm));
 		List<ForumNotification> notis = m3.getNotificationsFromServer();
+		assertNotNull(notis);
 		assertEquals(0, notis.size());
-
 	}
 
+	
 	@Test
 	public void testPolicy_Security(){
 		// email should be unique!!
@@ -714,9 +742,7 @@ public class UnitTestsForClient {
 				enumCancelModerator.NO_RESTRICTION, enumMessageContent.NOT_FILTERED,
 				enumModeratorPermissions.EXTENDED, 
 				enumSecurity.NOT_USED_EMAIL, 0, 0);
-		sa.initiateForum(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD, policy, "*");
-
-		Forum forum = sa.getForum(FORUM2_NAME);
+		assertTrue(sa.initiateForum(FORUM2_NAME, ADMIN_NAME, ADMIN_PASSWORD, policy, "*"));
 
 		Member mem333 = u.register(FORUM2_NAME, USER2_NAME, USER2_PASSWORD, "first.mail@unique.mail");
 		assertNotNull(mem333);
@@ -736,26 +762,32 @@ public class UnitTestsForClient {
 				enumCancelModerator.NO_RESTRICTION, enumMessageContent.NOT_FILTERED,
 				enumModeratorPermissions.LIMITED, 
 				enumSecurity.NOT_USED_EMAIL, 0, 0);
-		sa.initiateForum(FORUM2_NAME, ADMIN2_NAME, ADMIN2_PASSWORD, policy, "*");
+		assertTrue(sa.initiateForum(FORUM2_NAME, ADMIN2_NAME, ADMIN2_PASSWORD, policy, "*"));
 
 		Forum forum = sa.getForum(FORUM2_NAME);
+		assertNotNull(forum);
 		List<Member> members1 = new ArrayList<Member>();
 		Member m2 = u.register(FORUM2_NAME, USER2_NAME, USER2_PASSWORD, USER2_EMAIL);
+		assertNotNull(m2);
 		members1.add(m2);
 		SubForum subForum = new SubForum(forum, SUBFORUM_Food_and_animals);
 		Admin admin = (Admin) u.login(FORUM2_NAME, ADMIN2_NAME, ADMIN2_PASSWORD);
+		assertNotNull(admin);
 		assertTrue(admin.addSubForum(subForum, members1));
 
 		Member m3 = u.register(FORUM2_NAME, USER3_NAME, USER3_PASSWORD, USER3_EMAIL);
-
+		assertNotNull(m3);
 		ThreadMessage threadMessage = new ThreadMessage(subForum, "title for delete test", "content for delete", USER3_NAME);
 
-		m3.publishThread(threadMessage);
+		assertTrue(m3.publishThread(threadMessage));
 		forum = admin.getForum(FORUM2_NAME);
+		assertNotNull(forum);
 		List<Moderator> mods = admin.getAllModeratorsInSubForum(FORUM2_NAME, SUBFORUM_Food_and_animals);
-		assertNotNull(mods);
+		assertNotNull(mods); 
+		assertTrue(mods.size() > 0);
 		Moderator mod = mods.get(0);
 		List<ThreadMessage> tmessages = m3.viewThreadMessages(FORUM2_NAME, SUBFORUM_Food_and_animals);
+		assertNotNull(tmessages);
 		ThreadMessage m3tm = null;
 		for (ThreadMessage thr : tmessages) {
 			if(thr.getTitle().equals("title for delete test")){
@@ -781,25 +813,32 @@ public class UnitTestsForClient {
 				enumCancelModerator.NO_RESTRICTION, enumMessageContent.FILTERED,
 				enumModeratorPermissions.EXTENDED, 
 				enumSecurity.NOT_USED_EMAIL, 0, 0);
-		sa.initiateForum(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD, policy, "*");
+		assertTrue(sa.initiateForum(FORUM1_NAME, ADMIN_NAME, ADMIN_PASSWORD, policy, "*"));
 		Forum forum = sa.getForum(FORUM_NAME);
-
-		Member m1 = u.register(FORUM_NAME, "sofy c", "ksjdf66asd", "sdf@adf.com");
-		Member m2 = u.register(FORUM_NAME, "ori li", "ksjdf66asd", "sd444f1@adf.com");
-		Member m3 = u.register(FORUM_NAME, "neta lee", "ksjdf66asd", "sd2222f2@adf.com");
-		Admin admin = (Admin) u.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
+		assertNotNull(forum);
+		
+		Member m1 = u.register(FORUM1_NAME, "sofy c", "ksjdf66asd", "sdf@adf.com");
+		Member m2 = u.register(FORUM1_NAME, "ori li", "ksjdf66asd", "sd444f1@adf.com");
+		Member m3 = u.register(FORUM1_NAME, "neta lee", "ksjdf66asd", "sd2222f2@adf.com");
+		Admin admin = (Admin) u.login(FORUM1_NAME, ADMIN_NAME, ADMIN_PASSWORD);
+		assertNotNull(m1);
+		assertNotNull(m2);
+		assertNotNull(m3);
+		assertNotNull(admin);
 
 		SubForum subForum_Holidays = new SubForum(forum, SUBFORUM_Holidays);
 		ArrayList<Member> moderatorsFor_Holidays = new ArrayList<Member>();
 		moderatorsFor_Holidays.add(m2);
 		moderatorsFor_Holidays.add(m3);
-		admin.addSubForum(subForum_Holidays, moderatorsFor_Holidays);
+		assertTrue(admin.addSubForum(subForum_Holidays, moderatorsFor_Holidays));
 		ThreadMessage tm_french = new ThreadMessage(subForum_Holidays, "best french holiday options...?", "hi all, my boyfriend and i want to travel this summer to france, any ideas?", "sofy c");
 		ThreadMessage tm_list = new ThreadMessage(subForum_Holidays, "my holiday options", "here is a small list of my prefered vacations: bali, thailand, hawaii and costa rica!!! right?", "neta lee");
 
-		m1.publishThread(tm_french);
-		m3.publishThread(tm_list);
-		List<ThreadMessage> threadMessages = m1.viewThreadMessages(FORUM_NAME, SUBFORUM_Holidays);
+		assertTrue(m1.publishThread(tm_french));
+		assertTrue(m3.publishThread(tm_list));
+		List<ThreadMessage> threadMessages = m1.viewThreadMessages(FORUM1_NAME, SUBFORUM_Holidays);
+		assertNotNull(threadMessages); 
+		assertTrue(threadMessages.size() > 1);
 		if(threadMessages.get(0).getTitle().equals("best french holiday options...?")){
 			tm_french = threadMessages.get(0);
 			tm_list = threadMessages.get(1);
@@ -814,9 +853,31 @@ public class UnitTestsForClient {
 		Post post2 = new Post(tm_french, "go to eurodisney in france", "if you are going with kids -> that's a must to visit!! even for adults :)", "ori li");
 		Post post3 = new Post(tm_list, "add some sites to your holiday options list", "what about the big cities like new york, Buenos Aires, Barcelona...?", "sofy c");
 
-		m2.postComment(post3);
-		m2.postComment(post2);
-		m1.postComment(post);
+		assertTrue(m2.postComment(post3));
+		assertTrue(m2.postComment(post2));
+		assertTrue(m1.postComment(post));
+	}
+	
+	@Test
+	public void testBadWords(){
+		User u = new User(ch);
+		Member member = u.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL1);
+		assertNotNull(member);
+		SubForum sf = member.getSubForum(FORUM_NAME, SUBFORUM_Buy_cars);
+		assertNotNull(sf);
+		ThreadMessage tm_bad_title = new ThreadMessage(sf, "go fuck it", "should not publish this one..", member.getUserName());
+		assertFalse(member.publishThread(tm_bad_title));
+		ThreadMessage tm_bad_content = new ThreadMessage(sf, "looking to buy a car - shouldn't publish this one", "shit, fuck you man!", member.getUserName());
+		assertFalse(member.publishThread(tm_bad_content));
+		List<ThreadMessage> tms = member.viewThreadMessages(FORUM_NAME, SUBFORUM_Buy_cars);
+		assertNotNull(tms);
+		assertTrue(tms.size() > 0);
+		ThreadMessage someTm = tms.get(0);
+		assertNotNull(someTm);
+		Post post_bad_title = new Post(someTm, "fuck this shit", "don't post it!!", member.getUserName());
+		assertFalse(member.postComment(post_bad_title));
+		Post post_bad_content = new Post(someTm, "looks like normal title", "you shit fuck!", member.getUserName());
+		assertFalse(member.postComment(post_bad_content));
 	}
 	
 }
