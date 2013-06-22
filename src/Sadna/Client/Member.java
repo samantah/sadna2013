@@ -25,6 +25,10 @@ public class Member extends User {
     protected List<ForumNotification> notifications;
     protected long dateOfJoining;
 
+    public Member(){
+    	
+    }
+    
     public Member(String userName, String password, String email, String forum, ClientCommunicationHandlerInterface ch) {
         super(ch);
         this.userName = userName;

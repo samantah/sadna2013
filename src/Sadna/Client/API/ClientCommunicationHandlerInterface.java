@@ -93,5 +93,7 @@ public interface ClientCommunicationHandlerInterface extends Serializable {
     public boolean hasNotifications(String forum, String userName, String password);
 
 	public boolean clearDataBase(String superAdminName, String superAdminPassword);
+	
+	public Member verifyEmail(String forumName, String username, String randomCode);
 
 }
