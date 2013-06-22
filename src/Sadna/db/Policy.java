@@ -115,7 +115,7 @@ public class Policy implements Serializable{
 
     @Override
     public String toString() {
-        return "Policy{" + "imidOrArgeNotiPolicy=" + imidOrArgeNotiPolicy + ", friendsNotiPolicy=" + friendsNotiPolicy + ", deletePolicy=" + deletePolicy + "\n assignModeratorPolicy=" + assignModeratorPolicy + ", cancelModeratorPolicy=" + cancelModeratorPolicy + ", messageContentPolicy=" + messageContentPolicy + "\n moderatorPermissionsPolicy=" + moderatorPermissionsPolicy + ", emailPolicy=" + emailPolicy + ", seniority=" + seniority + ", minPublish=" + minPublish + '}';
+        return "Policy\n" + "imidOrArgeNotiPolicy=" + imidOrArgeNotiPolicy + "\n friendsNotiPolicy=" + friendsNotiPolicy + "\n deletePolicy=" + deletePolicy + "\n" + " assignModeratorPolicy=" + assignModeratorPolicy + "\n cancelModeratorPolicy=" + cancelModeratorPolicy + "\n messageContentPolicy=" + messageContentPolicy + "\n moderatorPermissionsPolicy=" + moderatorPermissionsPolicy + "\n emailPolicy=" + emailPolicy + "\n seniority=" + seniority + "\n minPublish=" + minPublish;
     }
         
         

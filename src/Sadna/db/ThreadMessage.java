@@ -10,7 +10,7 @@ import Sadna.db.Generators.PostIDGenerator;
  *
  * @author fistuk
  */
-public class ThreadMessage extends Message {
+public class ThreadMessage extends Message implements Comparable<ThreadMessage>{
 
     /**
      *
@@ -41,6 +41,11 @@ public class ThreadMessage extends Message {
     @Override
     public String toString() {
         return this.getTitle();
+    }
+
+    @Override
+    public int compareTo(ThreadMessage t) {
+        return this.id-t.id;
     }
     
     
