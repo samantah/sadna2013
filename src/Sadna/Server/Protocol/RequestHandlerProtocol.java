@@ -27,6 +27,7 @@ import net.sf.classifier4J.vector.VectorClassifier;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import com.sun.org.apache.regexp.internal.recompile;
 
 
 import java.nio.channels.SocketChannel;
@@ -1474,11 +1475,11 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	}
 
 	private Object handleAddModerator(Subforumdb sf, String moderatorToAdd,
-			String userName, String password) {
+			String adminUserName, String password) {
 		String forumName = sf.getForumdb().getForumName();
 		Forumdb forum = _si.getForum(forumName);
 		Memberdb admin = forum.getMemberdb();
-		if (admin == null || !admin.getUserName().equals(userName)
+		if (admin == null || !admin.getUserName().equals(adminUserName)
 				|| !checkPassword(password, admin.getPassword())) {
 			_logMsg = "as a respond to ADDMOD- sending: "+_msgToClient.sendErrorNoAuthorized();
 			_reportLogger.log(Level.DEBUG ,_logMsg);
@@ -1495,7 +1496,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 
 		if (forum.getEnumAssignModerator().equals("MIN_PUBLISH")) {
 			System.out.println("in min publish");
-			int numberOfUserThreads = _si.getNumberOfUserThreads(forumName, userName, null, null);
+			int numberOfUserThreads = _si.getNumberOfUserThreads(forumName, moderatorToAdd, null, null);
 			int minPublish = forum.getMinPublish();
 			if (numberOfUserThreads < minPublish) {
 				_logMsg = "as a respond to ADDMOD- sending: "+_msgToClient.sendErrorNoAuthorized();
