@@ -272,7 +272,7 @@ public class UnitTestsForClient {
 		assertNotNull(m);
 		assertTrue(m instanceof Admin);
 		Admin a = (Admin)m;
-		Forum fake = new Forum("stamForum", null);
+		Forum fake = new Forum("stamForum", null, "");
 		SubForum illegal = new SubForum(fake, "firstAttemp");
 		ArrayList<Member> mods = new ArrayList<Member>();
 		assertFalse(a.addSubForum(illegal, mods));
