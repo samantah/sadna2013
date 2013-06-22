@@ -906,9 +906,30 @@ public class UnitTestsForClient {
 				enumAssignModerator.NO_RESTRICTION,
 				enumCancelModerator.NO_RESTRICTION, enumMessageContent.FILTERED,
 				enumModeratorPermissions.LIMITED, 
-				enumSecurity.VERIFY_EMAIL, 0, 0);
-		assertTrue(sa.initiateForum("Left forum policies", "leftadmin", "left1234", policy1, ""));
+				enumSecurity.NOT_USED_EMAIL, 0, 0);
+		assertTrue(sa.initiateForum("Left forum policies", "leftadmin", "left1234", policy1, "shit fuck cunt"));
+		Forum forum = sa.getForum("Left forum policies");
+		assertNotNull(forum);
+		Admin admin = (Admin) u.login("Left forum policies", "leftadmin", "left1234");
+		SubForum subForum_Sports = new SubForum(forum, "sports: tenis and football");
+		SubForum subForum_University = new SubForum(forum, "university life");
+		Member m1 = u.register("Left forum policies", "sofy c", "ksjdf66asd", "sdf@adf.com");
+		Member m2 = u.register("Left forum policies", "ori li", "ksjdf66asd", "sd444f1@adf.com");
+		Member m3 = u.register("Left forum policies", "neta lee", "ksjdf66asd", "sd2222f2@adf.com");
+		assertNotNull(m1);
+		assertNotNull(m2);
+		assertNotNull(m3);
+		assertNotNull(admin);
+
+		ArrayList<Member> moderators = new ArrayList<Member>();
+		moderators.add(m1);
+		moderators.add(m2);
+		moderators.add(m3);
 		
+		admin.addSubForum(subForum_Sports, moderators);
+		moderators.clear();
+		moderators.add(m1);
+		admin.addSubForum(subForum_University, moderators);
 		
 		Policy policy2 = new Policy(enumNotiImidiOrAgre.AGGREGATE,
 				enumNotiFriends.PUBLISHERS, enumDelete.EXTENDED,
@@ -917,13 +938,13 @@ public class UnitTestsForClient {
 				enumModeratorPermissions.EXTENDED, 
 				enumSecurity.NOT_USED_EMAIL, 0, 1);
 		assertTrue(sa.initiateForum("Right forum policies", "rightadmin", "right1234", policy2, ""));
-		Forum forum = sa.getForum("Right forum policies");
-		assertNotNull(forum);
-		Admin admin = (Admin) u.login("Right forum policies", "rightadmin", "right1234");
-		SubForum subForum_Clothes = new SubForum(forum, "clothes");
-		SubForum subForum_Computers = new SubForum(forum, "computers and technology");
-		admin.addSubForum(subForum_Clothes, new ArrayList<Member>());
-		admin.addSubForum(subForum_Computers, new ArrayList<Member>());
+		Forum forum1 = sa.getForum("Right forum policies");
+		assertNotNull(forum1);
+		Admin admin2 = (Admin) u.login("Right forum policies", "rightadmin", "right1234");
+		SubForum subForum_Clothes = new SubForum(forum1, "clothes");
+		SubForum subForum_Computers = new SubForum(forum1, "computers and technology");
+		admin2.addSubForum(subForum_Clothes, new ArrayList<Member>());
+		admin2.addSubForum(subForum_Computers, new ArrayList<Member>());
 	}
 	
 }
