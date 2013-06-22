@@ -20,7 +20,7 @@ public class RegistrationPage extends ForumJFrame {
         this.setResizable(false);
         jLabelInvalidData.setVisible(false);
         jLabelVerifyMessage.setVisible(false);
-        jTextFieldCode.disable();
+        jTextFieldCode.setEditable(false);
     }
 
     /**
@@ -190,10 +190,10 @@ public class RegistrationPage extends ForumJFrame {
         }
         if (register.getUserName() == null) {
             this.jLabelVerifyMessage.setVisible(true);
-            jTextFieldUserName.disable();
-            jTextFieldEmail.disable();
-            jPasswordField1.disable();
-            jTextFieldCode.enable();
+            jTextFieldUserName.setEditable(false);
+            jTextFieldEmail.setEditable(false);
+            jPasswordField1.setEditable(false);
+            jTextFieldCode.setEditable(true);
         } else {
             CurrentStatus.currUser = register;
             goBack();
