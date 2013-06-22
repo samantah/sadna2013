@@ -53,8 +53,8 @@ public class User implements Serializable {
         return conHand.register(forumName, userName, password, email);
     }
     
-    public synchronized Member verifyEmail(String forumName, String userName, String randomCode) {
-        return conHand.verifyEmail(forumName, userName, randomCode);
+    public synchronized Member verifyEmail(String forumName, String userName, String password, String randomCode) {
+        return conHand.verifyEmail(forumName, userName, password, randomCode);
     }
 
     public synchronized Forum getForum(String forumName) {
