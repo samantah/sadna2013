@@ -1395,8 +1395,9 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 	}
 
 	@Override
-	public Member verifyEmail(String forumName, String username, String randomCode) {
-		msgToSend = "EMAIL\n"+"forumName:\n"+forumName+"\n"+"username:\n"+username+"\n"+"code:\n"+randomCode+"\n";
+	public Member verifyEmail(String forumName, String username, String password, String randomCode) {
+		msgToSend = "EMAIL\n"+"forumName:\n"+forumName+"\n"+"username:\n"+username+"\n"
+				+"password:\n"+password+"\n"+"code:\n"+randomCode+"\n";
 		msgToSend += delimiter;
 		log =  username + "is trying to verify it's email";
 		reportLogger.log(Level.TRACE ,log);
@@ -1414,13 +1415,6 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 			reportLogger.log(Level.ERROR, log);
 		}
 		if (receivedMsg.contains("200ok")) {
-			String[] received = receivedMsg.split("\n");
-			if(!(received[1].equals(username) && received[3].equals(forumName))){
-				log = "sendVerifyEmail: not the same forum";
-				reportLogger.log(Level.DEBUG, log);
-				return member;
-			}
-			String password = received[2];
 			log =username+ " is logged in to forum "+ forumName +" after a successful verification";
 			reportLogger.log(Level.TRACE ,log);
 			member = new Member(username, password, null, forumName, this);
@@ -1429,7 +1423,7 @@ public class ClientConnectionHandler implements ClientCommunicationHandlerInterf
 			log = "sendVerifyEmail: fail";
 			reportLogger.log(Level.DEBUG, log);
 		}
-	return member;
+		return member;
 	}
 
 }

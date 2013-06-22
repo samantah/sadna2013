@@ -4,7 +4,9 @@ import Sadna.Client.ClientConnectionHandler;
 import Sadna.Server.Protocol.AsyncServerProtocol;
 import Sadna.Server.Protocol.RequestHandlerProtocol;
 import Sadna.Server.Protocol.ServerProtocolFactory;
+import Sadna.Server.EmailPassCode;
 import Sadna.Server.Encryptor;
+import Sadna.Server.PairUserForum;
 import Sadna.Server.ServerToDataBaseHandler;
 import Sadna.Server.Tokenizer.FixedSeparatorMessageTokenizer;
 import Sadna.Server.Tokenizer.MessageTokenizer;
@@ -21,11 +23,14 @@ import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+
+import javassist.compiler.ast.Pair;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -51,7 +56,7 @@ public class Reactor<T> implements Runnable {
     private static IMplInterface _databaseImpl;
 	private static Logger reportLogger;
 	private static String XML_LOGGER_PATH = "./log4j.xml";
-
+	private static HashMap<PairUserForum, EmailPassCode> verificationList = new HashMap<PairUserForum, EmailPassCode>();
 	
     
     /**
@@ -324,4 +329,23 @@ public class Reactor<T> implements Runnable {
     public static Logger getLogger(){
     	return reportLogger;
     }
+    
+    public static void addUnverifiedMember(PairUserForum pair, EmailPassCode threeSome){
+    	synchronized (verificationList) {
+			verificationList.put(pair, threeSome);
+		}
+    }
+   
+   public static void removeUnverifiedMember(PairUserForum pair){
+	   synchronized (verificationList) {
+			verificationList.remove(pair);
+		}
+   }
+   
+   public static EmailPassCode getUnverifiedMember(PairUserForum pair){
+	   synchronized (verificationList) {
+			return verificationList.get(pair);
+		}
+   }
+   
 }

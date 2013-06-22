@@ -34,16 +34,17 @@ public class ServerToDataBaseHandler implements ServerInterface {
 	@Override
 	public boolean register(String forumName, String userName, String password, String email) {
 		boolean isAdded = false;
-
-		if (EmailValidator.isValidEmailAddress(email) && forumExists(forumName) && isUserNameUnique(forumName, userName)) {
-			Forumdb forum = this._db.getForum(forumName);
-			Date now = new Date();
-			long nowAsLong = now.getTime();
-			String nowAsString = String.valueOf(nowAsLong);
-			Memberdb toAdd = new Memberdb(forum, userName, password, email, "Member", nowAsString, "");
-			isAdded = _db.addMember(toAdd);
-		}
+		Forumdb forum = this._db.getForum(forumName);
+		Date now = new Date();
+		long nowAsLong = now.getTime();
+		String nowAsString = String.valueOf(nowAsLong);
+		Memberdb toAdd = new Memberdb(forum, userName, password, email, "Member", nowAsString, "");
+		isAdded = _db.addMember(toAdd);
 		return isAdded;
+	}
+
+	public boolean isValidUserData(String forumName, String userName, String email){
+		return EmailValidator.isValidEmailAddress(email) && forumExists(forumName) && isUserNameUnique(forumName, userName);
 	}
 
 	private boolean isUserNameUnique(String forumName, String userName) {
@@ -159,7 +160,7 @@ public class ServerToDataBaseHandler implements ServerInterface {
 					moderator.setRoll("Moderator");
 					validatedModerators.add(moderator);
 				}
-				
+
 				isAdded = _db.addSubForum(subForum, members);	
 			}
 		}

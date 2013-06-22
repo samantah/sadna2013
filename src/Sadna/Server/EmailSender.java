@@ -6,34 +6,24 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 public class EmailSender {
 	private String emailUsernameCompany;
 	private String emailPasswordCompany;
-	private String emailToUsername;
-	private String messageSubject;
-	private String messageText;
+
 	
-	public EmailSender(String usernameCompany, String passwordCompany, String to, String subject, String text){
-		emailUsernameCompany = usernameCompany;
-		emailPasswordCompany = passwordCompany;
-		emailToUsername = to;
-		messageSubject = subject;
-		messageText = text;
-	}
-	
-	public EmailSender(String to, String subject, String text){
+	public EmailSender(){
 		emailUsernameCompany = "forumlzubizubi";
 		emailPasswordCompany = "zubizubi";
-		emailToUsername = to;
-		messageSubject = subject;
-		messageText = text;
 	}
 	
-	public void send() throws AddressException, MessagingException{
+	public void sendCode(String sendTo, String code) throws MessagingException{
+		send(sendTo, "Welcome To ForumZubiZubi", code);
+	}
+	
+	public void send(String sendTo, String title, String content) throws MessagingException{
 		String host = "smtp.gmail.com";
 	    String from = emailUsernameCompany;
 	    String pass = emailPasswordCompany;
@@ -45,7 +35,7 @@ public class EmailSender {
 	    props.put("mail.smtp.port", "587");
 	    props.put("mail.smtp.auth", "true");
 
-	    String[] to = {emailToUsername}; // added this line
+	    String[] to = {sendTo}; // added this line
 
 	    Session session = Session.getDefaultInstance(props, null);
 	    MimeMessage message = new MimeMessage(session);
@@ -61,8 +51,8 @@ public class EmailSender {
 	    for( int i=0; i < toAddress.length; i++) { // changed from a while loop
 	        message.addRecipient(Message.RecipientType.TO, toAddress[i]);
 	    }
-	    message.setSubject(messageSubject);
-	    message.setText(messageText);
+	    message.setSubject(title);
+	    message.setText(content);
 	    Transport transport = session.getTransport("smtp");
 	    transport.connect(host, from, pass);
 	    transport.sendMessage(message, message.getAllRecipients());

@@ -59,4 +59,8 @@ public class StringMessagesToClient {
 		else
 			return "500 Internal Server Error";
 	}
+
+	public String verification() {
+		return "verification is required";
+	}
 }

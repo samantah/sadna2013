@@ -4,9 +4,12 @@ package Sadna.Server.Protocol;
 import Sadna.Client.Member;
 import Sadna.Client.Moderator;
 import Sadna.Server.API.ServerInterface;
+import Sadna.Server.EmailPassCode;
+import Sadna.Server.EmailSender;
 import Sadna.Server.Encryptor;
 import Sadna.Server.ForumNotification;
 import Sadna.Server.NotificationsFactory;
+import Sadna.Server.PairUserForum;
 import Sadna.Server.Reactor.Reactor;
 import Sadna.Server.StringMessagesToClient;
 import Sadna.Server.Tokenizer.StringMessage;
@@ -24,6 +27,8 @@ import net.sf.classifier4J.vector.VectorClassifier;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import com.sun.org.apache.regexp.internal.recompile;
+
 
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
@@ -34,6 +39,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.mail.MessagingException;
 
 
 
@@ -52,6 +59,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 	private SocketChannel _socketChannel;
 	private Logger _reportLogger;
 	private String _logMsg;
+	private EmailSender _emailSender;
 
 
 	public RequestHandlerProtocol(ServerInterface _si) {
@@ -59,6 +67,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		this._msgToClient = new StringMessagesToClient();
 		this._notificationsFactory = new NotificationsFactory(this._si);
 		this._reportLogger = (Logger) Reactor.getLogger();
+		this._emailSender = new EmailSender();
 
 
 	}
@@ -69,6 +78,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		this._notificationsFactory = new NotificationsFactory(this._si);
 		this._socketChannel = sc;
 		this._reportLogger = (Logger) Reactor.getLogger();
+		this._emailSender = new EmailSender();
 	}
 
 	/**
@@ -147,6 +157,8 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			return handleLogin(parsedReq[2], parsedReq[4], parsedReq[6]);
 		case "REGISTER":
 			return handleRegister(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8]);
+		case "EMAIL":
+			return handleEmail(parsedReq[2], parsedReq[4], parsedReq[6], parsedReq[8]);
 		case "GETSF":
 			return handleGetSubForum(parsedReq[2], parsedReq[4]);
 		case "GETSFL":
@@ -332,6 +344,37 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 
 	}
 
+	private Object handleEmail(String forumName, String username, String password, String randomCode) {
+		//if(_si.getForum(forumName).getEnumSecurityPolicy().equals("VERIFY_EMAIL")){
+		_logMsg = "recieved: EMAIL";
+		_reportLogger.log(Level.TRACE ,_logMsg);
+		this._si.openSession();
+		PairUserForum pair = new PairUserForum(username, forumName);
+		EmailPassCode threeSome = Reactor.getUnverifiedMember(pair);
+		if(threeSome!=null && threeSome.getCode().equals(randomCode) && threeSome.getPassword().equals(password)){
+			String encryptedPassword = Encryptor.encrypt(password);
+			boolean isAdded = _si.register(forumName, username, encryptedPassword, threeSome.getEmail());
+			if (isAdded) {
+				Reactor.removeUnverifiedMember(pair);
+				_logMsg = "as a respond to EMAIL- sending: "+_msgToClient.sendOK();
+				_reportLogger.log(Level.INFO ,_logMsg);
+				this._si.closeSession();
+				return _msgToClient.sendOK();
+			} else {
+				_logMsg = "as a respond to EMAIL- sending: "+_msgToClient.sendErrorInServer();
+				_reportLogger.log(Level.DEBUG ,_logMsg);
+				this._si.closeSession();
+				return _msgToClient.sendErrorInServer();
+			}
+		}
+		else{
+			_logMsg = "as a respond to EMAIL- sending: "+_msgToClient.sendErrorNoAuthorized();
+			_reportLogger.log(Level.DEBUG ,_logMsg);
+			this._si.closeSession();
+			return _msgToClient.sendErrorNoAuthorized();
+		}
+	}
+
 	private Object handleGetAllModerators(String forumName, String subForumName,
 			String adminUserName, String adminPassword) {
 		_logMsg = "recieved: GETALLMOD";
@@ -438,7 +481,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 					sb.append(threaddb.getContent());
 					sb.append(" ");
 				}
-				
+
 				setVCCutOff(vc, numberOfMessages);
 				vc.teachMatch(sb.toString());
 				if (!vc.isMatch(title + " " + content)){
@@ -850,31 +893,53 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		_logMsg = "recieved: REGISTER from "+userName + " forum "+ forumName;
 		_reportLogger.log(Level.INFO ,_logMsg);
 		this._si.openSession();
-		Forumdb forum = _si.getForum(forumName);
-		if(forum.getEnumSecurityPolicy().equals("NOT_USED_EMAIL")){
-			if(!_si.isUniqeEmail(email, forumName)){
-				_logMsg = "as a respond to REGISTER- sending: "+_msgToClient.sendErrorNoAuthorized();
+		if(_si.isValidUserData(forumName, userName, email)){
+			Forumdb forum = _si.getForum(forumName);
+			if(forum.getEnumSecurityPolicy().equals("NOT_USED_EMAIL")){
+				if(!_si.isUniqeEmail(email, forumName)){
+					_logMsg = "as a respond to REGISTER- sending: "+_msgToClient.sendErrorNoAuthorized();
+					_reportLogger.log(Level.DEBUG ,_logMsg);
+					this._si.closeSession();
+					return _msgToClient.sendErrorNoAuthorized();
+				}
+			}
+			if(forum.getEnumSecurityPolicy().equals("VERIFY_EMAIL")){
+				String code = ((int)Math.random()*1000000)+"";
+				try {
+					_emailSender.sendCode(email, code);
+				} catch (MessagingException e) {
+					_logMsg = "as a respond to REGISTER- sending: "+_msgToClient.sendErrorInServer();
+					_reportLogger.log(Level.DEBUG ,_logMsg);
+					this._si.closeSession();
+					return _msgToClient.sendErrorInServer();
+				}
+				Reactor.addUnverifiedMember(new PairUserForum(userName, forumName), new EmailPassCode(email, password, code));
+				
+				_logMsg = "as a respond to REGISTER- sending: "+_msgToClient.verification();
+				_reportLogger.log(Level.INFO ,_logMsg);
+				this._si.closeSession();
+				return _msgToClient.verification();
+			}
+
+			String encryptedPassword = Encryptor.encrypt(password);
+			boolean isAdded = _si.register(forumName, userName, encryptedPassword, email);
+			if (isAdded) {
+				_logMsg = "as a respond to REGISTER- sending: "+_msgToClient.sendOK();
+				_reportLogger.log(Level.INFO ,_logMsg);
+				this._si.closeSession();
+				return _msgToClient.sendOK();
+			} else {
+				_logMsg = "as a respond to REGISTER- sending: "+_msgToClient.sendErrorInServer();
 				_reportLogger.log(Level.DEBUG ,_logMsg);
 				this._si.closeSession();
-				return _msgToClient.sendErrorNoAuthorized();
+				return _msgToClient.sendErrorInServer();
 			}
 		}
-		if(forum.getEnumSecurityPolicy().equals("VERIFY_EMAIL")){
-			//to be implemented
-		}
-
-		String encryptedPassword = Encryptor.encrypt(password);
-		boolean isAdded = _si.register(forumName, userName, encryptedPassword, email);
-		if (isAdded) {
-			_logMsg = "as a respond to REGISTER- sending: "+_msgToClient.sendOK();
-			_reportLogger.log(Level.INFO ,_logMsg);
-			this._si.closeSession();
-			return _msgToClient.sendOK();
-		} else {
-			_logMsg = "as a respond to REGISTER- sending: "+_msgToClient.sendErrorInServer();
+		else{
+			_logMsg = "as a respond to REGISTER- sending: "+_msgToClient.sendErrorNoAuthorized();
 			_reportLogger.log(Level.DEBUG ,_logMsg);
 			this._si.closeSession();
-			return _msgToClient.sendErrorInServer();
+			return _msgToClient.sendErrorNoAuthorized();
 		}
 	}
 
@@ -1120,7 +1185,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 
 	public Object handlePostComment(Postdb post, String userName, String password) {
 		this._si.openSession();
-		
+
 		Subforumdb sf = post.getThreaddb().getSubforumdb();
 		Forumdb forum= sf.getForumdb();
 		List<String> forbiddenWordsAsList = forum.forbiddenWordsStringToList();
@@ -1156,7 +1221,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 					sb.append(threaddb.getContent());
 					sb.append(" ");
 				}
-				
+
 				setVCCutOff(vc, numberOfMessages);
 				vc.teachMatch(sb.toString());
 				if (!vc.isMatch(post.getTitle() + " " + post.getContent())){
