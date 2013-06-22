@@ -27,7 +27,6 @@ import net.sf.classifier4J.vector.VectorClassifier;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import com.sun.org.apache.regexp.internal.recompile;
 
 
 import java.nio.channels.SocketChannel;
