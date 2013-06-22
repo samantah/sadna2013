@@ -819,7 +819,7 @@ public class DataBase implements DBInterface {
 
         DataBase db = new DataBase();
         db.deleteFolder(db.dataBaseFolder);
-        Forum forum = new Forum("forum1", new Policy(enumNotiImidiOrAgre.IMIDIATE, 
+       /* Forum forum = new Forum("forum1", new Policy(enumNotiImidiOrAgre.IMIDIATE, 
         		enumNotiFriends.ALLMEMBERS, enumDelete.LIMITED, 
         		enumAssignModerator.NO_RESTRICTION, 
         		enumCancelModerator.NO_RESTRICTION, 
@@ -868,7 +868,7 @@ public class DataBase implements DBInterface {
         Moderator moderator = new Moderator(member3);
         db.addModerator(moderator, subForum);
         db.deleteModerator(moderator, subForum.getSubForumName());
-
+*/
     }
 
     @Override
