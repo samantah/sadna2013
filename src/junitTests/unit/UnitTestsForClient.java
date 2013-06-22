@@ -262,7 +262,7 @@ public class UnitTestsForClient {
 		int msgID = threadsList.get(0).getId();
 		ThreadMessage threadMessage = u.getThread(FORUM_NAME, SUBFORUM_Buy_cars, msgID);
 		assertNotNull(threadMessage);
-		assertTrue(threadMessage.getTitle().equals("zzzz")|| threadMessage.getTitle().equals("ccccc"));
+		assertTrue(threadMessage.getTitle().equals("where can i buy a car?")|| threadMessage.getTitle().equals("looking to buy a car"));
 	}
 
 	@Test
@@ -673,10 +673,8 @@ public class UnitTestsForClient {
 		assertTrue(m3.publishThread(threadMessage));
 		forum = admin.getForum(FORUM2_NAME);
 		assertNotNull(forum);
-		List<Moderator> mods = admin.getAllModeratorsInSubForum(FORUM2_NAME, SUBFORUM_Food_and_animals);
-		assertNotNull(mods);
-		assertTrue(mods.size() > 0);
-		Moderator mod = mods.get(0);
+		Moderator mod = (Moderator) u.login(FORUM2_NAME, USER2_NAME, USER2_PASSWORD);
+		assertNotNull(mod);
 		List<ThreadMessage> tmessages = m3.viewThreadMessages(FORUM2_NAME, SUBFORUM_Food_and_animals);
 		assertNotNull(tmessages);
 		ThreadMessage m3tm = null;
@@ -766,8 +764,8 @@ public class UnitTestsForClient {
 				enumSecurity.VERIFY_EMAIL, 0, 0);
 		assertTrue(sa.initiateForum(FORUM2_NAME, ADMIN_NAME, ADMIN_PASSWORD, policy, "*"));
 
-		Member mem333 = u.register(FORUM2_NAME, USER2_NAME, USER2_PASSWORD, "my.mail@unique.mail");
-		assertNull(mem333);
+		Member mem333 = u.register(FORUM2_NAME, USER2_NAME, USER2_PASSWORD, "sami.hour@gmail.com");
+		assertNull(mem333.getUserName());
 		Member mem444 = u.verifyEmail(FORUM2_NAME, "other_mem444", "other_pass444", "12345678999");
 		assertNull(mem444);
 	}
@@ -802,10 +800,7 @@ public class UnitTestsForClient {
 		assertTrue(m3.publishThread(threadMessage));
 		forum = admin.getForum(FORUM2_NAME);
 		assertNotNull(forum);
-		List<Moderator> mods = admin.getAllModeratorsInSubForum(FORUM2_NAME, SUBFORUM_Food_and_animals);
-		assertNotNull(mods); 
-		assertTrue(mods.size() > 0);
-		Moderator mod = mods.get(0);
+		Moderator mod = (Moderator)u.login(FORUM2_NAME, USER2_NAME, USER2_PASSWORD);
 		List<ThreadMessage> tmessages = m3.viewThreadMessages(FORUM2_NAME, SUBFORUM_Food_and_animals);
 		assertNotNull(tmessages);
 		ThreadMessage m3tm = null;
@@ -834,7 +829,7 @@ public class UnitTestsForClient {
 				enumModeratorPermissions.EXTENDED, 
 				enumSecurity.NOT_USED_EMAIL, 0, 0);
 		assertTrue(sa.initiateForum(FORUM1_NAME, ADMIN_NAME, ADMIN_PASSWORD, policy, "*"));
-		Forum forum = sa.getForum(FORUM_NAME);
+		Forum forum = sa.getForum(FORUM1_NAME);
 		assertNotNull(forum);
 		
 		Member m1 = u.register(FORUM1_NAME, "sofy c", "ksjdf66asd", "sdf@adf.com");
@@ -869,7 +864,7 @@ public class UnitTestsForClient {
 		}
 		
 		
-		Post post = new Post(tm_french, "your french vacation", "i'm sure you will love paris and all the beautiful sites there.. but i also recommend the south - the riviere..", "neta lee");
+		Post post = new Post(tm_french, "your french vacation", "i'm sure you will love paris holiday (without kids) and all the beautiful sites there for adults.. visit it! but i also recommend the south - the riviere..", "neta lee");
 		Post post2 = new Post(tm_french, "go to eurodisney in france", "if you are going with kids -> that's a must to visit!! even for adults :)", "ori li");
 		Post post3 = new Post(tm_list, "add some sites to your holiday options list", "what about the big cities like new york, Buenos Aires, Barcelona...?", "sofy c");
 
@@ -898,6 +893,29 @@ public class UnitTestsForClient {
 		assertFalse(member.postComment(post_bad_title));
 		Post post_bad_content = new Post(someTm, "looks like normal title", "you shit fuck!", member.getUserName());
 		assertFalse(member.postComment(post_bad_content));
+	}
+	
+	@Test
+	public void buildPolicyForums(){
+		User u = new User(ch);
+		SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
+		sa.clearDataBase();
+		
+		Policy policy1 = new Policy(enumNotiImidiOrAgre.IMIDIATE,
+				enumNotiFriends.ALLMEMBERS, enumDelete.LIMITED,
+				enumAssignModerator.NO_RESTRICTION,
+				enumCancelModerator.NO_RESTRICTION, enumMessageContent.FILTERED,
+				enumModeratorPermissions.LIMITED, 
+				enumSecurity.VERIFY_EMAIL, 0, 0);
+		assertTrue(sa.initiateForum("Left forum policies", "leftadmin", "left1234", policy1, ""));
+		
+		Policy policy2 = new Policy(enumNotiImidiOrAgre.AGGREGATE,
+				enumNotiFriends.PUBLISHERS, enumDelete.EXTENDED,
+				enumAssignModerator.MIN_PUBLISH,
+				enumCancelModerator.RESTRICTED, enumMessageContent.NOT_FILTERED,
+				enumModeratorPermissions.EXTENDED, 
+				enumSecurity.NOT_USED_EMAIL, 0, 1);
+		assertTrue(sa.initiateForum("Right forum policies", "rightadmin", "right1234", policy2, ""));
 	}
 	
 }
