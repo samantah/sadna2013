@@ -32,11 +32,12 @@ public class AcceptanceTests {
 	public static final String SUPER_ADMIN_NAME = "superAdmin";
 	public static final String SUPER_ADMIN_PASSWORD = "superAdmin1234";
 
-	public static final String FORUM_NAME = "forum233"; //valid forum
-	public static final String ADMIN_NAME = "adminsami";
+	public static final String FORUM_NAME = "forum24433"; //valid forum
+	public static final String ADMIN_NAME = "adminaviel";
 	public static final String ADMIN_PASSWORD = "adminpass12";
 
-	public static final String SUB_FORUM_NAME = "zubizubi1"; //valid sub forum
+	public static final String SUB_FORUM_NAME = "Pets"; //valid sub forum
+	public static final String SUB_FORUM_NAME2 = "flowers"; //valid sub forum
 
 	public static final String USER_NAME = "sadnaUser";  //valid username
 	public static final String USER1_EMAIL = "sadna@bgu.ac.il";
@@ -113,7 +114,7 @@ public class AcceptanceTests {
 	public void multipleUsersLoginTest() {
 		char a = 'a';
 		for (int i = 0; i < 3; i++) {
-			Member _member = bridge.register(FORUM_NAME, USER_NAME + a, USER_PASSWORD + a, "email" + "a" + "@.gmail.com");
+			Member _member = bridge.register(FORUM_NAME, USER_NAME + a, USER_PASSWORD + a, "emailzz" + a + "@gmail.com");
 			a++;
 		}
 		a = 'a';
@@ -131,7 +132,7 @@ public class AcceptanceTests {
 	public void multipleUsersRegisterTest() {
 		char a = 'a';
 		for (int i = 0; i < 5; i++) {
-			Member _member = bridge.register(FORUM_NAME, USER_NAME + a, USER_PASSWORD + a, "emaillala" + "a" + "@.gmail.com");
+			Member _member = bridge.register(FORUM_NAME, USER_NAME + a, USER_PASSWORD + a, "emailbaba" + a + "@gmail.com");
 			assertNotNull(_member);
 			a++;
 		}
@@ -169,9 +170,9 @@ public class AcceptanceTests {
 
 	@Test
 	public void publishThreadTest(){
-		SubForum sb = bridge.getSubForum(FORUM_NAME, SUB_FORUM_NAME);
+		SubForum sb = bridge.getSubForum(FORUM_NAME, SUB_FORUM_NAME2);
 		Member m = bridge.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER3_EMAIL);
-		ThreadMessage tm = new ThreadMessage(sb, "title", "content", m.getUserName());
+		ThreadMessage tm = new ThreadMessage(sb, "pets are the best", "i have a dog, and you guys?", m.getUserName());
 		boolean publish = bridge.publishThread(tm, "1234");
 		assertFalse(publish);
 		publish = bridge.publishThread(tm, m.getPassword());
@@ -193,10 +194,10 @@ public class AcceptanceTests {
 			ClientConnectionHandler currUser = array[i];
 			currUser.getForumsList();
 			currUser.getSubForumsList(FORUM_NAME);
-			currUser.getThreadsList(FORUM_NAME, SUB_FORUM_NAME);
+			//currUser.getThreadsList(FORUM_NAME, SUB_FORUM_NAME2);
 		}
 		long end = System.currentTimeMillis();
-		assertTrue((end-start<1000*5));
+		assertTrue((end-start<1000*30));
 	}
 
 	
@@ -220,7 +221,7 @@ public class AcceptanceTests {
 		Member m3 = u.register(FORUM_NAME, "eaaaaa", "ksjdf66asd", "sdf3@adf.com");
 		Admin admin = (Admin) u.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
 		
-		SubForum subForum_flowers = new SubForum(forum, "flowers");
+		SubForum subForum_flowers = new SubForum(forum, SUB_FORUM_NAME2);
 		SubForum subForum_fruits = new SubForum(forum, "fruits");
 		ArrayList<Member> al = new ArrayList<Member>();
 		al.add(m1);
@@ -234,12 +235,12 @@ public class AcceptanceTests {
 		
 		m1.publishThread(tm_flowers1);
 		m2.publishThread(tm_flowers2);
-		List<ThreadMessage> threadMessages = m1.viewThreadMessages(FORUM_NAME, SUB_FORUM_NAME);
+		List<ThreadMessage> threadMessages = m1.viewThreadMessages(FORUM_NAME, SUB_FORUM_NAME2);
 		tm_flowers1 = threadMessages.get(0);
 		tm_flowers2 = threadMessages.get(1);
 		
 		Post post = new Post(tm_flowers1, "love the flowers", "put them a lot in the sun!", "laaaaa");
-		Post post2 = new Post(tm_flowers1, "look at their flowers", "new york flowers are the most beautifull", "eaaaaa");
+		Post post2 = new Post(tm_flowers2, "look at their flowers", "new york flowers are the most beautifull", "eaaaaa");
 		Post post3 = new Post(tm_flowers2, "lovely flowers", "my garden is full, can any one take some?? lol", "baaaaa");
 	
 		m3.postComment(post);
