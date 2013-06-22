@@ -97,7 +97,7 @@ public class UnitTestsForClient {
 
 
 	public static void initiateTestPlatform() {
-		ch = new ClientConnectionHandler("192.168.1.104", 3333);
+		ch = new ClientConnectionHandler("192.168.1.102", 3333);
 		User u = new User(ch);
 		SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
 		sa.clearDataBase();
