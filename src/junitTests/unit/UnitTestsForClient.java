@@ -39,7 +39,7 @@ public class UnitTestsForClient {
 	public static final String SUPER_ADMIN_NAME = "superAdmin";
 	public static final String SUPER_ADMIN_PASSWORD = "superAdmin1234";
 
-	public static final String FORUM_NAME = "forum 233"; //valid forum
+	public static final String FORUM_NAME = "forum233"; //valid forum
 	public static final String ADMIN_NAME = "adminsami";
 	public static final String ADMIN_PASSWORD = "adminpass12";
 
@@ -235,14 +235,14 @@ public class UnitTestsForClient {
 	}
 
 	@Test
-	public void getSubForumsListTest(){
+	public void viewSubForumsTest(){
 		User u = new User(ch);
 		List<SubForum> sfList = u.viewSubForums(FORUM_NAME);
 		assertNotNull(sfList);
 	}
 
 	@Test
-	public void getThreadsListTest() {
+	public void viewThreadMessagesTest() {
 		User u = new User(ch);
 		List<ThreadMessage> tmList = u.viewThreadMessages(FORUM_NAME, SUBFORUM_Buy_cars);
 		assertNotNull(tmList);
@@ -250,7 +250,7 @@ public class UnitTestsForClient {
 	}
 
 	@Test
-	public void getForumsListTest(){
+	public void viewForumsTest(){
 		User u = new User(ch);
 		assertNotNull(u.viewForums());
 	}
@@ -483,7 +483,7 @@ public class UnitTestsForClient {
 	}
 
 	@Test
-	public void getNumOfForums(){
+	public void getNumOfForumsTest(){
 		User u = new User(ch);
 		SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
 		assertEquals(sa.getForumCounter(), 1);
@@ -562,7 +562,7 @@ public class UnitTestsForClient {
 	}
 
 	@Test
-	public void	testGetNumOfUserThreads(){
+	public void	getNumOfUserThreadsTest(){
 		User u = new User(ch);
 		Admin admin = (Admin) u.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
 		assertNotNull(admin);
@@ -576,7 +576,7 @@ public class UnitTestsForClient {
 	}
 
 	@Test
-	public void testGetUsersPostToUser(){
+	public void getUsersPostToUserTest(){
 		User u = new User(ch);
 		Admin admin = (Admin) u.login(FORUM_NAME, ADMIN_NAME, ADMIN_PASSWORD);
 		assertNotNull(admin);
@@ -612,7 +612,7 @@ public class UnitTestsForClient {
 	}
 
 	@Test
-	public void testPolicy_CancelModerator(){
+	public void policyCancelModeratorTest(){
 		User u = new User(ch);
 		SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
 		Policy policy = new Policy(enumNotiImidiOrAgre.IMIDIATE,
@@ -644,7 +644,7 @@ public class UnitTestsForClient {
 	}
 
 	@Test
-	public void testPolicy_DeleteOptionForModerator(){
+	public void policyDeleteOptionForModeratorTest(){
 		User u = new User(ch);
 		SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
 		Policy policy = new Policy(enumNotiImidiOrAgre.IMIDIATE,
@@ -692,7 +692,7 @@ public class UnitTestsForClient {
 	}
 
 	@Test
-	public void testPolicy_NotiFriends(){
+	public void policyNotiFriendsTest(){
 		User u = new User(ch);
 		SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
 		Policy policy = new Policy(enumNotiImidiOrAgre.IMIDIATE,
@@ -731,7 +731,7 @@ public class UnitTestsForClient {
 
 	
 	@Test
-	public void testPolicy_Security(){
+	public void policySecurityTest(){
 		// email should be unique!!
 
 		User u = new User(ch);
@@ -753,7 +753,7 @@ public class UnitTestsForClient {
 	}
 
 	@Test
-	public void testPolicy_ModeratorPermissions(){
+	public void policyModeratorPermissionsTest(){
 		User u = new User(ch);
 		SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
 		Policy policy = new Policy(enumNotiImidiOrAgre.IMIDIATE,
@@ -803,7 +803,7 @@ public class UnitTestsForClient {
 
 
 	@Test
-	public void testPolicy_MessageContent(){
+	public void policyMessageContentTest(){
 		User u = new User(ch);
 		SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
 		sa.clearDataBase();
@@ -859,7 +859,7 @@ public class UnitTestsForClient {
 	}
 	
 	@Test
-	public void testBadWords(){
+	public void badWordsTest(){
 		User u = new User(ch);
 		Member member = u.register(FORUM_NAME, USER_NAME, USER_PASSWORD, USER_EMAIL1);
 		assertNotNull(member);
