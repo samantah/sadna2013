@@ -913,10 +913,13 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 						_logMsg = "as a respond to REGISTER- sending: "+_msgToClient.sendErrorInServer();
 						_reportLogger.log(Level.DEBUG ,_logMsg);
 
-						//					this._si.closeSession();
-						//					return _msgToClient.sendErrorInServer();
 					}
 					numberOfTries++;
+					if (numberOfTries==10){
+						this._si.closeSession();
+						return _msgToClient.sendErrorInServer();
+
+					}
 
 				}
 				Reactor.addUnverifiedMember(new PairUserForum(userName, forumName), new EmailPassCode(email, password, code));
