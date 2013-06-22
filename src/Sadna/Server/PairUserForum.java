@@ -1,11 +1,12 @@
 package Sadna.Server;
 
+import java.util.Objects;
+
 public class PairUserForum {
 	private String userName;
 	private String forumName;
 
 	public PairUserForum(String userName, String forumName) {
-		super();
 		this.userName = userName;
 		this.forumName = forumName;
 	}
@@ -26,13 +27,24 @@ public class PairUserForum {
 		this.forumName = forumName;
 	}
 	
+    @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((forumName == null) ? 0 : forumName.hashCode());
+		result = prime * result
+				+ ((userName == null) ? 0 : userName.hashCode());
+		return result;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
-		if (!(obj instanceof PairUserForum))
+		if (getClass() != obj.getClass())
 			return false;
 		PairUserForum other = (PairUserForum) obj;
 		if (forumName == null) {
@@ -47,6 +59,13 @@ public class PairUserForum {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "PairUserForum [userName=" + userName + ", forumName="
+				+ forumName + "]";
+	}
+    
 	
 	
 	

@@ -19,15 +19,15 @@ public class EmailSender {
 		emailPasswordCompany = "zubizubi";
 	}
 	
-	public void sendCode(String sendTo, String code) throws MessagingException{
-		send(sendTo, "Welcome To ForumZubiZubi", messagecode(code));
+	public boolean sendCode(String sendTo, String code) throws MessagingException{
+		return send(sendTo, "Welcome To ForumZubiZubi", messagecode(code));
 	}
 	
 	private String messagecode(String code) {
 		return "Hi,\nYour code is: "+code+".\nTo continue, please enter it to the verification window.\n\n"+ "Thank's,\n\nForumZubiZibi crew (:";
 	}
 
-	public void send(String sendTo, String title, String content) throws MessagingException{
+	public boolean send(String sendTo, String title, String content) throws MessagingException{
 		String host = "smtp.gmail.com";
 	    String from = emailUsernameCompany;
 	    String pass = emailPasswordCompany;
@@ -60,6 +60,7 @@ public class EmailSender {
 	    Transport transport = session.getTransport("smtp");
 	    transport.connect(host, from, pass);
 	    transport.sendMessage(message, message.getAllRecipients());
-	    transport.close();  
+	    transport.close(); 
+	    return true;
 	}
 }

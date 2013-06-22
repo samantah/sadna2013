@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -56,7 +57,7 @@ public class Reactor<T> implements Runnable {
     private static IMplInterface _databaseImpl;
 	private static Logger reportLogger;
 	private static String XML_LOGGER_PATH = "./log4j.xml";
-	private static HashMap<PairUserForum, EmailPassCode> verificationList = new HashMap<PairUserForum, EmailPassCode>();
+	private static final HashMap<PairUserForum, EmailPassCode> verificationList = new HashMap<>();
 	
     
     /**
