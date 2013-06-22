@@ -991,7 +991,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 		Forumdb forum = _si.getForum(forumName);
 		List<String> forbiddenWordsAsList = forum.forbiddenWordsStringToList();
 		for (String forbiddenWord : forbiddenWordsAsList) {
-			if (threadTitle.contains(forbiddenWord) || threadTitle.contains(forbiddenWord)){
+			if (threadTitle.contains(forbiddenWord) || threadContent.contains(forbiddenWord)){
 				_logMsg = "as a respond to THREAD- sending: "+_msgToClient.sendErrorNoAuthorized();
 				_reportLogger.log(Level.DEBUG ,_logMsg);
 				this._si.closeSession();
