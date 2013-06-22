@@ -25,6 +25,10 @@ public class User implements Serializable {
     private static final long serialVersionUID = 6569160581577696172L;
     protected ClientCommunicationHandlerInterface conHand;
 
+    public User(){
+    	
+    }
+    
     public User(ClientCommunicationHandlerInterface ch) {
         this.conHand = ch;
     }
@@ -47,6 +51,10 @@ public class User implements Serializable {
 
     public synchronized Member register(String forumName, String userName, String password, String email) {
         return conHand.register(forumName, userName, password, email);
+    }
+    
+    public synchronized Member verifyEmail(String forumName, String userName, String randomCode) {
+        return conHand.verifyEmail(forumName, userName, randomCode);
     }
 
     public synchronized Forum getForum(String forumName) {
