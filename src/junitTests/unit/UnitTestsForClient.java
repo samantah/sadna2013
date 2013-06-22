@@ -29,7 +29,7 @@ import java.util.Set;
 import static org.junit.Assert.*;
 
 /**
- * @author snir elkaras
+ * @author s. hourmann
  *
  */
 public class UnitTestsForClient {
@@ -731,7 +731,7 @@ public class UnitTestsForClient {
 
 	
 	@Test
-	public void policySecurityTest(){
+	public void policySecurity_uniqueTest(){
 		// email should be unique!!
 
 		User u = new User(ch);
@@ -752,6 +752,26 @@ public class UnitTestsForClient {
 		assertNotNull(mem444);
 	}
 
+	@Test
+	public void policySecurity_sendEmailTest(){
+		// email verification
+
+		User u = new User(ch);
+		SuperAdmin sa = u.loginAsSuperAdmin(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD);
+		Policy policy = new Policy(enumNotiImidiOrAgre.IMIDIATE,
+				enumNotiFriends.ALLMEMBERS, enumDelete.EXTENDED,
+				enumAssignModerator.NO_RESTRICTION,
+				enumCancelModerator.NO_RESTRICTION, enumMessageContent.NOT_FILTERED,
+				enumModeratorPermissions.EXTENDED, 
+				enumSecurity.VERIFY_EMAIL, 0, 0);
+		assertTrue(sa.initiateForum(FORUM2_NAME, ADMIN_NAME, ADMIN_PASSWORD, policy, "*"));
+
+		Member mem333 = u.register(FORUM2_NAME, USER2_NAME, USER2_PASSWORD, "my.mail@unique.mail");
+		assertNull(mem333);
+		Member mem444 = u.verifyEmail(FORUM2_NAME, "other_mem444", "other_pass444", "12345678999");
+		assertNull(mem444);
+	}
+	
 	@Test
 	public void policyModeratorPermissionsTest(){
 		User u = new User(ch);
