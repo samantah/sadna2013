@@ -13,6 +13,7 @@ import Sadna.db.ThreadMessage;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -468,6 +469,7 @@ public class SubForumPage extends ForumJFrame {
         List<ThreadMessage> listOfThreads;
         listOfThreads = CurrentStatus.currUser.viewThreadMessages(f.getForumName(),
                 sf.getSubForumName());
+        Collections.sort(listOfThreads);
         for (ThreadMessage tm : listOfThreads) {
             listModel.addElement(tm);
         }
