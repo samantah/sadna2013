@@ -19,6 +19,7 @@ public class RegistrationPage extends ForumJFrame {
         initComponents();
         this.setResizable(false);
         jLabelInvalidData.setVisible(false);
+        jLabelVerifyMessage.setVisible(false);
     }
 
     /**
@@ -40,6 +41,10 @@ public class RegistrationPage extends ForumJFrame {
         jPasswordField1 = new javax.swing.JPasswordField();
         jLabelInvalidData = new javax.swing.JLabel();
         jButtonBack = new javax.swing.JButton();
+        jLabelCode = new javax.swing.JLabel();
+        jTextFieldCode = new javax.swing.JTextField();
+        jButtonVerify = new javax.swing.JButton();
+        jLabelVerifyMessage = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -72,18 +77,32 @@ public class RegistrationPage extends ForumJFrame {
             }
         });
 
+        jLabelCode.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabelCode.setText("Code");
+
+        jButtonVerify.setText("Verify");
+        jButtonVerify.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonVerifyActionPerformed(evt);
+            }
+        });
+
+        jLabelVerifyMessage.setForeground(new java.awt.Color(0, 0, 255));
+        jLabelVerifyMessage.setText("Email has been sent to you with a code, please verify your email");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(183, Short.MAX_VALUE)
+                .addContainerGap(199, Short.MAX_VALUE)
                 .addComponent(jLabelTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(161, 161, 161))
             .addGroup(layout.createSequentialGroup()
-                .addGap(125, 125, 125)
+                .addGap(25, 25, 25)
+                .addComponent(jLabelInvalidData, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelInvalidData, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelUserName)
@@ -91,16 +110,25 @@ public class RegistrationPage extends ForumJFrame {
                             .addComponent(jLabelEmail)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(40, 40, 40)
-                                .addComponent(jButtonBack)))
+                                .addComponent(jButtonBack))
+                            .addComponent(jLabelCode))
                         .addGap(11, 11, 11)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextFieldUserName)
-                            .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
-                            .addComponent(jTextFieldEmail)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jTextFieldUserName)
+                                .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+                                .addComponent(jTextFieldEmail)
+                                .addComponent(jTextFieldCode))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(40, 40, 40)
-                                .addComponent(jButtonRegister)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jButtonRegister)
+                                .addGap(35, 35, 35)
+                                .addComponent(jButtonVerify)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jLabelVerifyMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -119,13 +147,20 @@ public class RegistrationPage extends ForumJFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelEmail)
                     .addComponent(jTextFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelCode)
+                    .addComponent(jTextFieldCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(9, 9, 9)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonRegister)
-                    .addComponent(jButtonBack))
-                .addGap(18, 18, 18)
-                .addComponent(jLabelInvalidData)
-                .addContainerGap(23, Short.MAX_VALUE))
+                    .addComponent(jButtonBack)
+                    .addComponent(jButtonVerify))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelInvalidData)
+                    .addComponent(jLabelVerifyMessage))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         pack();
@@ -152,22 +187,53 @@ public class RegistrationPage extends ForumJFrame {
             jLabelInvalidData.setVisible(true);
             return;
         }
-        CurrentStatus.currUser = register;
-        goBack();
+        if (register.getUserName() == null) {
+            this.jLabelVerifyMessage.setVisible(true);
+        } else {
+            CurrentStatus.currUser = register;
+            goBack();
+        }
     }//GEN-LAST:event_jButtonRegisterActionPerformed
 
     private void jButtonBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBackActionPerformed
         goBack();
     }//GEN-LAST:event_jButtonBackActionPerformed
+
+    private void jButtonVerifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVerifyActionPerformed
+        String userNameStr = jTextFieldUserName.getText();
+        String passwordStr = jPasswordField1.getText();
+        String code = jTextFieldCode.getText();
+        if (userNameStr.equals("") || passwordStr.equals("") || code.equals("")) {
+            jTextFieldUserName.setText("");
+            jTextFieldCode.setText("");
+            jPasswordField1.setText("");
+            jLabelInvalidData.setVisible(true);
+            return;
+        }
+        String forumName = CurrentStatus.currForum.getForumName();
+        Member verified = CurrentStatus.currUser.verifyEmail(forumName, userNameStr, passwordStr, code);
+        if (verified == null) {
+            jLabelInvalidData.setVisible(true);
+        } else {
+            CurrentStatus.currUser = verified;
+            goBack();
+        }
+
+
+    }//GEN-LAST:event_jButtonVerifyActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonBack;
     private javax.swing.JButton jButtonRegister;
+    private javax.swing.JButton jButtonVerify;
+    private javax.swing.JLabel jLabelCode;
     private javax.swing.JLabel jLabelEmail;
     private javax.swing.JLabel jLabelInvalidData;
     private javax.swing.JLabel jLabelPassword;
     private javax.swing.JLabel jLabelTitle;
     private javax.swing.JLabel jLabelUserName;
+    private javax.swing.JLabel jLabelVerifyMessage;
     private javax.swing.JPasswordField jPasswordField1;
+    private javax.swing.JTextField jTextFieldCode;
     private javax.swing.JTextField jTextFieldEmail;
     private javax.swing.JTextField jTextFieldUserName;
     // End of variables declaration//GEN-END:variables
