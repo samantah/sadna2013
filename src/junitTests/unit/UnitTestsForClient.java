@@ -909,6 +909,7 @@ public class UnitTestsForClient {
 				enumSecurity.VERIFY_EMAIL, 0, 0);
 		assertTrue(sa.initiateForum("Left forum policies", "leftadmin", "left1234", policy1, ""));
 		
+		
 		Policy policy2 = new Policy(enumNotiImidiOrAgre.AGGREGATE,
 				enumNotiFriends.PUBLISHERS, enumDelete.EXTENDED,
 				enumAssignModerator.MIN_PUBLISH,
@@ -916,6 +917,13 @@ public class UnitTestsForClient {
 				enumModeratorPermissions.EXTENDED, 
 				enumSecurity.NOT_USED_EMAIL, 0, 1);
 		assertTrue(sa.initiateForum("Right forum policies", "rightadmin", "right1234", policy2, ""));
+		Forum forum = sa.getForum("Right forum policies");
+		assertNotNull(forum);
+		Admin admin = (Admin) u.login("Right forum policies", "rightadmin", "right1234");
+		SubForum subForum_Clothes = new SubForum(forum, "clothes");
+		SubForum subForum_Computers = new SubForum(forum, "computers and technology");
+		admin.addSubForum(subForum_Clothes, new ArrayList<Member>());
+		admin.addSubForum(subForum_Computers, new ArrayList<Member>());
 	}
 	
 }
