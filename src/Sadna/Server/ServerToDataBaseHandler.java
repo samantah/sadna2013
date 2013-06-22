@@ -587,7 +587,7 @@ public class ServerToDataBaseHandler implements ServerInterface {
 
 	@Override
 	public boolean closeSession() {
-		_db.closeSession();
+		//_db.closeSession();
 		return true;
 	}
 
