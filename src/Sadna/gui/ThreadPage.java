@@ -11,6 +11,7 @@ import Sadna.db.ThreadMessage;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -420,6 +421,7 @@ public class ThreadPage extends ForumJFrame {
         ThreadMessage thread = CurrentStatus.currUser.getThread(forumName,
                 subForumName, threadId);
         listOfPosts = CurrentStatus.currUser.getAllPosts(thread);
+        Collections.sort(listOfPosts);
         for (Post p : listOfPosts) {
             listModel.addElement(p);
         }

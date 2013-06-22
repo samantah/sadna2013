@@ -10,7 +10,7 @@ import java.io.Serializable;
  *
  * @author fistuk
  */
-public class Post extends Message implements Serializable {
+public class Post extends Message implements Serializable, Comparable<Post> {
 
     /**
      *
@@ -18,6 +18,8 @@ public class Post extends Message implements Serializable {
     private static final long serialVersionUID = -3796791526192451832L;
     private ThreadMessage thread;
 
+    
+    
     public Post(ThreadMessage thread, String title, String content, String publisher) {
         super(title, content, publisher);
         this.thread = thread;
@@ -40,5 +42,10 @@ public class Post extends Message implements Serializable {
     
     public void setThread(ThreadMessage thread) {
         this.thread = thread;
+    }
+
+    @Override
+    public int compareTo(Post t) {
+        return this.getId()-t.getId();
     }
 }
