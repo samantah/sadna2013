@@ -904,7 +904,7 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 				}
 			}
 			if(forum.getEnumSecurityPolicy().equals("VERIFY_EMAIL")){
-				String code = ((int)(Math.random()*1000000))+"";
+				String code = generateCode();
 				boolean succ = false;
 				while (!succ){
 					try {
@@ -946,6 +946,14 @@ public class RequestHandlerProtocol implements AsyncServerProtocol<StringMessage
 			this._si.closeSession();
 			return _msgToClient.sendErrorNoAuthorized();
 		}
+	}
+
+	private String generateCode() {
+		String code = ((int)(Math.random()*1000000))+"";
+		for(int i=code.length(); i<6;i++){
+			code = "0"+code;
+		}
+		return code;
 	}
 
 	public Object handleLogin(String forumName, String userName, String password) {
