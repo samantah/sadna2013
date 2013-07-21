@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class MainFrame extends ForumJFrame {
 
-    String host = "192.168.1.102";
+    String host = "192.168.1.105";
 //    String host = "132.73.198.83";
     int port = 3333;
 
